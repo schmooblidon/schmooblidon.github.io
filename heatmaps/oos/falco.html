@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<base href="../../../ikneedata/">
+<link href='http://fonts.googleapis.com/css?family=Share+Tech+Mono' rel='stylesheet' type='text/css'>
+<link href="stylesheet.css" rel="stylesheet" type="text/css">
+<script src="jquery-1.11.3.js" type="text/javascript"></script>
+<script type="text/javascript" src="script.js"></script>
+<link rel="shortcut icon" href="favicon.ico" />
+<title>I KneeData | For your frame data kneeds</title>
+</head>
+
+<body>
+<div id="header">
+	<a href="index.html"><img id="logo" src="assets/kneesmalllogo.png" width="40" height="40" alt=""/></a>
+    <a href="index.html"><img id="titlelogo" src="assets/ikneedatav5.png"/ width="280" height="60"></a>
+	<a href="index.html"><div class="button"><h4>Blog</h4></div></a>
+	<a href="heatmaps/oos/falcon.html"><div class="button"><h4>Heatmaps</h4></div></a>
+    <a href="graphsgfys.html"><div class="button longbutton"><h4>Graphs & Gfys</h4></div></a>
+    <a href="vidsthreads.html"><div class="button longbutton"><h4>Vids & Threads</h4></div></a>
+	<a href="donate.html"><div class="button"><h4>Donate</h4></div></a>
+	<a href="about.html"><div class="button"><h4>About</h4></div></a>
+</div>
+<div id="pagetitle" style="background-color:#5F369F">
+<h1>Heatmaps <img id="heatmapinfo" src="assets/question.png" style="height:22px; width:22px; border-radius:15px;"/></h1>
+
+<div id="heatmapinfobox"><p>Heatmaps display the speed of all the character's attacks from a certain position. The coloured shapes represent the hitboxes of each attack, where the colour represents the frame that it comes out. All smash games run at 60 frames per second. Red and yellow hitboxes are very fast, but green and blue are slower. Each hitbox shape is a combination of the furthest you can move forwards before the hitbox is out, how much you can move backwards, and all the space in between.</p>
+	<p>You can toggle each attack, or each frame (colour) individually, to allow you to see only the options you want. You can also play an animation of your selected hitboxes in real game speed (60fps) to get a feel for how fast each option is.</p>
+	<p>Hovering over the buttons will highlight (darkens them) the button's respective hitboxes. - may not work for all browsers.</p>
+</div>
+</div><div id="main">
+<div id="main-content">
+	<div id="control-container">
+    <div id="top-controls">
+    	<div class="noa control nohelp" id="heatmaptype"><p>OoS</p>
+        <div id="hmtypedropdown" class="dropdown"><div class="noa control hmtype nohelp">Coming Soon</div></div></div>
+		<div class="noa control nohelp" id="characterbutton"><p>
+Falco</p>
+<div id="chardropdown" class"dropdown">
+<a href="heatmaps/oos/fox.html"><div class="noa control character nohelp"><p>Fox</p></div></a>
+<a href="heatmaps/oos/falco.html"><div class="noa control character nohelp"><p>Falco</p></div></a>
+<a href="heatmaps/oos/marth.html"><div class="noa control character nohelp"><p>Marth</p></div></a>
+<a href="heatmaps/oos/sheik.html"><div class="noa control character nohelp"><p>Sheik</p></div></a>
+<a href="heatmaps/oos/puff.html"><div class="noa control character nohelp"><p>Puff</p></div></a>
+<a href="heatmaps/oos/peach.html"><div class="noa control character nohelp"><p>Peach</p></div></a>
+<a href="heatmaps/oos/ics.html"><div class="noa control character nohelp"><p>ICs</p></div></a>
+<a href="heatmaps/oos/falcon.html"><div class="noa control character nohelp"><p>Falcon</p></div></a>
+</div>
+
+</div><div class="attackall nohelp"><div id="allattcontainer"><div id="allattackon2" class="allatt noa control">All On</div><div id="allattackoff2" class="allatt noa control">All Off</div></div><div class="framecircle" id="fc0"><p>F</p></div></div>
+		<div id="attack1" class="attack control"><p>Shine</p><div class="framecircle" id="fc1"><p>F</p></div></div>
+		<div id="attack2" class="attack control"><p>Grab</p><div class="framecircle" id="fc2"><p>F</p></div></div>
+		<div id="attack3" class="attack control"><p>Upsmash</p><div class="framecircle" id="fc3"><p>F</p></div></div>
+		<div id="attack4" class="attack control"><p>Bair</p><div class="framecircle" id="fc4"><p>F</p></div></div>
+        <div id="attack5" class="attack control"><p>Nair</p><div class="framecircle" id="fc5"><p>F</p></div></div>
+		<div id="attack6" class="attack control"><p>Dair</p><div class="framecircle" id="fc6"><p>F</p></div></div>
+        <div id="attack7" class="attack control"><p>Fair</p><div class="framecircle" id="fc7"><p>F</p></div></div>
+        <div id="attack8" class="attack control"><p>Upair</p><div class="framecircle" id="fc8"><p>F</p></div></div>
+				<div id="hurtboxcontrol">Hurtbox control
+					<div id="hurtchar" class="noa control hurtboxchar nohelp"><p id="hurtcurrent">Falcon</p><div id="hurtchardropdown">
+					<div class="noa control hurtboxchar hbcharselect nohelp"><p>Fox</p></div>
+					<div class="noa control hurtboxchar hbcharselect nohelp"><p>Falco</p></div>
+					<div class="noa control hurtboxchar hbcharselect nohelp"><p>Marth</p></div>
+					<div class="noa control hurtboxchar hbcharselect nohelp"><p>Sheik</p></div>
+					<div class="noa control hurtboxchar hbcharselect nohelp"><p>Puff</p></div>
+					<div class="noa control hurtboxchar hbcharselect nohelp"><p>Peach</p></div>
+					<div class="noa control hurtboxchar hbcharselect nohelp"><p>ICs</p></div>
+					<div class="noa control hurtboxchar hbcharselect nohelp"><p>Falcon</p></div>
+					</div></div>
+					<div id="position" class="hurtboxcontrols noa control">crouch</div><div id="flip" class="hurtboxcontrols noa control"><p>flip</p></div>
+					<div id="hbleft" class="hurtboxcontrols noa control"></div><div id="hbright" class="hurtboxcontrols noa control"></div>
+				</div>
+        <a href="http://imgur.com/a/tLeCy"><div id="img-button" class="noa control"><p>
+Image Version</p></div></a>
+				<div id="hbhlbutton" class="noa control"><p>
+Turn highlight <span id="hbhlonoff">Off</span></p></div>
+		<div id="control-speed">
+		<div id="play-button" class="noa control play"></div>
+
+		<div id="times1" class="speed"><p>
+x1</p></div>
+		<div id="times05" class="speed"><p>
+1/2</p></div>
+		<div id="times025" class="speed"><p>
+1/4</p></div>
+</div></div>
+		</div>
+
+
+  <div id="imgandframecontainer">
+	<div id="img-container">
+		<img id="base" src="assets/heatmaps/falco/base.png"/>
+        <img id="ready" src="assets/heatmaps/ready.png"/>
+        <img id="go" src="assets/heatmaps/go.png"/>
+				<img class="a6 f20 hitbox" id="a6f20" src="assets/heatmaps/falco/dair20.png"/>
+				<img class="a5 f20 hitbox" id="a5f20" src="assets/heatmaps/falco/nair20.png"/>
+				<img class="a4 f20 hitbox" id="a4f20" src="assets/heatmaps/falco/bair20.png"/>
+				<img class="a8 f19 hitbox" id="a8f19" src="assets/heatmaps/falco/upair19.png"/>
+				<img class="a6 f19 hitbox" id="a6f19" src="assets/heatmaps/falco/dair19.png"/>
+				<img class="a5 f19 hitbox" id="a5f19" src="assets/heatmaps/falco/nair19.png"/>
+				<img class="a4 f19 hitbox" id="a4f19" src="assets/heatmaps/falco/bair19.png"/>
+				<img class="a8 f18 hitbox" id="a8f18" src="assets/heatmaps/falco/upair18.png"/>
+				<img class="a6 f18 hitbox" id="a6f18" src="assets/heatmaps/falco/dair18.png"/>
+				<img class="a5 f18 hitbox" id="a5f18" src="assets/heatmaps/falco/nair18.png"/>
+				<img class="a4 f18 hitbox" id="a4f18" src="assets/heatmaps/falco/bair18.png"/>
+				<img class="a8 f17 hitbox" id="a8f17" src="assets/heatmaps/falco/upair17.png"/>
+				<img class="a6 f17 hitbox" id="a6f17" src="assets/heatmaps/falco/dair17.png"/>
+				<img class="a5 f17 hitbox" id="a5f17" src="assets/heatmaps/falco/nair17.png"/>
+				<img class="a4 f17 hitbox" id="a4f17" src="assets/heatmaps/falco/bair17.png"/>
+				<img class="a8 f16 hitbox" id="a8f16" src="assets/heatmaps/falco/upair16.png"/>
+				<img class="a6 f16 hitbox" id="a6f16" src="assets/heatmaps/falco/dair16.png"/>
+				<img class="a5 f16 hitbox" id="a5f16" src="assets/heatmaps/falco/nair16.png"/>
+				<img class="a4 f16 hitbox" id="a4f16" src="assets/heatmaps/falco/bair16.png"/>
+				<img class="a3 f16 hitbox" id="a3f16" src="assets/heatmaps/falco/upsmash16.png"/>
+				<img class="a6 f15 hitbox" id="a6f15" src="assets/heatmaps/falco/dair15.png"/>
+				<img class="a5 f15 hitbox" id="a5f15" src="assets/heatmaps/falco/nair15.png"/>
+				<img class="a4 f15 hitbox" id="a4f15" src="assets/heatmaps/falco/bair15.png"/>
+				<img class="a3 f15 hitbox" id="a3f15" src="assets/heatmaps/falco/upsmash15.png"/>
+				<img class="a8 f14 hitbox" id="a8f14" src="assets/heatmaps/falco/upair14.png"/>
+				<img class="a6 f14 hitbox" id="a6f14" src="assets/heatmaps/falco/dair14.png"/>
+				<img class="a5 f14 hitbox" id="a5f14" src="assets/heatmaps/falco/nair14.png"/>
+				<img class="a4 f14 hitbox" id="a4f14" src="assets/heatmaps/falco/bair14.png"/>
+				<img class="a3 f14 hitbox" id="a3f14" src="assets/heatmaps/falco/upsmash14.png"/>
+				<img class="a8 f13 hitbox" id="a8f13" src="assets/heatmaps/falco/upair13.png"/>
+				<img class="a7 f13 hitbox" id="a7f13" src="assets/heatmaps/falco/fair13.png"/>
+				<img class="a6 f13 hitbox" id="a6f13" src="assets/heatmaps/falco/dair13.png"/>
+				<img class="a5 f13 hitbox" id="a5f13" src="assets/heatmaps/falco/nair13.png"/>
+				<img class="a4 f13 hitbox" id="a4f13" src="assets/heatmaps/falco/bair13.png"/>
+				<img class="a3 f13 hitbox" id="a3f13" src="assets/heatmaps/falco/upsmash13.png"/>
+				<img class="a7 f12 hitbox" id="a7f12" src="assets/heatmaps/falco/fair12.png"/>
+				<img class="a6 f12 hitbox" id="a6f12" src="assets/heatmaps/falco/dair12.png"/>
+				<img class="a5 f12 hitbox" id="a5f12" src="assets/heatmaps/falco/nair12.png"/>
+				<img class="a4 f12 hitbox" id="a4f12" src="assets/heatmaps/falco/bair12.png"/>
+				<img class="a3 f12 hitbox" id="a3f12" src="assets/heatmaps/falco/upsmash12.png"/>
+				<img class="a7 f11 hitbox" id="a7f11" src="assets/heatmaps/falco/fair11.png"/>
+				<img class="a6 f11 hitbox" id="a6f11" src="assets/heatmaps/falco/dair11.png"/>
+				<img class="a5 f11 hitbox" id="a5f11" src="assets/heatmaps/falco/nair11.png"/>
+				<img class="a4 f11 hitbox" id="a4f11" src="assets/heatmaps/falco/bair11.png"/>
+				<img class="a3 f11 hitbox" id="a3f11" src="assets/heatmaps/falco/upsmash11.png"/>
+				<img class="a6 f10 hitbox" id="a6f10" src="assets/heatmaps/falco/dair10.png"/>
+				<img class="a5 f10 hitbox" id="a5f10" src="assets/heatmaps/falco/nair10.png"/>
+				<img class="a4 f10 hitbox" id="a4f10" src="assets/heatmaps/falco/bair10.png"/>
+				<img class="a3 f10 hitbox" id="a3f10" src="assets/heatmaps/falco/upsmash10.png"/>
+				<img class="a5 f9 hitbox" id="a5f9" src="assets/heatmaps/falco/nair9.png"/>
+				<img class="a4 f9 hitbox" id="a4f9" src="assets/heatmaps/falco/bair9.png"/>
+				<img class="a3 f7 hitbox" id="a3f9" src="assets/heatmaps/falco/upsmash9.png"/>
+				<img class="a3 f7 hitbox" id="a3f8" src="assets/heatmaps/falco/upsmash8.png"/>
+				<img class="a2 f7 hitbox" id="a2f7" src="assets/heatmaps/falco/grab7.png"/>
+				<img class="a1 f6 hitbox" id="a1f6" src="assets/heatmaps/falco/shine6.png"/>
+		<img id="shield" src="assets/heatmaps/falco/shield.png"/>
+		<div id="hurtboxcontainer"><img id="hurtbox" src="assets/heatmaps/hurtboxes/falconstand.png" style="margin-left:75%"/></div>
+ 	</div>
+    <div id="framecontainer">
+			<div id="frameselect">Frame control: <span id="fsid">ALL</span></div>
+            <div id="frameall">All<div id="fallon" class="allf"><div>On</div></div><div id="falloff" class="allf"><div>Off</div></div></div><div id="frame1" class="framecontrol"><p>1</p></div><div id="frame2" class="framecontrol"><p>2
+        </p>
+        </div><div id="frame3" class="framecontrol"><p>3</p></div><div id="frame4" class="framecontrol"><p>4</p></div><div id="frame5" class="framecontrol"><p>5</p></div><div id="frame6" class="framecontrol"><p class="test">6</p></div><div id="frame7" class="framecontrol"><p>7</p></div><div id="frame8" class="framecontrol"><p>8</p></div><div id="frame9" class="framecontrol"><p>9</p></div><div id="frame10" class="framecontrol"><p>10</p></div><div id="frame11" class="framecontrol"><p>11</p></div><div id="frame12" class="framecontrol"><p>12</p></div><div id="frame13" class="framecontrol"><p>13</p></div><div id="frame14" class="framecontrol"><p>14</p></div><div id="frame15" class="framecontrol"><p>15</p></div><div id="frame16" class="framecontrol"><p>16</p></div><div id="frame17" class="framecontrol"><p>17</p></div><div id="frame18" class="framecontrol"><p>18</p></div><div id="frame19" class="framecontrol"><p>19</p></div><div id="frame20" class="framecontrol"><p>20</p></div>
+    </div>
+    </div>
+    </div>
+
+<div id="side-container">
+	<div id="ad">Ads</div>
+    <h2>Suggestions</h2>
+    <div id="sugboxcontainer"><div id="suggestiontext"><p>Have a suggestion of what
+    features to create next?
+    Send a message via</p></div>
+<a href="http://www.reddit.com/message/compose/?to=schmooblidon">
+<div class="sugbtn"><img src="assets/redditicon.png" width="50" height="40" alt=""/><p>Reddit</p></div></a>
+<a href="http://www.twitch.tv/message/compose?to=schmooblidon">
+<div class="sugbtn"><img src="assets/twitchicon.png" width="50" height="40" alt=""/><p>Twitch</p></div></a>
+</div>
+</div>
+
+</div>
+
+
+
+<div id="footer">
+  <p>Copyright Ikneedata.com 2015 or summin</p>
+</div>
+</body>
+</html>
