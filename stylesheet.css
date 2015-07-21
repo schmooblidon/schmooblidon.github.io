@@ -179,7 +179,7 @@ body {
 }
 
 #side-container {
-	width:320px;
+	width:300px;
 	background-color:#969696;
 	float:right;
 	position:static;
@@ -190,7 +190,7 @@ body {
 
 #ad {
 
-	height:500px;
+	height:600px;
 	width:300px;
 	background-color:#FFFFFF;
 	color:#000000;
