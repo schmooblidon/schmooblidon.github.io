@@ -886,6 +886,7 @@ a:visited {
 
 .media-flex {
     position: relative;
+		width:550px;
 }
 
 .media-flex .gfyitem > div,
