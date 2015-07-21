@@ -416,27 +416,29 @@ var resizing = function() {
 								//$(".gfyinside"+i).height($(".gfyinside"+i).children(".ig-text").height());
 					//		}
 							//$(".gfyinside"+i).children(".graphcontainer").height($(".gfyinside"+i).height() + 30);
-							$(".gfyinside"+i).children(".media-flex").height("auto");
+							$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).width());
 						}
 					}
 					if (windwidth < 1150){
 						$(".ig").css("display", "block");
 						$(".ig-text").css("float", "none");
 						$(".ig-text").width("auto");
-						//for (i=1;i<noofgfys+1;i++){
+						for (i=1;i<noofgfys+1;i++){
 						//	$(".gfyinside"+i).children(".graphcontainer").height("auto");
 							//$(".gfyinside"+i).children(".ig-text").css("bottom", $(".gfyinside"+i).children(".graphcontainer").height() * 0.35 - 20);
 
 							//$(".gfyinside"+i).height($(".gfyinside"+i).children(".graphcontainer").height() * 0.65 + $(".gfyinside"+i).children(".ig-text").height() + 25);
-					//	}
+							$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).width());
+						}
 					}
 					else {
 						$(".ig").css("display", "inline-block");
 						$(".ig-text").css("float", "right");
 						$(".ig-text").width(windwidth - 840);
-					//	for (i=1;i<noofgfys+1;i++){
+						for (i=1;i<noofgfys+1;i++){
 							//$(".gfyinside"+i).children(".ig-text").css("bottom", 0);
-					//	}
+							$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).width());
+						}
 					}
 				}
 				else {
@@ -464,10 +466,11 @@ var resizing = function() {
 						$(".ig").css("display", "inline-block");
 						$(".ig-text").css("float", "right");
 						$(".ig").height("auto");
-					//	for (i=1;i<noofgfys+1;i++){
+						for (i=1;i<noofgfys+1;i++){
 						//	$(".gfyinside"+i).children(".ig-text").css("bottom", 0);
 						//	$(".gfyinside"+i).children(".graphcontainer").height("auto");
-					//}
+						$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).width());
+						}
 					}
 				break;
 			case "h":
