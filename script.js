@@ -405,36 +405,36 @@ var resizing = function() {
 					$(".ig-text").width(windwidth - 840);
 					$("video").css({"width": "65%","height":" 65%"});
 					if ($(".ig").hasClass("gfyinside1")){
-						$(".gfyPreLoadCanvas").css({"width": "65%","height":" 65%"});
-						$(".gfyDotCanvas").css("right", 200);
-						$(".gfyCtrlTabPull").hide();
-						for (i=1;i<noofgfys+1;i++){
-							$(".gfyinside"+i).height($(".gfyinside"+i).children(".graphcontainer").children(".gfyitem").children("div").height() * 0.65);
-							$(".gfyinside"+i).find(".gfyCtrlBox").css({"right" : 200, "bottom": $(".gfyinside"+i).children(".graphcontainer").children(".gfyitem").children("div").height() * 0.35  - 40});
-							if($(".gfyinside"+i).height() < $(".gfyinside"+i).children(".ig-text").height()){
-								$(".gfyinside"+i).height($(".gfyinside"+i).children(".ig-text").height());
-							}
-							$(".gfyinside"+i).children(".graphcontainer").height($(".gfyinside"+i).height() + 30);
-						}
+						//$(".gfyPreLoadCanvas").css({"width": "65%","height":" 65%"});
+						//$(".gfyDotCanvas").css("right", 200);
+						//$(".gfyCtrlTabPull").hide();
+			//			for (i=1;i<noofgfys+1;i++){
+							//$(".gfyinside"+i).height($(".gfyinside"+i).children(".graphcontainer").children(".gfyitem").children("div").height() * 0.65);
+							//$(".gfyinside"+i).find(".gfyCtrlBox").css({"right" : 200, "bottom": $(".gfyinside"+i).children(".graphcontainer").children(".gfyitem").children("div").height() * 0.35  - 40});
+							//if($(".gfyinside"+i).height() < $(".gfyinside"+i).children(".ig-text").height()){
+								//$(".gfyinside"+i).height($(".gfyinside"+i).children(".ig-text").height());
+					//		}
+							//$(".gfyinside"+i).children(".graphcontainer").height($(".gfyinside"+i).height() + 30);
+					//	}
 					}
 					if (windwidth < 1150){
 						$(".ig").css("display", "block");
 						$(".ig-text").css("float", "none");
 						$(".ig-text").width("auto");
-						for (i=1;i<noofgfys+1;i++){
-							$(".gfyinside"+i).children(".graphcontainer").height("auto");
-							$(".gfyinside"+i).children(".ig-text").css("bottom", $(".gfyinside"+i).children(".graphcontainer").height() * 0.35 - 20);
+						//for (i=1;i<noofgfys+1;i++){
+						//	$(".gfyinside"+i).children(".graphcontainer").height("auto");
+							//$(".gfyinside"+i).children(".ig-text").css("bottom", $(".gfyinside"+i).children(".graphcontainer").height() * 0.35 - 20);
 
-							$(".gfyinside"+i).height($(".gfyinside"+i).children(".graphcontainer").height() * 0.65 + $(".gfyinside"+i).children(".ig-text").height() + 25);
-						}
+							//$(".gfyinside"+i).height($(".gfyinside"+i).children(".graphcontainer").height() * 0.65 + $(".gfyinside"+i).children(".ig-text").height() + 25);
+					//	}
 					}
 					else {
 						$(".ig").css("display", "inline-block");
 						$(".ig-text").css("float", "right");
 						$(".ig-text").width(windwidth - 840);
-						for (i=1;i<noofgfys+1;i++){
-							$(".gfyinside"+i).children(".ig-text").css("bottom", 0);
-						}
+					//	for (i=1;i<noofgfys+1;i++){
+							//$(".gfyinside"+i).children(".ig-text").css("bottom", 0);
+					//	}
 					}
 				}
 				else {
@@ -446,10 +446,10 @@ var resizing = function() {
 						$(".ig-text").width(windwidth - 1040);
 						$("video").width("100%");
 						$("video").height("100%");
-						$(".gfyCtrlBox").css({"right" : 0,
-						"bottom" : 0});
-						$(".gfyDotCanvas").css("right", 0);
-						$(".gfyCtrlTabPull").show();
+					//	$(".gfyCtrlBox").css({"right" : 0,
+					//	"bottom" : 0});
+					//	$(".gfyDotCanvas").css("right", 0);
+					//	$(".gfyCtrlTabPull").show();
 						youtubeheightswitch = true;
 						$(".graphcontainer").children("iframe").width(550);
 						if (youtubeheightswitch2){
@@ -462,10 +462,10 @@ var resizing = function() {
 						$(".ig").css("display", "inline-block");
 						$(".ig-text").css("float", "right");
 						$(".ig").height("auto");
-						for (i=1;i<noofgfys+1;i++){
-							$(".gfyinside"+i).children(".ig-text").css("bottom", 0);
-							$(".gfyinside"+i).children(".graphcontainer").height("auto");
-						}
+					//	for (i=1;i<noofgfys+1;i++){
+						//	$(".gfyinside"+i).children(".ig-text").css("bottom", 0);
+					//		$(".gfyinside"+i).children(".graphcontainer").height("auto");
+					//	}
 					}
 				break;
 			case "h":
