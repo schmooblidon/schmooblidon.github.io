@@ -5,7 +5,7 @@ controlconwidth = 100;
 hitboxwidth = 1280;
 hitboxheight = 714;
 hbhlswitch = 1;
-hurtchar = "Falcon";
+hurtchar = "falcon";
 pos = "stand";
 currentMargin = "75%";
 isflipped = '';
@@ -711,9 +711,9 @@ $(document).ready(function(){
 	});
 	$(".hbcharselect").click(function(){
 		hurtchar = $(this).text();
+		hurtchar = hurtchar.toLowerCase();
 		$("#hurtcurrent").empty();
 		$("#hurtcurrent").append(hurtchar);
-		/*$('#hurtchar').off('hover');*/
 		$("#hurtboxcontainer").empty();
 		$("#hurtboxcontainer").append('<img id="hurtbox" '+isflipped+' src="assets/heatmaps/hurtboxes/'+hurtchar+pos+'.png" style="margin-left:'+currentMargin+'"/>');
 		resizing();
