@@ -464,8 +464,8 @@ var resizing = function() {
 						$(".ig").height("auto");
 					//	for (i=1;i<noofgfys+1;i++){
 						//	$(".gfyinside"+i).children(".ig-text").css("bottom", 0);
-					//		$(".gfyinside"+i).children(".graphcontainer").height("auto");
-					//	}
+						//	$(".gfyinside"+i).children(".graphcontainer").height("auto");
+					//}
 					}
 				break;
 			case "h":
