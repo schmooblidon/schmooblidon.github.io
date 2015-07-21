@@ -405,17 +405,19 @@ var resizing = function() {
 					$(".ig-text").width(windwidth - 840);
 					$("video").css({"width": "65%","height":" 65%"});
 					if ($(".ig").hasClass("gfyinside1")){
+
 						//$(".gfyPreLoadCanvas").css({"width": "65%","height":" 65%"});
 						//$(".gfyDotCanvas").css("right", 200);
 						//$(".gfyCtrlTabPull").hide();
-			//			for (i=1;i<noofgfys+1;i++){
+						for (i=1;i<noofgfys+1;i++){
 							//$(".gfyinside"+i).height($(".gfyinside"+i).children(".graphcontainer").children(".gfyitem").children("div").height() * 0.65);
 							//$(".gfyinside"+i).find(".gfyCtrlBox").css({"right" : 200, "bottom": $(".gfyinside"+i).children(".graphcontainer").children(".gfyitem").children("div").height() * 0.35  - 40});
 							//if($(".gfyinside"+i).height() < $(".gfyinside"+i).children(".ig-text").height()){
 								//$(".gfyinside"+i).height($(".gfyinside"+i).children(".ig-text").height());
 					//		}
 							//$(".gfyinside"+i).children(".graphcontainer").height($(".gfyinside"+i).height() + 30);
-					//	}
+							$(".gfyinside"+i).children(".media-flex").height("auto");
+						}
 					}
 					if (windwidth < 1150){
 						$(".ig").css("display", "block");
