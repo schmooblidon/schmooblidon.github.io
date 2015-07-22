@@ -388,8 +388,8 @@ var resizing = function() {
 		}
 		switch(type) {
 			case "b":
-				$("#blogcontainer").width(windwidth - 440);
-				$("#blog").width(windwidth - 520);
+				$("#blogcontainer").width(windwidth - 360);
+				$("#blog").width(windwidth - 440);
 				break;
 			case "g":
 				$("#ig-content").width(windwidth - 490);
@@ -556,7 +556,7 @@ var resizing = function() {
 				}
 				break;
 			case "d":
-				$("#blogcontainer").width(windwidth - 440);
+				$("#blogcontainer").width(windwidth - 360);
 				if ($("#kneecoin").length){
 					var kcratio = 400/452;
 					$("#donationleft").width("40%");
@@ -576,7 +576,7 @@ var resizing = function() {
 				}
 				break;
 			case "a":
-				$("#blogcontainer").width(windwidth - 440);
+				$("#blogcontainer").width(windwidth - 360);
 				break;
 		}
 
