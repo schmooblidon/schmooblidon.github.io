@@ -613,7 +613,9 @@ $(document).ready(function(){
 	$("#ready").fadeOut(1);
 	$("#go").fadeOut(1);
 	randomtile();
-	helpbox();
+	if (mobile === false){
+		helpbox();
+	}
 	$(".attack").addClass("highlighted2");
 	$(".framecontrol").children("p").addClass("framehighlight2");
 	if (mobile === false){
