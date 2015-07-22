@@ -570,7 +570,7 @@ var resizing = function() {
 				break;
 		}
 
-		if ($(".main").css("font-family") === "Courier New"){
+		if ($("#main").css("font-family") === "Courier New"){
 			$("#img-button").css("font-size","11px");
 			$("#hbhlbutton").css("font-size","9px");
 			$("#control-speed").css("font-size","10px");
