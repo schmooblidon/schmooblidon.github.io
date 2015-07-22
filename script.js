@@ -351,20 +351,21 @@ var resizing = function() {
 			$("#main").removeClass("smalltext");
 		}
 		if (windwidth < 1200){
-			$(".button").css({"font-size":"12px","width":70});
+			$(".button").css({"font-size":"12px","width":70,"bottom":0});
 			$(".longbutton").css("width", 102);
 		}
 		else {
-			$(".button").css({"font-size":"16px","width":90});
+			$(".button").css({"font-size":"16px","width":90,"bottom":0});
 			$(".longbutton").css("width", 135);
 		}
 		if (windwidth < 1050){
-			$(".button").css({"font-size":"10px","width":70});
-			$(".longbutton").css("width", 90);
+			$(".button").css({"font-size":"12px","width":60,"bottom":16});
+
+			$(".longbutton").css({"width":70,"bottom":0});
 		}
-		if (windwidth < 900){
-			$(".button").css({"font-size":"10px","width":60});
-			$(".longbutton").css("width", 80);
+		if (windwidth < 950){
+			$(".button").css({"font-size":"10px","width":50});
+			$(".longbutton").css("width", 60);
 		}
 		if ($("#blog").length){
 			var type = "b";

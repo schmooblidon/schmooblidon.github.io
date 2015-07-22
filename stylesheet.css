@@ -903,6 +903,7 @@ a:visited {
 #socialmediaicons{
 	display:inline-block;
 	float:right;
+	position:relative;
 	margin-top:10px;
 	margin-right:30px;
 }
