@@ -650,6 +650,7 @@ body {
 	height:360px;
 	float:left;
 	position:fixed;
+	font-family: Consolas, "Share Tech Mono";
 
 }
 
@@ -725,6 +726,7 @@ body {
 	text-align:center;
 	font-size:20px;
 	cursor:pointer;
+	font-family: Consolas, "Share Tech Mono";
 }
 
 
