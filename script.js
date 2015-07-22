@@ -352,20 +352,24 @@ var resizing = function() {
 		}
 		if (windwidth < 1200){
 			$(".button").css({"font-size":"12px","width":70,"bottom":0});
-			$(".longbutton").css("width", 102);
+			$(".longbutton").css({"width":102,"top":0});
+			$("#titlelogo").css({"width":280,"height":60,"margin-top":10});
 		}
 		else {
 			$(".button").css({"font-size":"16px","width":90,"bottom":0});
-			$(".longbutton").css("width", 135);
+			$(".longbutton").css({"width":135,"top":0});
+			$("#titlelogo").css({"width":280,"height":60,"margin-top":10});
 		}
 		if (windwidth < 1050){
-			$(".button").css({"font-size":"12px","width":60,"bottom":16});
+			$(".button").css({"font-size":"12px","width":60,"bottom":14});
 
-			$(".longbutton").css({"width":70,"bottom":0});
+			$(".longbutton").css({"width":70,"bottom":0,"top":0});
+			$("#titlelogo").css({"width":200,"height":43,"margin-top":20});
 		}
-		if (windwidth < 950){
-			$(".button").css({"font-size":"10px","width":50});
-			$(".longbutton").css("width", 60);
+		if (windwidth < 870){
+			$(".button").css({"font-size":"10px","width":50,"bottom":11});
+			$(".longbutton").css({"width":60,"top":0});
+			$("#titlelogo").css({"width":150,"height":32,"margin-top":25});
 		}
 		if ($("#blog").length){
 			var type = "b";
