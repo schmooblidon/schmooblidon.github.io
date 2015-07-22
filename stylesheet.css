@@ -711,8 +711,6 @@ body {
 	float:right;
 	z-index:0;
 	position:relative;
-
-
 }
 
 .ig-text p {
@@ -729,9 +727,6 @@ body {
 	cursor:pointer;
 	font-family: Consolas, "Share Tech Mono";
 }
-
-
-
 
 #img-button {
 	height:41px;
