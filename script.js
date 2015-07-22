@@ -4,7 +4,7 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
 }
 youtubeheightswitch = true;
 youtubeheightswitch2 = false;
-sideconwidth = 320;
+sideconwidth = 300;
 controlconwidth = 100;
 hitboxwidth = 1280;
 hitboxheight = 714;
