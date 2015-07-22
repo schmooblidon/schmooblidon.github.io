@@ -597,6 +597,7 @@ var widthresize = function(){
     s.parentNode.insertBefore(g, s);
 }(document, 'script'));
 $(document).ready(function(){
+	prompt(mobile);
 	$("#fc0").addClass("fchighlight");
 	resizing();
 	widthresize();
