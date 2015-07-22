@@ -1,8 +1,10 @@
 mobile = false;
-
-if (navigator.userAgent.match(/Mobi/)) {
-    mobile = true;
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+ 	mobile = true;
 }
+/*if (navigator.userAgent.match(/Mobi/)) {
+    mobile = true;
+}*/
 
 youtubeheightswitch = true;
 youtubeheightswitch2 = false;
