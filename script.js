@@ -416,7 +416,7 @@ var resizing = function() {
 								//$(".gfyinside"+i).height($(".gfyinside"+i).children(".ig-text").height());
 					//		}
 							//$(".gfyinside"+i).children(".graphcontainer").height($(".gfyinside"+i).height() + 30);
-							$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).width());
+							$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).children(".graphcontainer").width());
 						}
 					}
 					if (windwidth < 1150){
@@ -428,7 +428,7 @@ var resizing = function() {
 							//$(".gfyinside"+i).children(".ig-text").css("bottom", $(".gfyinside"+i).children(".graphcontainer").height() * 0.35 - 20);
 
 							//$(".gfyinside"+i).height($(".gfyinside"+i).children(".graphcontainer").height() * 0.65 + $(".gfyinside"+i).children(".ig-text").height() + 25);
-							$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).width());
+							$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).children(".graphcontainer").width());
 						}
 					}
 					else {
@@ -437,7 +437,8 @@ var resizing = function() {
 						$(".ig-text").width(windwidth - 840);
 						for (i=1;i<noofgfys+1;i++){
 							//$(".gfyinside"+i).children(".ig-text").css("bottom", 0);
-							$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).width());
+							$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).children(".graphcontainer").width());
+
 						}
 					}
 				}
@@ -469,7 +470,8 @@ var resizing = function() {
 						for (i=1;i<noofgfys+1;i++){
 						//	$(".gfyinside"+i).children(".ig-text").css("bottom", 0);
 						//	$(".gfyinside"+i).children(".graphcontainer").height("auto");
-						$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).width());
+
+							$(".gfyinside"+i).children(".media-flex").height(ratios[i-1] * $(".gfyinside"+i).children(".graphcontainer").width());
 						}
 					}
 				break;
