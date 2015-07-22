@@ -2,10 +2,6 @@ mobile = false;
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
  	mobile = true;
 }
-/*if (navigator.userAgent.match(/Mobi/)) {
-    mobile = true;
-}*/
-
 youtubeheightswitch = true;
 youtubeheightswitch2 = false;
 sideconwidth = 320;
@@ -355,12 +351,12 @@ var resizing = function() {
 			$("#main").removeClass("smalltext");
 		}
 		if (windwidth < 1200){
-			$(".button").css({"font-size":"13px","width":90});
-			$(".longbutton").css("width", 110);
+			$(".button").css({"font-size":"12px","width":70});
+			$(".longbutton").css("width", 102);
 		}
 		else {
-			$(".button").css({"font-size":"16px","width":110});
-			$(".longbutton").css("width", 150);
+			$(".button").css({"font-size":"16px","width":90});
+			$(".longbutton").css("width", 135);
 		}
 		if (windwidth < 1050){
 			$(".button").css({"font-size":"10px","width":70});
@@ -668,6 +664,9 @@ $(document).ready(function(){
 	if (mobile === false){
 		$(".button").hover(function(){
 			$(this).toggleClass("buttonhighlighted");
+		});
+		$(".socialmedia").hover(function(){
+			$(this).toggleClass("socialmediahighlight");
 		});
 
 		$("#header").hover(function(){
