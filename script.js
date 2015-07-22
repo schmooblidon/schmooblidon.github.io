@@ -1,3 +1,9 @@
+mobile = false;
+
+if (navigator.userAgent.match(/Mobi/)) {
+    mobile = true;
+}
+
 youtubeheightswitch = true;
 youtubeheightswitch2 = false;
 sideconwidth = 320;
@@ -114,6 +120,7 @@ intervalId = 0;
 fulltext = "";
 pospart = "";
 var helpbox = function(){
+
 	$(".attack").children("p").hover(function(){
 		var textpart = $(this).text();
 		fulltext = "<div class='help' style='width:100px'><p>Toggle "+textpart+" hitboxes</p></div>";
@@ -607,11 +614,13 @@ $(document).ready(function(){
 	helpbox();
 	$(".attack").addClass("highlighted2");
 	$(".framecontrol").children("p").addClass("framehighlight2");
-	$(".maximize").hover(function(){
+	if (mobile === false){
+		$(".maximize").hover(function(){
 		$(this).fadeTo(300, 0.5);
 		}, function(){
 		$(this).fadeTo(300, 0);
-	});
+		});
+	}
 	$(".maximize").click(function(){
 		var char = $(this).parents("#ig-content").attr('class');
 		var num = $(this).attr('id');
@@ -652,33 +661,36 @@ $(document).ready(function(){
 			});
 		}
 	});
-	$(".button").hover(function(){
-		$(this).toggleClass("buttonhighlighted");
-	});
+	if (mobile === false){
+		$(".button").hover(function(){
+			$(this).toggleClass("buttonhighlighted");
+		});
 
-	$("#header").hover(function(){
-		$("body").toggleClass("bodyhighlight");
-	});
-	$("#heatmapinfo").hover(function(){
-		$("#heatmapinfobox").fadeToggle(300);
-	});
-	$(".noa").hover(function(){
-		$(this).toggleClass("highlighted");
-	});
-	$(".attack").children("p").hover(function(){
-		$(this).parent().toggleClass("highlighted");
-		if (hbhlswitch){
-			var m = $(this).parent().attr("id");
-			if (m.length > 7){
-				m = m[6]+m[7];
-			}
-			else {
-				m = m[6];
-			}
+		$("#header").hover(function(){
+			$("body").toggleClass("bodyhighlight");
+		});
 
-			hbhl("a",m);
-		}
-	});
+		$("#heatmapinfo").hover(function(){
+			$("#heatmapinfobox").fadeToggle(300);
+		});
+		$(".noa").hover(function(){
+			$(this).toggleClass("highlighted");
+		});
+		$(".attack").children("p").hover(function(){
+			$(this).parent().toggleClass("highlighted");
+			if (hbhlswitch){
+				var m = $(this).parent().attr("id");
+				if (m.length > 7){
+					m = m[6]+m[7];
+				}
+				else {
+					m = m[6];
+				}
+
+				hbhl("a",m);
+			}
+		});
+	}
 	$(".attack").children("p").click(function(){
 		$(this).parent().toggleClass("highlighted2");
 
@@ -691,9 +703,11 @@ $(document).ready(function(){
 		}
 		togglehitbox("a", atnum);
 	});
+	if (mobile === false){
 	$(".framecircle").hover(function(){
 		$(this).toggleClass("highlighted");
 		});
+	}
 	$(".framecircle").click(function(){
 		$(".framecircle").removeClass("fchighlight");
 		$(this).addClass("fchighlight");
@@ -705,9 +719,11 @@ $(document).ready(function(){
 		fselected = type;
 		fselect(type, text);
 	});
+	if (mobile === false){
 	$(".sugbtn").hover(function(){
 		$(this).toggleClass("sugbtnhighlight");
 	});
+	}
 	$("#hbhlbutton").click(function(){
 		$(this).children("p").children("span").empty();
 		if (hbhlswitch){
@@ -719,9 +735,11 @@ $(document).ready(function(){
 			hbhlswitch = 1;
 		}
 	});
-	$("#hurtchar").hover(function(){
-		$("#hurtchardropdown").toggle();
-	});
+	if (mobile === false){
+		$("#hurtchar").hover(function(){
+			$("#hurtchardropdown").toggle();
+		});
+	}
 	$(".hbcharselect").click(function(){
 		hurtchar = $(this).text();
 		hurtchar = hurtchar.toLowerCase();
@@ -778,9 +796,11 @@ $(document).ready(function(){
 			$(".a"+i).removeClass("a"+i+"off");
 		}
 	});
+	if (mobile === false){
 	$("#frameall").children("div").hover(function(){
 		$(this).toggleClass("highlighted2");
 	});
+}
 	$("#fallon").click(function(){
 		$(".framecontrol").children("p").removeClass("framehighlight3");
 		if (fselected.length > 3){
@@ -843,10 +863,12 @@ $(document).ready(function(){
 				fc[fselected][i-1] = 0;
 			}	}
 	});
+	if (mobile === false){
 	$(".speed").hover(function(){
 		$(this).toggleClass("highlighted"
 	);
 	});
+}
 	$("#times1").click(function(){
 		$(this).addClass("highlighted2"
 	);
@@ -866,6 +888,7 @@ $(document).ready(function(){
 		$("#times05").removeClass("highlighted2");
 		speed = 4;
 	});
+	if (mobile === false){
 	$("#characterbutton").hover(function(){
 		$("#chardropdown").toggle();
 	});
@@ -885,6 +908,7 @@ $(document).ready(function(){
 			hbhl("f",m);
 		}
 	});
+}
 	$(".framecontrol").click(function(){
 		$(this).children("p").toggleClass("framehighlight3");
 		var fnum = $(this).attr("id");
@@ -958,12 +982,14 @@ $(document).ready(function(){
 		$("#framecontainer").animate({width:825},200);
 		$(".framecontrol").animate({width:41},200);
 	});
+	if (mobile === false){
 	$(".fullsize").hover(function(){
 		$(this).toggleClass("highlighted");
 	});
 	$(".ig-button").hover(function(){
 		$(this).toggleClass("ighighlighted");
 	});
+}
 	setTimeout(resizing,500);
 	setTimeout(resizing,1000);
 	setTimeout(resizing,5000);
