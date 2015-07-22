@@ -919,3 +919,14 @@ a:visited {
 .socialmediahighlight {
 	background-color:#3395f0;
 }
+
+.author {
+	color:#fff56e;
+	font-weight:bold;
+}
+
+.authoricon {
+	margin-left:5px;
+	width:20px;
+	height:20px;
+}
