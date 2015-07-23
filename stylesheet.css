@@ -928,9 +928,13 @@ a:visited {
 	border-radius:3px;
 }
 
-
+.fb-share-button {
+	bottom: 8px;
+	left: 30px;
+	margin:0px;
+}
 
 .twitter-share-button {
 	bottom:8px;
-	left:30px;
+	left:60px;
 }
