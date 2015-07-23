@@ -4,7 +4,7 @@ if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(naviga
 }
 youtubeheightswitch = true;
 youtubeheightswitch2 = false;
-sideconwidth = 300;
+sideconwidth = 305;
 controlconwidth = 100;
 hitboxwidth = 1280;
 hitboxheight = 714;
@@ -243,6 +243,26 @@ var movehurtbox = function(){
 		}
 	}
 	currentMargin = $("#hurtbox").prop("style")["margin-left"];
+}
+
+var mobilemovehurtbox = function(direction){
+  if (currentMargin.length === 2){
+    var cm = Number(currentMargin[0]);
+  }
+  else {
+    var cm = Number(currentMargin[0]+currentMargin[1]);
+  }
+  if (direction = "l"){
+    if (cm > 0){
+        $("#hurtbox").css("margin-left",(cm-2)+"%");
+    }
+  }
+  else if (direction = "r"){
+    if (cm < 75){
+        $("#hurtbox").css("margin-left",(cm+2)+"%");
+    }
+  }
+  currentMargin = $("#hurtbox").prop("style")["margin-left"];
 }
 
 var togglehitbox = function(type, num) {
@@ -677,12 +697,10 @@ $(document).ready(function(){
 	}
 	else {
 		$("#hbleft").click(function(){
-			movehurtbox();
-			movehurtbox();
+			mobilemovehurtbox("l");
 		});
 		$("#hbright").click(function(){
-			movehurtbox();
-			movehurtbox();
+			mobilemovehurtbox("r");
 		});
 		$("#characterbutton").click(function(){
 			$("#chardropdown").toggle();
