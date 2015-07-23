@@ -711,6 +711,8 @@ $(document).ready(function(){
 		$("#hurtchar").click(function(){
 			$("#hurtchardropdown").toggle();
 		});
+    $(".maximize").attr("src", "assets/tapenlarge.png");
+    $(".maximize").css("opacity",100);
 
 	}
 	$(".attack").addClass("highlighted2");
