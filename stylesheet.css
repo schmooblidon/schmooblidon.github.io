@@ -489,7 +489,7 @@ body {
 }
 
 #hmtypedropdown {
-	display:inline-block;
+	display:none;
 	position:absolute;
 	width:80px;
 	height:30px;
@@ -507,7 +507,7 @@ body {
 }
 
 #hurtchardropdown {
-	display:inline-block;
+	display:none;
 	position:absolute;
 	width:80px;
 	height:30px;
@@ -937,4 +937,5 @@ a:visited {
 .twitter-share-button {
 	bottom:8px;
 	left:60px;
+	margin-left:30px;
 }
