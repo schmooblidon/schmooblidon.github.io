@@ -929,7 +929,7 @@ a:visited {
 }
 
 .fb-share-button {
-	top:10;
-	left:100;
+	bottom:8px;
+	left:30px;
 
 }
