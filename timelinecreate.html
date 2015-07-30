@@ -8,8 +8,10 @@
 <link href="newthingsheet.css" rel="stylesheet" type="text/css">
 
 <script src="jquery-1.11.3.js" type="text/javascript"></script>
-<script type="text/javascript" src="script.js"></script>
+<script type="text/javascript" src="bresize.js"></script>
 <script type="text/javascript" src="newthingscript.js"></script>
+<script type="text/javascript" src="script.js"></script>
+
 
 <link rel="shortcut icon" href="favicon.ico" />
 <title>I KneeData | For your frame data kneeds</title>
@@ -28,17 +30,66 @@
 	<div id="socialmediaicons"><a href="http://twitter.com/IKneeData"><div class="socialmedia" style="background-image:url(assets/twitterlogo.png)"></div></a>
 	<a href="http://facebook.com/IKneeData"><div class="socialmedia" style="background-image:url(assets/facebooklogo.png)"></div></a></div>
 </div>
-<div id="pagetitle" style="background-color:#AC2629">
-<h1>Blog</h1></div>
+<div id="pagetitle" style="background-color:#1d39b3">
+<h1>Timelines</h1></div>
 <div id="main">
 <div id="main-content">
-<div id="timelinebigcontainer">
-<div id="tline"></div>
-<div id="timelinescontainer">
-	<div class="timeline" id="tl1"><div class="tkey" style="background-image:url(assets/buttons/stickdown.png)"></div><div class="tframe"></div><div class="tframe"></div><div class="tframe"></div><div class="tframe"></div></div>
-<div class="timeline" id="tl2"><div class="tkey" style="background-image:url(assets/buttons/b.png)"></div><div class="tframe"></div><div class="tframe"></div><div class="tframe"></div><div class="tframe"></div></div>
-<div class="timeline" id="tl3"><div class="tkey" style="background-image:url(assets/buttons/xy.png)"></div><div class="tframe"></div><div class="tframe"></div><div class="tframe"></div><div class="tframe"></div></div>
+<div id="maincontrols">
+	<form id="drop1">Game
+	<select name="dropdown" id="gamedrop">
+	<option value="0" selected>-</option>
+	<option value="64">64</option>
+	<option value="me">Melee</option>
+	<option value="br">Brawl</option>
+	<option value="pm">Project M</option>
+	<option value="s4">Smash 4</option>
+	</select>
+	</form>
+	<form id="drop2">Character
+	<select name="dropdown" id="chardrop">
+	<option value="0" selected>-</option>
+	</select>
+	</form>
+	<form id="drop3">Name <input type="text" name="timelinename" maxlength="30" id="namedrop" style="width:100px;"/></form>
+	<form id="drop4">No. of Buttons
+	<select name="dropdown" id="buttonsdrop">
+	<option value="0" selected>-</option>
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+	</select>
+	</form>
+	<form id="drop5">No. of Frames
+	<select name="dropdown" id="framesdrop">
+	<option value="0" selected>-</option>
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+	<option value="11">11</option>
+	<option value="12">12</option>
+	<option value="13">13</option>
+	<option value="14">14</option>
+	<option value="15">15</option>
+	</select>
+	</form>
+	<div id="createbutton" class="editbutton"><p>Create</p></div>
 </div>
+<div id="timelinebigcontainer">
+
 </div>
 
 

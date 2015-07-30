@@ -1,0 +1,202 @@
+
+#buttondropdown {
+	width:200px;
+	height:280px;
+	position:absolute;
+	background-color:#262626;
+	left:100px;
+}
+
+#timelinetitle {
+	line-height:0px;
+	vertical-align: top;
+}
+
+.buttonselect {
+	height:70px;
+	width:100px;
+	display:inline-block;
+	background-color:#262626;
+}
+.buttonselecthighlight {
+	background-color:#4a4a4a;
+}
+
+#tlgame {
+	margin:10px;
+	line-height:0px;
+}
+
+#tltext {
+	display:inline-block;
+	margin:20px 20px 10px 5px;
+	line-height:0px;
+	vertical-align: top;
+}
+
+#tlchar {
+	display:inline-block;
+	margin-right:10px;
+	width:26px;
+	height:26px;
+	line-height:0px;
+}
+
+#tlname {
+	font-family:'Share Tech Mono';
+	font-size:23px;
+	line-height:0px;
+}
+
+#maincontrols {
+	background-color: #3c3c3c;
+	height:50px;
+}
+
+#maincontrols form {
+	display:inline-block;
+	margin:15px 15px;
+}
+
+#maincontrols p {
+	display:inline-block;
+	margin:15px 15px;
+}
+
+.error {
+	border:2px solid red;
+}
+
+.editbutton {
+	vertical-align: top;
+	background-color:#4f4f4f;
+	color:white;
+	width:90px;
+	height:50px;
+	display:inline-block;
+	cursor:pointer;
+}
+
+.editbuthighlight {
+	background-color:#2b2b2b;
+}
+
+#timelinebigcontainer {
+	position:relative;
+	display:inline-block;
+	width:420px;
+}
+
+#timelinebigcontainer div {
+	line-height:0px;
+}
+
+#timelinescontainer {
+	display:inline-block;
+	width:400px;
+}
+
+.timeline {
+	display:inline-block;
+	height:72px;
+
+}
+
+#tline {
+	display:inline-block;
+	height:240px;
+	width:3px;
+	background-color:blue;
+	position:relative;
+	top:0px;
+	left:103px;
+	margin:0px;
+}
+
+.tkey {
+	display:inline-block;
+	height:70px;
+	width:100px;
+	background-color:#4a4a4a;
+	border:1px solid black;
+	cursor:pointer;
+}
+
+.tkeyhighlight {
+	background-color:#262626;
+}
+
+.dropdowned {
+	background-color:#262626;
+}
+#playkey {
+
+	display:inline-block;
+	height:70px;
+	width:100px;
+	border:1px solid black;
+	cursor:pointer;
+}
+
+
+
+.playmode {
+	background-color:#777777;
+	background-image:url(assets/buttons/play.png);
+}
+
+.pausemode {
+	background-color:#777777;
+	background-image:url(assets/buttons/stop.png);
+}
+
+.playkeyhighlight {
+	background-color:#4f4f4f;
+}
+
+.tframe {
+	display:inline-block;
+	height:70px;
+	width:70px;
+	background-color:white;
+	border:1px solid black;
+	cursor:pointer;
+}
+
+.tframehighlight {
+	margin:25px;
+	height:20px;
+	width:20px;
+	background-color:#9e9e9e;
+	border-radius:10px;
+}
+
+.tnum {
+	display:inline-block;
+	height:30px;
+	width:70px;
+	background-color:#777777;
+	border:1px solid black;
+	text-align:center;
+	vertical-align:top;
+
+}
+
+.tnum p {
+	margin:3px 3px;
+	color:white;
+	font-size:20px;
+	line-height:normal;
+}
+
+.type0 {
+	background-color:black;
+}
+
+.type1 {
+	background-color:white;
+}
+
+.type2 {
+	background-color:#333333;
+}
