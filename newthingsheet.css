@@ -1,4 +1,83 @@
 
+#controllerdisplay {
+	position:relative;
+	width:720px;
+	height:620px;
+}
+
+#controllerdisplay img {
+	position:absolute;
+
+}
+
+#i-ss {
+	top:277px;
+	left:343px;
+	opacity:0.35;
+}
+
+.dpad {
+	top:402px;
+	left:201px;
+	opacity:0.35;
+}
+#i-cs {
+	top:416px;
+	left:442px;
+}
+#i-xx {
+	left:629px;
+	top:240px;
+	opacity:0.35;
+}
+#i-yy {
+	left:515px;
+	top:190px;
+	opacity:0.35;
+}
+#i-aa {
+	left:534px;
+	top:252px;
+	opacity:0.35;
+}
+#i-zz {
+	left:659px;
+	top:100px;
+	opacity:0.2;
+}
+#i-bb {
+	left:471px;
+	top:310px;
+	opacity:0.35;
+}
+#i-rr {
+	left:544px;
+	top:43px;
+	opacity:0.2;
+}
+#i-ll {
+	left:102px;
+	top:43px;
+	opacity:0.2;
+}
+#i-ls {
+	left:96px;
+	top:252px;
+}
+#i-lb {
+	left:60px;
+	top:108px;
+}
+#i-rb {
+	left:536px;
+	top:108px;
+}
+#i-zb {
+	left:534px;
+	top:123px;
+}
+
+
 #buttondropdown {
 	width:200px;
 	height:280px;
@@ -140,6 +219,8 @@
 
 
 
+
+
 .playmode {
 	background-color:#777777;
 	background-image:url(assets/buttons/play.png);
@@ -151,8 +232,45 @@
 }
 
 .playkeyhighlight {
-	background-color:#4f4f4f;
+	background-color:#343635;
 }
+
+
+#playcontrols {
+	background-color:#777777;
+	display:inline-block;
+	height:25px;
+	width:100px;
+	border:1px solid black;
+	cursor:pointer;
+}
+
+.playbutton {
+	background-color:#777777;
+	line-height:0px;
+	vertical-align:middle;
+	text-align:center;
+	font-size:10px;
+	display:inline-block;
+	height:23px;
+	width:22px;
+	border:1px solid black;
+	cursor:pointer;
+}
+
+#loop {
+	padding-left:2px;
+	padding-right:1px;
+}
+
+.playbuttonhighlight {
+	background-color:#343635;
+}
+
+.playbuttonhighlight2{
+	background-color:black;
+}
+
 
 .tframe {
 	display:inline-block;
