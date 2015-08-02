@@ -6,6 +6,37 @@ body {
 	color:#FFFFFF;
 	margin:0;
 }
+
+.spoilerbutton {
+	height:40px;
+	Width:100px;
+	font-size:20px;
+	background-color:#787878;
+	cursor:pointer;
+	text-align:center;
+	vertical-align: middle;
+	line-height:36px;
+}
+
+.spoilerbutton p {
+	margin-top:5px;
+
+}
+
+.spoilerbuttonhighlight {
+	background-color: #4d4d4d;
+
+}
+.spoilercontent {
+	background-color:rgba(150, 145, 145, 0.36);
+	padding:20px;
+}
+
+.semititle {
+	font-size:22px;
+	font-weight:bold;
+	text-decoration:underline;
+}
 #header {
 	display:block;
 	background-color: #000000;

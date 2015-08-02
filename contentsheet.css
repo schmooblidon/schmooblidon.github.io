@@ -10,29 +10,29 @@
 	z-index:120;
 	border:20px solid #727272;
 }
-#blogcontainer {
+.blogcontainer {
 	height:auto;
 	width:auto;
 	display:inline-block;
 	background-color: rgba(41, 41, 41, 0.6);
 	margin:30px;
 }
-#blogcontainer h2 {
+.blogcontainer h2 {
 	margin-left:40px;
 }
-#blog {
+.blog {
 	width:800px;
 	margin:40px;
 }
-#blog p {
+.blog p {
 	color:#EFEFEF;
 	background:none;
 }
-#blogcontainer img {
+.blogcontainer img {
 	position:relative;
 	top:10px;
 }
-#blog img {
+.blog img {
 	position:relative;
 	top:5px;
 }

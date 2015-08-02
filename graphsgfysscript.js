@@ -8,7 +8,10 @@ if	(typeof noofgfys === 'undefined'){
     s.parentNode.insertBefore(g, s);
 }(document, 'script'));
 
+spoiler = 0;
+
 $(document).ready(function(){
+	$(".spoilercontent").hide();
 	if (mobile === false){
 		$(".maximize").hover(function(){
 		$(this).fadeTo(300, 0.5);
@@ -65,6 +68,20 @@ $(document).ready(function(){
 			$bigimg.click(function(){
 				$("#bigimgcontainer").empty();
 			});
+		}
+	});
+
+	$(".spoilerbutton").hover(function(){
+		$(this).toggleClass("spoilerbuttonhighlight");
+	});
+	$(".spoilerbutton").click(function(){
+		if (spoiler){
+			$(".spoilercontent").hide();
+			spoiler = 0;
+		}
+		else {
+			$(".spoilercontent").show();
+			spoiler = 1;
 		}
 	});
 });
