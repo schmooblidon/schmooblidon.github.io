@@ -78,10 +78,12 @@ $(document).ready(function(){
 		if (spoiler){
 			$(".spoilercontent").hide();
 			spoiler = 0;
+			$(".spoilerbutton").children("p").empty().append("Show");
 		}
 		else {
 			$(".spoilercontent").show();
 			spoiler = 1;
+			$(".spoilerbutton").children("p").empty().append("Hide");
 		}
 	});
 });
