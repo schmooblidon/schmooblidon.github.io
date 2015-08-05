@@ -10,6 +10,32 @@
 
 }
 
+.lstickf {
+	height:41px;
+	width:41px;
+	position:absolute;
+	background-image:url(assets/buttons/lsstick.png);
+	filter: brightness(1);
+	-webkit-filter: brightness(1);
+	top: 15px;
+  left: 15px;
+}
+.cstickf {
+	height:31px;
+	width:31px;
+	position:absolute;
+	background-image:url(assets/buttons/csstick.png);
+	filter: brightness(1);
+	-webkit-filter: brightness(1);
+	top: 20px;
+  left: 20px;
+}
+
+.stickfhighlight {
+	filter: brightness(1.2);
+	-webkit-filter: brightness(1.2);
+}
+
 #i-ss {
 	top:277px;
 	left:343px;
@@ -84,6 +110,7 @@
 	position:absolute;
 	background-color:#262626;
 	left:100px;
+	z-index:5;
 }
 
 #timelinetitle {
@@ -279,6 +306,7 @@
 	background-color:white;
 	border:1px solid black;
 	cursor:pointer;
+	position:relative;
 }
 
 .tframehighlight {

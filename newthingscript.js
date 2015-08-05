@@ -304,6 +304,12 @@ var playtimeline = function(){
   }
 }
 
+var dragstick = function(type){
+  $("."+type+"stickf").draggable({ stop: function(type){
+    timelines["tl"]
+  } , containment: "parent", scroll: false });
+}
+
 $(document).ready(function(){
   $("#gamedrop").change(function() {
     var id = $(this).val();
@@ -350,10 +356,20 @@ $(document).ready(function(){
 
   $("#timelinebigcontainer").on({
     mouseenter: function () {
-        $(this).append("<div class='tframehighlight'></div>");
+        if ($(this).hasClass("stickf")){
+          $(this).children(".analog").addClass("stickfhighlight");
+        }
+        else {
+          $(this).append("<div class='tframehighlight'></div>");
+        }
     },
     mouseleave: function () {
+      if ($(this).hasClass("stickf")){
+        $(this).children(".analog").removeClass("stickfhighlight");
+      }
+      else {
         $(this).empty();
+      }
     }
   }, ".tframe");
 
@@ -419,6 +435,15 @@ $(document).ready(function(){
     }
     buttons[num-1] = but;
     $(this).closest(".tkey").addClass(but).css("background-image","url(assets/buttons/"+but+".png)");
+    if (but === "ls"){
+
+      $("#tl"+num).children(".tframe").removeClass("type0 type1").addClass("type2 stickf").css("background-image","url(assets/buttons/lsframe.png)").append('<div class="lstickf analog" id="lstickf'+num+'"></div>');
+      dragstick("l");
+    }
+    else if (but === "cs"){
+      $("#tl"+num).children(".tframe").removeClass("type0 type1").addClass("type2 stickf").css("background-image","url(assets/buttons/csframe.png)").append('<div class="cstickf analog" id="cstickf'+num+'"></div>');
+      dragstick("c");
+    }
     $(".tkey").removeClass("tkeyhighlight");
   });
 
@@ -458,6 +483,29 @@ $(document).ready(function(){
       $(this).css("background-image","url(assets/buttons/loop.png)");
     }
   });
+
+  /*$("#timelinebigcontainer").on('mousedown', '.analog', function(e){
+    var node = $(this);
+    var position = node.offset();
+    var initialized = {
+        x : position.left - e.pageX,
+        y : position.top - e.pageY
+    };
+    var handlers = {
+        mousemove : function(e){
+            node.css({
+                left : ( initialized.x + e.pageX ) + 'px',
+                top : ( initialized.y + e.pageY ) + 'px'
+            });
+        },
+        mouseup : function(e){
+            $(this).off(handlers);
+        }
+    };
+    $(document).on(handlers);
+  });*/
+
+
 
 
 });
