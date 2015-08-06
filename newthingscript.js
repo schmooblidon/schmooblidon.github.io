@@ -20,6 +20,23 @@ noofframes = 0;
 buttons = [];
 speed = 1;
 loop = true;
+lsticknum = 0;
+csticknum = 0;
+inuse = [];
+inuse[0] = ["ls", 0];
+inuse[1] = ["cs", 0];
+inuse[2] = ["aa", 0];
+inuse[3] = ["bb", 0];
+inuse[4] = ["xx", 0];
+inuse[5] = ["yy", 0];
+inuse[6] = ["ss", 0];
+inuse[7] = ["zz", 0];
+inuse[8] = ["ll", 0];
+inuse[9] = ["rr", 0];
+inuse[10] = ["du", 0];
+inuse[11] = ["dr", 0];
+inuse[12] = ["dd", 0];
+inuse[13] = ["dl", 0];
 /*
 for (i=1;i<=noofbuttons;i++){
   timelines["tl"+i] = [];
@@ -34,40 +51,42 @@ var tframeclickstates = function(){
   $("#timelinebigcontainer").on('click','.tframe',function() {
 
     var $t = $(this);
-    var id = $t.attr("id");
-    if (id[2] === "f"){
-      var but = parseInt(id.substr(1,1));
-      if (id.length === 4){
-        var frame = parseInt(id.substr(3,1));
+    if (!$t.hasClass("stickf")){
+      var id = $t.attr("id");
+      if (id[2] === "f"){
+        var but = parseInt(id.substr(1,1));
+        if (id.length === 4){
+          var frame = parseInt(id.substr(3,1));
+        }
+        else {
+          var frame = parseInt(id.substr(3,2));
+        }
       }
       else {
-        var frame = parseInt(id.substr(3,2));
+        but = parseInt(id.substr(1,2));
+        if (id.length === 5){
+          var frame = parseInt(id.substr(4,1));
+        }
+        else {
+          var frame = parseInt(id.substr(4,2));
+        }
       }
-    }
-    else {
-      but = parseInt(id.substr(1,2));
-      if (id.length === 5){
-        var frame = parseInt(id.substr(4,1));
-      }
-      else {
-        var frame = parseInt(id.substr(4,2));
-      }
-    }
 
-    if ($t.hasClass("type0")){
-      $t.removeClass("type0");
-      $t.addClass("type1");
-      timelines["tl"+but][frame-1] = 1;
-    }
-    else if ($t.hasClass("type1")){
-      $t.removeClass("type1");
-      $t.addClass("type2");
-      timelines["tl"+but][frame-1] = 2;
-    }
-    else if ($t.hasClass("type2")){
-      $t.removeClass("type2");
-      $t.addClass("type0");
-      timelines["tl"+but][frame-1] = 0;
+      if ($t.hasClass("type0")){
+        $t.removeClass("type0");
+        $t.addClass("type1");
+        timelines["tl"+but][frame-1] = 1;
+      }
+      else if ($t.hasClass("type1")){
+        $t.removeClass("type1");
+        $t.addClass("type2");
+        timelines["tl"+but][frame-1] = 2;
+      }
+      else if ($t.hasClass("type2")){
+        $t.removeClass("type2");
+        $t.addClass("type0");
+        timelines["tl"+but][frame-1] = 0;
+      }
     }
   });
 }
@@ -272,7 +291,13 @@ var playtimeline = function(){
     (function buttondisplay (j) {
       setTimeout(function () {
         for (i=1;i<=noofbuttons;i++){
-          if (timelines["tl"+i][noofframes-j]){
+          if (buttons[i-1] === "ls"){
+            $("#i-ls").css({"top": 252 - 30 + (2 * timelines["tl"+i][noofframes-j][0]), "left": 96 - 30 + (2 * timelines["tl"+i][noofframes-j][1])});
+          }
+          else if (buttons[i-1] === "cs"){
+            $("#i-cs").css({"top": 416 - 30 + (1.5 * timelines["tl"+i][noofframes-j][0]), "left": 442 - 30 + (1.5 * timelines["tl"+i][noofframes-j][1])});
+          }
+          else if (timelines["tl"+i][noofframes-j]){
             $("#i-"+buttons[i-1]).fadeTo(1,1);
             if (buttons[i-1] === "ll"){
               $("#i-lb").css("top","123px");
@@ -305,8 +330,13 @@ var playtimeline = function(){
 }
 
 var dragstick = function(type){
-  $("."+type+"stickf").draggable({ stop: function(type){
-    timelines["tl"]
+  $("."+type+"stickf").draggable({ stop: function(){
+    var frame = $(this).attr("id");
+    frame = parseInt(frame.substr(7,2));
+    var but = $(this).closest(".timeline").attr("id");
+    but = parseInt(but.substr(2,2));
+    var dimensions = $(this).position();
+    timelines["tl"+but][frame-1] = [dimensions.top, dimensions.left];
   } , containment: "parent", scroll: false });
 }
 
@@ -381,17 +411,26 @@ $(document).ready(function(){
     else {
       $(".tkey").removeClass("dropdowned");
       $("#buttondropdown").remove();
-      $(this).append('<div id="buttondropdown"><div class="buttonselect" id="ls" style="background-image:url(assets/buttons/ls.png)"></div><div class="buttonselect" id="cs" style="background-image:url(assets/buttons/cs.png)"></div><div class="buttonselect" id="aa" style="background-image:url(assets/buttons/aa.png)"></div><div class="buttonselect" id="bb" style="background-image:url(assets/buttons/bb.png)"></div><div class="buttonselect" id="xx" style="background-image:url(assets/buttons/xx.png)"></div><div class="buttonselect" id="yy" style="background-image:url(assets/buttons/yy.png)"></div><div class="buttonselect" id="ss" style="background-image:url(assets/buttons/ss.png)"></div><div class="buttonselect" id="zz" style="background-image:url(assets/buttons/zz.png)"></div><div class="buttonselect" id="ll" style="background-image:url(assets/buttons/ll.png)"></div><div class="buttonselect" id="rr" style="background-image:url(assets/buttons/rr.png)"></div>');
+      $(this).append('<div id="buttondropdown"><div class="buttonselect" id="ls" style="background-image:url(assets/buttons/ls.png)"></div><div class="buttonselect" id="cs" style="background-image:url(assets/buttons/cs.png)"></div><div class="buttonselect" id="aa" style="background-image:url(assets/buttons/aa.png)"></div><div class="buttonselect" id="bb" style="background-image:url(assets/buttons/bb.png)"></div><div class="buttonselect" id="xx" style="background-image:url(assets/buttons/xx.png)"></div><div class="buttonselect" id="yy" style="background-image:url(assets/buttons/yy.png)"></div><div class="buttonselect" id="ss" style="background-image:url(assets/buttons/ss.png)"></div><div class="buttonselect" id="zz" style="background-image:url(assets/buttons/zz.png)"></div><div class="buttonselect" id="ll" style="background-image:url(assets/buttons/ll.png)"></div><div class="buttonselect" id="rr" style="background-image:url(assets/buttons/rr.png)"></div><div class="buttonselect" id="du" style="background-image:url(assets/buttons/du.png)"></div><div class="buttonselect" id="dr" style="background-image:url(assets/buttons/dr.png)"></div><div class="buttonselect" id="dd" style="background-image:url(assets/buttons/dd.png)"></div><div class="buttonselect" id="dl" style="background-image:url(assets/buttons/dl.png)"></div>');
+      for (i=0;i<=13;i++){
+        if (inuse[i][1]){
+          $("#"+inuse[i][0]).addClass("greyedout");
+        }
+      }
       $(this).addClass("dropdowned");
     }
   });
 
   $("#timelinebigcontainer").on({
     mouseenter: function () {
+      if (!($(this).hasClass("greyedout"))){
         $(this).addClass("buttonselecthighlight");
+      }
     },
     mouseleave: function () {
+      if (!($(this).hasClass("greyedout"))){
         $(this).removeClass("buttonselecthighlight");
+      }
     }
   }, ".buttonselect");
 
@@ -422,29 +461,84 @@ $(document).ready(function(){
     }
   }, ".playbutton");
 
+  $("#timelinebigcontainer").on({
+    mouseenter: function () {
+        $(this).addClass("stickexcontrolhighlight");
+    },
+    mouseleave: function () {
+        $(this).removeClass("stickexcontrolhighlight");
+    }
+  }, ".stickexcontrol");
+
 
   $("#timelinebigcontainer").on('click','.buttonselect',function() {
-    $(this).closest(".tkey").removeClass("aa bb ss xx yy ls cs zz");
-    var but = $(this).attr("id");
-    var num = $(this).closest(".timeline").attr("id");
-    if (num.length === 4){
-      num = parseInt(num.substr(2,2));
-    }
-    else {
-      num = parseInt(num.substr(2,1));
-    }
-    buttons[num-1] = but;
-    $(this).closest(".tkey").addClass(but).css("background-image","url(assets/buttons/"+but+".png)");
-    if (but === "ls"){
 
-      $("#tl"+num).children(".tframe").removeClass("type0 type1").addClass("type2 stickf").css("background-image","url(assets/buttons/lsframe.png)").append('<div class="lstickf analog" id="lstickf'+num+'"></div>');
-      dragstick("l");
-    }
-    else if (but === "cs"){
-      $("#tl"+num).children(".tframe").removeClass("type0 type1").addClass("type2 stickf").css("background-image","url(assets/buttons/csframe.png)").append('<div class="cstickf analog" id="cstickf'+num+'"></div>');
-      dragstick("c");
+    if (!($(this).hasClass("greyedout"))){
+      for (i=0;i<=13;i++){
+        if ($(this).closest(".tkey").hasClass(inuse[i][0])){
+          inuse[i][1] = 0;
+        }
+      }
+      var num = $(this).closest(".timeline").attr("id");
+      if (num.length === 4){
+        num = parseInt(num.substr(2,2));
+      }
+      else {
+        num = parseInt(num.substr(2,1));
+      }
+
+      if ($(this).closest(".tkey").hasClass("ls") || $(this).closest(".tkey").hasClass("cs")){
+        for (i=1;i<=noofframes;i++){
+          timelines["tl"+num][i-1] = 0;
+        }
+        $(this).closest(".timeline").children(".tframe").removeClass("type1 type2 stickf").addClass("type0").empty().css("background-image","none");
+        if ($(this).closest(".tkey").hasClass("ls")){
+          $("#i-ls").css({"top":252,"left":96});
+          $("#tlextra"+lsticknum).remove();
+        }
+        else {
+          $("#i-cs").css({"top":416,"left":442});
+          $("#tlextra"+csticknum).remove();
+        }
+      }
+
+      $(this).closest(".tkey").removeClass("aa bb ss xx yy ls cs zz ll rr");
+      var but = $(this).attr("id");
+      buttons[num-1] = but;
+      for (i=0;i<=13;i++){
+        if (inuse[i][0] === but){
+          inuse[i][1] = 1;
+        }
+      }
+      $(this).closest(".tkey").addClass(but).css("background-image","url(assets/buttons/"+but+".png)");
+
+      if (but === "ls" || but === "cs"){
+        $("#tl"+num).children(".tframe").removeClass("type0 type1").addClass("type2 stickf").css("background-image","url(assets/buttons/"+but+"frame.png)");
+        if (but === "ls"){
+          lsticknum = num;
+        }
+        else {
+          csticknum = num;
+        }
+        for (i=1;i<=noofframes;i++){
+          if (but === "ls"){
+            timelines["tl"+num][i-1] = [15,15];
+          }
+          else {
+            timelines["tl"+num][i-1] = [20,20];
+          }
+          $("#tl"+num).children("#b"+num+"f"+i).append('<div class="'+but+'tickf analog" id="'+but+'tickf'+i+'"></div>');
+        }
+        $("#tl"+num).after('<div class="tlex" id="tlextra'+num+'"></div>');
+        $("#tlextra"+num).append('<div class="tlexkey"></div>');
+        for (i=1;i<=noofframes;i++){
+          $("#tlextra"+num).append('<div class="tlexf" id="tlextraf'+i+'"><div class="stickexcontrol stickprevious" id="'+but+'tickpf'+i+'"></div><div class="stickexcontrol stickreset" id="'+but+'tickrf'+i+'"></div><div class="stickexcontrol sticknext" id="'+but+'ticknf'+i+'"></div></div>');
+        }
+        dragstick(but[0]);
+      }
     }
     $(".tkey").removeClass("tkeyhighlight");
+
   });
 
   $("#timelinebigcontainer").on('click','.playmode',function() {
@@ -483,6 +577,56 @@ $(document).ready(function(){
       $(this).css("background-image","url(assets/buttons/loop.png)");
     }
   });
+
+  $("#timelinebigcontainer").on('click','.stickprevious',function() {
+    var num = $(this).attr("id");
+    var but = num.substr(0,2);
+    num = parseInt(num.substr(8,2));
+    if (!(num === 1)){
+      var top = $("#"+but+"tickf"+(num-1)).css("top");
+      var left = $("#"+but+"tickf"+(num-1)).css("left");
+      $("#"+but+"tickf"+num).css({"top":top,"left":left});
+      if (but === "ls"){
+        timelines["tl"+lsticknum][num-1] = [top, left];
+      }
+      else {
+        timelines["tl"+csticknum][num-1] = [top, left];
+      }
+    }
+  });
+
+  $("#timelinebigcontainer").on('click','.sticknext',function() {
+    var num = $(this).attr("id");
+    var but = num.substr(0,2);
+    num = parseInt(num.substr(8,2));
+    if (!(num === noofframes)){
+      var top = $("#"+but+"tickf"+(num+1)).css("top");
+      var left = $("#"+but+"tickf"+(num+1)).css("left");
+      $("#"+but+"tickf"+num).css({"top":top,"left":left});
+      if (but === "ls"){
+        timelines["tl"+lsticknum][num-1] = [top, left];
+      }
+      else {
+        timelines["tl"+csticknum][num-1] = [top, left];
+      }
+    }
+  });
+
+  $("#timelinebigcontainer").on('click','.stickreset',function() {
+    var num = $(this).attr("id");
+    var but = num.substr(0,2);
+    num = parseInt(num.substr(8,2));
+    if (but === "ls"){
+      $("#"+but+"tickf"+num).css({"top":15,"left":15});
+      timelines["tl"+lsticknum][num-1] = [15, 15];
+    }
+    else {
+      $("#"+but+"tickf"+num).css({"top":20,"left":20});
+      timelines["tl"+csticknum][num-1] = [20, 20];
+    }
+  });
+
+
 
   /*$("#timelinebigcontainer").on('mousedown', '.analog', function(e){
     var node = $(this);
