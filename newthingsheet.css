@@ -196,6 +196,14 @@
 	position:relative;
 	display:inline-block;
 	width:420px;
+	height:600px;
+
+}
+
+#scrollbox {
+		width:500px;
+		overflow-x:auto;
+		position:relative;
 }
 
 #timelinebigcontainer div {
@@ -223,10 +231,11 @@
 	height:240px;
 	width:3px;
 	background-color:blue;
-	position:relative;
+	position:absolute;;
 	top:0px;
 	left:103px;
 	margin:0px;
+	z-index:4;
 }
 
 .tlexkey {

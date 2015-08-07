@@ -1,12 +1,3 @@
-
-
-
-/* state 1 = press compulsory = white
-/* state 2 = will not affect = grey
-/* state 0 = no press compulsary = black */
-
-/*timelineframelength = 10;
-*/
   controllertext = '<img id="i-lb" src="assets/condisplay/lbutton.png"><img id="i-rb" src="assets/condisplay/rbutton.png"><img id="i-ll" src="assets/condisplay/ltext.png"><img id="i-rr" src="assets/condisplay/rtext.png"><img id="i-zb" src="assets/condisplay/zbutton.png"><img id="i-zz" src="assets/condisplay/ztext.png"><img id="base" src="assets/condisplay/base.png"><img id="i-aa" src="assets/condisplay/a.png"><img id="i-bb" src="assets/condisplay/b.png"><img id="i-xx" src="assets/condisplay/x.png"><img id="i-yy" src="assets/condisplay/y.png"><img id="i-ss" src="assets/condisplay/start.png"><img id="i-du" class="dpad" src="assets/condisplay/dpup.png"><img id="i-dr" class="dpad" src="assets/condisplay/dpright.png"><img id="i-dd" class="dpad" src="assets/condisplay/dpdown.png"><img id="i-dl" class="dpad" src="assets/condisplay/dpleft.png"><img id="i-cs" src="assets/condisplay/cstick.png"><img id="i-ls" src="assets/condisplay/lstick.png">';
 playing = false;
 timelines = {};
@@ -37,13 +28,6 @@ inuse[10] = ["du", 0];
 inuse[11] = ["dr", 0];
 inuse[12] = ["dd", 0];
 inuse[13] = ["dl", 0];
-/*
-for (i=1;i<=noofbuttons;i++){
-  timelines["tl"+i] = [];
-  for (j=1;j<=timelineframelength;j++){
-    timelines["tl"+i][j-1] = 0;
-  }
-}*/
 
 framescript = "1003sd1222222122bb1222220122xy0000122222";
 
@@ -113,15 +97,36 @@ var updatetimeline = function(ug,uc,un,unb,unf){
   if (unb !== noofbuttons){
     $("#tline").height((72*(unb+1)));
     if (unb < noofbuttons){
-      for(i=1;i<=noofbuttons-unb;i++){
+      var tempinuse = [];
+      var j = 0;
+      for (i=0;i<=13;i++){
+        if (inuse[i][1]){
+          tempinuse[j] = [inuse[i][0],inuse[i][1],i];
+          j++;
+        }
+      }
+      for (i=1;i<=noofbuttons-unb;i++){
+        for (j=1;j<=tempinuse.length;j++){
+          if ($("#tl"+(noofbuttons+1-i)).children(".tkey").hasClass(tempinuse[j-1][0])){
+            inuse[tempinuse[j-1][2]][1] = 0;
+          }
+        }
         $("#tl"+(noofbuttons+1-i)).remove();
+        $("#tlextra"+(noofbuttons+1-i)).remove();
       }
     }
     else {
       for (i=1;i<=unb-noofbuttons;i++){
-        $("#tl"+(noofbuttons-1+i)).after('<div class="timeline" id="tl'+(noofbuttons+i)+'"><div class="tkey"></div></div>');
+        if (buttons[(noofbuttons-2+i)] === "ls" || buttons[(noofbuttons-2+i)] === "cs"){
+          $("#tlextra"+(noofbuttons-1+i)).after('<div class="timeline" id="tl'+(noofbuttons+i)+'"><div class="tkey"></div></div>');
+        }
+        else {
+          $("#tl"+(noofbuttons-1+i)).after('<div class="timeline" id="tl'+(noofbuttons+i)+'"><div class="tkey"></div></div>');
+        }
         for (j=1;j<=noofframes;j++){
           $("#tl"+(noofbuttons+i)).append('<div class="tframe type0" id="b'+(noofbuttons+i)+'f'+j+'"></div>');
+          timelines["tl"+(noofbuttons+i)] = [];
+          timelines["tl"+(noofbuttons+i)][j-1] = 0;
         }
       }
     }
@@ -134,15 +139,34 @@ var updatetimeline = function(ug,uc,un,unb,unf){
       for(j=1;j<=noofframes-unf;j++){
         for (i=1;i<=noofbuttons;i++){
           $("#b"+i+"f"+(noofframes+1-j)).remove();
+          $("#tlextra"+i).children("#tlextraf"+(noofframes+1-j)).remove();
         }
         $("#num"+(noofframes+1-j)).remove();
       }
 
     }
     else {
+
       for(j=1;j<=unf-noofframes;j++){
         for (i=1;i<=noofbuttons;i++){
           $("#tl"+i).append('<div class="tframe type0" id="b'+i+'f'+(noofframes+j)+'"></div>');
+          if (buttons[i-1] === "ls" || buttons[i-1] === "cs"){
+            $("#tl"+i).children(".tframe").removeClass("type0 type1").addClass("type2 stickf").css("background-image","url(assets/buttons/"+buttons[i-1]+"frame.png)");
+            $("#tl"+i).children("#b"+i+"f"+(noofframes+j)).append('<div class="'+buttons[i-1]+'tickf analog" id="'+buttons[i-1]+'tickf'+(noofframes+j)+'"></div>');
+            $("#tlextra"+i).append('<div class="tlexf" id="tlextraf'+(noofframes+j)+'"><div class="stickexcontrol stickprevious" id="'+buttons[i-1]+'tickpf'+(noofframes+j)+'"></div><div class="stickexcontrol stickreset" id="'+buttons[i-1]+'tickrf'+(noofframes+j)+'"></div><div class="stickexcontrol sticknext" id="'+buttons[i-1]+'ticknf'+(noofframes+j)+'"></div></div>');
+            if (buttons[i-1] === "ls"){
+              timelines["tl"+i][(noofframes+j)-1] = [15,15];
+              dragstick("l");
+            }
+            else {
+              timelines["tl"+i][(noofframes+j)-1] = [20,20];
+              dragstick("c");
+            }
+
+          }
+          else {
+            timelines["tl"+i][(noofframes+j)-1] = 0;
+          }
         }
         $("#playline").append('<div class="tnum" id="num'+(noofframes+j)+'"><p>'+(noofframes+j)+'</p></div>');
       }
@@ -152,7 +176,7 @@ var updatetimeline = function(ug,uc,un,unb,unf){
     $("#timelinescontainer").width(102+(72*noofframes));
 
   }
-
+  resizing();
 
 }
 
@@ -189,7 +213,7 @@ var createnewtimeline = function(ngame,nchar,nname,nnoofbuttons,nnoofframes){
     }
   }
 
-  $("#timelinebigcontainer").width(110+(72*noofframes)).append('<div id="controllerdisplay">'+controllertext+'</div><div id="tline" style="height:'+(72*(noofbuttons+1))+'px"></div><div id="timelinescontainer"></div>');
+  $("#timelinebigcontainer").width(110+(72*noofframes)).append('<div id="controllerdisplay">'+controllertext+'</div><div id="scrollbox"><div id="tline" style="height:'+(72*(noofbuttons+1))+'px"></div><div id="timelinescontainer"></div></div>');
 
   for (i=1;i<=noofbuttons;i++){
     $("#timelinescontainer").append('<div class="timeline" id="tl'+i+'"><div class="tkey"></div></div>');
@@ -203,7 +227,7 @@ var createnewtimeline = function(ngame,nchar,nname,nnoofbuttons,nnoofframes){
   for (j=1;j<=noofframes;j++){
       $("#playline").append('<div class="tnum" id="num'+j+'"><p>'+j+'</p></div>');
   }
-
+  resizing();
   tframeclickstates();
 
 }
@@ -271,7 +295,6 @@ var buildtimeline = function(framescript){
   for (j=1;j<=tlflength;j++){
       $("#playline").append('<div class="tnum"><p>'+j+'</p></div>');
   }
-
   }
 
 var playtimeline = function(){
@@ -320,7 +343,6 @@ var playtimeline = function(){
             else if (buttons[i-1] === "zz"){
               $("#i-zb").css("top","123px");
             }
-
           }
         }
         if (--j) buttondisplay(j);
@@ -341,6 +363,7 @@ var dragstick = function(type){
 }
 
 $(document).ready(function(){
+
   $("#gamedrop").change(function() {
     var id = $(this).val();
     $("#chardrop").empty()
@@ -372,8 +395,6 @@ $(document).ready(function(){
     }
     $("#chardrop").append(text);
   });
-
-
 
   $(".editbutton").hover(function(){
     $(this).toggleClass("editbuthighlight");
@@ -625,31 +646,5 @@ $(document).ready(function(){
       timelines["tl"+csticknum][num-1] = [20, 20];
     }
   });
-
-
-
-  /*$("#timelinebigcontainer").on('mousedown', '.analog', function(e){
-    var node = $(this);
-    var position = node.offset();
-    var initialized = {
-        x : position.left - e.pageX,
-        y : position.top - e.pageY
-    };
-    var handlers = {
-        mousemove : function(e){
-            node.css({
-                left : ( initialized.x + e.pageX ) + 'px',
-                top : ( initialized.y + e.pageY ) + 'px'
-            });
-        },
-        mouseup : function(e){
-            $(this).off(handlers);
-        }
-    };
-    $(document).on(handlers);
-  });*/
-
-
-
 
 });
