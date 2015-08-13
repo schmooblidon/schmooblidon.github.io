@@ -1,0 +1,22 @@
+.test {
+	width:1280px;
+	height:720px;
+	fill:blue;
+}
+
+.highlight {
+	opacity:0.4;
+}
+
+.clip-me {
+	clip-path: url(assets/heatmaps/svgs/test/grab7.svg#c1);
+}
+
+#imgtest {
+	-webkit-clip-path: url(#grab7);
+	clip-path:url(#grab7);
+}
+
+#imgtest:hover {
+	opacity:0.5;
+}

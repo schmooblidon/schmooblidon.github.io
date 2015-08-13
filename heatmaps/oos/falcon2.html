@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<base href="../../">
+<link href='http://fonts.googleapis.com/css?family=Slabo+27px|Share+Tech+Mono' rel='stylesheet' type='text/css'>
+<link href="stylesheet.css" rel="stylesheet" type="text/css">
+<link href="heatmapsheet2.css" rel="stylesheet" type="text/css">
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-65409082-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<script src="jquery-1.11.3.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="hresize.js"></script>
+<script type="text/javascript" src="script.js"></script>
+<script type="text/javascript" src="heatmapscript.js"></script>
+<link rel="shortcut icon" href="favicon.ico" />
+<title>I KneeData | For your frame data kneeds</title>
+</head>
+
+<body>
+  <div id="imgandframecontainer">
+	<div id="img-container">
+		<img id="base" src="assets/heatmaps/falcon/base.png"/>
+        <img id="ready" src="assets/heatmaps/ready.png"/>
+        <img id="go" src="assets/heatmaps/go.png"/>
+				<div class="a7 f20 hitbox" id="a7f20" style="clip-path:url(#dair20);-webkit-clip-path:url(#dair20)"></div>
+				<div class="a6 f20 hitbox" id="a6f20" style="clip-path:url(#knee20);-webkit-clip-path:url(#knee20)"></div>
+				<div class="a4 f20 hitbox" id="a4f20" style="clip-path:url(#bair20);-webkit-clip-path:url(#bair20)"></div>
+				<div class="a6 f19 hitbox" id="a6f19" style="clip-path:url(#knee19);-webkit-clip-path:url(#knee19)"></div>
+				<div class="a4 f19 hitbox" id="a4f19" style="clip-path:url(#bair19);-webkit-clip-path:url(#bair19)"></div>
+				<div class="a6 f18 hitbox" id="a6f18" style="clip-path:url(#knee18);-webkit-clip-path:url(#knee18)"></div>
+				<div class="a4 f18 hitbox" id="a4f18" style="clip-path:url(#bair18);-webkit-clip-path:url(#bair18)"></div>
+				<div class="a4 f17 hitbox" id="a4f17" style="clip-path:url(#bair17);-webkit-clip-path:url(#bair17)"></div>
+				<div class="a2 f17 hitbox" id="a2f17" style="clip-path:url(#upair17);-webkit-clip-path:url(#upair17)"></div>
+				<div class="a4 f16 hitbox" id="a4f16" style="clip-path:url(#bair16);-webkit-clip-path:url(#bair16)"></div>
+				<div class="a3 f16 hitbox" id="a3f16" style="clip-path:url(#nair16);-webkit-clip-path:url(#nair16)"></div>
+				<div class="a2 f16 hitbox" id="a2f16" style="clip-path:url(#upair16);-webkit-clip-path:url(#upair16)"></div>
+				<div class="a3 f15 hitbox" id="a3f15" style="clip-path:url(#nair15);-webkit-clip-path:url(#nair15)"></div>
+				<div class="a2 f15 hitbox" id="a2f15" style="clip-path:url(#upair15);-webkit-clip-path:url(#upair15)"></div>
+        <div class="a5 f14 hitbox multihit" id="a5f14">
+          <div class="in-f14 innerhit" style="clip-path:url(#upb14-1);-webkit-clip-path:url(#upb14-1)"></div>
+          <div class="in-f14 innerhit" style="clip-path:url(#upb14-2);-webkit-clip-path:url(#upb14-2)"></div>
+        </div>
+        <div class="a4 f14 hitbox" id="a4f14" style="clip-path:url(#bair14);-webkit-clip-path:url(#bair14)"></div>
+				<div class="a3 f14 hitbox" id="a3f14" style="clip-path:url(#nair14);-webkit-clip-path:url(#nair14)"></div>
+				<div class="a2 f14 hitbox" id="a2f14" style="clip-path:url(#upair14);-webkit-clip-path:url(#upair14)"></div>
+				<div class="a3 f13 hitbox" id="a3f13" style="clip-path:url(#nair13);-webkit-clip-path:url(#nair13)"></div>
+				<div class="a2 f13 hitbox" id="a2f13" style="clip-path:url(#upair13);-webkit-clip-path:url(#upair13)"></div>
+				<div class="a3 f12 hitbox" id="a3f12" style="clip-path:url(#nair12);-webkit-clip-path:url(#nair12)"></div>
+				<div class="a2 f12 hitbox" id="a2f12" style="clip-path:url(#upair12);-webkit-clip-path:url(#upair12)"></div>
+        <div class="a3 f11 hitbox" id="a3f11" style="clip-path:url(#nair11);-webkit-clip-path:url(#nair11)"></div>
+				<div class="a2 f11 hitbox" id="a2f11" style="clip-path:url(#upair11);-webkit-clip-path:url(#upair11)"></div>
+        <div class="a2 f10 hitbox" id="a2f10" style="clip-path:url(#upair10);-webkit-clip-path:url(#upair10)"></div>
+        <div class="a1 f7 hitbox" id="a1f7" style="clip-path:url(#grab7);-webkit-clip-path: url(#grab7);"></div>
+        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1280px" height="720px"
+  	  viewBox="0 0 1280 720" enable-background="new 0 0 1280 720" xml:space="preserve">
+     <clipPath id="grab7">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M670,434l21,4l11,6l12-6l22-4l19,3l19,13l10,15l5,19l-4,19l-13,17
+  	l-17,11l-20,3l-21-3l-11-8l-13,8l-19,4l-18-4l-20-12l-11-16l-6-18l6-23l12-14l15-9L670,434z"/>
+    </clipPath>
+    <clipPath id="upair10">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M605,319l21-4h176l18,4l17,11h62l23,6l20,12l14,20l5,21l-5,24l-13,19
+  	l-22,14l-24,5H727l-29-7l-19-10l-15-20h-42l-16-4l-18-9l-11-16l-6-20l4-19l12-16L605,319z"/>
+    </clipPath>
+    <clipPath id="upair11">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M550,338v-19l8-17l17-15l19-7h49l3-7l16-17l22-9l229-1l21,6l20,15
+  	l13,23l1,22l-11,102l-19,22l-22,11l-26,4H714l-24-9l-19-17l-6-12l-40,1l-16-3l-15-8l-15-13l-23-37L550,338z"/>
+    </clipPath>
+    <clipPath id="nair11">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M490,395l4-22l12-16l21-13l23-3l25-15l27-6h211l14,3h84l19,4l19,12
+  	l12,18l5,20l-5,20l-12,18l-20,13l-22,4h-41l-5,8l-27,15l-26,4H602l-25-5l-8-4h-21l-21-4l-19-12l-13-16l-5-22"/>
+    </clipPath>
+    <clipPath id="upair12">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M550,252l20-3h11l-3-21l10-23l15-16l27-12h253l24,5l21,16l9,15l28,72
+  	l2,20l-3,21l-18,22l-20,11l-25,5h-57l-15,11l-18,4H599l-20-4l-15-11l-35-34l-10-13l-4-18l5-20l11-15L550,252z"/>
+    </clipPath>
+    <clipPath id="nair12">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M505,336l20-6h13l10-9l26-9l265-1l11,4h92l20,8l16,17l9,19v21l-11,19
+  	l-18,15l-39,16l-25,1h-19l-6,5l-19,11l-21,9l-214,3l-30-2l-17-8l-16,1l-22-2l-17-10l-16-11l-14-15l-8-21l2-23l11-18L505,336z"/>
+    </clipPath>
+    <clipPath id="upair13">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M477,291l-1-19l7-18l13-14l16-9h8l-7-5l-10-20l-1-25l9-20l17-17l22-10
+  	l24-1l257-1l27,5l15,10l51,49l12,15l7,24l-6,21l-14,20l-21,14l-23,5l-23-1l1,7l-5,17l-9,12l-19,14l-23,4l-242-1l-18-6l-38-20l-15-12
+  	L477,291z"/>
+    </clipPath>
+    <clipPath id="nair13">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M470,343l17-15l20-7l17-1l19-12l32-5h259l29,3l4,3l81-1l24,6l19,12
+  	l12,19l3,21l-5,21l-13,16l-21,12l-39,8h-35l-21,13l-38,13l-251,1l-28-8l-15-5h-20l-20-8l-16-10l-14-13l-9-19l-1-23L470,343z"/>
+    </clipPath>
+    <clipPath id="upair14">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M436,127l22-9h307l22,1l61,15l21,9l15,15l8,22v26l-12,20l-19,16l-21,7
+  	h-3l4,6l6,15l-1,18l-9,19l-20,15l-19,5H536l-21-1l-52-13l-11-5l-14-15l-6-16v-21l9-18l10-8l-13-4l-18-16l-11-21v-25l10-21L436,127z"
+  	/>
+    </clipPath>
+    <clipPath id="nair14">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M452,340l16-16l19-10l14-3h12l3-2l29-9h316l26,6l5,3h71l22,5l19,11
+  	l14,19l4,21l-3,20l-16,21l-18,11l-26,4h-54l-3,3l-27,13l-38,7H579l-46-6l-18-9l-25-6l-15-8l-17-12l-11-19l-2-24L452,340z"/>
+    </clipPath>
+    <clipPath id="upb14-1">
+      <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M391,453l18-5h52l20,4l19,12l3,5h56l13,2l13,8l7,11l3,13l-3,13l-8,10
+  	l-9,8l-15,4h-58l-4,7l-19,10l-15,3l-62,1l-14-4l-17-11l-12-17l-6-24l5-21l11-17L391,453z"/>
+    </clipPath>
+    <clipPath id="upb14-2">
+      <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M686,488l8-10l12-7l14-3h55l2-3l20-13l21-4l52,1l20,3l18,11l14,20
+      l4,19l-4,23l-13,17l-18,12l-26,5l-49-1l-17-3l-22-13l-2-3l-58-1l-14-3l-13-10l-7-15l-1-12L686,488z"/>
+    </clipPath>
+    <clipPath id="bair14">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M295,337l20-3l12-17l20-11l25-6h7l7-8l17-10l18-3h296l21,4l16,11
+  	l11,16l4,17l-6,21l-12,16l-16,10l-8,1v6l-16,22l-22,13l-16,3l-11,17l-23,13l-25,4H317l-21-3l-21-13l-13-18l-7-24l5-24l14-19L295,337
+  	z"/>
+    </clipPath>
+    <clipPath id="upair15">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M332,156l19-16l24-8l84-16h317l23,8l19,14l11,20l3,23l-8,21l-15,19
+  	l-6,3l12,7l12,15l6,18l-3,19l-11,17l-14,11l-19,6l-14,1H440l-21-3l-16-10l-11-15l-5-18l4-20l1-3h-21l-23-7l-17-18l-10-21l1-25
+  	L332,156z"/>
+    </clipPath>
+    <clipPath id="nair15">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M465,311l25-5l9,3l12-8l26-3h329l19,3l24,9h62l32,11l18,13l12,21l2,21
+  	l-8,21l-16,17l-20,10l-25,2h-57l-6,4l-22,7l-22,2l-318,1l-16-1l-25-7l-18-14l-19-7l-15-10l-15-18l-4-21l4-22l14-18L465,311z"/>
+    </clipPath>
+    <clipPath id="bair15">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M268,334l21-15l21-6l19-16l28-9h14l21-12l15-2h324l20,2l17,11l11,16
+  	l5,19l-5,19l-12,15l-20,14l-6,12l-9,6l-9,9l-22,13l-12,5l-3,6l-32,20l-20,9l-26,3H322l-24-4l-24-12l-15-21l-7-38l1-21L268,334z"/>
+    </clipPath>
+    <clipPath id="upair16">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M252,217l10-20l21-16l68-40l21-8h333l27,3l21,11l15,16l7,23l-4,23
+  	l-5,10h12l19,10l13,12l8,17l1,17l-8,19l-10,14l-14,13l-18,6l-20,2H397l-19-5l-16-12l-11-18v-3h-51l-21-11l-16-14l-11-24V217z"/>
+    </clipPath>
+    <clipPath id="nair16">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M416,341l10-19l18-12l28-7l13,2l6-2l22-5h19h347l31,7l15,10h41l23,1
+  	l22,10l25,24l7,18v22l-10,21l-19,16l-24,7h-83l-4,2l-28,4H515l-29-5l-23-14l-11-13l-15-7l-15-16l-8-23L416,341z"/>
+    </clipPath>
+    <clipPath id="bair16">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M246,334l20-15l23-4l13-15l21-12l27-2l17-12l18-4l367-1l20,7l16,13
+  	l9,16l1,20l-8,20l-11,10l-10,6l-11,4l-7,14l-19,18l-26,8l-15,17l-27,11l-369,1l-26-4l-20-12l-15-18l-6-23l4-23L246,334z"/>
+    </clipPath>
+    <clipPath id="upair17">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M214,257l10-15l44-49l13-11l28-9h374l24,10l19,16l9,21v12h36l20,8
+  	l14,13l6,19l3,19l-3,18l-8,16l-14,10l-19,7l-21,1l-367,1l-22-2l-12-5h-67l-25-2l-21-10l-18-20l-7-23L214,257z"/>
+    </clipPath>
+    <clipPath id="bair17">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M232,332l20-15l24-8h2l1-3l21-17l26-5l10-1l7-6l17-7l21-3h376l18,2
+  	l19,10l13,16l5,14v19l-10,17l-18,16h-6l-5,12l-20,19l-23,9h-3l-13,14l-21,10l-23,7l-25,2H295l-22-2l-24-13l-18-15l-12-27l2-25
+  	L232,332z"/>
+    </clipPath>
+    <clipPath id="knee18">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M426,312l10-14l16-11l18-4h415l18,4l7,5h12l27,5l23,14l14,21l5,23
+  	l-6,25l-15,22l-23,15l-27,4H504l-25-4l-19-12l-14-15l-7-11l-4-17v-8l-7-11l-4-12L426,312z"/>
+    </clipPath>
+    <clipPath id="bair18">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M209,343l15-19l23-13l16-2l8-12l23-11l22-4h6l2-3l21-10l22-3h407l21,5
+  	l15,8l12,15l6,19l-2,19l-11,15l-18,14l-5,1l-1,4l-10,16l-21,14l-18,4l-5,8l-20,14l-26,6H280l-20-1l-19-4l-20-13l-13-18l-5-25
+  	L209,343z"/>
+    </clipPath>
+    <clipPath id="knee19">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M411,310l10-13l15-10l19-3h12l10-5h456l28,4l22,13l16,22l6,24l-5,26
+  	l-14,18l-20,18l-15,11l-29,6H507l-27-4l-20-11l-19-15l-15-16l-7-24l-8-7l-4-19L411,310z"/>
+    </clipPath>
+    <clipPath id="bair19">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M194,345l13-19l21-13l21-4l3-7l20-13l23-7h10l18-9l14-4l19-2h432l27,6
+  	l15,11l10,15l3,21l-4,16l-11,14l-16,11h-4l-2,9l-17,17l-20,12h-9l-10,13l-22,12l-23,4H253l-24-3l-20-12l-15-20l-5-25L194,345z"/>
+    </clipPath>
+    <clipPath id="knee20">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M405,344l-2-4v-19l8-15l15-12l19-9l19-1l8-3l27-2h434l24,3l25,7l23,12
+  	l16,17l9,23l-1,25l-4,8l6,11l-2,24l-17,26l-21,15l-28,7H474l-26-9l-18-14l-16-24l-2-14l-8-13l-1-23L405,344z"/>
+    </clipPath>
+    <clipPath id="dair20">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M300,455l5-7l4-18l-5-18l7-30l15-22l7-4l-5-21l7-27l14-19l25-16l33-5
+  	h471l29,4l25,17l14,19l6,28l-4,22l5,21l-6,24l-7,10l-4,19l6,24l8,30l-5,22l5,18l-9,38l-18,26l-31,18l-33,5H381l-29-4l-31-19l-20-26
+  	l-8-36l5-21l-5-20L300,455z"/>
+    </clipPath>
+    <clipPath id="bair20">
+  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M219,469l-26-14l-15-19l-5-23v-10l5-15l-5-11l3-24l12-21l20-16l25-6
+  	l20-18l23-7l11-2h7l8-5l21-7l12-3l449-1l17,2l17,3l17,8l14,10l9,16v19l-4,13l5,25l-7,21l-13,15l-15,8l-4,7l-15,17l-22,11l-10,3
+  	l-10,12l-24,12l-24,3H245L219,469z"/>
+  </clipPath>
+
+		<img id="shield" src="assets/heatmaps/falcon/shield.png"/>
+		<div id="hurtboxcontainer"><img id="hurtbox" src="assets/heatmaps/hurtboxes/falconstand.png" style="margin-left:75%"/></div>
+	</div>
+    <div id="framecontainer">
+			<div id="frameselect">Frame control: <span id="fsid">ALL</span></div>
+            <div id="frameall">All<div id="fallon" class="allf"><div>On</div></div><div id="falloff" class="allf"><div>Off</div></div></div><div id="frame1" class="framecontrol"><p>1</p></div><div id="frame2" class="framecontrol"><p>2
+        </p>
+        </div><div id="frame3" class="framecontrol"><p>3</p></div><div id="frame4" class="framecontrol"><p>4</p></div><div id="frame5" class="framecontrol"><p>5</p></div><div id="frame6" class="framecontrol"><p class="test">6</p></div><div id="frame7" class="framecontrol"><p>7</p></div><div id="frame8" class="framecontrol"><p>8</p></div><div id="frame9" class="framecontrol"><p>9</p></div><div id="frame10" class="framecontrol"><p>10</p></div><div id="frame11" class="framecontrol"><p>11</p></div><div id="frame12" class="framecontrol"><p>12</p></div><div id="frame13" class="framecontrol"><p>13</p></div><div id="frame14" class="framecontrol"><p>14</p></div><div id="frame15" class="framecontrol"><p>15</p></div><div id="frame16" class="framecontrol"><p>16</p></div><div id="frame17" class="framecontrol"><p>17</p></div><div id="frame18" class="framecontrol"><p>18</p></div><div id="frame19" class="framecontrol"><p>19</p></div><div id="frame20" class="framecontrol"><p>20</p></div>
+    </div>
+    </div>
+</body>
+</html>
