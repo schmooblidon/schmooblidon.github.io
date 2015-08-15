@@ -1,6 +1,21 @@
 .hitbox {
 	position:absolute;
+	stroke-width:4px;
 }
+
+.hitbox-t {
+	position:absolute;
+	stroke-width:2px;
+}
+
+.hitboxinfo {
+	position:absolute;
+	background-color:black;
+	color:white;
+	padding:7px;
+	border-radius:5px;
+}
+
 .hitboxhighlight {
 	-webkit-filter: grayscale(50%);
 	filter: grayscale(50%);
