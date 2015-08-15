@@ -1,12 +1,6 @@
 .hitbox {
-	width:1280px;
-	height:720px;
-	z-index:150;
 	position:absolute;
 }
-
-
-
 .hitboxhighlight {
 	-webkit-filter: grayscale(50%);
 	filter: grayscale(50%);
@@ -319,20 +313,20 @@
 #frame16 {background-color:#0066ff;} #frame17 {background-color:#0033ff;} #frame18 {background-color:#0000bc;}
 #frame19 {background-color:#01017a;} #frame20 {background-color:#000041;}
 
-.f1 {background:#ff0000;} .f2 {backgroundr:#ff2a00;} .f3 {background:#ff3c00;} .f4 {background:#ff5500;} .f5 {background:#ff7b00;} .f6 {background:#ffb300;} .f7 {background:#ffd400;} .f8 {background:#eaff00;} .f9 {background:#aaff00;}
-.f10 {background:#06ff00;} .f11 {background:#01ff79;} .f12 {background:#00ffde;}
-.f13 {background:#00deff;} .f14 {background:#00c0ff;} .f15 {background:#0099ff;}
-.f16 {background:#0066ff;} .f17 {background:#0033ff;} .f18 {background:#0000bc;}
-.f19 {background:#01017a;} .f20 {background:#000041;}
+.f1 {fill:#ff0000;} .f2 {fill:#ff2a00;} .f3 {fill:#ff3c00;} .f4 {fill:#ff5500;} .f5 {fill:#ff7b00;} .f6 {fill:#ffb300;} .f7 {fill:#ffd400;} .f8 {fill:#eaff00;} .f9 {fill:#aaff00;}
+.f10 {fill:#06ff00;} .f11 {fill:#01ff79;} .f12 {fill:#00ffde;}
+.f13 {fill:#00deff;} .f14 {fill:#00c0ff;} .f15 {fill:#0099ff;}
+.f16 {fill:#0066ff;} .f17 {fill:#0033ff;} .f18 {fill:#0000bc;}
+.f19 {fill:#01017a;} .f20 {fill:#000041;}
 
-.in-f1 {background:#ff0000;} .in-f2 {backgroundr:#ff2a00;} .in-f3 {background:#ff3c00;} .in-f4 {background:#ff5500;} .in-f5 {background:#ff7b00;} .in-f6 {background:#ffb300;} .in-f7 {background:#ffd400;} .in-f8 {background:#eaff00;} .in-f9 {background:#aaff00;}
-.in-f10 {background:#06ff00;} .in-f11 {background:#01ff79;} .in-f12 {background:#00ffde;}
-.in-f13 {background:#00deff;} .in-f14 {background:#00c0ff;} .in-f15 {background:#0099ff;}
-.in-f16 {background:#0066ff;} .in-f17 {background:#0033ff;} .in-f18 {background:#0000bc;}
-.in-f19 {background:#01017a;} .in-f20 {background:#000041;}
+.in-f1 {fill:#ff0000;} .in-f2 {fill:#ff2a00;} .in-f3 {fill:#ff3c00;} .in-f4 {fill:#ff5500;} .in-f5 {fill:#ff7b00;} .in-f6 {fill:#ffb300;} .in-f7 {fill:#ffd400;} .in-f8 {fill:#eaff00;} .in-f9 {fill:#aaff00;}
+.in-f10 {fill:#06ff00;} .in-f11 {fill:#01ff79;} .in-f12 {fill:#00ffde;}
+.in-f13 {fill:#00deff;} .in-f14 {fill:#00c0ff;} .in-f15 {fill:#0099ff;}
+.in-f16 {fill:#0066ff;} .in-f17 {fill:#0033ff;} .in-f18 {fill:#0000bc;}
+.in-f19 {fill:#01017a;} .in-f20 {fill:#000041;}
 
 .multihit {
-	background:none;
+	fill:none;
 	width:0px;
 	height:0px;
 }

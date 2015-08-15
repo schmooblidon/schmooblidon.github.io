@@ -15,9 +15,11 @@ var resizingtype = function(){
 	var base = $("#base");
 	if (hitboxwidth > (windwidth - sideconwidth - controlconwidth)) {
 		$("#img-container").children("img").width(windwidth - sideconwidth - controlconwidth);
+		$("#hitboxsvg").width(windwidth - sideconwidth - controlconwidth);
 		$("#hurtbox").width(base.width() * hurttobaseratio);
 		$("#img-container").width(base.width());
 		$("#img-container").children("img").height(base.width() / hmratio);
+		$("#hitboxsvg").height(base.width() / hmratio);
 		$("#img-container").height(base.height());
 		$("#hurtbox").height(base.height());
 		$(".framecontrol").width(Math.round(base.width()/21));
@@ -27,9 +29,11 @@ var resizingtype = function(){
 	}
 	else {
 		$("#img-container").children("img").width(hitboxwidth);
+		$("#hitboxsvg").width(hitboxwidth);
 		$("#hurtbox").width(300);
 		$("#img-container").width(hitboxwidth);
 		$("#img-container").children("img").height(hitboxheight);
+		$("#hitboxsvg").height(hitboxheight);
 		$("#hurtbox").height(hitboxheight);
 		$("#img-container").height(hitboxheight);
 		$(".framecontrol").width(Math.round(hitboxwidth /21 - 1));

@@ -15,29 +15,28 @@
 </head>
 
 <body>
-  <img id="imgtest" src="assets/heatmaps/falcon/base.png"/>
-  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="0px" height="0px" viewBox="0 0 612 792" enable-background="new 0 0 612 792" xml:space="preserve">
-   <defs>
-   <clipPath id="grab7">
-     <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M336,470l21,4l11,7l12-7l21-3l19,2l19,12l11,16l4,19l-3,18l-13,17
-	l-17,11l-20,4l-19-2l-13-9l-14,8l-18,3l-18-3l-19-11l-12-16l-5-20l5-21l11-14l16-10L336,470z"/>
-</clipPath>
-  <clipPath id="upair10">
-  <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M575,346l12-16l18-11l20-4h176l20,4l16,12h63l22,5l19,12l14,20l5,22
-	l-4,22l-14,20l-21,13l-21,5l-174-1l-26-5l-21-11l-15-19h-41l-20-5l-15-9l-12-17l-5-18L575,346z"/>
-</clipPath>
-</defs>
+  <div id-"main" style="display:inline-block">
+  <div style="background-color:green;display:inline-block;width:200px;height:720px;position:relative"></div>
+  <div style="display:inline-block;position:relative;width:640px;height:360px;">
+  <img id="base" src="assets/heatmaps/falcon/base.png" style="position:absolute;display:inline-block" width="640px" height="360px"/>
+  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="640" height="360"
+viewBox="0 0 1280 720" enable-background="new 0 0 1280 720" xml:space="preserve"  style="position:absolute">
+    <clipPath id="grab7">
+ <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M670,434l21,4l11,6l12-6l22-4l19,3l19,13l10,15l5,19l-4,19l-13,17
+   l-17,11l-20,3l-21-3l-11-8l-13,8l-19,4l-18-4l-20-12l-11-16l-6-18l6-23l12-14l15-9L670,434z"/>
+
+   </clipPath>
+
+
+   <clipPath id="upair10">
+ <path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M605,319l21-4h176l18,4l17,11h62l23,6l20,12l14,20l5,21l-5,24l-13,19
+  l-22,14l-24,5H727l-29-7l-19-10l-15-20h-42l-16-4l-18-9l-11-16l-6-20l4-19l12-16L605,319z"/>
+   </clipPath>
+   <rect class="a1 f7 hitbox" id="a1f7" width="1280" height="720" clip-path="url(#grab7)" style="fill:blue;position:absolute"></rect>
+   <rect class="a2 f10 hitbox" id="a2f10" width="1280" height="720" clip-path="url(#upair10)" style="fill:green;position:absolute"></rect>
   </svg>
-
-  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="1280px" height="720px" viewBox="0 0 1280 720" enable-background="new 0 0 1280 720" xml:space="preserve">
-<path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M670,434l21,4l11,7l12-7l21-3l19,2l19,12l11,16l4,19l-3,18l-13,17
-	l-17,11l-20,4l-19-2l-13-9l-14,8l-18,3l-18-3l-19-11l-12-16l-5-20l5-21l11-14l16-10L670,434z"/>
-<path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M575,346l12-16l18-11l20-4h176l20,4l16,12h63l22,5l19,12l14,20l5,22
-	l-4,22l-14,20l-21,13l-21,5l-174-1l-26-5l-21-11l-15-19h-41l-20-5l-15-9l-12-17l-5-18L575,346z"/>
-</svg>
-
+</div>
+</div>
 
 </body>
 </html>
