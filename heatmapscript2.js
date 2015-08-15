@@ -265,6 +265,7 @@ var togglehitbox = function(type, num) {
 			for (i=1;i<21;i++) {
 				if (fc["fc"+num][i-1]){
 					$("#"+type+"f"+i).fadeToggle(200,0);
+
 				}
 			}
 			var typenum = parseInt(type.substr(1,2));
@@ -737,9 +738,11 @@ $(document).ready(function(){
 		var id = $(this).attr("id");
 		id = id.substr(0,(id.length - 2));
 		var lengtha = id.indexOf("f");
-		var a = id.substr(1,lengtha - 1);
-		var f = id.substr(lengtha + 1, 2);
-  	$("#hurtboxcontainer").after('<div class="hitboxinfo">'+listofattacks[a-1]+' frame '+f+'</div>')
+		var a = parseInt(id.substr(1,lengtha - 1));
+		var f = parseInt(id.substr(lengtha + 1, 2));
+		if (attackswitches[a-1] && fc["fc0"][f-1] && fc["fc"+a][f-1]){
+  		$("#hurtboxcontainer").after('<div class="hitboxinfo">'+listofattacks[a-1]+' frame '+f+'</div>')
+		}
 
 	}).mouseout(function(){
   	$(".hitboxinfo").remove();
@@ -750,6 +753,25 @@ $(document).ready(function(){
        left:  e.pageX - 100,
        top:   e.pageY - 120
     });
+	});
+
+	$("#img-container").hover(function(){
+		for (i=1;i<15;i++){
+			if (attackswitches[i-1] === 0){
+				for (j=1;j<21;j++){
+					$("#a"+i+"f"+j+"-t").hide();
+				}
+			}
+			else {
+				for (j=1;j<21;j++){
+					if (fc["fc0"][j-1] === 0 || fc["fc"+i][j-1] === 0){
+						$("#a"+i+"f"+j+"-t").hide();
+					}
+				}
+			}
+		}
+	},function(){
+		$("#hitboxsvg-t").children("path").show();
 	});
 
 	play();
