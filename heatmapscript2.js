@@ -740,7 +740,7 @@ $(document).ready(function(){
 		var lengtha = id.indexOf("f");
 		var a = parseInt(id.substr(1,lengtha - 1));
 		var f = parseInt(id.substr(lengtha + 1, 2));
-		if (attackswitches[a-1] && fc["fc0"][f-1] && fc["fc"+a][f-1]){
+		if (attackswitches[a-1] && fc["fc"+a][f-1]){
   		$("#hurtboxcontainer").after('<div class="hitboxinfo">'+listofattacks[a-1]+' frame '+f+'</div>')
 		}
 
@@ -764,7 +764,7 @@ $(document).ready(function(){
 			}
 			else {
 				for (j=1;j<21;j++){
-					if (fc["fc0"][j-1] === 0 || fc["fc"+i][j-1] === 0){
+					if (fc["fc"+i][j-1] === 0){
 						$("#a"+i+"f"+j+"-t").hide();
 					}
 				}
