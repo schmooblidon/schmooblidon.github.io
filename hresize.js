@@ -12,97 +12,38 @@ var resizingtype = function(){
 	}
 	var hmratio = hitboxwidth / hitboxheight;
 	var hurttobaseratio = 300 / 1280;
-	var imgurtobaseratiow = 167 / 1280;
-	var imgurtobaseratioh = 61 / 720;
 	var base = $("#base");
 	if (hitboxwidth > (windwidth - sideconwidth - controlconwidth)) {
 		$("#img-container").children("img").width(windwidth - sideconwidth - controlconwidth);
 		$("#hitboxsvg").width(windwidth - sideconwidth - controlconwidth);
 		$("#hitboxsvg-t").width(windwidth - sideconwidth - controlconwidth);
-		var previoushbwidth = $("#hurtboxcontainer").width();
 		$("#hurtbox").width(base.width() * hurttobaseratio);
-		$("#hurtboxcontainer").width(base.width() * hurttobaseratio);
-		$("#draghurtcontainer").width(base.width());
-		var draghurtmarg = ($("#hurtbox").width() - 140) / 2;
-		if (draghurtmarg < 0){
-			draghurtmarg = 0;
-		}
-		var temppos = $("#draghurt").position();
-		var newleft = temppos.left * ($("#hurtboxcontainer").width()/previoushbwidth);
-		$("#draghurt").css({"margin-left":draghurtmarg,"margin-right":draghurtmarg,"left":newleft});
-		$("#hurtcontrolbox").css({"margin-left":draghurtmarg,"margin-right":draghurtmarg,"left":newleft});
-		$("#hurtboxcontainer").css("left",newleft);
-
-		$("#imgurbox").width(base.width() * imgurtobaseratiow);
-		$("#imgur").width(base.width() * imgurtobaseratiow);
 		$("#img-container").width(base.width());
 		$("#img-container").children("img").height(base.width() / hmratio);
 		$("#hitboxsvg").height(base.width() / hmratio);
 		$("#hitboxsvg-t").height(base.width() / hmratio);
 		$("#img-container").height(base.height());
 		$("#hurtbox").height(base.height());
-		$("#imgurbox").height(base.height() * imgurtobaseratioh);
-		$("#imgur").height(base.height() * imgurtobaseratioh);
 		$(".framecontrol").width(Math.round(base.width()/21));
 		$("#frameall").width($(".framecontrol").width());
 		$("#frame20").width(base.width() - $(".framecontrol").width() * 20);
 		$("#imgandframecontainer").width(base.width());
-		if (windwidth < 1500){
-			if (windwidth < 1100){
-				var dragboxdim = [75,25];
-			}
-			else if (windwidth < 1200){
-				var dragboxdim = [80,30];
-			}
-			else if (windwidth < 1300){
-				var dragboxdim = [85,35];
-			}
-			else if (windwidth < 1400){
-				var dragboxdim = [90,40];
-			}
-			else {
-				var dragboxdim = [95,45];
-			}
-			$("#hurtcontrolbox").height(dragboxdim[0]);
-			$("#hurtboxmidcontrols").height(dragboxdim[0]);
-			$("#draghurtcontainer").height(dragboxdim[1]);
-			$("#draghurt").height(dragboxdim[1]);
-			$("#hurtchardropdown").css("bottom",dragboxdim[0]);
-
-		}
 	}
 	else {
 		$("#img-container").children("img").width(hitboxwidth);
 		$("#hitboxsvg").width(hitboxwidth);
 		$("#hitboxsvg-t").width(hitboxwidth);
-		var previoushbwidth = $("#hurtboxcontainer").width();
 		$("#hurtbox").width(300);
-		$("#hurtboxcontainer").width(300);
-		$("#draghurtcontainer").width(base.width());
-		var temppos = $("#draghurt").position();
-		var newleft = temppos.left * (300/previoushbwidth);
-		$("#draghurt").css({"margin-left":80,"margin-right":80,"left":newleft});
-		$("#hurtcontrolbox").css({"margin-left":80,"margin-right":80,"left":newleft});
-		$("#hurtboxcontainer").css("left",newleft);
 		$("#img-container").width(hitboxwidth);
 		$("#img-container").children("img").height(hitboxheight);
 		$("#hitboxsvg").height(hitboxheight);
 		$("#hitboxsvg-t").height(hitboxheight);
 		$("#hurtbox").height(hitboxheight);
-		$("#imgurbox").width(167);
-		$("#imgur").width(167);
-		$("#imgurbox").height(61);
-		$("#imgur").height(61);
 		$("#img-container").height(hitboxheight);
 		$(".framecontrol").width(Math.round(hitboxwidth /21 - 1));
 		$("#frameall").width($(".framecontrol").width());
 		$("#frame20").width(base.width() - $(".framecontrol").width() * 20);
 		$("#imgandframecontainer").width(hitboxwidth);
-		$("#hurtcontrolbox").height(100);
-		$("#hurtboxmidcontrols").height(100);
-		$("#draghurtcontainer").height(50);
-		$("#draghurt").height(50);
-		$("#hurtchardropdown").css("bottom",100);
 	}
 	if (windwidth < 1150){
 		$(".framecontrol").css("font-size","15px");
