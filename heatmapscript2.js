@@ -27,7 +27,7 @@ texttoff = [];
 texttempoff = [];
 fselected = "fc0";
 attackswitches = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
-listofattacks = ["Grab","Upair","Nair","Bair","Up-b","Knee","Dair"];
+
 var fc = {};
 for(i=0;i<11;i++){
 	fc["fc"+i] = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
@@ -744,7 +744,19 @@ $(document).ready(function(){
 		var a = parseInt(id.substr(1,lengtha - 1));
 		var f = parseInt(id.substr(lengtha + 1, 2));
 		if (attackswitches[a-1] && fc["fc"+a][f-1]){
-  		$("#hurtboxcontainer").after('<div class="hitboxinfo">'+listofattacks[a-1]+' frame '+f+'</div>')
+  		$("#hurtboxcontainer").after('<div class="hitboxinfo">'+listofattacks[a-1]+' frame '+f+'</div>');
+			for (i=1;i<=specials.length;i++){
+				if (specials[i-1][0] === "a"+a+"f"+f){
+					$(".hitboxinfo").append('<br><span class="'+specials[i-1][2]+'">'+specials[i-1][1]+'</span>');
+				}
+				if (specials[i-1][0] === "a"+a){
+
+					if (f >= specials[i-1][3] && f <= specials[i-1][4]){
+						$(".hitboxinfo").append('<br><span class="'+specials[i-1][2]+'">'+specials[i-1][1]+'</span>');
+					}
+				}
+			}
+			$(".hitboxinfo").append('<span class="attdetails">'+attdetails[a-1]+'</span>');
 		}
 
 	}).mouseout(function(){

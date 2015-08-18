@@ -1,3 +1,16 @@
+.attdetails {
+	color:#b0b0b0;
+	font-size:11px;
+}
+
+.intangible {
+	color: #2ebaff;
+}
+
+.counterattack {
+	color: #5cff98;
+}
+
 #imgurbox {
 	position:absolute;
 	top:0;
@@ -131,6 +144,7 @@
 	color:white;
 	padding:7px;
 	border-radius:5px;
+	z-index:199;
 }
 
 .hitboxhighlight {
