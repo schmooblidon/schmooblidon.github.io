@@ -757,10 +757,15 @@ $(document).ready(function(){
 				}
 			}
 			$(".hitboxinfo").append('<span class="attdetails">'+attdetails[a-1]+'</span>');
+
+			$("#hurtcontrolbox").css("z-index","198");
+			$("#draghurt").css("z-index","198");
 		}
 
 	}).mouseout(function(){
   	$(".hitboxinfo").remove();
+		$("#hurtcontrolbox").css("z-index","251");
+		$("#draghurt").css("z-index","251");
 	});
 
 	$(document).on('mousemove', function(e){
