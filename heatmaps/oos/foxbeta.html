@@ -20,9 +20,7 @@
 <script src="jquery-ui.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="hresize2.js"></script>
 <script type="text/javascript" src="script.js"></script>
-<script>listofattacks = ["Shine","Grab","Bair","Nair","Dair","Upsmash","Fair","Upair"];
-attdetails = ["<br>+3 Frames Jumpsquat<br>Hits: 1<br>Invulnerable: 1<br>Jump cancelable: 4+","<br>Total: 30<br>Grab: 7-8","<br>+3 Frames Jumpsquat<br>Total: 39<br>Hit: 4-19<br>IASA: 38<br>Auto cancel: <3 24><br>Landlag: 20<br>Lcanceled: 10","<br>+3 Frames Jumpsquat<br>Total: 49<br>Hit: 4-31<br>IASA: 42<br>Auto cancel: <3 37><br>Landlag: 15<br>Lcanceled: 7","<br>+3 Frames Jumpsquat<br>Total: 49<br>Hit: 5-6, 8-9, 11-12, 14-15, 17-18, 20-21, 23-24<br>Auto cancel: <4 31><br>Landlag: 18<br>Lcanceled: 9","<br>+1 Frame Jumpsquat<br>Total: 41<br>Hit: 7-17<br>Head invincible (but not snout): 1-9<br>Charge frame: 2","<br>+3 Frames Jumpsquat<br>Total: 59<br>Hit: 6-8, 16-18, 24-26, 33-35, 43-45<br>IASA: 53<br>Auto cancel: <5 49><br>Landlag: 22<br>Lcanceled: 11","<br>+3 Frames Jumpsquat<br>Total: 39<br>Hit: 8-9, 11-14<br>IASA: 36<br>Auto cancel: <7 26><br>Landlag: 18<br>Lcanceled: 9"];
-specials = [["a1f4","Intangible","intangible"],["a6","Head Intangible","intangible",2,10]];</script>
+<script type="text/javascript" src="hmdata.js"></script>
 <script type="text/javascript" src="heatmapscript2.js"></script>
 <link rel="shortcut icon" href="favicon.ico" />
 <title>I KneeData | For your frame data kneeds</title>
@@ -55,17 +53,16 @@ specials = [["a1f4","Intangible","intangible"],["a6","Head Intangible","intangib
     <div id="top-controls">
     	<div class="noa control nohelp" id="heatmaptype"><p>OoS</p>
         <div id="hmtypedropdown" class="dropdown" style="display:none"><div class="noa control hmtype nohelp">Coming Soon</div></div></div>
-		<div class="noa control nohelp" id="characterbutton"><p>
-Fox</p>
+		<div class="noa control nohelp" id="characterbutton"><p>Fox</p>
 <div id="chardropdown" class="dropdown" style="display:none">
-	<a href="heatmaps/oos/fox.html"><div class="noa control character nohelp"><p>Fox</p></div></a>
-	<a href="heatmaps/oos/falco.html"><div class="noa control character nohelp"><p>Falco</p></div></a>
-	<a href="heatmaps/oos/marth.html"><div class="noa control character nohelp"><p>Marth</p></div></a>
-	<a href="heatmaps/oos/sheik.html"><div class="noa control character nohelp"><p>Sheik</p></div></a>
-	<a href="heatmaps/oos/puff.html"><div class="noa control character nohelp"><p>Puff</p></div></a>
-	<a href="heatmaps/oos/peach.html"><div class="noa control character nohelp"><p>Peach</p></div></a>
-	<a href="heatmaps/oos/ics.html"><div class="noa control character nohelp"><p>ICs</p></div></a>
-	<a href="heatmaps/oos/falcon.html"><div class="noa control character nohelp"><p>Falcon</p></div></a>
+	<a href="heatmaps/oos/foxbeta.html"><div class="noa control character nohelp"><p>Fox</p></div></a>
+	<a href="heatmaps/oos/falcobeta.html"><div class="noa control character nohelp"><p>Falco</p></div></a>
+	<a href="heatmaps/oos/marthbeta.html"><div class="noa control character nohelp"><p>Marth</p></div></a>
+	<a href="heatmaps/oos/sheikbeta.html"><div class="noa control character nohelp"><p>Sheik</p></div></a>
+	<a href="heatmaps/oos/puffbeta.html"><div class="noa control character nohelp"><p>Puff</p></div></a>
+	<a href="heatmaps/oos/peachbeta.html"><div class="noa control character nohelp"><p>Peach</p></div></a>
+	<a href="heatmaps/oos/icsbeta.html"><div class="noa control character nohelp"><p>ICs</p></div></a>
+	<a href="heatmaps/oos/falconbeta.html"><div class="noa control character nohelp"><p>Falcon</p></div></a>
 </div>
 
 </div>
@@ -240,7 +237,7 @@ x1</p></div>
         <path fill-rule="evenodd" clip-rule="evenodd" d="M538,474l24-33l37-23l41-8l45,11l32,18l25,33l9,40l-9,39l-24,33
         	l-28,20l-50,13l-51-11l-27-22l-24-32l-9-40L538,474z" class="a1 f4 hitbox" id="a1f4"/>
     </svg>
-
+    <div id="framenumbers"></div>
 		<img id="shield" src="assets/heatmaps/fox/shield.png"/>
 		<div id="hurtboxcontainer"><img id="hurtbox" src="assets/heatmaps/hurtboxes/falconstand.png"/></div>
     <svg version="1.1" id="hitboxsvg-t" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1280px" height="720px"

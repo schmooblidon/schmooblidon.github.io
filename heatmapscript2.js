@@ -355,13 +355,63 @@ var hbhlundo = function(t,z){
 		}
 	}
 };
-
+timertemp = 1;
 var speed = 1;
+var timerplay = function(){
+	setTimeout(function(){
+	timertemp++;
+	$("#framenumbers").empty().append(timertemp);
+	var hit = false;
+	for (j=1;j<11;j++) {
+		if (attackswitches[j-1] && (fc["fc"+j][timertemp-1])){
+			$("#a"+j+"f"+timertemp).show();
+			if ($("#a"+j+"f"+timertemp).length > 0){
+				hit = true;
+			}
+		}
+	}
+	if (hit){
+		$("#framenumbers").addClass("hitting");
+	}
+	else {
+		$("#framenumbers").removeClass("hitting");
+	}
+	if (timertemp < 20){
+		timerplay();
+	}
+	else {
+		timertemp = 1;
+		setTimeout(function(){
+			$("#framenumbers").removeClass("hitting").empty().hide();
+			$("#go").hide();
+			playing = 0;
+		}, 1040);
+	}
+}
+	, 17 * speed);
+};
+var timer = function(){
+	$("#framenumbers").show().append("0");
+	$(".hitbox").fadeOut(200);
+	$("#ready").show();
+	setTimeout(function(){
+		timerplay();
+		$("#ready").hide();
+		$("#go").show();
+	},1000);
+};
+
+playing = 0;
 var play = function() {
 	$("#play-button").click(function(){
-		$(".hitbox").fadeOut(200);
+		if (!playing){
+		playing = 1;
+		timer();
+		}
+		/*$(".hitbox").fadeOut(200);
 		$("#ready").fadeIn(1).delay(1000).fadeOut(1);
 		$("#go").fadeOut(1).delay(1000).fadeIn(1);
+
 		for (i=1;i<21;i++){
 			a = i *17 *speed;
 				for (j=1;j<11;j++) {
@@ -369,14 +419,21 @@ var play = function() {
 						$("#a"+j+"f"+i).fadeOut(1).delay(a+800-17).fadeIn(1);
 					}
 			}
+			window.setTimeout(function(){$("#framenumbers").empty().append(i);}, (a+800-17));
 		}
 		$("#go").fadeIn(1).delay(1040).fadeOut(1)
+		var thing = 100 * i;
+
+		timer();
+*/
 	});
+
 };
 
 
 $(document).ready(function(){
 	$("#fc0").addClass("fchighlight");
+	var currentchar = $("#characterbutton").children("p").text().toLowerCase();
 	var noofattacks = 0;
 	for(i=1;i<11;i++){
 		if ($("#top-controls").children("#attack"+i).length > 0){
@@ -720,10 +777,10 @@ $(document).ready(function(){
 		}
 	});
 
-	$(".hitbox-t").click(function(){
+	/*$(".hitbox-t").click(function(){
 		var id = $(this).attr('id');
 		prompt(id);
-	});
+	});*/
 
 	$(".hitbox-t").hover(function(){
 		$(this).attr("stroke","white");
@@ -744,19 +801,23 @@ $(document).ready(function(){
 		var a = parseInt(id.substr(1,lengtha - 1));
 		var f = parseInt(id.substr(lengtha + 1, 2));
 		if (attackswitches[a-1] && fc["fc"+a][f-1]){
-  		$("#hurtboxcontainer").after('<div class="hitboxinfo">'+listofattacks[a-1]+' frame '+f+'</div>');
-			for (i=1;i<=specials.length;i++){
-				if (specials[i-1][0] === "a"+a+"f"+f){
-					$(".hitboxinfo").append('<br><span class="'+specials[i-1][2]+'">'+specials[i-1][1]+'</span>');
+  		$("#hurtboxcontainer").after('<div class="hitboxinfo">'+chars[currentchar]["listofattacks"][a-1]+' frame '+f+'</div>');
+			for (i=1;i<=chars[currentchar]["specials"].length;i++){
+				if (chars[currentchar]["specials"][i-1][0] === "a"+a+"f"+f){
+					$(".hitboxinfo").append('<br><span class="'+chars[currentchar]["specials"][i-1][2]+'">'+chars[currentchar]["specials"][i-1][1]+'</span>');
 				}
-				if (specials[i-1][0] === "a"+a){
-
-					if (f >= specials[i-1][3] && f <= specials[i-1][4]){
-						$(".hitboxinfo").append('<br><span class="'+specials[i-1][2]+'">'+specials[i-1][1]+'</span>');
+				if (chars[currentchar]["specials"][i-1][0] === "a"+a){
+					if (chars[currentchar]["specials"][i-1].length > 3){
+						if (f >= chars[currentchar]["specials"][i-1][3] && f <= chars[currentchar]["specials"][i-1][4]){
+							$(".hitboxinfo").append('<br><span class="'+chars[currentchar]["specials"][i-1][2]+'">'+chars[currentchar]["specials"][i-1][1]+'</span>');
+						}
+					}
+					else {
+						$(".hitboxinfo").append('<br><span class="'+chars[currentchar]["specials"][i-1][2]+'">'+chars[currentchar]["specials"][i-1][1]+'</span>');
 					}
 				}
 			}
-			$(".hitboxinfo").append('<span class="attdetails">'+attdetails[a-1]+'</span>');
+			$(".hitboxinfo").append('<span class="attdetails">'+chars[currentchar]["attdetails"][a-1]+'</span>');
 
 			$("#hurtcontrolbox").css("z-index","198");
 			$("#draghurt").css("z-index","198");
@@ -818,10 +879,16 @@ $(document).ready(function(){
 		}, function(){
 		$(".hbcon").css("opacity","0.5");
 	});*/
-
+	/*$("#draghurt").hover(function(){
+		$("#hurtcontrolbox").fadeIn(100);
+	},function(){
+		$("#hurtcontrolbox").fadeOut(100);
+	});*/
 	$(".hbcon").hover(function(){
+		$("#hurtcontrolbox").css("opacity",1);
 		$(".hbcon").css("opacity","0.7");
 		$(this).css("opacity","1");
+		$("#hurtcontrolbox").fadeIn(100);
 		if ($(this).hasClass("hbcharselect")){
 			$("#hurtchar").css("opacity","1");
 		}
@@ -832,7 +899,9 @@ $(document).ready(function(){
 		}
 		else {
 			$(".hbcon").css("opacity","0.5");
+			$("#hurtcontrolbox").css("opacity",0);
 		}
+
 	});
 
 	$(".hbdirection").hover(function(){
