@@ -202,6 +202,10 @@
 	background-size: 100% 100%;
 }
 
+.mobiledraghurt {
+	display:inline-block;
+}
+
 .imgurhighlight {
 	opacity:0.7;
 }
