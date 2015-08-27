@@ -536,8 +536,8 @@ $(document).ready(function(){
 			});
 	}
 	else {
-		$("draghurtcontainer").children("#draghurt").remove();
-		$("draghurtcontainer").append('<div id="hurttap" class="hbcon"><div id="hurtleft" class="hbcon"></div><div id="hurtright" class="hbcon"></div></div>');
+		$("#draghurtcontainer").children("#draghurt").remove();
+		$("#draghurtcontainer").append('<div id="hurttap" class="hbcon"><div id="hurtleft" class="hbcon"></div><div id="hurtright" class="hbcon"></div></div>');
 		$("#hurtleft").click(function(){
 			mobilemovehurtbox("l");
 		});
