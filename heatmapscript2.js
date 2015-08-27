@@ -241,23 +241,22 @@ var movehurtbox = function(){
 }
 
 var mobilemovehurtbox = function(direction){
-  if (currentMargin.length === 2){
-    var cm = Number(currentMargin[0]);
-  }
-  else {
-    var cm = Number(currentMargin[0]+currentMargin[1]);
-  }
+	currentLeft = $("#hurtbox").left();
   if (direction = "l"){
-    if (cm > 0){
-        $("#hurtbox").css("margin-left",(cm-2)+"%");
+    if (currentLeft > 0){
+        $("#hurtboxcontainer").left(currentLeft-2);
+				$("#hurttap").left(currentLeft-2);
+				$("#hurtcontrolbox").left(currentLeft-2);
     }
   }
   else if (direction = "r"){
-    if (cm < 75){
-        $("#hurtbox").css("margin-left",(cm+2)+"%");
+    if (currentLeft < $("#draghurtcontainer").width()){
+        $("#hurtboxcontainer").left(currentLeft+2));
+				$("#hurttap").left(currentLeft+2);
+				$("#hurtcontrolbox").left(currentLeft+2);
     }
   }
-  currentMargin = $("#hurtbox").prop("style")["margin-left"];
+  currentLeft = $("#hurtbox").left();
 }
 
 var togglehitbox = function(type, num) {
@@ -537,10 +536,12 @@ $(document).ready(function(){
 			});
 	}
 	else {
-		$("#hbleft").click(function(){
+		$("draghurtcontainer").children("#draghurt").remove();
+		$("draghurtcontainer").append('<div id="hurttap" class="hbcon"><div id="hurtleft" class="hbcon"></div><div id="hurtright" class="hbcon"></div></div>');
+		$("#hurtleft").click(function(){
 			mobilemovehurtbox("l");
 		});
-		$("#hbright").click(function(){
+		$("#hurtright").click(function(){
 			mobilemovehurtbox("r");
 		});
 		$("#characterbutton").click(function(){

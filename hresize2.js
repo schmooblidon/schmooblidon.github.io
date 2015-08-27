@@ -27,7 +27,12 @@ var resizingtype = function(){
 		if (draghurtmarg < 0){
 			draghurtmarg = 0;
 		}
-		var temppos = $("#draghurt").position();
+		if (!mobile){
+			var temppos = $("#draghurt").position();
+		}
+		else {
+			var temppos = $("#hurttap").position();
+		}
 		var newleft = temppos.left * ($("#hurtboxcontainer").width()/previoushbwidth);
 		$("#draghurt").css({"margin-left":draghurtmarg,"margin-right":draghurtmarg,"left":newleft});
 		$("#hurtcontrolbox").css({"margin-left":draghurtmarg,"margin-right":draghurtmarg,"left":newleft});
