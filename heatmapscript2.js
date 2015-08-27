@@ -251,7 +251,7 @@ var mobilemovehurtbox = function(direction){
   }
   else if (direction = "r"){
     if (currentLeft < $("#draghurtcontainer").width()){
-        $("#hurtboxcontainer").left(currentLeft+2));
+        $("#hurtboxcontainer").left(currentLeft+2);
 				$("#hurttap").left(currentLeft+2);
 				$("#hurtcontrolbox").left(currentLeft+2);
     }
