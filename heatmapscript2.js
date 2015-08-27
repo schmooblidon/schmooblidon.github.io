@@ -240,24 +240,29 @@ var movehurtbox = function(){
 	currentMargin = $("#hurtbox").prop("style")["margin-left"];
 }
 
-var mobilemovehurtbox = function(direction){
-	currentLeft = $("#hurtbox").left();
-  if (direction = "l"){
-    if (currentLeft > 0){
-        $("#hurtboxcontainer").left(currentLeft-2);
-				$("#hurttap").left(currentLeft-2);
-				$("#hurtcontrolbox").left(currentLeft-2);
-    }
+var mobilemovehurtboxright = function(){
+	currentLeft = $("#draghurt").css("left");
+	var k = currentLeft.indexOf("px");
+	currentLeft = parseInt(currentLeft.substr(0,k));
+
+  if (currentLeft < $("#draghurtcontainer").width()){
+      $("#hurtboxcontainer").css("left",(currentLeft+10));
+			$("#draghurt").css("left",(currentLeft+10));
+			$("#hurtcontrolbox").css("left",(currentLeft+10));
   }
-  else if (direction = "r"){
-    if (currentLeft < $("#draghurtcontainer").width()){
-        $("#hurtboxcontainer").left(currentLeft+2);
-				$("#hurttap").left(currentLeft+2);
-				$("#hurtcontrolbox").left(currentLeft+2);
-    }
-  }
-  currentLeft = $("#hurtbox").left();
 }
+
+var mobilemovehurtboxleft = function(){
+	currentLeft = $("#draghurt").css("left");
+	var k = currentLeft.indexOf("px");
+	currentLeft = parseInt(currentLeft.substr(0,k));
+  if (currentLeft > 0){
+      $("#hurtboxcontainer").css("left",(currentLeft-10));
+			$("#draghurt").css("left",(currentLeft-10));
+			$("#hurtcontrolbox").css("left",(currentLeft-10));
+  }
+}
+
 
 var togglehitbox = function(type, num) {
 		var type = type+num;
@@ -536,13 +541,13 @@ $(document).ready(function(){
 			});
 	}
 	else {
-		$("#draghurt").removeClass("notmobiledraghurt").addClass("mobiledraghurt");
-		$("#draghurt").append('<div id="hurtleft" class="hbcon"></div><div id="hurtright" class="hbcon"></div>');
+		$("#draghurt").removeClass("notmobiledraghurt hbcon").addClass("mobiledraghurt");
+		$("#draghurt").append('<div id="hurtleft"></div><div id="hurtright"></div>');
 		$("#hurtleft").click(function(){
-			mobilemovehurtbox("l");
+			mobilemovehurtboxleft();
 		});
 		$("#hurtright").click(function(){
-			mobilemovehurtbox("r");
+			mobilemovehurtboxright();
 		});
 		$("#characterbutton").click(function(){
 			$("#chardropdown").toggle();
@@ -862,6 +867,7 @@ $(document).ready(function(){
 		$(this).toggleClass("imgurhighlight");
 	});
 
+	if (!mobile){
 	$("#draghurt").draggable({containment: "parent", scroll: false,
       drag: function() {
 				var pos = $(this).position();
@@ -875,6 +881,7 @@ $(document).ready(function(){
 				currenthurtboxpos = pos.left;
 			}
 			});
+		}
 
 	/*$("#hurtcontrolbox").hover(function(){
 		$(".hbcon").css("opacity","0.7");

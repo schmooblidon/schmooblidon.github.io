@@ -67,6 +67,10 @@ var resizingtype = function(){
 			$("#hurtboxmidcontrols").height(dragboxdim[0]);
 			$("#draghurtcontainer").height(dragboxdim[1]);
 			$("#draghurt").height(dragboxdim[1]);
+			if (mobile){
+				$("#hurtleft").height($("#draghurt").height());
+				$("#hurtright").height($("#draghurt").height());
+			}
 			$("#hurtchardropdown").css("bottom",dragboxdim[0]);
 
 		}
@@ -102,6 +106,10 @@ var resizingtype = function(){
 		$("#hurtboxmidcontrols").height(100);
 		$("#draghurtcontainer").height(50);
 		$("#draghurt").height(50);
+		if (mobile){
+			$("#hurtleft").height($("#draghurt").height());
+			$("#hurtright").height($("#draghurt").height());
+		}
 		$("#hurtchardropdown").css("bottom",100);
 	}
 	if (windwidth < 1150){
