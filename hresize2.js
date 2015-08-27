@@ -1,3 +1,7 @@
+mobile = false;
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+ 	mobile = true;
+}
 var resizingtype = function(){
 	var i = 11;
 	while (i>0){
