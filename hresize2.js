@@ -1,7 +1,3 @@
-mobile = false;
-if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
- 	mobile = true;
-}
 var resizingtype = function(){
 	var i = 11;
 	while (i>0){
@@ -31,12 +27,7 @@ var resizingtype = function(){
 		if (draghurtmarg < 0){
 			draghurtmarg = 0;
 		}
-		if (!mobile){
-			var temppos = $("#draghurt").position();
-		}
-		else {
-			var temppos = $("#hurttap").position();
-		}
+		var temppos = $("#draghurt").position();
 		var newleft = temppos.left * ($("#hurtboxcontainer").width()/previoushbwidth);
 		$("#draghurt").css({"margin-left":draghurtmarg,"margin-right":draghurtmarg,"left":newleft});
 		$("#hurtcontrolbox").css({"margin-left":draghurtmarg,"margin-right":draghurtmarg,"left":newleft});
