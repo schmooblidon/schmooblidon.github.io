@@ -543,6 +543,9 @@ $(document).ready(function(){
 	else {
 		$("#draghurt").removeClass("notmobiledraghurt hbcon").addClass("mobiledraghurt");
 		$("#draghurt").append('<div id="hurtleft"></div><div id="hurtright"></div>');
+		$("#heatmapinfo").click(function(){
+			$("#heatmapinfobox").fadeToggle(300);
+		});
 		$("#hurtleft").click(function(){
 			mobilemovehurtboxleft();
 		});
