@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<base href="../../">
+<link href='http://fonts.googleapis.com/css?family=Slabo+27px|Share+Tech+Mono' rel='stylesheet' type='text/css'>
+<link href="stylesheet.css" rel="stylesheet" type="text/css">
+<link href="heatmapsheet2.css" rel="stylesheet" type="text/css">
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-65409082-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<script src="jquery-1.11.3.min.js" type="text/javascript"></script>
+<script src="jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="hresize2.js"></script>
+<script type="text/javascript" src="script.js"></script>
+<script type="text/javascript" src="hmdata.js"></script>
+<script type="text/javascript" src="heatmapscript2.js"></script>
+<link rel="shortcut icon" href="favicon.ico" />
+<title>I KneeData | For your frame data kneeds</title>
+</head>
+
+<body>
+<div id="header">
+	<a href="http://ikneedata.com"><img id="logo" src="assets/kneesmalllogo.png" width="40" height="40" alt=""></a>
+    <a href="http://ikneedata.com"><img id="titlelogo" src="assets/ikneedatav5.png" width="280" height="60"></a>
+	<a href="http://ikneedata.com"><div class="button"><h4>Blog</h4></div></a>
+	<a href="heatmaps/oos/falcon.html"><div class="button"><h4>Heatmaps</h4></div></a>
+    <a href="graphsgfys.html"><div class="button longbutton"><h4>Graphs & Gfys</h4></div></a>
+    <a href="vidsthreads.html"><div class="button longbutton"><h4>Vids & Threads</h4></div></a>
+	<a href="donate.html"><div class="button"><h4>Donate</h4></div></a>
+	<a href="about.html"><div class="button"><h4>About</h4></div></a>
+	<div id="socialmediaicons"><a href="http://twitter.com/IKneeData"><div class="socialmedia" style="background-image:url(assets/twitterlogo.png)"></div></a>
+	<a href="http://facebook.com/IKneeData"><div class="socialmedia" style="background-image:url(assets/facebooklogo.png)"></div></a></div>
+</div>
+<div id="pagetitle" style="background-color:#5F369F">
+<h1>Heatmaps <img id="heatmapinfo" src="assets/question.png" style="height:22px; width:22px; border-radius:15px;"/><a href="heatmaps/oos/foxold.html"><div id="oldbutton">Not working? Try the old build</div></a></h1>
+
+<div id="heatmapinfobox"><p>Heatmaps display the speed of all the character's attacks from a certain position. The coloured shapes represent the possible hitboxes of each attack, where the colour represents the frame that it comes out. All smash games run at 60 frames per second. Red and yellow hitboxes are very fast, but green and blue are slower.</p>
+	<p>You can toggle each attack, or each frame (colour) individually, to allow you to see only the options you want. You can also play an animation of your selected hitboxes in real game speed (60fps) to get a feel for how fast each option is.</p>
+	<p>Using the hurtbox controls, you can move around a custom opponent hurtbox to greater visualise hitbox range.</p>
+	<p>Hovering over the buttons will highlight (outlines them) the button's respective hitboxes, and hovering over (tapping on mobile) each hitbox will display info.</p>
+</div>
+</div><div id="main">
+<div id="main-content">
+	<div id="control-container">
+    <div id="top-controls">
+    	<div class="noa control nohelp" id="heatmaptype"><p>OoS</p>
+        <div id="hmtypedropdown" class="dropdown" style="display:none"><div class="noa control hmtype nohelp">Coming Soon</div></div></div>
+		<div class="noa control nohelp" id="characterbutton"><p>Ganon</p>
+<div id="chardropdown" class="dropdown" style="display:none">
+  <div id="charcolumn1" class="charcolumn">
+	<a href="heatmaps/oos/fox.html"><div class="noa control character nohelp"><p>Fox</p></div></a>
+	<a href="heatmaps/oos/falco.html"><div class="noa control character nohelp"><p>Falco</p></div></a>
+	<a href="heatmaps/oos/marth.html"><div class="noa control character nohelp"><p>Marth</p></div></a>
+	<a href="heatmaps/oos/sheik.html"><div class="noa control character nohelp"><p>Sheik</p></div></a>
+	<a href="heatmaps/oos/puff.html"><div class="noa control character nohelp"><p>Puff</p></div></a>
+	<a href="heatmaps/oos/peach.html"><div class="noa control character nohelp"><p>Peach</p></div></a>
+	<a href="heatmaps/oos/ics.html"><div class="noa control character nohelp"><p>ICs</p></div></a>
+	<a href="heatmaps/oos/falcon.html"><div class="noa control character nohelp"><p>Falcon</p></div></a>
+</div>
+<div id="charcolumn2" class="charcolumn">
+  <a href="heatmaps/oos/doc.html"><div class="noa control character nohelp"><p>Doc</p></div></a>
+  <a href="heatmaps/oos/pika.html"><div class="noa control character nohelp"><p>Pika</p></div></a>
+  <a href="heatmaps/oos/samus.html"><div class="noa control character nohelp"><p>Samus</p></div></a>
+  <a href="heatmaps/oos/ganon.html"><div class="noa control character nohelp"><p>Ganon</p></div></a>
+  <a href="heatmaps/oos/luigi.html"><div class="noa control character nohelp"><p>Luigi</p></div></a>
+  <a href="heatmaps/oos/mario.html"><div class="noa control character nohelp"><p>Mario</p></div></a>
+</div>
+</div>
+
+</div>
+		<div class="attackall nohelp"><div id="allattcontainer"><div id="allattackon2" class="allatt noa control">All On</div><div id="allattackoff2" class="allatt noa control">All Off</div></div><div class="framecircle" id="fc0"><p>F</p></div></div>
+		<div id="attack1" class="attack control"><p>Grab</p><div class="framecircle" id="fc1"><p>F</p></div></div>
+		<div id="attack2" class="attack control"><p>Upair</p><div class="framecircle" id="fc2"><p>F</p></div></div>
+		<div id="attack3" class="attack control"><p>Nair</p><div class="framecircle" id="fc3"><p>F</p></div></div>
+        <div id="attack4" class="attack control"><p>Upb</p><div class="framecircle" id="fc4"><p>F</p></div></div>
+		<div id="attack5" class="attack control"><p>Bair</p><div class="framecircle" id="fc5"><p>F</p></div></div>
+		<div id="attack6" class="attack control"><p>Fair</p><div class="framecircle" id="fc6"><p>F</p></div></div>
+
+		<div id="control-speed">
+		<div id="play-button" class="noa control play"></div>
+
+		<div id="times1" class="speed"><p>
+x1</p></div>
+		<div id="times05" class="speed"><p>
+1/2</p></div>
+		<div id="times025" class="speed"><p>
+1/4</p></div>
+</div></div>
+		</div>
+
+
+  <div id="imgandframecontainer">
+	<div id="img-container">
+		<img id="base" src="assets/heatmaps/ganon/base.png"/>
+        <img id="ready" src="assets/heatmaps/ready.png"/>
+        <img id="go" src="assets/heatmaps/go.png"/>
+        <svg version="1.1" id="hitboxsvg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1280px" height="720px"
+  	  viewBox="0 0 1280 720" enable-background="new 0 0 1280 720" xml:space="preserve" style="position:absolute">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M545,297l-16-3l-14-9l-8-10l-6-1l-17-10l-11-16l-5-20l5-19l11-15l13-8
+      	l5-24l14-19l25-15l26-5h306l27,4l22,14l17,23l5,24l-6,25l-15,20l-22,14l-11,2l2,9l-3,15l-10,13l-15,8l-17,3H545z" class="a6 f20 hitbox" id="a6f20"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M245,412l-21-18l-13-26v-29l10-25l21-20l28-11h32l12-11l23-9h27l11-8
+      	l19-7h320l21,8l14,14l8,17l-1,20l-9,18l-15,13l-19,7l-6,11l-17,16l-25,8l-4,1l-5,12l-22,18l-26,9l-13,2H282l-11-2L245,412z" class="a5 f20 hitbox" id="a5f20"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M247,337l-15-17l-7-23l4-20l16-51l9-18l22-17l23-6h288l24,2l22,12
+      	l13,14h65l19,6l14,12l9,16l6,22l1,19l-7,17l-13,14l-19,8l-21,1h-53l-4,5l-18,13l-25,6H298l-25-2L247,337z" class="a2 f20 hitbox" id="a2f20"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M233,405l-15-27l-2-26l13-32l16-19l30-15l30-3h9l5-5l23-11l25-3h8
+      	l11-9l20-5h294l16,4l16,11l11,16l4,18l-5,19l-11,15l-15,10l-13,4l-4,6l-14,16l-24,12l-10,2l-1,4l-18,20l-27,13l-25,7l-29,3H285
+      	l-29-7L233,405z" class="a5 f19 hitbox" id="a5f19"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M251,272l-9-21l1-23l13-22l39-51l14-14l27-10l272-1l24,4l21,11l15,18
+      	l7,22l-2,12h45l18,7l15,14l8,18l-1,18l-4,18l-8,17l-15,13l-19,7H408l-18-7l-2-1h-93l-25-10L251,272z" class="a2 f19 hitbox" id="a2f19"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M249,419l-20-19l-12-28l1-27l12-25l22-19l27-9h36l3-5l20-13l24-5h24
+      	l11-9l20-7h263l21,2l18,10l13,15l5,18l-3,21l-9,13l-15,13l-14,6l-12,3l-6,12l-22,18l-25,9l-2,5l-17,20l-27,14l-29,3H329l-26-1l-26-5
+      	L249,419z" class="a5 f18 hitbox" id="a5f18"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M439,294l-20-5l-17-13l-10-16l-2-13h-55l-24-9l-17-17l-11-23l1-23
+      	l11-22l17-13l68-41l21-10h264l22,5l20,13l13,19l4,22l-6,23l-11,14h18l22,7l15,12l10,18l1,18l-6,17l-28,26l-19,9l-22,1L439,294z" class="a2 f18 hitbox" id="a2f18"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M240,373l3-18l9-20l12-17l4-4l25-13l33-5h7l16-13l25-8h21l10-9l21-7
+      	h255l19,8l15,13l8,16l1,19l-8,20l-14,13l-14,8l-8,4l-12,16l-13,13l-20,12l-10,2l-2,5l-22,17l-31,15l-26,9H309l-28-7l-23-16l-14-23
+      	L240,373z" class="a5 f17 hitbox" id="a5f17"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M458,280l-18-11l-11-15l-4-18l3-19l8-12h-32l-23-10l-18-16l-9-21v-23
+      	l11-23l18-16l22-7l88-16l26-1h220l24,8l19,16l10,20l1,25l-9,21l-15,16l-19,8l10,2l18,10l12,15l5,20l-4,20l-11,14l-19,11l-25,5h-19
+      	H478L458,280z" class="a2 f17 hitbox" id="a2f17"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M241,381l6-27l17-23l23-14l29-6h22l6-7l21-13l25-4h11l5-7l17-11l21-4
+      	h218l21,5l17,11l10,15l4,18l-4,18l-11,16l-17,11l-11,2l-2,9l-14,18l-23,14l-23,4h-6l-1,2l-15,21l-27,16l-27,4H316l-29-4l-23-14
+      	l-17-22L241,381z" class="a5 f16 hitbox" id="a5f16"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M467,239l2-19l10-17l16-12l4-2l-27-10l-17-16l-10-21v-23l9-21l20-17
+      	l23-9h225l24,2l75,17l21,9l17,17l9,24l-2,23l-11,21l-18,14l-23,8h-18l10,8l10,18l1,20l-7,17l-14,14l-21,10H570l-22-2l-46-13l-16-8
+      	l-12-13L467,239z" class="a2 f16 hitbox" id="a2f16"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M512,255v-19l8-18l14-13l21-8h13l-17-16l-9-21v-23l9-21l19-17l22-8
+      	h214l23,3l18,10l60,52l15,16l6,23l-4,22l-14,21l-20,14l-24,5h-33v23l-9,17l-15,13l-22,7H591l-19-10l-39-22l-14-13L512,255z" class="a2 f15 hitbox" id="a2f15"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M370,552l-26-15l-15-19l-6-28l6-25l15-20l21-13l27-5h49l25,4l20,13
+      	l5,6l12-2h46l18,3l15,10l9,13l4,15l-4,16l-9,12l-14,11l-19,5h-47l-11-2l-3,5l-26,14l-25,4h-44L370,552z M683,491l4-17l10-14l14-8l18-4h48l10,2l4-5l22-14l27-4h47l26,4l23,15
+      	l15,20l5,24l-6,28l-15,20l-22,12l-26,4h-47l-25-4l-25-15l-2-4l-12,2h-47l-19-4l-14-9l-9-12L683,491z" class="a4 f14 hitbox" id="a4f14"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M497,382l-2-28l9-23l18-19l24-11l29-1h223l21,2h99l20,4l14,9l11,15
+      	l4,17l-5,19l-10,12l-21,13l-10,6l-18,3h-54l-12,12l-12,9l-25,7h-29l-3,3l-27,8H564l-27-9l-19-16l-10-12L497,382z" class="a3 f14 hitbox" id="a3f14"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M551,283l-2-19l7-18l13-15l18-9l21-2h19l-4-8l-1-24l10-22l17-16l22-9
+      	h198l19,3l23,14l12,19l33,71l6,21l-4,22l-15,21l-21,13l-25,5h-64l-13,12l-19,7l-20,2H629l-22-6l-15-9l-30-36L551,283z" class="a2 f14 hitbox" id="a2f14"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M574,440l-26-5l-23-14l-15-20l-6-25l6-26l15-21l22-13l28-5h56l5-1h157
+      	l19,3h90l19,3l15,10l10,13l4,18l-5,18l-10,13l-15,9l-17,3h-57l-8,12l-22,12l-24,5h-25l-11,7l-24,4H574z" class="a3 f13 hitbox" id="a3f13"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M579,303l4-19l11-16l17-11l21-4h48l9-16l18-16l23-8h171l23,4l21,14
+      	l14,22l2,20l-3,103l-4,22l-14,19l-21,12l-26,4H767l-23-2l-22-9l-18-16l-5-13h-48l-19-5l-17-11l-11-13l-20-41L579,303z" class="a2 f13 hitbox" id="a2f13"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M598,345l4-19l12-17l17-11l21-4h136l20,4l18,11l5,7h62l26,5l20,12
+      	l14,20l5,22l-5,23l-15,20l-21,12l-24,4H758l-22-4l-21-12l-15-21l-2-6h-51l-18-4l-14-9l-12-16L598,345z" class="a2 f12 hitbox" id="a2f12"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M745,410l21,3l17,11l13,17l3,19l-4,19l-12,16l-18,11l-19,3l-21-3
+      	l-15-10l-14,9l-21,4l-23-4l-15-11l-12-15l-4-19l4-20l12-16l18-11l21-3l19,3l15,9l15-9L745,410z" class="a1 f8 hitbox" id="a1f8"></path>
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M745,410l21,3l17,11l13,17l3,19l-4,19l-12,16l-18,11l-19,3l-21-3
+      	l-15-10l-14,9l-21,4l-23-4l-15-11l-12-15l-4-19l4-20l12-16l18-11l21-3l19,3l15,9l15-9L745,410z" class="a1 f7 hitbox" id="a1f7"></path>
+    </svg>
+    <div id="framenumbers"></div>
+		<img id="shield" src="assets/heatmaps/ganon/shield.png"/>
+		<div id="hurtboxcontainer"><img id="hurtbox" src="assets/heatmaps/hurtboxes/falconstand.png"/></div>
+    <svg version="1.1" id="hitboxsvg-t" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1280px" height="720px"
+    viewBox="0 0 1280 720" enable-background="new 0 0 1280 720" xml:space="preserve" style="position:absolute;z-index:200">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M545,297l-16-3l-14-9l-8-10l-6-1l-17-10l-11-16l-5-20l5-19l11-15l13-8
+    l5-24l14-19l25-15l26-5h306l27,4l22,14l17,23l5,24l-6,25l-15,20l-22,14l-11,2l2,9l-3,15l-10,13l-15,8l-17,3H545z" class="a6 f20 hitbox-t" id="a6f20-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M245,412l-21-18l-13-26v-29l10-25l21-20l28-11h32l12-11l23-9h27l11-8
+    l19-7h320l21,8l14,14l8,17l-1,20l-9,18l-15,13l-19,7l-6,11l-17,16l-25,8l-4,1l-5,12l-22,18l-26,9l-13,2H282l-11-2L245,412z" class="a5 f20 hitbox-t" id="a5f20-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M247,337l-15-17l-7-23l4-20l16-51l9-18l22-17l23-6h288l24,2l22,12
+    l13,14h65l19,6l14,12l9,16l6,22l1,19l-7,17l-13,14l-19,8l-21,1h-53l-4,5l-18,13l-25,6H298l-25-2L247,337z" class="a2 f20 hitbox-t" id="a2f20-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M233,405l-15-27l-2-26l13-32l16-19l30-15l30-3h9l5-5l23-11l25-3h8
+    l11-9l20-5h294l16,4l16,11l11,16l4,18l-5,19l-11,15l-15,10l-13,4l-4,6l-14,16l-24,12l-10,2l-1,4l-18,20l-27,13l-25,7l-29,3H285
+    l-29-7L233,405z" class="a5 f19 hitbox-t" id="a5f19-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M251,272l-9-21l1-23l13-22l39-51l14-14l27-10l272-1l24,4l21,11l15,18
+    l7,22l-2,12h45l18,7l15,14l8,18l-1,18l-4,18l-8,17l-15,13l-19,7H408l-18-7l-2-1h-93l-25-10L251,272z" class="a2 f19 hitbox-t" id="a2f19-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M249,419l-20-19l-12-28l1-27l12-25l22-19l27-9h36l3-5l20-13l24-5h24
+    l11-9l20-7h263l21,2l18,10l13,15l5,18l-3,21l-9,13l-15,13l-14,6l-12,3l-6,12l-22,18l-25,9l-2,5l-17,20l-27,14l-29,3H329l-26-1l-26-5
+    L249,419z" class="a5 f18 hitbox-t" id="a5f18-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M439,294l-20-5l-17-13l-10-16l-2-13h-55l-24-9l-17-17l-11-23l1-23
+    l11-22l17-13l68-41l21-10h264l22,5l20,13l13,19l4,22l-6,23l-11,14h18l22,7l15,12l10,18l1,18l-6,17l-28,26l-19,9l-22,1L439,294z" class="a2 f18 hitbox-t" id="a2f18-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M240,373l3-18l9-20l12-17l4-4l25-13l33-5h7l16-13l25-8h21l10-9l21-7
+    h255l19,8l15,13l8,16l1,19l-8,20l-14,13l-14,8l-8,4l-12,16l-13,13l-20,12l-10,2l-2,5l-22,17l-31,15l-26,9H309l-28-7l-23-16l-14-23
+    L240,373z" class="a5 f17 hitbox-t" id="a5f17-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M458,280l-18-11l-11-15l-4-18l3-19l8-12h-32l-23-10l-18-16l-9-21v-23
+    l11-23l18-16l22-7l88-16l26-1h220l24,8l19,16l10,20l1,25l-9,21l-15,16l-19,8l10,2l18,10l12,15l5,20l-4,20l-11,14l-19,11l-25,5h-19
+    H478L458,280z" class="a2 f17 hitbox-t" id="a2f17-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M241,381l6-27l17-23l23-14l29-6h22l6-7l21-13l25-4h11l5-7l17-11l21-4
+    h218l21,5l17,11l10,15l4,18l-4,18l-11,16l-17,11l-11,2l-2,9l-14,18l-23,14l-23,4h-6l-1,2l-15,21l-27,16l-27,4H316l-29-4l-23-14
+    l-17-22L241,381z" class="a5 f16 hitbox-t" id="a5f16-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M467,239l2-19l10-17l16-12l4-2l-27-10l-17-16l-10-21v-23l9-21l20-17
+    l23-9h225l24,2l75,17l21,9l17,17l9,24l-2,23l-11,21l-18,14l-23,8h-18l10,8l10,18l1,20l-7,17l-14,14l-21,10H570l-22-2l-46-13l-16-8
+    l-12-13L467,239z" class="a2 f16 hitbox-t" id="a2f16-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M512,255v-19l8-18l14-13l21-8h13l-17-16l-9-21v-23l9-21l19-17l22-8
+    h214l23,3l18,10l60,52l15,16l6,23l-4,22l-14,21l-20,14l-24,5h-33v23l-9,17l-15,13l-22,7H591l-19-10l-39-22l-14-13L512,255z" class="a2 f15 hitbox-t" id="a2f15-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M370,552l-26-15l-15-19l-6-28l6-25l15-20l21-13l27-5h49l25,4l20,13
+    l5,6l12-2h46l18,3l15,10l9,13l4,15l-4,16l-9,12l-14,11l-19,5h-47l-11-2l-3,5l-26,14l-25,4h-44L370,552z M683,491l4-17l10-14l14-8l18-4h48l10,2l4-5l22-14l27-4h47l26,4l23,15
+    l15,20l5,24l-6,28l-15,20l-22,12l-26,4h-47l-25-4l-25-15l-2-4l-12,2h-47l-19-4l-14-9l-9-12L683,491z" class="a4 f14 hitbox-t" id="a4f14-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M497,382l-2-28l9-23l18-19l24-11l29-1h223l21,2h99l20,4l14,9l11,15
+    l4,17l-5,19l-10,12l-21,13l-10,6l-18,3h-54l-12,12l-12,9l-25,7h-29l-3,3l-27,8H564l-27-9l-19-16l-10-12L497,382z" class="a3 f14 hitbox-t" id="a3f14-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M551,283l-2-19l7-18l13-15l18-9l21-2h19l-4-8l-1-24l10-22l17-16l22-9
+    h198l19,3l23,14l12,19l33,71l6,21l-4,22l-15,21l-21,13l-25,5h-64l-13,12l-19,7l-20,2H629l-22-6l-15-9l-30-36L551,283z" class="a2 f14 hitbox-t" id="a2f14-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M574,440l-26-5l-23-14l-15-20l-6-25l6-26l15-21l22-13l28-5h56l5-1h157
+    l19,3h90l19,3l15,10l10,13l4,18l-5,18l-10,13l-15,9l-17,3h-57l-8,12l-22,12l-24,5h-25l-11,7l-24,4H574z" class="a3 f13 hitbox-t" id="a3f13-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M579,303l4-19l11-16l17-11l21-4h48l9-16l18-16l23-8h171l23,4l21,14
+    l14,22l2,20l-3,103l-4,22l-14,19l-21,12l-26,4H767l-23-2l-22-9l-18-16l-5-13h-48l-19-5l-17-11l-11-13l-20-41L579,303z" class="a2 f13 hitbox-t" id="a2f13-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M598,345l4-19l12-17l17-11l21-4h136l20,4l18,11l5,7h62l26,5l20,12
+    l14,20l5,22l-5,23l-15,20l-21,12l-24,4H758l-22-4l-21-12l-15-21l-2-6h-51l-18-4l-14-9l-12-16L598,345z" class="a2 f12 hitbox-t" id="a2f12-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M745,410l21,3l17,11l13,17l3,19l-4,19l-12,16l-18,11l-19,3l-21-3
+    l-15-10l-14,9l-21,4l-23-4l-15-11l-12-15l-4-19l4-20l12-16l18-11l21-3l19,3l15,9l15-9L745,410z" class="a1 f8 hitbox-t" id="a1f8-t" style="fill:transparent"></path>
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M745,410l21,3l17,11l13,17l3,19l-4,19l-12,16l-18,11l-19,3l-21-3
+    l-15-10l-14,9l-21,4l-23-4l-15-11l-12-15l-4-19l4-20l12-16l18-11l21-3l19,3l15,9l15-9L745,410z" class="a1 f7 hitbox-t" id="a1f7-t" style="fill:transparent"></path>
+  </svg>
+  <div id="imgurbox" class="imgurhighlight"><a href="http://imgur.com/a/pcizk"><img id="imgur" src="assets/heatmaps/imgurlogo.png"/></a></div>
+  <div id="hurtcontrolbox"><!--<div id="hbleft" class="hbdirection hbcon"></div>--><div id="hurtboxmidcontrols"><div id="hurtchar" class="hbcon"><span id="hurtcurrent">Falcon</span><div id="hurtchardropdown" style="display:none">
+    <div class="hbcharselect hbcon"><p>Fox</p></div>
+    <div class="hbcharselect hbcon"><p>Falco</p></div>
+    <div class="hbcharselect hbcon"><p>Marth</p></div>
+    <div class="hbcharselect hbcon"><p>Sheik</p></div>
+    <div class="hbcharselect hbcon"><p>Puff</p></div>
+    <div class="hbcharselect hbcon"><p>Peach</p></div>
+    <div class="hbcharselect hbcon"><p>ICs</p></div>
+    <div class="hbcharselect hbcon"><p>Falcon</p></div>
+    <div class="hbcharselect hbcon"><p>Doc</p></div>
+    <div class="hbcharselect hbcon"><p>Pika</p></div>
+    <div class="hbcharselect hbcon"><p>Samus</p></div>
+    <div class="hbcharselect hbcon"><p>Ganon</p></div>
+    <div class="hbcharselect hbcon"><p>Luigi</p></div>
+    <div class="hbcharselect hbcon"><p>Mario</p></div>
+  </div></div><div id="position" class="hbcon">crouch</div><div id="flip" class="hbcon">flip</div></div><!--<div id="hbright" class="hbdirection hbcon"></div>--></div>
+  <div id="draghurtcontainer"><div id="draghurt" class="hbcon"></div></div>
+
+	</div>
+    <div id="framecontainer">
+			<div id="frameselect">Frame control: <span id="fsid">ALL</span></div>
+            <div id="frameall">All<div id="fallon" class="allf"><div>On</div></div><div id="falloff" class="allf"><div>Off</div></div></div><div id="frame1" class="framecontrol"><p>1</p></div><div id="frame2" class="framecontrol"><p>2
+        </p>
+        </div><div id="frame3" class="framecontrol"><p>3</p></div><div id="frame4" class="framecontrol"><p>4</p></div><div id="frame5" class="framecontrol"><p>5</p></div><div id="frame6" class="framecontrol"><p class="test">6</p></div><div id="frame7" class="framecontrol"><p>7</p></div><div id="frame8" class="framecontrol"><p>8</p></div><div id="frame9" class="framecontrol"><p>9</p></div><div id="frame10" class="framecontrol"><p>10</p></div><div id="frame11" class="framecontrol"><p>11</p></div><div id="frame12" class="framecontrol"><p>12</p></div><div id="frame13" class="framecontrol"><p>13</p></div><div id="frame14" class="framecontrol"><p>14</p></div><div id="frame15" class="framecontrol"><p>15</p></div><div id="frame16" class="framecontrol"><p>16</p></div><div id="frame17" class="framecontrol"><p>17</p></div><div id="frame18" class="framecontrol"><p>18</p></div><div id="frame19" class="framecontrol"><p>19</p></div><div id="frame20" class="framecontrol"><p>20</p></div>
+    </div>
+    </div>
+    </div>
+
+<div id="side-container">
+	<div id="ad"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ikneedatabanner -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-2776548052186122"
+     data-ad-slot="7967934690"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+    <h2>Suggestions</h2>
+    <div id="sugboxcontainer"><div id="suggestiontext"><p>Have a suggestion of what
+    features to create next?
+    Send a message via</p></div>
+<a href="http://www.reddit.com/message/compose/?to=schmooblidon">
+<div class="sugbtn"><img src="assets/redditicon.png" width="50" height="40" alt=""/><p>Reddit</p></div></a>
+<a href="http://www.twitch.tv/message/compose?to=schmooblidon">
+<div class="sugbtn"><img src="assets/twitchicon.png" width="50" height="40" alt=""/><p>Twitch</p></div></a>
+</div>
+</div>
+
+</div></body>
+</html>

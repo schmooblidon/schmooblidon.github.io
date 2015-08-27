@@ -557,6 +557,7 @@ $(document).ready(function(){
 	$(".framecontrol").children("p").addClass("framehighlight2");
 
 	$(".attack").children("p").click(function(){
+		if (!playing){
 		$(this).parent().toggleClass("highlighted2");
 
 		var atnum = $(this).parent().attr("id");
@@ -567,6 +568,7 @@ $(document).ready(function(){
 			var atnum = atnum[6] + atnum[7];
 		}
 		togglehitbox("a", atnum);
+	}
 	});
 
 	$(".framecircle").click(function(){
@@ -906,6 +908,12 @@ $(document).ready(function(){
 
 	$(".hbdirection").hover(function(){
 		$(this).toggleClass("hbdirectionhighlight");
+	});
+
+	$("#oldbutton").hover(function(){
+		$(this).css("opacity",1);
+	},function(){
+		$(this).css("opacity",0.5);
 	});
 
 	play();

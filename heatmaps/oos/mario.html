@@ -1,0 +1,426 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<base href="../../">
+<link href='http://fonts.googleapis.com/css?family=Slabo+27px|Share+Tech+Mono' rel='stylesheet' type='text/css'>
+<link href="stylesheet.css" rel="stylesheet" type="text/css">
+<link href="heatmapsheet2.css" rel="stylesheet" type="text/css">
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-65409082-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+<script src="jquery-1.11.3.min.js" type="text/javascript"></script>
+<script src="jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="hresize2.js"></script>
+<script type="text/javascript" src="script.js"></script>
+<script type="text/javascript" src="hmdata.js"></script>
+<script type="text/javascript" src="heatmapscript2.js"></script>
+<link rel="shortcut icon" href="favicon.ico" />
+<title>I KneeData | For your frame data kneeds</title>
+</head>
+
+<body>
+<div id="header">
+	<a href="http://ikneedata.com"><img id="logo" src="assets/kneesmalllogo.png" width="40" height="40" alt=""></a>
+    <a href="http://ikneedata.com"><img id="titlelogo" src="assets/ikneedatav5.png" width="280" height="60"></a>
+	<a href="http://ikneedata.com"><div class="button"><h4>Blog</h4></div></a>
+	<a href="heatmaps/oos/falcon.html"><div class="button"><h4>Heatmaps</h4></div></a>
+    <a href="graphsgfys.html"><div class="button longbutton"><h4>Graphs & Gfys</h4></div></a>
+    <a href="vidsthreads.html"><div class="button longbutton"><h4>Vids & Threads</h4></div></a>
+	<a href="donate.html"><div class="button"><h4>Donate</h4></div></a>
+	<a href="about.html"><div class="button"><h4>About</h4></div></a>
+	<div id="socialmediaicons"><a href="http://twitter.com/IKneeData"><div class="socialmedia" style="background-image:url(assets/twitterlogo.png)"></div></a>
+	<a href="http://facebook.com/IKneeData"><div class="socialmedia" style="background-image:url(assets/facebooklogo.png)"></div></a></div>
+</div>
+<div id="pagetitle" style="background-color:#5F369F">
+<h1>Heatmaps <img id="heatmapinfo" src="assets/question.png" style="height:22px; width:22px; border-radius:15px;"/><a href="heatmaps/oos/foxold.html"><div id="oldbutton">Not working? Try the old build</div></a></h1>
+
+<div id="heatmapinfobox"><p>Heatmaps display the speed of all the character's attacks from a certain position. The coloured shapes represent the possible hitboxes of each attack, where the colour represents the frame that it comes out. All smash games run at 60 frames per second. Red and yellow hitboxes are very fast, but green and blue are slower.</p>
+	<p>You can toggle each attack, or each frame (colour) individually, to allow you to see only the options you want. You can also play an animation of your selected hitboxes in real game speed (60fps) to get a feel for how fast each option is.</p>
+	<p>Using the hurtbox controls, you can move around a custom opponent hurtbox to greater visualise hitbox range.</p>
+	<p>Hovering over the buttons will highlight (outlines them) the button's respective hitboxes, and hovering over (tapping on mobile) each hitbox will display info.</p>
+</div>
+</div><div id="main">
+<div id="main-content">
+	<div id="control-container">
+    <div id="top-controls">
+    	<div class="noa control nohelp" id="heatmaptype"><p>OoS</p>
+        <div id="hmtypedropdown" class="dropdown" style="display:none"><div class="noa control hmtype nohelp">Coming Soon</div></div></div>
+		<div class="noa control nohelp" id="characterbutton"><p>Mario</p>
+<div id="chardropdown" class="dropdown" style="display:none">
+  <div id="charcolumn1" class="charcolumn">
+	<a href="heatmaps/oos/fox.html"><div class="noa control character nohelp"><p>Fox</p></div></a>
+	<a href="heatmaps/oos/falco.html"><div class="noa control character nohelp"><p>Falco</p></div></a>
+	<a href="heatmaps/oos/marth.html"><div class="noa control character nohelp"><p>Marth</p></div></a>
+	<a href="heatmaps/oos/sheik.html"><div class="noa control character nohelp"><p>Sheik</p></div></a>
+	<a href="heatmaps/oos/puff.html"><div class="noa control character nohelp"><p>Puff</p></div></a>
+	<a href="heatmaps/oos/peach.html"><div class="noa control character nohelp"><p>Peach</p></div></a>
+	<a href="heatmaps/oos/ics.html"><div class="noa control character nohelp"><p>ICs</p></div></a>
+	<a href="heatmaps/oos/falcon.html"><div class="noa control character nohelp"><p>Falcon</p></div></a>
+</div>
+<div id="charcolumn2" class="charcolumn">
+  <a href="heatmaps/oos/doc.html"><div class="noa control character nohelp"><p>Doc</p></div></a>
+  <a href="heatmaps/oos/pika.html"><div class="noa control character nohelp"><p>Pika</p></div></a>
+  <a href="heatmaps/oos/samus.html"><div class="noa control character nohelp"><p>Samus</p></div></a>
+  <a href="heatmaps/oos/ganon.html"><div class="noa control character nohelp"><p>Ganon</p></div></a>
+  <a href="heatmaps/oos/luigi.html"><div class="noa control character nohelp"><p>Luigi</p></div></a>
+  <a href="heatmaps/oos/mario.html"><div class="noa control character nohelp"><p>Mario</p></div></a>
+</div>
+</div>
+
+</div>
+		<div class="attackall nohelp"><div id="allattcontainer"><div id="allattackon2" class="allatt noa control">All On</div><div id="allattackoff2" class="allatt noa control">All Off</div></div><div class="framecircle" id="fc0"><p>F</p></div></div>
+		<div id="attack1" class="attack control"><p>Upb</p><div class="framecircle" id="fc1"><p>F</p></div></div>
+		<div id="attack2" class="attack control"><p>Nair</p><div class="framecircle" id="fc2"><p>F</p></div></div>
+		<div id="attack3" class="attack control"><p>Grab</p><div class="framecircle" id="fc3"><p>F</p></div></div>
+        <div id="attack4" class="attack control"><p>Upair</p><div class="framecircle" id="fc4"><p>F</p></div></div>
+		<div id="attack5" class="attack control"><p>Upsmash</p><div class="framecircle" id="fc5"><p>F</p></div></div>
+		<div id="attack6" class="attack control"><p>Bair</p><div class="framecircle" id="fc6"><p>F</p></div></div>
+        <div id="attack7" class="attack control"><p>Dair</p><div class="framecircle" id="fc7"><p>F</p></div></div>
+
+		<div id="control-speed">
+		<div id="play-button" class="noa control play"></div>
+
+		<div id="times1" class="speed"><p>
+x1</p></div>
+		<div id="times05" class="speed"><p>
+1/2</p></div>
+		<div id="times025" class="speed"><p>
+1/4</p></div>
+</div></div>
+		</div>
+
+
+  <div id="imgandframecontainer">
+	<div id="img-container">
+		<img id="base" src="assets/heatmaps/mario/base.png"/>
+        <img id="ready" src="assets/heatmaps/ready.png"/>
+        <img id="go" src="assets/heatmaps/go.png"/>
+        <svg version="1.1" id="hitboxsvg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1280px" height="720px"
+  	  viewBox="0 0 1280 720" enable-background="new 0 0 1280 720" xml:space="preserve" style="position:absolute">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M368,445l3-12l-3-15l6-29l18-24l27-16l31-5h392l30,5l19,12h5l28,16
+	l18,26l5,22l10,6l17,25l7,28l-4,15l3,12l-7,35l-18,23l-30,16l-27,3H500l-29-4l-26-15l-20-27l-5-26l-27-15l-19-28L368,445z" class="a7 f20 hitbox" id="a7f20"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M281,425l4-14l-2-8l-1-12l6-16l12-14l18-9l21-4h34l20-3h373l19,2l22,7
+	l16,14l15,30l3,17l-3,12l3,7l-6,25l-16,19l-21,12l-25,4H387l-25-4l-22-11l-10-11l-15-2l-17-9l-12-14L281,425z" class="a6 f20 hitbox" id="a6f20"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M412,486l-3-11l1-15l2-5l-3-5v-14l7-13l10-8l11-5l14-3h33l4-7l10-8
+	l11-4l14-3h357l21,1l16,5l11,11l6,11l1,14l-4,7l3,5l2,14l-5,12l-9,10l-13,7l-15,1h-30l-2,5l-9,10l-13,6l-15,2H450l-15-2l-13-6
+	L412,486z" class="a2 f20 hitbox" id="a2f20"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M237,71l-7-33l8-31l5-7h147l9,11l5,28l-5,32l-18,25l-1,7l-17,24
+	l-23,13l-27,5l-27-6l-22-14l-15-20l-6-26L237,71z M820,25l6-25h160l5,25l-6,31l-8,10l-5,23l-15,20l-22,14l-26,5l-27-5
+	l-23-14l-15-20l-3-15l-14-18L820,25z" class="a1 f20 hitbox" id="a1f20"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M295,381l9-16l16-12l18-5l11-2h40l6-1h369l25,5l21,13l14,20l4,21
+	l-5,23l-14,21l-21,12l-24,5H392l-22-4l-21-13l-9-11h-9l-19-9l-12-12l-7-17L295,381z" class="a6 f19 hitbox" id="a6f19"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M419,442l2-13l8-12l12-8l16-3h37l6-10l12-8l11-3l13-1h343l13,1l12,3
+	l11,8l8,12l2,13l-4,14l-9,11l-13,7l-15,1h-31l-2,4l-9,10l-12,7l-14,2H458l-14-2l-13-7l-8-11L419,442z" class="a2 f19 hitbox" id="a2f19"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M242,71l-1-30l12-28l14-13h123l12,11l11,15l13,28v30l-13,30l-7,7
+	l-11,23l-19,18l-26,10h-27l-27-10l-18-17l-12-16l-12-22V93L242,71z M835,131l-12-21v-5l-3-3l-15-27l-3-30l10-27l11-18h148l10,19l2,30
+	l-11,29l-3,3v6l-9,22l-11,18l-15,16l-25,11l-28,2l-26-8L835,131z" class="a1 f19 hitbox" id="a1f19"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M387,452l3-29l3-5l-2-8l9-28l20-23l27-14l33-3h330l33,3l27,15l20,22
+	l8,28l-2,23l10,8l14,26l3,32l-5,20l-9,16l-14,18l-28,15l-32,3l-345,1l-33-8l-25-18l-15-26l-2-21l-18-19L387,452z" class="a7 f18 hitbox" id="a7f18"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M305,390l5-18l12-14l16-9l19-2h44l5-1h346l19,2l21,10l16,17l7,23
+	l-2,24l-12,22l-20,14l-23,7l-13,1H411l-17-2l-18-6l-20-14l-4-7l-20-4l-15-11l-10-15L305,390z" class="a6 f18 hitbox" id="a6f18"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M429,438l4-13l10-12l15-6h45l3-6l9-9l12-7l15-1h331l16,2l12,6l10,12
+	l3,13l-2,13l-8,13l-11,8l-12,2l-13,1h-26l-7,11l-11,8l-13,3l-13,1H474l-11-1l-13-3l-12-9l-7-12L429,438z" class="a2 f18 hitbox" id="a2f18"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M253,67l7-32l19-24l20-11h80l23,14l19,26l6,30l-7,30l-16,21l-3,12
+	l-15,21l-24,15l-26,4l-27-5l-23-14l-15-20l-5-26l-6-8L253,67z M802,54l6-28l19-26h123l16,22l7,32l-7,32l-7,9l-5,24l-15,19l-23,14
+	l-26,5l-26-5l-23-13l-15-21l-3-14l-15-20L802,54z" class="a1 f18 hitbox" id="a1f18"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M403,416l6-28l18-24l26-16l32-6l322,1l29,5l28,17l17,24l6,29l-2,8
+	l15,9l17,24l6,28l-7,29l-18,26l-26,15l-29,4l-319-1l-31-4l-23-15l-20-27l-2-11l-16-9l-19-26l-6-26v-5L403,416z" class="a7 f17 hitbox" id="a7f17"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M317,401v-16l9-19l13-12l20-6h46l13-1h311l25,1l23,9l16,16l10,21v25
+	l-11,23l-19,16l-20,7l-15,2l-23,1H437l-23-1l-30-9l-19-16l-2-3l-11-3l-15-6l-13-13L317,401z" class="a6 f17 hitbox" id="a6f17"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M440,435l6-13l10-9l15-6h44l3-7l11-10l14-5h329l15,5l9,9l7,13v16
+	l-6,13l-9,8l-11,4l-14,3h-33l-3,7l-11,9l-15,5l-10,2H491l-12-1l-11-2l-11-4l-11-11l-6-12V435z" class="a2 f17 hitbox" id="a2f17"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M266,101V72l14-29l27-23l31-11l35,1l32,14l22,22l14,20l11,30l-1,30
+	l-14,28l-5,5l-11,25l-20,17l-26,9l-30-1l-24-11l-19-18l-14-21l-10-21l1-9L266,101z M785,119l-5-30l9-31l14-24l18-19l28-15h53l16,4l25,18l17,27l3,32
+	l-10,29l-4,7l-8,26l-12,20l-15,18l-24,12l-26,2l-28-7l-20-14l-14-21l-1-9L785,119z" class="a1 f17 hitbox" id="a1f17"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M327,394l4-17l11-15l16-9l20-3h39l3-1h318l23,8l18,16l12,23v23l-9,22
+	l-19,18l-23,8l-21,3l-14,1H448l-23-2l-17-5l-16-6l-17-16l-15-4l-19-11l-11-14L327,394z" class="a6 f16 hitbox" id="a6f16"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M450,446l2-13l7-11l11-9l15-4h40l6-10l11-8l15-4h302l15,4l11,10l7,11
+	v13l-4,15l-9,10l-13,5l-12,3l-13,1h-22l-1,3l-9,10l-11,5l-14,4l-12,1H500l-14-2l-14-4l-9-5l-9-11L450,446z" class="a2 f16 hitbox" id="a2f16"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M279,107l8-33l20-26l29-16l29-4l32,5l31,18l19,26l6,30l-7,31l-15,20
+	l-3,12l-15,22l-24,15l-26,4l-28-5l-23-15l-15-21l-5-23l-6-10L279,107z M787,63l18-24l32-19l29-4l32,4l27,17l20,26l7,32l-7,30l-8,10l-5,23
+	l-15,20l-22,13l-27,5l-26-4l-22-14l-16-21l-4-16l-13-17l-7-32L787,63z" class="a1 f16 hitbox" id="a1f16"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M433,452l-6-30l6-29l18-24l26-16l32-5h273l31,5l14,9l7,1l27,14l20,23
+	l9,29l3,2l21,23l8,28l-4,30l-18,27l-22,15l-43,18l-28,9H555l-32-3l-28-13l-21-24l-10-27l2-18l-13-16v-3l-2-1L433,452z" class="a7 f15 hitbox" id="a7f15"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M337,390l7-16l14-12l15-7l20-1h30l10-3h293l23,9l18,15l11,21l1,25
+	l-9,23l-20,17l-21,8l-15,3l-23,1H458l-23-2l-17-4l-15-6l-12-13h-8l-15-6l-13-8l-10-8l-8-17V390z" class="a6 f15 hitbox" id="a6f15"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M461,446l3-14l9-10l12-7l15-3h36l7-11l12-8l16-3h273l16,3l12,8l7,11
+	l3,14l-4,14l-9,12l-11,5l-12,4l-13,3h-26l-7,9l-10,6l-14,5l-13,3H508l-13-3l-14-6l-9-6l-9-12L461,446z" class="a2 f15 hitbox" id="a2f15"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M295,143v-29l16-31l26-22l32-10l34,2l30,13l23,23l17,26l10,29l-1,30
+	l-15,28l-4,3l-1,5l-11,22l-20,17l-25,8l-29-1l-27-12l-17-18l-16-24l-10-23l1-7L295,143z M755,138l9-33l14-24l18-22l29-15l33-5l34,8l28,20l16,25l4,31l-10,31
+	l-4,7l-7,23l-14,26l-16,19l-23,12l-27,4l-26-7l-21-14l-15-21l-1-10l-17-26L755,138z" class="a1 f15 hitbox" id="a1f15"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M445,455l-6-28l6-29l18-25l26-15l31-6h251l31,6l26,17l18,24l1,9l9,10
+	l7,31l-3,8l14,20l7,29l-8,29l-18,26l-28,16l-28,3H546l-30-4l-25-15l-20-27l-7-28l2-10l-14-19l-3-16L445,455z" class="a7 f14 hitbox" id="a7f14"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M335,400l11-15l11-12l15-10l18-5h40l7-3l26-1h230l25,1l22,10l16,16
+	l10,23l-1,25l-10,20l-20,16l-24,8l-20,2H445l-23-9l-8-5h-33l-17-2l-16-9l-11-14l-6-19L335,400z" class="a6 f14 hitbox" id="a6f14"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M472,447l5-13l11-10l13-7l16-1h30l2-3l9-10l12-7l16-2h245l15,2l12,7
+	l9,10l4,14l-3,15l-7,11l-10,7l-12,5l-14,4h-30l-6,8l-9,6l-11,5l-13,4H516l-13-4l-12-6l-10-7l-7-13L472,447z" class="a2 f14 hitbox" id="a2f14"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M755,140l6-29l19-24l28-18l33-5l32,5l27,16l20,27l6,31l-7,31l-7,9
+	l-5,23l-16,21l-22,13l-26,5l-27-5l-22-14l-15-21l-5-16l-13-17L755,140z M310,154l8-32l19-26l28-16l32-5l34,6l28,17l19,26l6,33l-7,28l-16,21
+	l-1,11l-15,21l-23,14l-28,6l-28-5l-22-14l-15-21l-6-25l-6-9L310,154z" class="a1 f14 hitbox" id="a1f14"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M331,412l6-17l13-14l17-8l19-2h30l19-11l25-4h228l25,6l20,16l13,22
+	l2,21l-8,23l-17,19l-21,10l-19,5l-24,3H460l-27-7l-15-11h-21l-23-2l-16-5l-16-11l-9-16L331,412z" class="a6 f13 hitbox" id="a6f13"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M367,355v-22l10-22l18-16l44-27l23-8h231l23,10l17,16l9,21v24l-8,17
+	l4,1l16,13l11,20l2,19l-7,16l-13,13l-17,7l-20,1l-224,1l-19-5l-16-12l-8-14l-1-5h-25l-22-9l-18-16L367,355z" class="a4 f13 hitbox" id="a4f13"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M484,451l6-13l10-10l15-5h44l3-8l9-8l15-7h244l15,6l10,11l4,11v15
+	l-7,13l-10,7l-12,7l-13,5h-34l-3,5l-9,7l-12,7l-14,5H525l-11-5l-14-8l-9-8l-6-12L484,451z" class="a2 f13 hitbox" id="a2f13"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M725,194l7-27l18-32l18-23l29-16l35-4l32,8l26,18l18,28l5,30l-10,29
+	l-5,9l-6,22l-16,30l-15,19l-23,13l-29,4l-26-6l-22-16l-13-20l-2-10l-16-25L725,194z M328,193l1-29l16-30l26-22l31-10l35,2l31,14l22,23l19,30l10,26l-1,32
+	l-15,28l-4,3l-1,7l-11,20l-20,16l-26,10l-29-2l-26-12l-16-17l-19-28l-10-23v-8L328,193z" class="a1 f13 hitbox" id="a1f13"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M361,428l3-19l10-18l17-12l19-5h14l3-3l22-8l28-1h187l24,3l21,12
+	l15,19l5,23l-4,22l-13,21l-19,12l-20,9l-23,5H479l-27-1l-22-9l-7-7h-10l-19-2l-16-9l-11-13L361,428z" class="a6 f12 hitbox" id="a6f12"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M647,441v-15l7-14l12-11l16-6l18,1l18,8l91,57l12,11l6,15v15l-7,14
+	l-11,10l-17,6l-18-1l-18-8l-92-56l-11-11L647,441z" class="a5 f12 hitbox" id="a5f12"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M410,314l7-23l14-17l21-12l40-13l26-3h180l26,6l19,14l13,20l3,23
+	l-6,23l-13,15l14,10l9,15l2,17l-6,19l-12,14l-16,8l-21,3H512l-19-2l-16-8l-12-14l-6-17l2-17l-14-3l-20-14l-13-20L410,314z" class="a4 f12 hitbox" id="a4f12"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M496,470l1-16l6-11l12-9l13-5h43l4-9l11-9l14-5h216l15,5l10,10l6,11
+	v15l-5,13l-10,9l-12,8l-12,5l-16,1h-21l-9,9l-12,8l-14,7H550l-17-1l-11-6l-12-8l-9-9L496,470z" class="a2 f12 hitbox" id="a2f12"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M346,209l7-31l20-26l28-17l34-5l32,6l28,17l19,26l6,30l-7,31l-14,17
+	l-4,17l-15,20l-24,15l-26,4l-28-5l-22-14l-15-20l-5-25l-7-9L346,209z M731,169l19-25l27-17l35-6l31,5l29,18l18,25l7,31l-7,30l-8,10l-5,24
+	l-16,20l-21,13l-27,5l-27-5l-21-13l-15-20l-4-15l-14-19l-8-30L731,169z" class="a1 f12 hitbox" id="a1f12"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M364,414l9-16l14-11l19-6h25l12-7l24-5h188l24,8l17,13l13,15l9,18
+	l3,24l-9,24l-16,17l-24,11l-26,1H501l-23-4l-35-13l-7-3l-42-12l-15-7l-11-12l-6-17L364,414z" class="a6 f11 hitbox" id="a6f11"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M547,503l-5-15l3-17l8-13l15-11l102-48l16-4l18,2l14,8l11,13l4,15
+	l-3,15l-9,14l-15,9l-99,49l-16,5l-19-2l-14-7L547,503z" class="a5 f11 hitbox" id="a5f11"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M463,342l-11-20l-3-23l8-23l16-18l23-10l26-2h183l54,8l23,8l18,15
+	l11,22v24l-9,22l-16,16l-25,11l4,10l-2,20l-9,15l-13,11l-19,7H562l-17-1l-24-6l-14-6l-14-13l-6-16l1-19l6-13l-11-4L463,342z" class="a4 f11 hitbox" id="a4f11"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M509,462l7-12l11-9l16-4h39l7-11l11-9l14-3h189l13,3l12,10l7,12l1,14
+	l-5,13l-8,9l-13,10l-12,6l-15,1h-25l-8,8l-12,9l-10,6l-16,2H559l-15-2l-12-7l-12-10l-8-9l-5-13L509,462z" class="a2 f11 hitbox" id="a2f11"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M455,374l-27-11l-18-20l-21-32l-9-21v-8l-13-28l1-33l15-29l25-20
+	l32-11l36,2l29,13l23,24l19,28l13,31l-1,31l-14,28l-5,3v6l-12,23l-20,17l-25,8L455,374z M697,234l21-39l19-23l31-16l34-3l30,7l27,19l18,28l4,30l-9,29l-7,12
+	l-5,18l-17,33l-15,20l-22,13l-27,5l-27-5l-22-14l-16-21l-3-15l-13-18l-7-30L697,234z" class="a1 f11 hitbox" id="a1f11"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M409,439l4-18l11-14l15-10l19-3h5l14-9l24-5h157l23,5l22,13l13,19
+	l5,21l-5,25l-13,19l-23,15l-25,3H502l-24-3l-21-13l-18-3l-14-9l-12-15L409,439z" class="a6 f10 hitbox" id="a6f10"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M542,484l3-15l9-13l15-8l16-4l20,4l13,9l9,12l3,17l-4,16l-10,12l-14,8
+	l-16,3l-16-3l-14-8l-10-13L542,484z" class="a5 f10 hitbox" id="a5f10"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M509,393l3-17l9-15l17-11l4-1l-8-10l-7-23l4-24l13-19l20-14l25-6h167
+	l27,9l17,15l57,67l11,19l2,25l-8,22l-17,17l-22,10l-26,2h-47l-17,6l-17,2H591l-18-3l-44-17l-15-16L509,393z" class="a4 f10 hitbox" id="a4f10"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M520,483l2-13l7-11l12-9l15-4h39l6-10l11-9l13-4h164l15,4l11,8l7,11
+	l2,15l-4,13l-9,10l-11,9l-12,7l-14,2h-29l-5,5l-16,12l-12,6l-15,1H570l-16-2l-11-7l-13-11l-6-8L520,483z" class="a2 f10 hitbox" id="a2f10"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M697,234l18-25l30-18l33-6l32,6l28,18l19,26l6,29l-7,31l-7,10l-5,24
+	l-16,20l-22,13l-27,5l-27-5l-22-14l-16-21l-3-15l-13-18l-7-30L697,234z M444,371l-22-14l-16-20l-5-25l-7-11l-7-29l7-31l20-27l26-16l34-6l34,6
+	l28,18l18,25l7,31l-7,31l-15,20l-3,13l-14,20l-23,14l-28,6L444,371z" class="a1 f10 hitbox" id="a1f10"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M543,407l1-17l9-17l15-11l18-6h28l3-4l16-19l20-10l26-3h120l27,3
+	l21,12l17,19l6,22l8,86l-2,26l-12,21l-21,15l-25,6H703l-25-7l-19-13l-14-22l-5-13h-6l-20-3l-19-10l-35-25l-11-13L543,407z" class="a4 f9 hitbox" id="a4f9"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M531,491l3-14l8-11l12-6l12-4h42l8-12l12-8l15-4h131l16,3l13,9l7,11
+	l3,14l-4,14l-8,9l-11,11l-12,8l-15,3h-33l-6,5l-12,10l-12,7l-16,1H580l-15-2l-12-8l-12-12l-7-9L531,491z" class="a2 f9 hitbox" id="a2f9"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M673,423l2-23l9-83l10-29l22-25l29-14l34-2l32,9l26,20l17,30l2,28
+	l-11,106l-9,28l-22,25l-9,4l-6,15l-20,19l-27,10l-26-1l-25-9l-20-19l-11-22v-26l5-21L673,423z M493,534l-21-17l-6-11l-12-6l-21-21l-11-29l-21-104l-1-30l15-31l25-21
+	l31-11h34l32,13l23,21l12,30l7,30l14,69l1,37l3,7l2,24l-9,25l-18,19l-24,12l-29,2L493,534z" class="a1 f9 hitbox" id="a1f9"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M581,431l3-17l11-15l16-10l19-4h106l19,4l15,8l10,13h34l25,5l21,13
+	l14,20l5,22l-6,24l-15,21l-21,12l-24,3H707l-23-4l-22-14l-15-19l-4-18h-14l-19-4l-15-9l-10-13L581,431z" class="a4 f8 hitbox" id="a4f8"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M641,519l4-15l8-11l13-8l17-3l15,3l11,8l14-9l15-2l15,2l14,9l9,12
+	l3,14l-4,15l-9,13l-13,8l-14,2l-15-2l-14-9l-13,7l-17,4l-16-3l-12-9l-8-12L641,519z" class="a3 f8 hitbox" id="a3f8"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M543,500l4-13l9-11l14-7l15-2h36l6-11l11-8l15-4h108l13,1l13,6l9,11
+	l5,13l-2,14l-5,10l-18,19l-10,7l-16,5h-36l-6,8l-9,9l-11,5l-16,1h-81l-13-3l-10-8l-16-16l-7-11L543,500z" class="a2 f8 hitbox" id="a2f8"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M424,459l-3-31l11-31l22-23l31-14l34-3l34,11l116,59l8-21l16-26l27-18
+	l34-9l33,4l29,16l20,25l9,33l-6,30l-39,106l-14,26l-19,15l-11,7l-12,13l-15,8l-12,3l-16,2l-16-1l-12-4l-21-12l-3-2l-156-89l-18-13
+	l-7-12l-19-13l-9-7L424,459z" class="a1 f8 hitbox" id="a1f8"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M641,519l4-15l8-11l13-8l17-3l15,3l11,8l14-9l15-2l15,2l14,9l9,12
+	l3,14l-4,15l-9,13l-13,8l-14,2l-15-2l-14-9l-13,7l-17,4l-16-3l-12-9l-8-12L641,519z" class="a3 f7 hitbox" id="a3f7"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M558,518l3-13l8-12l14-8l14-3h35l2-4l7-8l10-7l16-3h80l16,3l11,7l8,12
+	l3,14l-3,13l-9,12l-12,7l-14,2h-34l-1,3l-8,10l-15,9l-13,1h-81l-12-1l-13-8l-9-12L558,518z" class="a2 f7 hitbox" id="a2f7"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M616,543l7-36l23-31l36-22l36-6l40,7l33,21l23,31l7,36l-8,36l-26,35
+	l-32,19l-28,4l-25,4l-27-3l-23-14l-18-24l-9-21l-4-8L616,543z" class="a1 f7 hitbox" id="a1f7"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M616,543l7-36l23-31l36-22l36-6l40,7l33,21l23,31l7,36l-8,36l-26,35
+	l-32,19l-28,4l-25,4l-27-3l-23-14l-18-24l-9-21l-4-8L616,543z" class="a1 f6 hitbox" id="a1f6"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M616,543l7-36l23-31l36-22l36-6l40,7l33,21l23,31l7,36l-8,36l-26,35
+	l-32,19l-28,4l-25,4l-27-3l-23-14l-18-24l-9-21l-4-8L616,543z" class="a1 f5 hitbox" id="a1f5"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M616,543l7-36l23-31l36-22l36-6l40,7l33,21l23,31l7,36l-8,36l-26,35
+	l-32,19l-28,4l-25,4l-27-3l-23-14l-18-24l-9-21l-4-8L616,543z" class="a1 f4 hitbox" id="a1f4"></path>
+    </svg>
+    <div id="framenumbers"></div>
+		<img id="shield" src="assets/heatmaps/mario/shield.png"/>
+		<div id="hurtboxcontainer"><img id="hurtbox" src="assets/heatmaps/hurtboxes/falconstand.png"/></div>
+    <svg version="1.1" id="hitboxsvg-t" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1280px" height="720px"
+    viewBox="0 0 1280 720" enable-background="new 0 0 1280 720" xml:space="preserve" style="position:absolute;z-index:200">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M368,445l3-12l-3-15l6-29l18-24l27-16l31-5h392l30,5l19,12h5l28,16
+l18,26l5,22l10,6l17,25l7,28l-4,15l3,12l-7,35l-18,23l-30,16l-27,3H500l-29-4l-26-15l-20-27l-5-26l-27-15l-19-28L368,445z" class="a7 f20 hitbox-t" id="a7f20-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M281,425l4-14l-2-8l-1-12l6-16l12-14l18-9l21-4h34l20-3h373l19,2l22,7
+l16,14l15,30l3,17l-3,12l3,7l-6,25l-16,19l-21,12l-25,4H387l-25-4l-22-11l-10-11l-15-2l-17-9l-12-14L281,425z" class="a6 f20 hitbox-t" id="a6f20-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M412,486l-3-11l1-15l2-5l-3-5v-14l7-13l10-8l11-5l14-3h33l4-7l10-8
+l11-4l14-3h357l21,1l16,5l11,11l6,11l1,14l-4,7l3,5l2,14l-5,12l-9,10l-13,7l-15,1h-30l-2,5l-9,10l-13,6l-15,2H450l-15-2l-13-6
+L412,486z" class="a2 f20 hitbox-t" id="a2f20-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M237,71l-7-33l8-31l5-7h147l9,11l5,28l-5,32l-18,25l-1,7l-17,24
+l-23,13l-27,5l-27-6l-22-14l-15-20l-6-26L237,71z M820,25l6-25h160l5,25l-6,31l-8,10l-5,23l-15,20l-22,14l-26,5l-27-5
+l-23-14l-15-20l-3-15l-14-18L820,25z" class="a1 f20 hitbox-t" id="a1f20-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M295,381l9-16l16-12l18-5l11-2h40l6-1h369l25,5l21,13l14,20l4,21
+l-5,23l-14,21l-21,12l-24,5H392l-22-4l-21-13l-9-11h-9l-19-9l-12-12l-7-17L295,381z" class="a6 f19 hitbox-t" id="a6f19-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M419,442l2-13l8-12l12-8l16-3h37l6-10l12-8l11-3l13-1h343l13,1l12,3
+l11,8l8,12l2,13l-4,14l-9,11l-13,7l-15,1h-31l-2,4l-9,10l-12,7l-14,2H458l-14-2l-13-7l-8-11L419,442z" class="a2 f19 hitbox-t" id="a2f19-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M242,71l-1-30l12-28l14-13h123l12,11l11,15l13,28v30l-13,30l-7,7
+l-11,23l-19,18l-26,10h-27l-27-10l-18-17l-12-16l-12-22V93L242,71z M835,131l-12-21v-5l-3-3l-15-27l-3-30l10-27l11-18h148l10,19l2,30
+l-11,29l-3,3v6l-9,22l-11,18l-15,16l-25,11l-28,2l-26-8L835,131z" class="a1 f19 hitbox-t" id="a1f19-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M387,452l3-29l3-5l-2-8l9-28l20-23l27-14l33-3h330l33,3l27,15l20,22
+l8,28l-2,23l10,8l14,26l3,32l-5,20l-9,16l-14,18l-28,15l-32,3l-345,1l-33-8l-25-18l-15-26l-2-21l-18-19L387,452z" class="a7 f18 hitbox-t" id="a7f18-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M305,390l5-18l12-14l16-9l19-2h44l5-1h346l19,2l21,10l16,17l7,23
+l-2,24l-12,22l-20,14l-23,7l-13,1H411l-17-2l-18-6l-20-14l-4-7l-20-4l-15-11l-10-15L305,390z" class="a6 f18 hitbox-t" id="a6f18-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M429,438l4-13l10-12l15-6h45l3-6l9-9l12-7l15-1h331l16,2l12,6l10,12
+l3,13l-2,13l-8,13l-11,8l-12,2l-13,1h-26l-7,11l-11,8l-13,3l-13,1H474l-11-1l-13-3l-12-9l-7-12L429,438z" class="a2 f18 hitbox-t" id="a2f18-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M253,67l7-32l19-24l20-11h80l23,14l19,26l6,30l-7,30l-16,21l-3,12
+l-15,21l-24,15l-26,4l-27-5l-23-14l-15-20l-5-26l-6-8L253,67z M802,54l6-28l19-26h123l16,22l7,32l-7,32l-7,9l-5,24l-15,19l-23,14
+l-26,5l-26-5l-23-13l-15-21l-3-14l-15-20L802,54z" class="a1 f18 hitbox-t" id="a1f18-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M403,416l6-28l18-24l26-16l32-6l322,1l29,5l28,17l17,24l6,29l-2,8
+l15,9l17,24l6,28l-7,29l-18,26l-26,15l-29,4l-319-1l-31-4l-23-15l-20-27l-2-11l-16-9l-19-26l-6-26v-5L403,416z" class="a7 f17 hitbox-t" id="a7f17-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M317,401v-16l9-19l13-12l20-6h46l13-1h311l25,1l23,9l16,16l10,21v25
+l-11,23l-19,16l-20,7l-15,2l-23,1H437l-23-1l-30-9l-19-16l-2-3l-11-3l-15-6l-13-13L317,401z" class="a6 f17 hitbox-t" id="a6f17-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M440,435l6-13l10-9l15-6h44l3-7l11-10l14-5h329l15,5l9,9l7,13v16
+l-6,13l-9,8l-11,4l-14,3h-33l-3,7l-11,9l-15,5l-10,2H491l-12-1l-11-2l-11-4l-11-11l-6-12V435z" class="a2 f17 hitbox-t" id="a2f17-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M266,101V72l14-29l27-23l31-11l35,1l32,14l22,22l14,20l11,30l-1,30
+l-14,28l-5,5l-11,25l-20,17l-26,9l-30-1l-24-11l-19-18l-14-21l-10-21l1-9L266,101z M785,119l-5-30l9-31l14-24l18-19l28-15h53l16,4l25,18l17,27l3,32
+l-10,29l-4,7l-8,26l-12,20l-15,18l-24,12l-26,2l-28-7l-20-14l-14-21l-1-9L785,119z" class="a1 f17 hitbox-t" id="a1f17-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M327,394l4-17l11-15l16-9l20-3h39l3-1h318l23,8l18,16l12,23v23l-9,22
+l-19,18l-23,8l-21,3l-14,1H448l-23-2l-17-5l-16-6l-17-16l-15-4l-19-11l-11-14L327,394z" class="a6 f16 hitbox-t" id="a6f16-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M450,446l2-13l7-11l11-9l15-4h40l6-10l11-8l15-4h302l15,4l11,10l7,11
+v13l-4,15l-9,10l-13,5l-12,3l-13,1h-22l-1,3l-9,10l-11,5l-14,4l-12,1H500l-14-2l-14-4l-9-5l-9-11L450,446z" class="a2 f16 hitbox-t" id="a2f16-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M279,107l8-33l20-26l29-16l29-4l32,5l31,18l19,26l6,30l-7,31l-15,20
+l-3,12l-15,22l-24,15l-26,4l-28-5l-23-15l-15-21l-5-23l-6-10L279,107z M787,63l18-24l32-19l29-4l32,4l27,17l20,26l7,32l-7,30l-8,10l-5,23
+l-15,20l-22,13l-27,5l-26-4l-22-14l-16-21l-4-16l-13-17l-7-32L787,63z" class="a1 f16 hitbox-t" id="a1f16-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M433,452l-6-30l6-29l18-24l26-16l32-5h273l31,5l14,9l7,1l27,14l20,23
+l9,29l3,2l21,23l8,28l-4,30l-18,27l-22,15l-43,18l-28,9H555l-32-3l-28-13l-21-24l-10-27l2-18l-13-16v-3l-2-1L433,452z" class="a7 f15 hitbox-t" id="a7f15-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M337,390l7-16l14-12l15-7l20-1h30l10-3h293l23,9l18,15l11,21l1,25
+l-9,23l-20,17l-21,8l-15,3l-23,1H458l-23-2l-17-4l-15-6l-12-13h-8l-15-6l-13-8l-10-8l-8-17V390z" class="a6 f15 hitbox-t" id="a6f15-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M461,446l3-14l9-10l12-7l15-3h36l7-11l12-8l16-3h273l16,3l12,8l7,11
+l3,14l-4,14l-9,12l-11,5l-12,4l-13,3h-26l-7,9l-10,6l-14,5l-13,3H508l-13-3l-14-6l-9-6l-9-12L461,446z" class="a2 f15 hitbox-t" id="a2f15-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M295,143v-29l16-31l26-22l32-10l34,2l30,13l23,23l17,26l10,29l-1,30
+l-15,28l-4,3l-1,5l-11,22l-20,17l-25,8l-29-1l-27-12l-17-18l-16-24l-10-23l1-7L295,143z M755,138l9-33l14-24l18-22l29-15l33-5l34,8l28,20l16,25l4,31l-10,31
+l-4,7l-7,23l-14,26l-16,19l-23,12l-27,4l-26-7l-21-14l-15-21l-1-10l-17-26L755,138z" class="a1 f15 hitbox-t" id="a1f15-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M445,455l-6-28l6-29l18-25l26-15l31-6h251l31,6l26,17l18,24l1,9l9,10
+l7,31l-3,8l14,20l7,29l-8,29l-18,26l-28,16l-28,3H546l-30-4l-25-15l-20-27l-7-28l2-10l-14-19l-3-16L445,455z" class="a7 f14 hitbox-t" id="a7f14-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M335,400l11-15l11-12l15-10l18-5h40l7-3l26-1h230l25,1l22,10l16,16
+l10,23l-1,25l-10,20l-20,16l-24,8l-20,2H445l-23-9l-8-5h-33l-17-2l-16-9l-11-14l-6-19L335,400z" class="a6 f14 hitbox-t" id="a6f14-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M472,447l5-13l11-10l13-7l16-1h30l2-3l9-10l12-7l16-2h245l15,2l12,7
+l9,10l4,14l-3,15l-7,11l-10,7l-12,5l-14,4h-30l-6,8l-9,6l-11,5l-13,4H516l-13-4l-12-6l-10-7l-7-13L472,447z" class="a2 f14 hitbox-t" id="a2f14-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M755,140l6-29l19-24l28-18l33-5l32,5l27,16l20,27l6,31l-7,31l-7,9
+l-5,23l-16,21l-22,13l-26,5l-27-5l-22-14l-15-21l-5-16l-13-17L755,140z M310,154l8-32l19-26l28-16l32-5l34,6l28,17l19,26l6,33l-7,28l-16,21
+l-1,11l-15,21l-23,14l-28,6l-28-5l-22-14l-15-21l-6-25l-6-9L310,154z" class="a1 f14 hitbox-t" id="a1f14-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M331,412l6-17l13-14l17-8l19-2h30l19-11l25-4h228l25,6l20,16l13,22
+l2,21l-8,23l-17,19l-21,10l-19,5l-24,3H460l-27-7l-15-11h-21l-23-2l-16-5l-16-11l-9-16L331,412z" class="a6 f13 hitbox-t" id="a6f13-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M367,355v-22l10-22l18-16l44-27l23-8h231l23,10l17,16l9,21v24l-8,17
+l4,1l16,13l11,20l2,19l-7,16l-13,13l-17,7l-20,1l-224,1l-19-5l-16-12l-8-14l-1-5h-25l-22-9l-18-16L367,355z" class="a4 f13 hitbox-t" id="a4f13-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M484,451l6-13l10-10l15-5h44l3-8l9-8l15-7h244l15,6l10,11l4,11v15
+l-7,13l-10,7l-12,7l-13,5h-34l-3,5l-9,7l-12,7l-14,5H525l-11-5l-14-8l-9-8l-6-12L484,451z" class="a2 f13 hitbox-t" id="a2f13-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M725,194l7-27l18-32l18-23l29-16l35-4l32,8l26,18l18,28l5,30l-10,29
+l-5,9l-6,22l-16,30l-15,19l-23,13l-29,4l-26-6l-22-16l-13-20l-2-10l-16-25L725,194z M328,193l1-29l16-30l26-22l31-10l35,2l31,14l22,23l19,30l10,26l-1,32
+l-15,28l-4,3l-1,7l-11,20l-20,16l-26,10l-29-2l-26-12l-16-17l-19-28l-10-23v-8L328,193z" class="a1 f13 hitbox-t" id="a1f13-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M361,428l3-19l10-18l17-12l19-5h14l3-3l22-8l28-1h187l24,3l21,12
+l15,19l5,23l-4,22l-13,21l-19,12l-20,9l-23,5H479l-27-1l-22-9l-7-7h-10l-19-2l-16-9l-11-13L361,428z" class="a6 f12 hitbox-t" id="a6f12-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M647,441v-15l7-14l12-11l16-6l18,1l18,8l91,57l12,11l6,15v15l-7,14
+l-11,10l-17,6l-18-1l-18-8l-92-56l-11-11L647,441z" class="a5 f12 hitbox-t" id="a5f12-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M410,314l7-23l14-17l21-12l40-13l26-3h180l26,6l19,14l13,20l3,23
+l-6,23l-13,15l14,10l9,15l2,17l-6,19l-12,14l-16,8l-21,3H512l-19-2l-16-8l-12-14l-6-17l2-17l-14-3l-20-14l-13-20L410,314z" class="a4 f12 hitbox-t" id="a4f12-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M496,470l1-16l6-11l12-9l13-5h43l4-9l11-9l14-5h216l15,5l10,10l6,11
+v15l-5,13l-10,9l-12,8l-12,5l-16,1h-21l-9,9l-12,8l-14,7H550l-17-1l-11-6l-12-8l-9-9L496,470z" class="a2 f12 hitbox-t" id="a2f12-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M346,209l7-31l20-26l28-17l34-5l32,6l28,17l19,26l6,30l-7,31l-14,17
+l-4,17l-15,20l-24,15l-26,4l-28-5l-22-14l-15-20l-5-25l-7-9L346,209z M731,169l19-25l27-17l35-6l31,5l29,18l18,25l7,31l-7,30l-8,10l-5,24
+l-16,20l-21,13l-27,5l-27-5l-21-13l-15-20l-4-15l-14-19l-8-30L731,169z" class="a1 f12 hitbox-t" id="a1f12-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M364,414l9-16l14-11l19-6h25l12-7l24-5h188l24,8l17,13l13,15l9,18
+l3,24l-9,24l-16,17l-24,11l-26,1H501l-23-4l-35-13l-7-3l-42-12l-15-7l-11-12l-6-17L364,414z" class="a6 f11 hitbox-t" id="a6f11-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M547,503l-5-15l3-17l8-13l15-11l102-48l16-4l18,2l14,8l11,13l4,15
+l-3,15l-9,14l-15,9l-99,49l-16,5l-19-2l-14-7L547,503z" class="a5 f11 hitbox-t" id="a5f11-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M463,342l-11-20l-3-23l8-23l16-18l23-10l26-2h183l54,8l23,8l18,15
+l11,22v24l-9,22l-16,16l-25,11l4,10l-2,20l-9,15l-13,11l-19,7H562l-17-1l-24-6l-14-6l-14-13l-6-16l1-19l6-13l-11-4L463,342z" class="a4 f11 hitbox-t" id="a4f11-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M509,462l7-12l11-9l16-4h39l7-11l11-9l14-3h189l13,3l12,10l7,12l1,14
+l-5,13l-8,9l-13,10l-12,6l-15,1h-25l-8,8l-12,9l-10,6l-16,2H559l-15-2l-12-7l-12-10l-8-9l-5-13L509,462z" class="a2 f11 hitbox-t" id="a2f11-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M455,374l-27-11l-18-20l-21-32l-9-21v-8l-13-28l1-33l15-29l25-20
+l32-11l36,2l29,13l23,24l19,28l13,31l-1,31l-14,28l-5,3v6l-12,23l-20,17l-25,8L455,374z M697,234l21-39l19-23l31-16l34-3l30,7l27,19l18,28l4,30l-9,29l-7,12
+l-5,18l-17,33l-15,20l-22,13l-27,5l-27-5l-22-14l-16-21l-3-15l-13-18l-7-30L697,234z" class="a1 f11 hitbox-t" id="a1f11-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M409,439l4-18l11-14l15-10l19-3h5l14-9l24-5h157l23,5l22,13l13,19
+l5,21l-5,25l-13,19l-23,15l-25,3H502l-24-3l-21-13l-18-3l-14-9l-12-15L409,439z" class="a6 f10 hitbox-t" id="a6f10-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M542,484l3-15l9-13l15-8l16-4l20,4l13,9l9,12l3,17l-4,16l-10,12l-14,8
+l-16,3l-16-3l-14-8l-10-13L542,484z" class="a5 f10 hitbox-t" id="a5f10-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M509,393l3-17l9-15l17-11l4-1l-8-10l-7-23l4-24l13-19l20-14l25-6h167
+l27,9l17,15l57,67l11,19l2,25l-8,22l-17,17l-22,10l-26,2h-47l-17,6l-17,2H591l-18-3l-44-17l-15-16L509,393z" class="a4 f10 hitbox-t" id="a4f10-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M520,483l2-13l7-11l12-9l15-4h39l6-10l11-9l13-4h164l15,4l11,8l7,11
+l2,15l-4,13l-9,10l-11,9l-12,7l-14,2h-29l-5,5l-16,12l-12,6l-15,1H570l-16-2l-11-7l-13-11l-6-8L520,483z" class="a2 f10 hitbox-t" id="a2f10-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M697,234l18-25l30-18l33-6l32,6l28,18l19,26l6,29l-7,31l-7,10l-5,24
+l-16,20l-22,13l-27,5l-27-5l-22-14l-16-21l-3-15l-13-18l-7-30L697,234z M444,371l-22-14l-16-20l-5-25l-7-11l-7-29l7-31l20-27l26-16l34-6l34,6
+l28,18l18,25l7,31l-7,31l-15,20l-3,13l-14,20l-23,14l-28,6L444,371z" class="a1 f10 hitbox-t" id="a1f10-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M543,407l1-17l9-17l15-11l18-6h28l3-4l16-19l20-10l26-3h120l27,3
+l21,12l17,19l6,22l8,86l-2,26l-12,21l-21,15l-25,6H703l-25-7l-19-13l-14-22l-5-13h-6l-20-3l-19-10l-35-25l-11-13L543,407z" class="a4 f9 hitbox-t" id="a4f9-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M531,491l3-14l8-11l12-6l12-4h42l8-12l12-8l15-4h131l16,3l13,9l7,11
+l3,14l-4,14l-8,9l-11,11l-12,8l-15,3h-33l-6,5l-12,10l-12,7l-16,1H580l-15-2l-12-8l-12-12l-7-9L531,491z" class="a2 f9 hitbox-t" id="a2f9-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M673,423l2-23l9-83l10-29l22-25l29-14l34-2l32,9l26,20l17,30l2,28
+l-11,106l-9,28l-22,25l-9,4l-6,15l-20,19l-27,10l-26-1l-25-9l-20-19l-11-22v-26l5-21L673,423z M493,534l-21-17l-6-11l-12-6l-21-21l-11-29l-21-104l-1-30l15-31l25-21
+l31-11h34l32,13l23,21l12,30l7,30l14,69l1,37l3,7l2,24l-9,25l-18,19l-24,12l-29,2L493,534z" class="a1 f9 hitbox-t" id="a1f9-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M581,431l3-17l11-15l16-10l19-4h106l19,4l15,8l10,13h34l25,5l21,13
+l14,20l5,22l-6,24l-15,21l-21,12l-24,3H707l-23-4l-22-14l-15-19l-4-18h-14l-19-4l-15-9l-10-13L581,431z" class="a4 f8 hitbox-t" id="a4f8-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M641,519l4-15l8-11l13-8l17-3l15,3l11,8l14-9l15-2l15,2l14,9l9,12
+l3,14l-4,15l-9,13l-13,8l-14,2l-15-2l-14-9l-13,7l-17,4l-16-3l-12-9l-8-12L641,519z" class="a3 f8 hitbox-t" id="a3f8-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M543,500l4-13l9-11l14-7l15-2h36l6-11l11-8l15-4h108l13,1l13,6l9,11
+l5,13l-2,14l-5,10l-18,19l-10,7l-16,5h-36l-6,8l-9,9l-11,5l-16,1h-81l-13-3l-10-8l-16-16l-7-11L543,500z" class="a2 f8 hitbox-t" id="a2f8-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M424,459l-3-31l11-31l22-23l31-14l34-3l34,11l116,59l8-21l16-26l27-18
+l34-9l33,4l29,16l20,25l9,33l-6,30l-39,106l-14,26l-19,15l-11,7l-12,13l-15,8l-12,3l-16,2l-16-1l-12-4l-21-12l-3-2l-156-89l-18-13
+l-7-12l-19-13l-9-7L424,459z" class="a1 f8 hitbox-t" id="a1f8-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M641,519l4-15l8-11l13-8l17-3l15,3l11,8l14-9l15-2l15,2l14,9l9,12
+l3,14l-4,15l-9,13l-13,8l-14,2l-15-2l-14-9l-13,7l-17,4l-16-3l-12-9l-8-12L641,519z" class="a3 f7 hitbox-t" id="a3f7-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M558,518l3-13l8-12l14-8l14-3h35l2-4l7-8l10-7l16-3h80l16,3l11,7l8,12
+l3,14l-3,13l-9,12l-12,7l-14,2h-34l-1,3l-8,10l-15,9l-13,1h-81l-12-1l-13-8l-9-12L558,518z" class="a2 f7 hitbox-t" id="a2f7-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M616,543l7-36l23-31l36-22l36-6l40,7l33,21l23,31l7,36l-8,36l-26,35
+l-32,19l-28,4l-25,4l-27-3l-23-14l-18-24l-9-21l-4-8L616,543z" class="a1 f7 hitbox-t" id="a1f7-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M616,543l7-36l23-31l36-22l36-6l40,7l33,21l23,31l7,36l-8,36l-26,35
+l-32,19l-28,4l-25,4l-27-3l-23-14l-18-24l-9-21l-4-8L616,543z" class="a1 f6 hitbox-t" id="a1f6-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M616,543l7-36l23-31l36-22l36-6l40,7l33,21l23,31l7,36l-8,36l-26,35
+l-32,19l-28,4l-25,4l-27-3l-23-14l-18-24l-9-21l-4-8L616,543z" class="a1 f5 hitbox-t" id="a1f5-t" style="fill:transparent"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M616,543l7-36l23-31l36-22l36-6l40,7l33,21l23,31l7,36l-8,36l-26,35
+l-32,19l-28,4l-25,4l-27-3l-23-14l-18-24l-9-21l-4-8L616,543z" class="a1 f4 hitbox-t" id="a1f4-t" style="fill:transparent"></path>
+  </svg>
+  <div id="imgurbox" class="imgurhighlight"><a href="http://imgur.com/a/JeTwi"><img id="imgur" src="assets/heatmaps/imgurlogo.png"/></a></div>
+  <div id="hurtcontrolbox"><!--<div id="hbleft" class="hbdirection hbcon"></div>--><div id="hurtboxmidcontrols"><div id="hurtchar" class="hbcon"><span id="hurtcurrent">Falcon</span><div id="hurtchardropdown" style="display:none">
+    <div class="hbcharselect hbcon"><p>Fox</p></div>
+    <div class="hbcharselect hbcon"><p>Falco</p></div>
+    <div class="hbcharselect hbcon"><p>Marth</p></div>
+    <div class="hbcharselect hbcon"><p>Sheik</p></div>
+    <div class="hbcharselect hbcon"><p>Puff</p></div>
+    <div class="hbcharselect hbcon"><p>Peach</p></div>
+    <div class="hbcharselect hbcon"><p>ICs</p></div>
+    <div class="hbcharselect hbcon"><p>Falcon</p></div>
+    <div class="hbcharselect hbcon"><p>Doc</p></div>
+    <div class="hbcharselect hbcon"><p>Pika</p></div>
+    <div class="hbcharselect hbcon"><p>Samus</p></div>
+    <div class="hbcharselect hbcon"><p>Ganon</p></div>
+    <div class="hbcharselect hbcon"><p>Luigi</p></div>
+    <div class="hbcharselect hbcon"><p>Mario</p></div>
+  </div></div><div id="position" class="hbcon">crouch</div><div id="flip" class="hbcon">flip</div></div><!--<div id="hbright" class="hbdirection hbcon"></div>--></div>
+  <div id="draghurtcontainer"><div id="draghurt" class="hbcon"></div></div>
+
+	</div>
+    <div id="framecontainer">
+			<div id="frameselect">Frame control: <span id="fsid">ALL</span></div>
+            <div id="frameall">All<div id="fallon" class="allf"><div>On</div></div><div id="falloff" class="allf"><div>Off</div></div></div><div id="frame1" class="framecontrol"><p>1</p></div><div id="frame2" class="framecontrol"><p>2
+        </p>
+        </div><div id="frame3" class="framecontrol"><p>3</p></div><div id="frame4" class="framecontrol"><p>4</p></div><div id="frame5" class="framecontrol"><p>5</p></div><div id="frame6" class="framecontrol"><p class="test">6</p></div><div id="frame7" class="framecontrol"><p>7</p></div><div id="frame8" class="framecontrol"><p>8</p></div><div id="frame9" class="framecontrol"><p>9</p></div><div id="frame10" class="framecontrol"><p>10</p></div><div id="frame11" class="framecontrol"><p>11</p></div><div id="frame12" class="framecontrol"><p>12</p></div><div id="frame13" class="framecontrol"><p>13</p></div><div id="frame14" class="framecontrol"><p>14</p></div><div id="frame15" class="framecontrol"><p>15</p></div><div id="frame16" class="framecontrol"><p>16</p></div><div id="frame17" class="framecontrol"><p>17</p></div><div id="frame18" class="framecontrol"><p>18</p></div><div id="frame19" class="framecontrol"><p>19</p></div><div id="frame20" class="framecontrol"><p>20</p></div>
+    </div>
+    </div>
+    </div>
+
+<div id="side-container">
+	<div id="ad"><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- ikneedatabanner -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:600px"
+     data-ad-client="ca-pub-2776548052186122"
+     data-ad-slot="7967934690"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+    <h2>Suggestions</h2>
+    <div id="sugboxcontainer"><div id="suggestiontext"><p>Have a suggestion of what
+    features to create next?
+    Send a message via</p></div>
+<a href="http://www.reddit.com/message/compose/?to=schmooblidon">
+<div class="sugbtn"><img src="assets/redditicon.png" width="50" height="40" alt=""/><p>Reddit</p></div></a>
+<a href="http://www.twitch.tv/message/compose?to=schmooblidon">
+<div class="sugbtn"><img src="assets/twitchicon.png" width="50" height="40" alt=""/><p>Twitch</p></div></a>
+</div>
+</div>
+
+</div></body>
+</html>

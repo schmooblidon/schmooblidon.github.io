@@ -1,18 +1,19 @@
 
 
-char = "ics";
-attack = ["dair", "grab", "nair", "upair", "bair", "upsmash"];
+char = "doc";
+attack = ["upb", "nair", "grab", "upair", "upsmash", "bair", "dair"];
 
 attacks = {};
-attacks.a1 = [[6,20]];
-attacks.a2 = [[7,8],[13,14]];
-attacks.a3 = [[9,20]];
-attacks.a4 = [[9,20]];
-attacks.a5 = [[11,14],[17,20]];
-attacks.a6 = [[15,19]];
+attacks.a7 = [[20],[18,17],[15,14]];
+attacks.a6 = [[20,10]];
+attacks.a5 = [[12,10]];
+attacks.a4 = [[13,8]];
+attacks.a3 = [[8,7]];
+attacks.a2 = [[20,7]];
+attacks.a1 = [[20,4]];
 
 
-a = 6;
+a = 7;
 text = "";
 
 var thing = function(){
