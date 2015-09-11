@@ -1,0 +1,349 @@
+.f2 {
+	fill: red;
+}
+
+.f3 {
+	fill:#7a2323;
+}
+
+.vis {
+	stroke-width:3;
+}
+
+.invis {
+	fill:transparent;
+	stroke-width:2;
+}
+
+#side-controls {
+	width:190px;
+	height:500px;
+	position:relative;
+	display:inline-block;
+	background-color:#969696;
+}
+
+#controls-container {
+	width:150px;
+	height:500px;
+	position:relative;
+	display:inline-block;
+	vertical-align:bottom;
+}
+
+#movecontrols {
+	width:40px;
+	height:500px;
+	background-color:#a4a4a4;
+	position:relative;
+	display:inline-block;
+	cursor:pointer;
+}
+
+.eventcreate {
+	width:150px;
+	height:40px;
+	background-color:#7d7d7d;
+	text-align:center;
+	cursor:pointer;
+}
+
+.eventcreatehighlight {
+	background-color:#666666;
+}
+
+.eventcreate p {
+	padding:10px 0px 0px 0px;
+	margin:0px;
+}
+
+#main {
+	display:inline-block;
+	position:relative;
+}
+
+#main-content {
+	vertical-align:top;
+}
+
+#popout {
+	background-color:rgba(0, 0, 0, 0.65);
+	z-index:100;
+	position:absolute;
+	display:none;
+}
+
+#eventcustomize {
+	background-color:#ababab;
+	height:500px;
+	width:600px;
+	z-index:101;
+	position:relative;
+
+}
+
+#actioncontainer {
+	background-color:#8c8c8c;
+	height:500px;
+	width:150px;
+	display:inline-block;
+	vertical-align: top;
+}
+
+#actionoptions {
+	background-color:#a1a1a1;
+	height:500px;
+	width:450px;
+	display:inline-block;
+}
+
+#eventcusttitle {
+	height:50px;
+	width:600px;
+	text-align:center;
+}
+
+#eventcusttitle p {
+	font-size:25px;
+	padding:10px;
+	margin:0;
+}
+
+.addaction {
+	height:50px;
+	width:150px;
+	background-color:#717171;
+	text-align:center;
+	vertical-align: top;
+	cursor:pointer;
+}
+
+.actionnum {
+	height:50px;
+	width:150px;
+	background-color:#5b5b5b;
+	text-align:center;
+	vertical-align: top;
+	cursor:pointer;
+}
+
+.actionnum p {
+	margin:0;
+	padding:16px;
+}
+
+.addaction p {
+	margin:0;
+	padding:16px;
+}
+
+.addactionhighlight {
+	background-color:#464646;
+}
+
+.actiontype {
+	height:30px;
+	width:80px;
+	background-color:#5b5b5b;
+	text-align:center;
+	vertical-align: top;
+	cursor:pointer;
+	display:inline-block;
+	font-size:12px;
+	margin:5px;
+}
+
+.actiontype p {
+	margin:0;
+	padding:7px;
+}
+
+.attacktype {
+	height:30px;
+	width:80px;
+	background-color:#5b5b5b;
+	text-align:center;
+	vertical-align: top;
+	cursor:pointer;
+	display:inline-block;
+	font-size:12px;
+	margin:5px;
+}
+
+.attacktype p {
+	margin:0;
+	padding:7px;
+}
+
+.actiontypehighlight {
+	background-color:#3e3e3e;
+}
+
+.actiontypehighlight2 {
+	background-color:#ececec;
+	color:#262626;
+}
+
+.attacktypehighlight {
+	background-color:#3e3e3e;
+}
+
+.attacktypehighlight2 {
+	background-color:#ececec;
+	color:#262626;
+}
+
+#actionoptionpanel1 {
+	width:450px;
+	height:120px;
+}
+
+.velocity {
+	width:450px;
+	height:50px;
+	font-size:13px;
+	text-align:center;
+	background-color:#626262;
+	color:#c6c6c6;
+}
+
+.velocity p {
+	margin:0;
+	padding:7px;
+	display:inline-block;
+}
+
+.actiontypetitle {
+	width:450px;
+	height:40px;
+	font-size:15px;
+	text-align:center;
+	background-color:#787878;
+}
+
+.actiontypetitle p {
+	margin:0;
+	padding:12px;
+}
+
+.selectattacktitle {
+	width:450px;
+	height:40px;
+	font-size:15px;
+	text-align:center;
+	background-color:#787878;
+}
+
+.selectattacktitle p {
+	margin:0;
+	padding:12px;
+}
+
+.slidercontainer {
+	width:186px;
+	height:20px;
+	margin:0px 7px;
+}
+
+.sliderbar {
+	background-color:#e4e4e4;
+	position:absolute;
+	border-radius:5px;
+	width:186px;
+	height:6px;
+	margin:7px 0px;
+}
+
+.sliderpointer {
+	background-color:#3b3b3b;
+	position:absolute;
+	border-radius:10px;
+	width:20px;
+	height:20px;
+	cursor:pointer;
+}
+
+.wavedashanglecontainer {
+	width:200px;
+	height:150px;
+	display:inline-block;
+}
+
+.wavedashanglegreyedout {
+	width:200px;
+	height:150px;
+	position:absolute;
+	z-index:102;
+}
+
+.angledetails {
+	width:200px;
+	text-align:center;
+	height:30px;
+	font-size:12px;
+}
+
+.angledetails p {
+	margin:0;
+	padding:4px 0px;
+}
+
+#anglerangeornot {
+	width:450px;
+	height:35px;
+	font-size:16px;
+	background-color:#868686;
+}
+
+.single p {
+	text-align:left;
+	padding:7px 0px 7px 50px;
+	margin:0;
+}
+
+.range p {
+	text-align:center;
+	margin:0;
+	padding:7px 0px;
+}
+
+#anglerangeornotbutton {
+	width: 120px;
+	height: 30px;
+	background-color: #525252;
+	text-align: center;
+	margin: 0px 165px;
+	cursor:pointer;
+}
+
+#anglerangeornotbutton p {
+	margin:0;
+	padding:5px;
+}
+
+#createbutton {
+	height:50px;
+	width:150px;
+	text-align:center;
+	vertical-align: top;
+	cursor:pointer;
+}
+
+#createbutton p {
+	margin:0;
+	padding:16px;
+}
+
+.createbuttondisable {
+	background-color:#48832c;
+	opacity:0.3;
+}
+
+.createbuttonokay {
+	background-color:#5ca43a;
+	opacity:1;
+}
+
+.createbuttonhighlight {
+	background-color:#70c944;
+}
