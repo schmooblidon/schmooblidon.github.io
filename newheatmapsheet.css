@@ -15,6 +15,14 @@
 	stroke-width:2;
 }
 
+#right-controls {
+	width:190px;
+	height:500px;
+	position:relative;
+	display:inline-block;
+	background-color:#969696;
+}
+
 #side-controls {
 	width:190px;
 	height:500px;

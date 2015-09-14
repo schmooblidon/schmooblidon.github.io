@@ -7,7 +7,25 @@ var airdodgev3 = 1.97283;
 var sidecontrolsshow = true;
 var currentwavedashangle = [[0,"f"],[0,"f"]];
 var character = "fox";
+var char = "fox";
 
+var interpolateframe = true;
+
+/*
+script layout:
+event1 = [action1, action2];
+action1 = [type, ...]
+if type = wavedash
+action1 = [wavedash, singleorrange...]
+if singleorrange = s
+action1 = [wavedash, s, airdodge]
+if singleorrange = r
+action1 = [wavedash, r, [airdodge1,airdodge2]]
+if type = attack
+action2 = [attack, attacktype]
+if attacktype has variables
+action2 = [attack, left]
+*/
 var actiontypes = ["test","test2"];
 var allac = ["Jump","Wavedash","Dash","Dash Back","Pivot","Soft Turn","Smash Turn","Shield","Run","Crouch","DoubleJump","Airdodge","Drift","Attack"];
 
@@ -64,7 +82,7 @@ Shield: wavedash, jump, upsmash, up, roll
 Crouch: grounded attacks
 */
 
-var createHitbox = function(char,eventnum,attack,currentSpeedX,positionX,positionY){
+var createHitbox = function(char,eventnum,attack,currentSpeedX,positionX,positionY,range,rnum){
   var att = window[char].attacks[attack];
   var k = -1;
   var idPresent = true;
@@ -103,14 +121,105 @@ var createHitbox = function(char,eventnum,attack,currentSpeedX,positionX,positio
         }
       }
       if (typeof offsetListnumber === "undefined"){
-        prompt("something wrong");
+        /*prompt("something wrong");*/
       }
       else {
-        prompt("something right");
+        /*prompt("something right");*/
       }
       var offsetIndex = att["id"+currentFrameIdList[n]].offset[offsetListnumber];
-      $(SVG("circle")).attr("id","e"+eventnum+"a"+att.anum+"f"+att.idlist[i][0]+"i"+currentFrameIdList[n]).attr("class","f"+att.idlist[i][0]+" vis id"+currentFrameIdList[n]+"f"+att.idlist[i][0]+attack).attr("cx", (positionX+(offsetIndex[1][0] * mm))).attr("cy", (positionY-(offsetIndex[1][1] * mm))).attr("r", (att["id"+currentFrameIdList[n]].hsize * mm)).prependTo("#hitbox-visible");
-      $(SVG("circle")).attr("id","e"+eventnum+"a"+att.anum+"f"+att.idlist[i][0]+"i"+currentFrameIdList[n]+"-i").attr("class","f"+att.idlist[i][0]+" invis").attr("cx", (positionX+(offsetIndex[1][0] * mm))).attr("cy", (positionY-(offsetIndex[1][1] * mm))).attr("r", (att["id"+currentFrameIdList[n]].hsize * mm)).prependTo("#hitbox-invisible");
+      if ($("#e"+eventnum+"a"+att.anum+"f"+(att.idlist[i][0]-1)+"i"+currentFrameIdList[n]).length){
+
+        /*INTERPOLATING*/
+
+        var id = "e"+eventnum+"a"+att.anum+"f"+att.idlist[i][0]+"i"+currentFrameIdList[n];
+        var cla = "f"+att.idlist[i][0]+" id"+currentFrameIdList[n]+"f"+att.idlist[i][0]+attack;
+        var previous = $("#e"+eventnum+"a"+att.anum+"f"+(att.idlist[i][0]-1)+"i"+currentFrameIdList[n]);
+        if (previous.children(".currenthit").length){
+          previous = previous.children(".currenthit");
+        }
+        /*$("#hitbox-visible").prepend('<g id="'+id+'" class="'+cla+' vis" ></g>');*/
+        $(SVG("g")).attr("id",id).attr("class",cla+" vis "+range+" "+range+rnum).prependTo("#hitbox-visible");
+        $(SVG("circle")).attr("class","currenthit").attr("cx", (positionX+(offsetIndex[1][0] * mm))).attr("cy", (positionY-(offsetIndex[1][1] * mm))).attr("r", (att["id"+currentFrameIdList[n]].hsize * mm)).prependTo("#"+id);
+        /*$("#hitbox-invisible").prepend('<g id="'+id+'-i" class="'+cla+' invis" ></g>');*/
+        $(SVG("g")).attr("id",id+"-i").attr("class",cla+" invis "+range+" "+range+rnum).prependTo("#hitbox-invisible");
+        $(SVG("circle")).attr("class","currenthit").attr("cx", (positionX+(offsetIndex[1][0] * mm))).attr("cy", (positionY-(offsetIndex[1][1] * mm))).attr("r", (att["id"+currentFrameIdList[n]].hsize * mm)).prependTo("#"+id+"-i");
+
+
+        var p = previous;
+        var c = $("#"+id).children(".currenthit");
+        var r = parseFloat(c.attr("r"));
+
+        var a = parseFloat(c.attr("cx")) - parseFloat(p.attr("cx"));
+
+        var b = parseFloat(c.attr("cy")) - parseFloat(p.attr("cy"));
+
+        if (b > 0){
+          var y = "b";
+        }
+        else {
+          var y = "a";
+        }
+
+        var x = Math.atan(Math.abs(a)/Math.abs(b));
+
+        var opp = Math.sin(x) * r;
+        var adj = Math.cos(x) * r;
+
+        var sigma = [parseFloat(p.attr("cx")),parseFloat(p.attr("cy"))];
+
+        if (y === "b"){
+
+          var alpha1 = [(sigma[0] + adj),(sigma[1] - opp)];
+          var alpha2 = [(alpha1[0] + a), (alpha1[1] + b)];
+
+          var beta1 = [(sigma[0] - adj),(sigma[1] + opp)];
+          var beta2 = [(beta1[0] + a),(beta1[1] + b)];
+        }
+        else {
+          var alpha1 = [(sigma[0] - adj),(sigma[1] - opp)];
+          var alpha2 = [(alpha1[0] + a), (alpha1[1] + b)];
+
+          var beta1 = [(sigma[0] + adj),(sigma[1] + opp)];
+          var beta2 = [(beta1[0] + a),(beta1[1] + b)];
+        }
+
+        $(SVG("path")).attr("class","interpolation").attr("d", "M "+alpha1[0]+" "+alpha1[1]+" L "+alpha2[0]+" "+alpha2[1]+" A "+r+" "+r+" 0 0 1 "+beta2[0]+" "+beta2[1]+" L "+beta1[0]+" "+beta1[1]+" A "+r+" "+r+" 0 0 1 "+alpha1[0]+" "+alpha1[1]+" Z").prependTo("#"+id);
+
+        $(SVG("path")).attr("class","interpolation").attr("d", "M "+alpha1[0]+" "+alpha1[1]+" L "+alpha2[0]+" "+alpha2[1]+" A "+r+" "+r+" 0 0 1 "+beta2[0]+" "+beta2[1]+" L "+beta1[0]+" "+beta1[1]+" A "+r+" "+r+" 0 0 1 "+alpha1[0]+" "+alpha1[1]+" Z").prependTo("#"+id+"-i");
+
+      }
+      else {
+        var id = "e"+eventnum+"a"+att.anum+"f"+att.idlist[i][0]+"i"+currentFrameIdList[n];
+        if (rnum > 1){
+          $(SVG("g")).attr("id",id).attr("class","f"+att.idlist[i][0]+" vis id"+currentFrameIdList[n]+"f"+att.idlist[i][0]+attack+" range").prependTo("#hitbox-visible");
+          $(SVG("g")).attr("id",id+"-i").attr("class","f"+att.idlist[i][0]+" invis id"+currentFrameIdList[n]+"f"+att.idlist[i][0]+attack+" range").prependTo("#hitbox-invisible");
+        }
+        if (rnum > 0){
+          $(SVG("circle")).attr("class",range+rnum).attr("cx", (positionX+(offsetIndex[1][0] * mm))).attr("cy", (positionY-(offsetIndex[1][1] * mm))).attr("r", (att["id"+currentFrameIdList[n]].hsize * mm)).prependTo("#"+id);
+          $(SVG("circle")).attr("class",range+rnum).attr("cx", (positionX+(offsetIndex[1][0] * mm))).attr("cy", (positionY-(offsetIndex[1][1] * mm))).attr("r", (att["id"+currentFrameIdList[n]].hsize * mm)).prependTo("#"+id+"-i");
+        }
+        if (rnum === 1){
+          var r1 = $("#"+id).children(".r1");
+          var r2 = $("#"+id).children(".r2");
+          var r1c = [parseFloat(r1.attr("cx")),parseFloat(r1.attr("cy"))];
+          var r2c = [parseFloat(r2.attr("cx")),parseFloat(r2.attr("cy"))];
+          var rr = parseFloat(r1.attr("r"));
+          $(SVG("path")).attr("class","rinterpolate").attr("d","M "+r1c[0]+" "+(r1c[1]-rr)+" L "+r2c[0]+" "+(r2c[1]-rr)+" A "+rr+" "+rr+" 0 0 1 "+r2c[0]+" "+(r2c[1]+rr)+" L "+r1c[0]+" "+(r1c[1]+rr)+" A "+rr+" "+rr+" 0 0 1 "+r1c[0]+" "+(r1c[1]-rr)+" Z").prependTo("#"+id);
+          $(SVG("path")).attr("class","rinterpolate").attr("d","M "+r1c[0]+" "+(r1c[1]-rr)+" L "+r2c[0]+" "+(r2c[1]-rr)+" A "+rr+" "+rr+" 0 0 1 "+r2c[0]+" "+(r2c[1]+rr)+" L "+r1c[0]+" "+(r1c[1]+rr)+" A "+rr+" "+rr+" 0 0 1 "+r1c[0]+" "+(r1c[1]-rr)+" Z").prependTo("#"+id+"-i");
+        }
+        if (rnum === 0){
+          $(SVG("circle")).attr("id","e"+eventnum+"a"+att.anum+"f"+att.idlist[i][0]+"i"+currentFrameIdList[n]).attr("class","f"+att.idlist[i][0]+" vis id"+currentFrameIdList[n]+"f"+att.idlist[i][0]+attack+" "+range+" "+range+rnum).attr("cx", (positionX+(offsetIndex[1][0] * mm))).attr("cy", (positionY-(offsetIndex[1][1] * mm))).attr("r", (att["id"+currentFrameIdList[n]].hsize * mm)).prependTo("#hitbox-visible");
+          $(SVG("circle")).attr("id","e"+eventnum+"a"+att.anum+"f"+att.idlist[i][0]+"i"+currentFrameIdList[n]+"-i").attr("class","f"+att.idlist[i][0]+" invis id"+currentFrameIdList[n]+"f"+att.idlist[i][0]+attack+" "+range+" "+range+rnum).attr("cx", (positionX+(offsetIndex[1][0] * mm))).attr("cy", (positionY-(offsetIndex[1][1] * mm))).attr("r", (att["id"+currentFrameIdList[n]].hsize * mm)).prependTo("#hitbox-invisible");
+        }
+
+
+      }
+      /*if ($("#e"+eventnum+"a"+att.anum+"f"+(att.idlist[i][0]-1)+"i"+currentFrameIdList[n]).length){
+        var previous = $("#e"+eventnum+"a"+att.anum+"f"+(att.idlist[i][0]-1)+"i"+currentFrameIdList[n]);
+        var current = $("#e"+eventnum+"a"+att.anum+"f"+(att.idlist[i][0])+"i"+currentFrameIdList[n]);
+        $(SVG("line")).attr("x1",previous.attr("cx")).attr("y1",previous.attr("cy")).attr("x2",current.attr("cx")).attr("y2",current.attr("cy")).attr("style","stroke:rgb(120,0,0);stroke-width:"+(current.attr("r"))*2).prependTo("#hitbox-visible");
+      }
+      */
     }
   }
 }
@@ -332,12 +441,68 @@ var selectStart = function(char){
 }
 
 var interpretScript = function(script){
-  
+  var positionX = cw;
+  var positionY = ch;
+  var distance = 0;
+  var frames = 0;
+  var eventnum = 1;
+  /*prompt(script);*/
+
+  for (i=0;i<script.length;i++){
+    switch (script[i][0]){
+      case "Wavedash" :
+        if (script[i][1] === "r"){
+          var wdangle2 = script[i][3][0];
+          var distandspeed2 = wavedash(char,wdangle2);
+          var distance2 = distance;
+          distance2 = distandspeed2[0];
+          var currentSpeedX2 = distandspeed2[1];
+          var positionX2 = positionX;
+          var positionY2 = positionY;
+          if (script[i][3][1] === "f"){
+            positionX2 += (distance2*mm);
+          }
+          else {
+            positionX2 -= (distance2*mm);
+          }
+          var frames2 = frames;
+          frames2 = frames2 + 10 + window[char].jumpsquat;
+        }
+        var wdangle = script[i][2][0];
+        /*prompt("wavedash angle "+wdangle);*/
+        var distandspeed = wavedash(char,wdangle);
+        distance = distandspeed[0];
+        /*prompt("Distance "+distance);*/
+        var currentSpeedX = distandspeed[1];
+        /*prompt("CurrentSpeedX "+currentSpeedX);*/
+        if (script[i][2][1] === "f"){
+          positionX += (distance*mm);
+        }
+        else {
+          positionX -= (distance*mm);
+        }
+        /*prompt("PositionX "+positionX);*/
+        frames = frames + 10 + window[char].jumpsquat;
+        break;
+
+      case "Attack" :
+        if (script[i-1][1] === "r"){
+          createHitbox(char,eventnum,"jab1",currentSpeedX2,positionX2,positionY2,"r",2);
+          createHitbox(char,eventnum,"jab1",currentSpeedX,positionX,positionY,"r",1);
+        }
+        else {
+          createHitbox(char,eventnum,"jab1",currentSpeedX,positionX,positionY,"s",0);
+        }
+        break;
+      default :
+        /*prompt("test");*/
+    }
+  }
 }
 
 
 $(document).ready(function(){
-  $(".invis").hover(function(){
+  /*$(".invis").hover(function(){
 
   	$(this).attr("stroke","white");
   	var id = $(this).attr("id");
@@ -348,7 +513,47 @@ $(document).ready(function(){
   	var id = $(this).attr("id");
   	id = id.substr(0,(id.length - 2));
   	$("#"+id).attr("stroke","none");
-  });
+  });*/
+
+  $("body").on({
+    mouseenter: function () {
+      var id = $(this).attr("id");
+      id = id.substr(0,(id.length - 2));
+      if ($(this).children(".interpolation").length){
+        if (interpolateframe){
+          $(this).children(".interpolation").attr("stroke","white");
+          $("#"+id).children(".interpolation").attr("stroke","white");
+        }
+        else {
+          $(this).children(".currenthit").attr("stroke","white");
+          $("#"+id).children(".currenthit").attr("stroke","white");
+        }
+      }
+      else {
+        $(this).attr("stroke","white");
+        $("#"+id).attr("stroke","white");
+      }
+    },
+    mouseleave: function () {
+      var id = $(this).attr("id");
+      id = id.substr(0,(id.length - 2));
+      if ($(this).children(".interpolation").length){
+        if (interpolateframe){
+          $(this).children(".interpolation").attr("stroke","none");
+          $("#"+id).children(".interpolation").attr("stroke","none");
+        }
+        else {
+          $(this).children(".currenthit").attr("stroke","none");
+          $("#"+id).children(".currenthit").attr("stroke","none");
+        }
+      }
+      else {
+        $(this).attr("stroke","none");
+        $("#"+id).attr("stroke","none");
+      }
+    }
+  }, ".invis");
+
 
   $("#movecontrols").click(function(){
     if (sidecontrolsshow){
@@ -378,6 +583,7 @@ $(document).ready(function(){
   });
 
   $(".eventcreate").click(function(){
+    event1 = [];
     var w = $(window).width();
     var h = $(window).height();
     $("body").prepend('<div id="popout" style="width:'+w+'px;height:'+h+'px"><div id="eventcustomize"><div id="eventcusttitle"><p>Event Options</p></div><div id="actioncontainer"><div class="addaction"><p>Add Action +</p></div></div><div id="actionoptions"></div></div></div>');
@@ -411,6 +617,7 @@ $(document).ready(function(){
         a = false;
       }
     }
+    event1[i-1] = [];
     $("#actionoptions").empty();
     $(".actionnum").removeClass("actionnumselected");
     $("#actioncontainer").append('<div id="actionnum'+i+'" class="actionnum actionnumselected"><p>Action '+i+'</p></div>');
@@ -467,6 +674,8 @@ $(document).ready(function(){
       }
     }
     actiontypes[i-1] = id;
+    event1[i-1] = [];
+    event1[i-1][0] = id;
     if (id === "Attack"){
       $(".addaction").remove();
     }
@@ -566,12 +775,18 @@ $(document).ready(function(){
           }
         }, stop: function() {
           var angle1 = (currentwavedashangle[0][0]-1)*((2.67039-0.80815)/99)+0.80815;
+          event1[i-1][2] = [];
+          event1[i-1][2][0] = angle1;
           if (currentwavedashangle[0][0] !== 0) {
             var distandspeedangle1 = wavedash(character,angle1);
             distandspeedangle1[1] = Math.round(distandspeedangle1[1] * 100000) / 100000;
             if (currentwavedashangle[0][1] === "b"){
               distandspeedangle1[0] *= -1;
               distandspeedangle1[1] *= -1;
+              event1[i-1][2][1] = "b";
+            }
+            else {
+              event1[i-1][2][1] = "f";
             }
             $("#evelocityx").empty().append(distandspeedangle1[1]);
           }
@@ -581,12 +796,19 @@ $(document).ready(function(){
 
           if ($("#anglerangeornot").hasClass("range")){
             var angle2 = (currentwavedashangle[1][0]-1)*((2.67039-0.80815)/99)+0.80815;
+            event1[i-1][1] = "r";
+            event1[i-1][3] = [];
+            event1[i-1][3][0] = angle2;
             if (currentwavedashangle[1][0] !== 0) {
               var distandspeedangle2 = wavedash(character,angle2);
               distandspeedangle2[1] = Math.round(distandspeedangle2[1] * 100000) / 100000;
               if (currentwavedashangle[1][1] === "b"){
                 distandspeedangle2[0] *= -1;
                 distandspeedangle2[1] *= -1;
+                event1[i-1][3][1] = "b";
+              }
+              else {
+                event1[i-1][3][1] = "f";
               }
               $("#evelocityx2").empty().append(distandspeedangle2[1]);
             }
@@ -600,6 +822,8 @@ $(document).ready(function(){
             $("#wavedashangle2worded").empty().append("Wavedash down");
             $("#wavedashangle2strength").empty().append(0);
             currentwavedashangle[1][0] = 0;
+            event1[i-1][3] = "none";
+            event1[i-1][1] = "s";
           }
 
         }, containment: "parent", scroll: false });
@@ -670,7 +894,8 @@ $(document).ready(function(){
 
         $("#createbutton").click(function(){
           if($("#createbutton").hasClass("createbuttonokay")){
-            $("#popout").remove();
+            $("#popout").fadeOut(300);
+            interpretScript(event1);
           }
         });
         break;
