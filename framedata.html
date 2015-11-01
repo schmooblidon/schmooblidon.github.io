@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<base href="">
+<link href='http://fonts.googleapis.com/css?family=Share+Tech+Mono' rel='stylesheet' type='text/css'>
+<link href="stylesheet.css" rel="stylesheet" type="text/css">
+<link href="framedatasheet.css" rel="stylesheet" type="text/css">
+
+<script src="jquery-1.11.3.js" type="text/javascript"></script>
+<script src="jquery-ui.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="framedata.js"></script>
+<script type="text/javascript" src="fresize.js"></script>
+<script type="text/javascript" src="framedatascript.js"></script>
+<script type="text/javascript" src="script.js"></script>
+
+
+<link rel="shortcut icon" href="favicon.ico" />
+<title>I KneeData | For your frame data kneeds</title>
+</head>
+
+<body>
+<div id="header">
+	<a href="http://ikneedata.com"><img id="logo" src="assets/kneesmalllogo.png" width="40" height="40" alt=""/></a>
+    <a href="http://ikneedata.com"><img id="titlelogo" src="assets/ikneedatav5.png"/ width="280" height="60"></a>
+	<a href="http://ikneedata.com"><div class="button"><h4>Blog</h4></div></a>
+	<a href="heatmaps/oos/falcon.html"><div class="button"><h4>Heatmaps</h4></div></a>
+   <a href="graphsgfys.html"><div class="button longbutton"><h4>Graphs & Gfys</h4></div></a>
+  <a href="vidsthreads.html"><div class="button longbutton"><h4>Vids & Threads</h4></div></a>
+	<a href="donate.html"><div class="button"><h4>Donate</h4></div></a>
+	<a href="about.html"><div class="button"><h4>About</h4></div></a>
+	<div id="socialmediaicons"><a href="http://twitter.com/IKneeData"><div class="socialmedia" style="background-image:url(assets/twitterlogo.png)"></div></a>
+	<a href="http://facebook.com/IKneeData"><div class="socialmedia" style="background-image:url(assets/facebooklogo.png)"></div></a></div>
+</div>
+<div id="pagetitle" style="background-color:#1db37d">
+<h1>Frame Data</h1></div>
+<div id="main">
+	<div id="charandattackcontainer">
+	<div class="selecttitle"><p>Character</p></div>
+	<div id="charcontainer" style="overflow-y: scroll;">
+		<div id="fox" class="char"><p>Fox</p></div>
+		<div id="falco" class="char"><p>Falco</p></div>
+		<div id="marth" class="char"><p>Marth</p></div>
+		<div id="sheik" class="char"><p>Sheik</p></div>
+		<div id="puff" class="char"><p>Puff</p></div>
+		<div id="peach" class="char"><p>Peach</p></div>
+		<div id="ics" class="char"><p>ICs</p></div>
+		<div id="falcon" class="char"><p>Falcon</p></div>
+	</div>
+	<div class="selecttitle"><p>Attack</p></div>
+	<div id="attackcontainer" style="overflow-y: scroll;">
+		<div id="jab" class="attack"><p>Jab</p></div>
+		<div id="dattack" class="attack"><p>Dash Attack</p></div>
+		<div id="tilts" class="a-title"><p>Tilts</p></div>
+		<div id="ftilt" class="attack"><p>F-Tilt</p></div>
+		<div id="dtilt" class="attack"><p>D-Tilt</p></div>
+		<div id="uptilt" class="attack"><p>Up-Tilt</p></div>
+		<div id="grabs" class="a-title"><p>Grabs</p></div>
+		<div id="sgrab" class="attack"><p>Standing Grab</p></div>
+		<div id="dgrab" class="attack"><p>Dash Grab</p></div>
+		<div id="smashs" class="a-title"><p>Smash Attacks</p></div>
+		<div id="fsmash" class="attack"><p>F-Smash</p></div>
+		<div id="dsmash" class="attack"><p>D-Smash</p></div>
+		<div id="upsmash" class="attack"><p>Up-Smash</p></div>
+		<div id="aerials" class="a-title"><p>Aerials</p></div>
+		<div id="fair" class="attack"><p>F-air</p></div>
+		<div id="dair" class="attack"><p>D-air</p></div>
+		<div id="upair" class="attack"><p>Up-air</p></div>
+		<div id="bair" class="attack"><p>B-air</p></div>
+		<div id="nair" class="attack"><p>N-air</p></div>
+		<div id="specials" class="a-title"><p>Specials</p></div>
+		<div id="sideb" class="attack"><p>Side-B</p></div>
+		<div id="downb" class="attack"><p>Down-B</p></div>
+		<div id="upb" class="attack"><p>Up-B</p></div>
+</div>
+</div><div id="main-content">
+<div id="titledetails"><div id="gameicon"></div><div id="charicon"></div><p id="charname">Sheik</p><p id="attackname">F-Tilt</p></div>
+<div id="vidcontrols"><div id="play" class="vcontrol play"></div><div id="fminus" class="vcontrol"></div><div id="fplus" class="vcontrol"></div><div id="loop" class="vcontrol"></div><div id="speedminus" class="vcontrol"></div><div id="speedplus" class="vcontrol"></div></div><div id="keycontainer"><p id="time"></p> <p id="timecount"></p> <p id="funcall"></p> <p id="frames"></p> <p id="rframes"></p></div>
+<div id="vidandsvgcontainer"><div id="vidcontainer" style="position:absolute"><video id="mainvid" loop autobuffer preload style="display:inline-block">
+<source type="video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;" src="assets/vids/sheik/ftilt.mp4"></source>
+</video></div><div id="svgcontainer" style="position:absolute">
+		 <svg id="svgbox" height="512px" width="1244px"></svg>
+	 </div>
+	 <div id="detailcanvas"><div id="autocanceldisplay" class="displayoff"><p>Autocancel</p></div><div id="iasadisplay" class="displayoff"><p>Interruptable</p></div></div>
+</div>
+<div id="extradetails"><div id="infobox"><div id="attdetails"><div id="statstitle"><p>Attack Stats</p></div><div id="statsbox"></div></div><div id="id0-container" class="idcontainer"><div id="id0-label" class="idlabel"><p>Id 0</p></div><div id="id0-info" class="idinfobox"><p>Damage: <span></span></p><p>BKB: <span></span></p><p>KBG: <span></span></p><p>Angle: <span></span></p><p>AF: <span></span></p><p>Type: <span></span></p><p style="display:inline-block">Outline: </p><div id="id0strokecolour1" class="colourbox colourboxselected"></div><div id="id0strokecolour2" class="colourbox"></div><div id="id0strokecolour3" class="colourbox"></div><div class="alwaysshow"><div id="id0stroke" class="ministroke minirealbutton"></div><p>Always Show Outline</p><div id="id0strokeswitch" class="miniswitch off"><p>Off</p></div></div><p style="display:inline-block">Fill: </p><div id="id0fillcolour1" class="colourbox colourboxselected"></div><div id="id0fillcolour2" class="colourbox"></div><div id="id0fillcolour3" class="colourbox"></div><div class="alwaysshow"><div id="id0fill" class="minifill minirealbutton"></div><p>Always Show Fill</p><div id="id0fillswitch" class="miniswitch off"><p>Off</p></div></div></div></div><div id="id1-container" class="idcontainer"><div id="id1-label" class="idlabel"><p>Id 1</p></div><div id="id1-info" class="idinfobox"><p>Damage: <span></span></p><p>BKB: <span></span></p><p>KBG: <span></span></p><p>Angle: <span></span></p><p>AF: <span></span></p><p>Type: <span></span></p><p style="display:inline-block">Outline: </p><div id="id1strokecolour1" class="colourbox colourboxselected"></div><div id="id1strokecolour2" class="colourbox"></div><div id="id1strokecolour3" class="colourbox"></div><div class="alwaysshow"><div id="id1stroke" class="ministroke minirealbutton"></div><p>Always Show Outline</p><div id="id1strokeswitch" class="miniswitch off"><p>Off</p></div></div><p style="display:inline-block">Fill: </p><div id="id1fillcolour1" class="colourbox colourboxselected"></div><div id="id1fillcolour2" class="colourbox"></div><div id="id1fillcolour3" class="colourbox"></div><div class="alwaysshow"><div id="id1fill" class="minifill minirealbutton"></div><p>Always Show Fill</p><div id="id1fillswitch" class="miniswitch off"><p>Off</p></div></div></div></div><div id="id2-container" class="idcontainer"><div id="id2-label" class="idlabel"><p>Id 2</p></div><div id="id2-info" class="idinfobox"><p>Damage: <span></span></p><p>BKB: <span></span></p><p>KBG: <span></span></p><p>Angle: <span></span></p><p>AF: <span></span></p><p>Type: <span></span></p><p style="display:inline-block">Outline: </p><div id="id2strokecolour1" class="colourbox colourboxselected"></div><div id="id2strokecolour2" class="colourbox"></div><div id="id2strokecolour3" class="colourbox"></div><div class="alwaysshow"><div id="id2stroke" class="ministroke minirealbutton"></div><p>Always Show Outline</p><div id="id2strokeswitch" class="miniswitch off"><p>Off</p></div></div><p style="display:inline-block">Fill: </p><div id="id2fillcolour1" class="colourbox colourboxselected"></div><div id="id2fillcolour2" class="colourbox"></div><div id="id2fillcolour3" class="colourbox"></div><div class="alwaysshow"><div id="id2fill" class="minifill minirealbutton"></div><p>Always Show Fill</p><div id="id2fillswitch" class="miniswitch off"><p>Off</p></div></div></div></div><div id="id3-container" class="idcontainer"><div id="id3-label" class="idlabel"><p>Id 3</p></div><div id="id3-info" class="idinfobox"><p>Damage: <span></span></p><p>BKB: <span></span></p><p>KBG: <span></span></p><p>Angle: <span></span></p><p>AF: <span></span></p><p>Type: <span></span></p><p style="display:inline-block">Outline: </p><div id="id3strokecolour1" class="colourbox colourboxselected"></div><div id="id3strokecolour2" class="colourbox"></div><div id="id3strokecolour3" class="colourbox"></div><div class="alwaysshow"><div id="id3stroke" class="ministroke minirealbutton"></div><p>Always Show Outline</p><div id="id3strokeswitch" class="miniswitch off"><p>Off</p></div></div><p style="display:inline-block">Fill: </p><div id="id3fillcolour1" class="colourbox colourboxselected"></div><div id="id3fillcolour2" class="colourbox"></div><div id="id3fillcolour3" class="colourbox"></div><div class="alwaysshow"><div id="id3fill" class="minifill minirealbutton"></div><p>Always Show Fill</p><div id="id3fillswitch" class="miniswitch off"><p>Off</p></div></div></div></div></div><div id="switches"><div class="switchtem"><div id="stroke" class="realbutton"></div><div class="s-button"><p>Outline Hitboxes</div><div id="strokeswitch" class="switch on"><p>On</p></div></div><div class="switchtem"><div id="fill" class="realbutton"></div><div class="s-button"><p>Fill Hitboxes</div><div id="fillswitch" class="switch off"><p>Off</p></div></div><div class="switchtem"><div id="angle" class="realbutton"></div><div class="s-button"><p>Show Angles</div><div id="angleswitch" class="switch on"><p>On</p></div></div><div class="switchtem"><div id="autocancel" class="realbutton"></div><div class="s-button"><p>Show Autocancel</div><div id="autocancelswitch" class="switch on"><p>On</p></div></div><div class="switchtem"><div id="iasa" class="realbutton"></div><div class="s-button"><p>Show IASA</div><div id="iasaswitch" class="switch on"><p>On</p></div></div></div></div>
+</div>
+</body>
+</html>

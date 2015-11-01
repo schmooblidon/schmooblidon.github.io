@@ -1,0 +1,393 @@
+*{
+    padding:0;
+    margin:0;
+}
+
+
+#charandattackcontainer {
+	display:inline-block;
+	width:150px;
+	vertical-align: top;
+}
+
+.selecttitle {
+	width:150px;
+	height:30px;
+	background-color:black;
+	color:white;
+	font-size:18px;
+	text-align:center;
+}
+
+.selecttitle p {
+	margin:0;
+	padding:3px 0;
+}
+
+#charcontainer {
+	width:150px;
+	height:200px;
+	display:inline-block;
+}
+
+.char {
+	width:130px;
+	height:40px;
+	text-align: center;
+	background-color:#535353;
+	color:white;
+}
+
+.char p {
+	margin:0;
+	padding:11px 0 11px 0;
+	vertical-align:middle;
+}
+
+#attackcontainer {
+	width:150px;
+	height:500px;
+	display:inline-block;
+}
+
+#main-content {
+	display:inline-block;
+	vertical-align: top;
+}
+
+.attack {
+	width:130px;
+	height:40px;
+	text-align: center;
+	background-color:#535353;
+	color:white;
+}
+
+.attack p {
+	margin:0;
+	padding:11px 0 11px 0;
+	vertical-align:middle;
+}
+
+.a-title {
+	width:130px;
+	height:20px;
+	text-align: center;
+	background-color:#333333;
+	color:#b3b3b3;
+}
+
+.a-title p {
+	margin:0;
+	padding:1px 0 1px 0;
+	vertical-align:middle;
+}
+
+#main-content {
+	height:960px;
+}
+
+#titledetails {
+	height:80px;
+	display:block;
+	background-color:#424242;
+	line-height:0;
+	position:relative;
+}
+
+#gameicon {
+	height:45px;
+	width:190px;
+	background-image:url(assets/gameicon/me.png);
+	display:inline-block;
+	margin:0 20px;
+	position:relative;
+	top:20px;
+}
+
+#charicon {
+	height:26px;
+	width:26px;
+	background:url(assets/stockicons/melee.png) 104px 0;
+	display:inline-block;
+	margin:0 20px;
+	position:relative;
+	top:8px;
+}
+
+#charname {
+	font-size:30px;
+	display:inline-block;
+	margin:0 20px;
+	position:relative;
+	top:5px;
+}
+
+#attackname {
+	font-size:30px;
+	display:inline-block;
+	margin:0 20px;
+	position:relative;
+	top:5px;
+}
+
+#vidcontrols {
+	width:150px;
+	height:100px;
+  display:inline-block;
+  vertical-align: top;
+}
+
+#keycontainer {
+  width:800px;
+  height:100px;
+  background-color:#3c3c3c;
+  display:inline-block;
+  vertical-align: top;
+}
+
+.vcontrol {
+	width:50px;
+	height:50px;
+	background-color:#303030;
+	display:inline-block;
+}
+
+.play {background-image:url(assets/fdcontrols/play.png);} .pause {background-image:url(assets/fdcontrols/pause.png);} #fminus {background-image:url(assets/fdcontrols/fminus.png);} #fplus {background-image:url(assets/fdcontrols/fplus.png);} #speedminus {background-image:url(assets/fdcontrols/speedminus.png);} #speedplus {background-image:url(assets/fdcontrols/speedplus.png);} #loop {background-image:url(assets/fdcontrols/loop.png);}
+
+#vidandsvgcontainer {
+	display:block;
+	width:122px;
+	height:512px;
+}
+#vidcontainer {
+	display:inline-block;
+}
+#svgcontainer {
+	display:inline-block;
+}
+
+#detailcanvas {
+  position:absolute;
+  width:1244px;
+  height:512px;
+  z-index:10;
+}
+
+#detailcanvas div {
+  position:absolute;
+  color:black;
+  border-radius:5px;
+  font-size:25px;
+  font-weight:bold;
+  text-align:center;
+}
+
+#detailcanvas div p {
+  padding:5px;
+}
+
+#autocanceldisplay {
+  bottom:20px;
+  right:522px;
+  height:40px;
+  width:200px;
+  background-color:#e7f547;
+}
+
+#iasadisplay {
+  top:20px;
+  right:522px;
+  height:40px;
+  width:200px;
+  background-color:#39cb3e;
+}
+
+.displayoff {
+  opacity:0.1;
+}
+
+.displayon {
+  opacity:1;
+}
+
+.hitbox {
+  stroke-width: 2px;
+}
+
+#extradetails {
+	height:270px;
+	font-size:16px;
+}
+
+#infobox {
+	height:270px;
+	width:850px;
+	display:inline-block;
+	vertical-align: top;
+	background-color:black;
+}
+#attdetails {
+	height:270px;
+	width:130px;
+	display:inline-block;
+	vertical-align: top;
+	background-color:#505050
+}
+
+#statstitle {
+	width:130px;
+	height:30px;
+	background-color:#656565;
+}
+
+#statstitle p {
+	padding:5px 0px;
+	text-align:center;
+}
+
+#attdetails p {
+	padding:5px 5px;
+}
+
+.idcontainer {
+	height:270px;
+	width:180px;
+	display:inline-block;
+	vertical-align: top;
+	background-color:#2a2a2a;
+  position:relative;
+}
+
+.infodisabled {
+  height:270px;
+  width:180px;
+  position:absolute;
+  z-index:5;
+  background-color:rgba(0, 0, 0, 0.67);
+}
+
+.idinfobox {
+	height:250px;
+	width:180px;
+	display:inline-block;
+	background-color:#303030;
+	margin:0px;
+}
+
+.idinfobox p {
+	padding:3px 5px;
+}
+
+.idlabel {
+	height:20px;
+	width:50px;
+	display:block;
+	background-color:#4f4d4d;
+	margin:0px;
+}
+
+.idlabel p {
+	padding:2px 5px;
+}
+
+.h-standard {color:#ff4242;} .h-reflective {color:#29dd91} .h-absorbing {color:#4d9dfb} .h-grab {color:#ce45fe} .h-inert {color:#bababa}
+
+.colourbox {
+  width:15px;
+  height:15px;
+  margin:0px 3px;
+  display:inline-block;
+  border:3px solid black;
+}
+
+.alwaysshow p {
+  display:inline-block;
+}
+
+.alwaysshow {
+  width:180px;
+  height:20px;
+  font-size:13px;
+  background-color:#4f4d4d;
+}
+
+.minirealbutton {
+  width:180px;
+  height:20px;
+  opacity:0;
+  background-color:#ffffff;
+  position:absolute;
+}
+
+.miniswitch {
+  width:30px;
+  height:20px;
+  display:inline-block;
+  float:right;
+}
+
+#id0strokecolour1 {background-color:#3f18ff} #id0strokecolour2 {background-color:white} #id0strokecolour3 {background-color:none}
+
+#id0fillcolour1 {background-color:#7566bf} #id0fillcolour2 {background-color:#939393} #id0fillcolour3 {background-color:none}
+
+#id1strokecolour1 {background-color:#09dcf9} #id1strokecolour2 {background-color:white} #id1strokecolour3 {background-color:none}
+
+#id1fillcolour1 {background-color:#2e68cb} #id1fillcolour2 {background-color:#939393} #id1fillcolour3 {background-color:none}
+
+#id2strokecolour1 {background-color:#12f59c} #id2strokecolour2 {background-color:white} #id2strokecolour3 {background-color:none}
+
+#id2fillcolour1 {background-color:#0eb2c8} #id2fillcolour2 {background-color:#939393} #id2fillcolour3 {background-color:none}
+
+#id3strokecolour1 {background-color:#19ff2a} #id3strokecolour2 {background-color:white} #id3strokecolour3 {background-color:none}
+
+#id3fillcolour1 {background-color:#08995c} #id3fillcolour2 {background-color:#939393} #id3fillcolour3 {background-color:none}
+
+.colourboxselected {
+  border:3px solid white;
+}
+
+#switches {
+	height:240px;
+	width:250px;
+	display:inline-block;
+	vertical-align: top;
+}
+
+.switchtem div p {
+	margin:0;
+	padding:15px 0px;
+}
+
+.switchtem {
+	width:250px;
+	height:50px;
+	display:inline-block;
+	text-align:center;
+}
+
+.realbutton {
+	width:250px;
+	height:50px;
+	opacity:0;
+	background-color:#ffffff;
+	position:absolute;
+}
+
+.s-button {
+	width:200px;
+	height:50px;
+	display:inline-block;
+	background-color:#676767;
+}
+.switch {
+	width:50px;
+	height:50px;
+	display:inline-block;
+}
+.on {
+	background-color:#3bd641;
+}
+.off {
+	background-color:#ed4242;
+}
