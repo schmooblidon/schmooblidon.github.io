@@ -1,4 +1,4 @@
-*{
+*:not(h4){
     padding:0;
     margin:0;
 }
@@ -132,8 +132,8 @@
 }
 
 #vidcontrols {
-	width:150px;
-	height:100px;
+	width:250px;
+	height:50px;
   display:inline-block;
   vertical-align: top;
 }
@@ -155,6 +155,14 @@
 
 .play {background-image:url(assets/fdcontrols/play.png);} .pause {background-image:url(assets/fdcontrols/pause.png);} #fminus {background-image:url(assets/fdcontrols/fminus.png);} #fplus {background-image:url(assets/fdcontrols/fplus.png);} #speedminus {background-image:url(assets/fdcontrols/speedminus.png);} #speedplus {background-image:url(assets/fdcontrols/speedplus.png);} #loop {background-image:url(assets/fdcontrols/loop.png);}
 
+.speeddisabled {
+  width:50px;
+  height:50px;
+  background-color:rgba(0, 0, 0, 0.66);
+  position:absolute;
+  z-index:3;
+}
+
 #vidandsvgcontainer {
 	display:block;
 	width:122px;
@@ -165,13 +173,22 @@
 }
 #svgcontainer {
 	display:inline-block;
+
+}
+
+#svgbox-t {
+  z-index:3;
+}
+
+.angle {
+	position:absolute;
+  z-index:2;
 }
 
 #detailcanvas {
   position:absolute;
   width:1244px;
   height:512px;
-  z-index:10;
 }
 
 #detailcanvas div {
@@ -291,6 +308,10 @@
 	padding:2px 5px;
 }
 
+.anglesmall {
+  position:absolute;
+}
+
 .h-standard {color:#ff4242;} .h-reflective {color:#29dd91} .h-absorbing {color:#4d9dfb} .h-grab {color:#ce45fe} .h-inert {color:#bababa}
 
 .colourbox {
@@ -299,6 +320,25 @@
   margin:0px 3px;
   display:inline-block;
   border:3px solid black;
+  position:relative;
+}
+
+.colourselectbox {
+  width:200px;
+  height:240px;
+  position:absolute;
+  bottom:20px;
+  right:-97px;
+  border:5px solid #383838;
+  border-radius:3px;
+  z-index:10;
+}
+
+.colourselect {
+  width:40px;
+  height:40px;
+  display:inline-block;
+  vertical-align: top;
 }
 
 .alwaysshow p {
@@ -327,21 +367,21 @@
   float:right;
 }
 
-#id0strokecolour1 {background-color:#3f18ff} #id0strokecolour2 {background-color:white} #id0strokecolour3 {background-color:none}
+#id0strokecolour {background-color:#66ff66} #id0strokecolour2 {background-color:white} #id0stroketrans {background-color:none;background-image:url(assets/transparent.png)}
 
-#id0fillcolour1 {background-color:#7566bf} #id0fillcolour2 {background-color:#939393} #id0fillcolour3 {background-color:none}
+#id0fillcolour {background-color:#ff6666} #id0fillcolour2 {background-color:#939393} #id0filltrans {background-color:none;background-image:url(assets/transparent.png)}
 
-#id1strokecolour1 {background-color:#09dcf9} #id1strokecolour2 {background-color:white} #id1strokecolour3 {background-color:none}
+#id1strokecolour {background-color:#66ffff} #id1strokecolour2 {background-color:white} #id1stroketrans {background-color:none;background-image:url(assets/transparent.png)}
 
-#id1fillcolour1 {background-color:#2e68cb} #id1fillcolour2 {background-color:#939393} #id1fillcolour3 {background-color:none}
+#id1fillcolour {background-color:#ffff66} #id1fillcolour2 {background-color:#939393} #id1filltrans {background-color:none;background-image:url(assets/transparent.png)}
 
-#id2strokecolour1 {background-color:#12f59c} #id2strokecolour2 {background-color:white} #id2strokecolour3 {background-color:none}
+#id2strokecolour {background-color:#ff66ff} #id2strokecolour2 {background-color:white} #id2stroketrans {background-color:none;background-image:url(assets/transparent.png)}
 
-#id2fillcolour1 {background-color:#0eb2c8} #id2fillcolour2 {background-color:#939393} #id2fillcolour3 {background-color:none}
+#id2fillcolour {background-color:#6666ff} #id2fillcolour2 {background-color:#939393} #id2filltrans {background-color:none;background-image:url(assets/transparent.png)}
 
-#id3strokecolour1 {background-color:#19ff2a} #id3strokecolour2 {background-color:white} #id3strokecolour3 {background-color:none}
+#id3strokecolour {background-color:#9966ff} #id3strokecolour2 {background-color:white} #id3stroketrans {background-color:none;background-image:url(assets/transparent.png)}
 
-#id3fillcolour1 {background-color:#08995c} #id3fillcolour2 {background-color:#939393} #id3fillcolour3 {background-color:none}
+#id3fillcolour {background-color:#ff6633} #id3fillcolour2 {background-color:#939393} #id3filltrans {background-color:none;background-image:url(assets/transparent.png)}
 
 .colourboxselected {
   border:3px solid white;
