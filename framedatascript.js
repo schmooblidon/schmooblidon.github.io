@@ -432,8 +432,8 @@ $(document).ready(function(){
 
 	$(document).on('mousemove', function(e){
     $(".angle").css({
-       left:  e.pageX-150,
-       top:   e.pageY-400
+       left:  e.pageX-0,
+       top:   e.pageY-350
     });
 	});
 
