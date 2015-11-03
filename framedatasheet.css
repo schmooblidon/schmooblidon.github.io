@@ -269,6 +269,33 @@
   opacity:1;
 }
 
+.groundline {
+  background-color:rgba(255, 255, 255, 0.32);
+  width:622px;
+  height:3px;
+  position:absolute;
+}
+
+#groundlinef {
+  bottom:95px;
+  left:0px;
+}
+
+#groundlinet {
+  bottom:240px;
+  right:0px;
+}
+
+#centerline {
+  background-color:rgba(255, 255, 255, 0.32);
+  width:3px;
+  height:392px;
+  top:60px;
+  position:absolute;
+  right:622px;
+
+}
+
 .hitbox {
   stroke-width: 2px;
 }
