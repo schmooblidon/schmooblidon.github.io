@@ -1,3 +1,6 @@
+// use a circle tool in ps, and like hover over the hitboxes to see where the center point is, write it down. do 2 for interpolate ones, then use center points and draw svg circles, interpolate manually
+
+
 types = ['<span class="h-standard">Standard</span>','<span class="h-reflective">Reflective</span>','<span class="h-absorbing">Absorbing</span>','<span class="h-grab">Grab</span>','<span class="h-inert">Inert</span>'];
 
 stattypes = ["Total","AF","IASA","Autocancel","LandingLag"];

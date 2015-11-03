@@ -135,6 +135,7 @@ var drawHitboxes = function(t){
     }
     // if hitbox of current frame exists
     if (typeof a["id"+(k-1)].svg["f"+frame] != "undefined"){
+      $("#framedisplay").removeClass("nothitting").addClass("hitting");
       if (switches.stroke && !switches["id"+k+"stroke"]){
         $("#id"+(k-1)+"f"+frame).attr("stroke", ocolour[k-1]);
       }
@@ -146,7 +147,11 @@ var drawHitboxes = function(t){
         hitboxHover();
       }
     }
+    else {
+      $("#framedisplay").removeClass("hitting").addClass("nothitting");
+    }
   }
+  $("#framedisplay").children("p").empty().append(frame);
   if (frame >= a.IASA && switches.iasa){
     $("#iasadisplay").removeClass("displayoff").addClass("displayon");
   }

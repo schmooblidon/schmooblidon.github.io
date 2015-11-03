@@ -191,6 +191,30 @@
   height:512px;
 }
 
+#framedisplay {
+  width:60px;
+  height:60px;
+  border-radius: 10px;
+  top:30px;
+  left:30px;
+  font-size:40px;
+}
+.nothitting {
+  background-color:white;
+}
+.hitting {
+  background-color:#f64545;
+}
+
+.hitting p {
+  color:white;
+}
+
+#framedisplay p {
+  font-size:40px;
+  padding:5px;
+}
+
 #detailcanvas div {
   position:absolute;
   color:black;
@@ -203,6 +227,8 @@
 #detailcanvas div p {
   padding:5px;
 }
+
+
 
 #autocanceldisplay {
   bottom:20px;
