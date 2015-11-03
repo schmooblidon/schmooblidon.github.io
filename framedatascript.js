@@ -247,6 +247,25 @@ var colourPick = function(id){
   });
 }
 
+var frameForward = function(){
+  vid.pause();
+  $("#play").removeClass("pause").addClass("play");
+  playing = false;
+  clearInterval(playAttack);
+  vid.currentTime += (1 / 60);
+  $('#time').html((vid.currentTime * 60).toPrecision(15));
+  drawHitboxes(true);
+}
+
+var frameBackward = function(){
+  vid.pause();
+  $("#play").removeClass("pause").addClass("play");
+  playing = false;
+  clearInterval(playAttack);
+  vid.currentTime -= (1 / 60);
+  drawHitboxes(true);
+  $('#time').html((vid.currentTime * 60).toPrecision(15));
+}
 
 $(document).ready(function(){
 
@@ -261,22 +280,10 @@ $(document).ready(function(){
   }*/
 
   $("#fplus").click(function(){
-    vid.pause();
-    $("#play").removeClass("pause").addClass("play");
-    playing = false;
-    clearInterval(playAttack);
-    vid.currentTime += (1 / 60);
-    $('#time').html((vid.currentTime * 60).toPrecision(15));
-    drawHitboxes(true);
+    frameForward();
   });
   $("#fminus").click(function(){
-    vid.pause();
-    $("#play").removeClass("pause").addClass("play");
-    playing = false;
-    clearInterval(playAttack);
-    vid.currentTime -= (1 / 60);
-    drawHitboxes(true);
-    $('#time').html((vid.currentTime * 60).toPrecision(15));
+    frameBackward();
   });
   $("#play").click(function(){
     if (playing){
@@ -433,6 +440,24 @@ $(document).ready(function(){
       $(".colourselectbox").remove();
     }
   });
+
+  document.onkeydown = function(evt) {
+    evt = evt || window.event;
+    switch (evt.keyCode) {
+        case 37:
+        case 38:
+        case 65:
+        case 83:
+            frameBackward();
+            break;
+        case 39:
+        case 40:
+        case 68:
+        case 87:
+            frameForward();
+            break;
+    }
+  };
   updatehitbox();
 
 	$(document).on('mousemove', function(e){
