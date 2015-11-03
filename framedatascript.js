@@ -267,6 +267,17 @@ var frameBackward = function(){
   $('#time').html((vid.currentTime * 60).toPrecision(15));
 }
 
+var displaySpeed = function(){
+  var speedstr = Math.round(vspeed * 10).toString();
+  if (speedstr != "10"){
+    speedstr = "0."+speedstr;
+  }
+  else {
+    speedstr = "1";
+  }
+  $("#speedvalue").empty().append(speedstr);
+}
+
 $(document).ready(function(){
 
   updateIdInfo();
@@ -325,6 +336,7 @@ $(document).ready(function(){
     if (vspeed > 0.11){
       $("#speedminus").empty();
     }
+    displaySpeed();
   });
 
   $("#speedminus").click(function(){
@@ -344,7 +356,7 @@ $(document).ready(function(){
     if (vspeed < 0.91){
       $("#speedplus").empty();
     }
-
+    displaySpeed();
   });
 
 
