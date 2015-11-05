@@ -13,10 +13,10 @@ var resizingtype = function(){
 	var hmratio = hitboxwidth / hitboxheight;
 	var hurttobaseratio = 300 / 1280;
 	var base = $("#base");
-	if (hitboxwidth > (windwidth - sideconwidth - controlconwidth)) {
-		$("#img-container").children("img").width(windwidth - sideconwidth - controlconwidth);
-		$("#hitboxsvg").width(windwidth - sideconwidth - controlconwidth);
-		$("#hitboxsvg-t").width(windwidth - sideconwidth - controlconwidth);
+	if (hitboxwidth > (windwidth - 10 - controlconwidth)) {
+		$("#img-container").children("img").width(windwidth - 10 - controlconwidth);
+		$("#hitboxsvg").width(windwidth - 10 - controlconwidth);
+		$("#hitboxsvg-t").width(windwidth - 10 - controlconwidth);
 		$("#hurtbox").width(base.width() * hurttobaseratio);
 		$("#img-container").width(base.width());
 		$("#img-container").children("img").height(base.width() / hmratio);

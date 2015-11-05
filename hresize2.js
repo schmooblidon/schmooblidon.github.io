@@ -15,10 +15,10 @@ var resizingtype = function(){
 	var imgurtobaseratiow = 167 / 1280;
 	var imgurtobaseratioh = 61 / 720;
 	var base = $("#base");
-	if (hitboxwidth > (windwidth - sideconwidth - controlconwidth)) {
-		$("#img-container").children("img").width(windwidth - sideconwidth - controlconwidth);
-		$("#hitboxsvg").width(windwidth - sideconwidth - controlconwidth);
-		$("#hitboxsvg-t").width(windwidth - sideconwidth - controlconwidth);
+	if (hitboxwidth > (windwidth - controlconwidth)) {
+		$("#img-container").children("img").width(windwidth - 10 - controlconwidth);
+		$("#hitboxsvg").width(windwidth - 10 - controlconwidth);
+		$("#hitboxsvg-t").width(windwidth - 10 - controlconwidth);
 		var previoushbwidth = $("#hurtboxcontainer").width();
 		$("#hurtbox").width(base.width() * hurttobaseratio);
 		$("#hurtboxcontainer").width(base.width() * hurttobaseratio);

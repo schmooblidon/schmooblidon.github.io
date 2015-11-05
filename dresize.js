@@ -1,5 +1,5 @@
 var resizingtype = function(){
-	$("#blogcontainer").width(windwidth - 360);
+	$("#blogcontainer").width(windwidth);
 	if ($("#kneecoin").length){
 		var kcratio = 400/452;
 		$("#donationleft").width("40%");

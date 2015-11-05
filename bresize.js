@@ -1,6 +1,6 @@
 var resizingtype = function(){
-	$(".blogcontainer").width(windwidth - 360);
-	$(".blog").width(windwidth - 440);
+	$(".blogcontainer").width(windwidth - 60);
+	$(".blog").width(windwidth - 140);
 	if (windwidth < 1120){
 		$("#bloggfycontainer").width(500).height(269);
 		$("#docupb").width(500).height(427);

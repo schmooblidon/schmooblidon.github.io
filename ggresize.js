@@ -1,15 +1,15 @@
 var resizingtype = function(){
-  $("#ig-content").width(windwidth - 490);
-  $(".ig").width(windwidth - 490);
-  $(".ig-text").width(windwidth - 1040);
-  if (windwidth < 1500){
+  $("#ig-content").width(windwidth - 190);
+  $(".ig").width(windwidth - 190);
+  $(".ig-text").width(windwidth - 740);
+  if (windwidth < 1200){
     $(".graphcontainer").width(350);
     $(".graphcontainer").children("a").children("img").width("99%");
     $(".graphcontainer").children("a").children("img").height("99%");
     $(".graphcontainer").children("img").width("99%");
     $(".graphcontainer").children("img").height("99%");
-    $(".ig-text").width(windwidth - 840);
-    if (windwidth < 1150){
+    $(".ig-text").width(windwidth - 540);
+    if (windwidth < 850){
       $(".ig").css("display", "block");
       $(".ig-text").css("float", "none");
       $(".ig-text").width("auto");
@@ -17,7 +17,7 @@ var resizingtype = function(){
     else {
       $(".ig").css("display", "inline-block");
       $(".ig-text").css("float", "right");
-      $(".ig-text").width(windwidth - 840);
+      $(".ig-text").width(windwidth - 540);
     }
   }
   else {
@@ -26,7 +26,7 @@ var resizingtype = function(){
       $(".graphcontainer").children("a").children("img").height("100%");
       $(".graphcontainer").children("img").width("100%");
       $(".graphcontainer").children("img").height("100%");
-      $(".ig-text").width(windwidth - 1040);
+      $(".ig-text").width(windwidth - 740);
       $(".ig").css("display", "inline-block");
       $(".ig-text").css("float", "right");
       $(".ig").height("auto");
