@@ -1,0 +1,116 @@
+.framePos {
+	fill:#25d041;
+}
+
+#trajLine {
+
+	stroke-width:10px;
+	fill:none;
+}
+
+.tLineK {
+	stroke:#f66666;
+}
+
+.tLineS {
+	stroke:#50ff7c
+}
+
+#display {
+	width:4580px;
+	height:3188px;
+	display:inline-block;
+	vertical-align:top;
+}
+
+#rightcontrols {
+	width:150px;
+	height:500px;
+	background-color:black;
+	display:inline-block;
+	vertical-align:top;
+
+}
+.posButton {
+	width:120px;
+	height:50px;
+	margin:15px;
+}
+
+#posButton1 {
+	background-image:url(assets/trajectory/pos1.png);
+}
+
+#posButton2 {
+	background-image:url(assets/trajectory/pos2.png);
+}
+
+.posButtonSelected {
+	background-color:white;
+}
+
+#victim-char {
+	width:150px;
+	height:50px;
+	text-align:center;
+	position:relative;
+}
+
+#victimcharname {
+	font-size:30px;
+}
+
+#chardropdown {
+	display:none;
+	position:absolute;
+	width:140px;
+	height:350px;
+	right:140px;
+	top:-25px;
+	z-index:100;
+	text-align:center;
+	font-size:14px;
+}
+
+.hbcharselect {
+	width:140px;
+	height:25px;
+	background-color:rgba(55, 55, 55, 0.82);
+	display:inline-block;
+	cursor:pointer;
+}
+
+.hbcharselect p{
+	margin:0;
+}
+
+#percent {
+	width:150px;
+	height:80px;
+	display:inline-block;
+}
+
+#percentNumber {
+	width:110px;
+	height:80px;
+	display:inline-block;
+	font-size:40px;
+}
+
+#percentButtonContainer {
+	display:inline-block;
+	width:40px;
+	height:80px;
+}
+
+.percentButton {
+	display:inline-block;
+	width:40px;
+	height:40px;
+	cursor:pointer;
+}
+
+.percentButton p {
+	margin:10px;
+	font-size:30px;
+}
