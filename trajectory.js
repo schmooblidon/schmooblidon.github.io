@@ -14,6 +14,8 @@ bzBottom = -108.8;
 bzLeft = -224;
 bzRight = 224;
 
+curPositions = [];
+
 centreOffset = [bzRight*10+50,bzTop*10+50];
 
 var percent = 120;
@@ -40,9 +42,13 @@ function drawTrajectory(percent,damage,growth,base,angle,character, NTSC, xPos, 
 	$("#trajectory").empty();
 	var hit = new Hit(percent, damage, growth, base, angle, character, NTSC, xPos, yPos);
 	var positions = hit.positions;
-	console.log(positions);
-	var lineText = "";
+	curPositions = positions;
 	var cla = "tLineS";
+  var temX = ((xPos*10)+centreOffset[0]);
+  var temY = ((-yPos*10)+centreOffset[1]);
+  var lineText = "M"+temX+" "+temY+" ";
+  $(SVG("path")).attr("id","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajectory");
+
 	for (i=0;i<positions.length;i++){
 		var x = positions[i][0];
 		var y = positions[i][1];
@@ -57,9 +63,31 @@ function drawTrajectory(percent,damage,growth,base,angle,character, NTSC, xPos, 
 			$(".framePos").css("fill","#df3c3c");
 		}
 	}
-	var lineText = lineText.replace("L","M");
+	//var lineText = lineText.replace("L","M");
 	//lineText += "Z";
 	$(SVG("path")).attr("id","trajLine").attr("class",cla).attr("d",lineText).prependTo("#trajectory");
+}
+
+function trajPosInfo(){
+  $(".framePos").hover(function(){
+    $(this).attr("r",30);
+    var id = $(this).attr("id");
+    id = parseInt(id.substr(1,(id.length - 1)));
+    $("#trajCanvas").after('<div class="framePosInfoBox">Frame of hitstun: '+id+'<br>Pos X:'+((Math.round(curPositions[id-1][0]*100))/100)+' Y:'+((Math.round(curPositions[id-1][1]*100))/100)+'<br>Vel X:'+((Math.round(curPositions[id-1][2]*100))/100)+' Y:'+((Math.round(curPositions[id-1][3]*100))/100)+'</div>');
+    $(".framePosInfoBox").css({"top":mouseY,"left":mouseX+10});
+  }, function(){
+    $(this).attr("r",15);
+    $(".framePosInfoBox").remove();
+  });
+
+  $("#start").hover(function(){
+    $(this).css("stroke-width",20);
+    $("#trajCanvas").after('<div class="framePosInfoBox">Position Hit<br>X: '+((Math.round(mouseXMeleeF*100))/100)+' Y: '+((Math.round(mouseYMeleeF*100))/100)+'</div>');
+    $(".framePosInfoBox").css({"top":mouseY,"left":mouseX+10});
+  }, function(){
+    $(this).css("stroke-width",0);
+    $(".framePosInfoBox").remove();
+  });
 }
 
 $(document).ready(function(){
@@ -88,6 +116,7 @@ $(document).ready(function(){
       trajFrozen = true;
       mouseXMeleeF = mouseXMelee;
       mouseYMeleeF = mouseYMelee;
+      trajPosInfo();
     }
     else {
       trajFrozen = false;
@@ -95,6 +124,7 @@ $(document).ready(function(){
   });
 
 	drawTrajectory(percent,damage,growth,base,angle,character,NTSC,0,0);
+  trajPosInfo();
 
 	$("#victim-char").hover(function(){
 		$(".hbcharselect").css("opacity",0.7);
@@ -114,6 +144,7 @@ $(document).ready(function(){
 		character = newchar;
     if (trajFrozen){
       drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+      trajPosInfo();
     }
     else {
 		  drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMelee,mouseYMelee);
@@ -137,6 +168,7 @@ $(document).ready(function(){
 			$("#percentNumberEdit").empty().append(newnum);
       if (trajFrozen){
         drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+        trajPosInfo();
       }
       else {
         drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMelee,mouseYMelee);

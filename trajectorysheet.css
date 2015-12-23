@@ -8,6 +8,12 @@
 	fill:none;
 }
 
+#start {
+	fill:#34bffa;
+	stroke:#34bffa;
+	stroke-width:0;
+}
+
 .tLineK {
 	stroke:#f66666;
 }
@@ -125,4 +131,15 @@
 .percentButton p {
 	margin:10px;
 	font-size:30px;
+}
+
+.framePosInfoBox {
+	width:140px;
+	height:45px;
+	border-radius:10px;
+	background-color:#2a2a2a;
+	position:absolute;
+	text-align:center;
+	font-size:10px;
+	padding-top:5px;
 }
