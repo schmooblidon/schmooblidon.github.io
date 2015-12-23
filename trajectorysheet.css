@@ -16,6 +16,18 @@
 	stroke:#50ff7c
 }
 
+#trajCanvas {
+	width:4580px;
+	height:3188px;
+	position:absolute;
+}
+
+#mousePosition {
+	position:absolute;
+	bottom:0px;
+	right:100px;
+}
+
 #display {
 	width:4580px;
 	height:3188px;

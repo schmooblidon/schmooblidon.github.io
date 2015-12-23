@@ -1,6 +1,11 @@
 pointerfrozen = false;
 mouseX = 0;
 mouseY = 0;
+trajFrozen = false;
+mouseXMelee = 0;
+mouseYMelee = 0;
+mouseXMeleeF = 0;
+mouseYMeleeF = 0;
 
 isKilled = false;
 
@@ -31,9 +36,9 @@ function SVG(tag)
 
 
 
-function drawTrajectory(percent,damage,growth,base,angle,character, NTSC){
+function drawTrajectory(percent,damage,growth,base,angle,character, NTSC, xPos, yPos){
 	$("#trajectory").empty();
-	var hit = new Hit(percent, damage, growth, base, angle, character, NTSC);
+	var hit = new Hit(percent, damage, growth, base, angle, character, NTSC, xPos, yPos);
 	var positions = hit.positions;
 	console.log(positions);
 	var lineText = "";
@@ -60,10 +65,37 @@ function drawTrajectory(percent,damage,growth,base,angle,character, NTSC){
 $(document).ready(function(){
 
 	$(document).on('mousemove', function(e){
-		mouseX = e.pageX - 100;
-		mouseY = e.pageY - 120;
+		mouseX = e.pageX - trajOffset.left;
+		mouseY = e.pageY - trajOffset.top;
+    //(disWidth/4580)*100 gives width in pixels of blastzone
+
 	});
-	drawTrajectory(percent,damage,growth,base,angle,character,NTSC);
+  $("#trajectory").mousemove(function(){
+    var widthRatio = disWidth/4580;
+    var heightRatio = disHeight/3188;
+    mouseXMelee = (Math.round(((mouseX/widthRatio)-2290)*10))/100;
+    mouseYMelee = (Math.round(((mouseY/heightRatio)-2050)*-10))/100;
+    $("#mPosX").empty().append(mouseXMelee);
+    $("#mPosY").empty().append(mouseYMelee);
+    if (trajFrozen == false){
+
+      drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMelee,mouseYMelee);
+    }
+  });
+
+  $("#trajectory").click(function(){
+    if (trajFrozen == false){
+      trajFrozen = true;
+      mouseXMeleeF = mouseXMelee;
+      mouseYMeleeF = mouseYMelee;
+    }
+    else {
+      trajFrozen = false;
+    }
+  });
+
+	drawTrajectory(percent,damage,growth,base,angle,character,NTSC,0,0);
+
 	$("#victim-char").hover(function(){
 		$(".hbcharselect").css("opacity",0.7);
 		$("#chardropdown").show();
@@ -80,7 +112,12 @@ $(document).ready(function(){
 		var newchar = $(this).children("p").text();
 		$("#victimcharname").empty().append(newchar);
 		character = newchar;
-		drawTrajectory(percent,damage,growth,base,angle,character,NTSC);
+    if (trajFrozen){
+      drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+    }
+    else {
+		  drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMelee,mouseYMelee);
+    }
 	});
 
 	var percentHold = 0;
@@ -98,10 +135,19 @@ $(document).ready(function(){
 				percent -= 1;
 			}
 			$("#percentNumberEdit").empty().append(newnum);
-			drawTrajectory(percent,damage,growth,base,angle,character,NTSC);
+      if (trajFrozen){
+        drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+      }
+      else {
+        drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMelee,mouseYMelee);
+      }
 		}, 50);
 	}).bind("mouseup mouseleave", function() {
     clearInterval(percentHold);
 	});
+
+  /*setTimeout(function(){
+    trajOffset = $("#trajectory").offset();
+  }, 1000);*/
 
 });

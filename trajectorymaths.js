@@ -1,4 +1,4 @@
-function Hit(percent, damage, growth, base, trajectory, character, NTSC) {
+function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, yPos) {
 
     /******* Internal functions start *******/
 
@@ -45,10 +45,10 @@ function Hit(percent, damage, growth, base, trajectory, character, NTSC) {
     }
 
     //Calculate position for every frame of hitstun
-    function knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun) {
+    function knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos) {
         var positions = [];
-        var hPos = 0;
-        var vPos = 0;
+        var hPos = xPos;
+        var vPos = yPos;
         //Gravity only plays into effect until max fallspeed is reached.
         var gravityFrames = Math.floor(characters[character]["terminalVelocity"] / characters[character]["gravity"]);
         //Since gravity generally doesn't divide into max fallspeed evenly, we have a < gravity frame
@@ -162,7 +162,7 @@ function Hit(percent, damage, growth, base, trajectory, character, NTSC) {
 
     var verticalDecay = getVerticalDecay(angle, gravity);
 
-    this.positions = knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun);
+    this.positions = knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos);
 
     //Position on the last frame of hitstun. Not used yet, but potentially useful.
     var endPosition = this.positions[this.positions.length - 1];
