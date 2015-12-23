@@ -120,6 +120,7 @@ $(document).ready(function(){
     }
     else {
       trajFrozen = false;
+      $(".framePosInfoBox").remove();
     }
   });
 
