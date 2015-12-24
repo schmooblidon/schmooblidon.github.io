@@ -34,6 +34,64 @@
 	right:100px;
 }
 
+#leftcontrols {
+	width:150px;
+	height:700px;
+	background-color:black;
+	display:inline-block;
+	vertical-align:top;
+	overflow-y:scroll;
+}
+
+.character {
+	width:150px;
+	height:50px;
+	display:inline-block;
+	background-color:#000000;
+
+}
+
+.attack {
+	width:150px;
+	height:25px;
+	display:inline-block;
+	background-color:#333333;
+}
+
+.attack p {
+	margin:0px 0px 0px 20px;
+}
+
+.subattack {
+	width:150px;
+	height:25px;
+	display:inline-block;
+	background-color:#454545;
+}
+
+.subattack p {
+	margin:0px 0px 0px 40px;
+}
+
+.id {
+	width:150px;
+	height:25px;
+	display:inline-block;
+	background-color:#575757;
+}
+
+.id p {
+	margin:0px 0px 0px 60px;
+}
+
+.idstats {
+	width:150px;
+	height:75px;
+	display:inline-block;
+	background-color:#000000;
+	font-size:12px;
+}
+
 #display {
 	width:4580px;
 	height:3188px;

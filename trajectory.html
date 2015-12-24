@@ -18,6 +18,7 @@
 
 </script>-->
 <script src="jquery-1.11.3.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="hitboxDB.js"></script>
 <script type="text/javascript" src="trresize.js"></script>
 <script type="text/javascript" src="trajectorymaths.js"></script>
 <script type="text/javascript" src="trajectory.js"></script>
@@ -42,10 +43,38 @@
 </div>
 <div id="pagetitle" style="background-color:#D48B39">
 <h1>Trajectory Simulator</h1>
+
 </div>
 <div id="main">
-
-<div id="display">
+<div id="leftcontrols">
+	<div id="Title"><p>Select Attack</p></div>
+	<div id="Fx" class="character"><p>Fox</p></div>
+	<div id="Fc" class="character"><p>Falco</p></div>
+	<div id="Ms" class="character"><p>Marth</p></div>
+	<div id="Sh" class="character"><p>Sheik</p></div>
+	<div id="Jp" class="character"><p>Puff</p></div>
+	<div id="Pc" class="character"><p>Peach</p></div>
+	<div id="Po" class="character"><p>ICs</p></div>
+	<div id="CF" class="character"><p>Falcon</p></div>
+	<div id="Pk" class="character"><p>Pika</p></div>
+	<div id="Sm" class="character"><p>Samus</p></div>
+	<div id="DM" class="character"><p>Doc</p></div>
+	<div id="Ys" class="character"><p>Yoshi</p></div>
+	<div id="Lg" class="character"><p>Luigi</p></div>
+	<div id="Gn" class="character"><p>Ganon</p></div>
+	<div id="Ma" class="character"><p>Mario</p></div>
+	<div id="YL" class="character"><p>Y.Link</p></div>
+	<div id="DK" class="character"><p>DK</p></div>
+	<div id="Lk" class="character"><p>Link</p></div>
+	<div id="GW" class="character"><p>MrG&W</p></div>
+	<div id="Ry" class="character"><p>Roy</p></div>
+	<div id="Mw" class="character"><p>Mewtwo</p></div>
+	<div id="Zd" class="character"><p>Zelda</p></div>
+	<div id="Ns" class="character"><p>Ness</p></div>
+	<div id="Pi" class="character"><p>Pichu</p></div>
+	<div id="Bw" class="character"><p>Bowser</p></div>
+	<div id="Kb" class="character"><p>Kirby</p></div>
+</div><div id="display">
   <img id="trajBackground" src="assets/trajectory/battlefield.png" style="position:absolute"/>
 	<div id="trajCanvas"><div id="mousePosition"><p>X: <span id="mPosX">0</span> Y: <span id="mPosY">0</span></p></div></div>
   <svg version="1.1" id="trajectory" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="4580px" height="3188px" viewBox="0 0 4580 3188" enable-background="new 0 0 4580 3188" xml:space="preserve" style="position:absolute"></svg>

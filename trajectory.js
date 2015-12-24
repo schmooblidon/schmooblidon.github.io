@@ -18,14 +18,87 @@ curPositions = [];
 
 centreOffset = [bzRight*10+50,bzTop*10+50];
 
+curHitbox = chars.Sh.usmash.hit2.id2;
+
 var percent = 120;
-var damage = 18;
-var growth = 112;
-var base = 30;
-var angle = 80;
 var NTSC = true;
 var character = "Fox";
 
+function attackTable(){
+  var id = "";
+  var id2 = "";
+  var id3 = "";
+  $(".character").click(function(){
+    $(".attack").remove();
+    $(".subattack").remove();
+    $(".id").remove();
+    $(".idstats").remove();
+    id = $(this).attr("id");
+    var keys = Object.keys(chars[id]);
+    for (i=0;i<keys.length;i++){
+      $(this).after('<div id="'+keys[i]+'" class="attack '+id+'"><p>'+keys[i]+'</p></div>');
+    }
+    $(".attack").click(function(){
+      $(".subattack").remove();
+      $(".id").remove();
+      $(".idstats").remove();
+      id2 = $(this).attr("id");
+      var keys2 = Object.keys(chars[id][id2]);
+      if (keys2[0][0] == "i" && keys2[0][1] == "d"){
+        for (j=0;j<keys2.length;j++){
+          $(this).after('<div id="'+keys2[j]+'" class="id '+id2+' '+id+'"><p>'+keys2[j]+'</p></div>');
+        }
+        $(".id").click(function(){
+          $(".idstats").remove();
+          id4 = $(this).attr("id");
+          var hb = chars[id][id2][id4];
+          $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+          curHitbox = hb;
+          if (trajFrozen){
+            drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+            trajPosInfo();
+          }
+          else {
+            drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
+          }
+        });
+      }
+      else {
+        for (k=0;k<keys2.length;k++){
+          $(this).after('<div id="'+keys2[k]+'" class="subattack '+id2+' '+id+'"><p>'+keys2[k]+'</p></div>');
+        }
+        $(".subattack").click(function(){
+          $(".id").remove();
+          $(".idstats").remove();
+          id3 = $(this).attr("id");
+          var keys3 = Object.keys(chars[id][id2][id3]);
+          for (l=0;l<keys3.length;l++){
+            $(this).after('<div id="'+keys3[l]+'" class="id '+id3+' '+id2+' '+id+'"><p>'+keys3[l]+'</p></div>');
+          }
+          $(".id").click(function(){
+            $(".idstats").remove();
+            id4 = $(this).attr("id");
+            var hb = chars[id][id2][id3][id4];
+            $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+            curHitbox = hb;
+            if (trajFrozen){
+              drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+              trajPosInfo();
+            }
+            else {
+              drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
+            }
+
+          });
+        })
+      }
+    })
+
+  });
+
+
+
+}
 
 
 
@@ -38,7 +111,7 @@ function SVG(tag)
 
 
 
-function drawTrajectory(percent,damage,growth,base,angle,character, NTSC, xPos, yPos){
+function drawTrajectory(percent,damage,growth,base,angle, character, NTSC, xPos, yPos){
 	$("#trajectory").empty();
 	var hit = new Hit(percent, damage, growth, base, angle, character, NTSC, xPos, yPos);
 	var positions = hit.positions;
@@ -91,7 +164,7 @@ function trajPosInfo(){
 }
 
 $(document).ready(function(){
-
+  attackTable();
 	$(document).on('mousemove', function(e){
 		mouseX = e.pageX - trajOffset.left;
 		mouseY = e.pageY - trajOffset.top;
@@ -107,7 +180,7 @@ $(document).ready(function(){
     $("#mPosY").empty().append(mouseYMelee);
     if (trajFrozen == false){
 
-      drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMelee,mouseYMelee);
+      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
     }
   });
 
@@ -124,7 +197,7 @@ $(document).ready(function(){
     }
   });
 
-	drawTrajectory(percent,damage,growth,base,angle,character,NTSC,0,0);
+	drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,0,0);
   trajPosInfo();
 
 	$("#victim-char").hover(function(){
@@ -144,11 +217,11 @@ $(document).ready(function(){
 		$("#victimcharname").empty().append(newchar);
 		character = newchar;
     if (trajFrozen){
-      drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
       trajPosInfo();
     }
     else {
-		  drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMelee,mouseYMelee);
+		  drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
     }
 	});
 
@@ -168,11 +241,11 @@ $(document).ready(function(){
 			}
 			$("#percentNumberEdit").empty().append(newnum);
       if (trajFrozen){
-        drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
         trajPosInfo();
       }
       else {
-        drawTrajectory(percent,damage,growth,base,angle,character,NTSC,mouseXMelee,mouseYMelee);
+        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
       }
 		}, 50);
 	}).bind("mouseup mouseleave", function() {

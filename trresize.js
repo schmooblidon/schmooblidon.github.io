@@ -5,10 +5,10 @@ disHeight = 3188;
 
 var resizingtype = function(){
 	//width/length.   width = ratio*height.   height = width/ratio
-	$("#display").width(windwidth-150);
-	$("#trajectory").width(windwidth-150);
-	$("#trajBackground").width(windwidth-150);
-	$("#trajCanvas").width(windwidth-150);
+	$("#display").width(windwidth-300);
+	$("#trajectory").width(windwidth-300);
+	$("#trajBackground").width(windwidth-300);
+	$("#trajCanvas").width(windwidth-300);
 	disWidth = $("#display").width();
 	$("#display").height($("#display").width()/ratio);
 	$("#trajectory").height($("#trajectory").width()/ratio);
