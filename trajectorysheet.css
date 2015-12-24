@@ -51,11 +51,19 @@
 
 }
 
+.characterhighlight {
+	background-color:#383838;
+}
+
 .attack {
 	width:150px;
 	height:25px;
 	display:inline-block;
 	background-color:#333333;
+}
+
+.attackhighlight {
+	background-color:#525252;
 }
 
 .attack p {
@@ -69,6 +77,10 @@
 	background-color:#454545;
 }
 
+.subattackhighlight {
+	background-color:#666666;
+}
+
 .subattack p {
 	margin:0px 0px 0px 40px;
 }
@@ -78,6 +90,15 @@
 	height:25px;
 	display:inline-block;
 	background-color:#575757;
+}
+
+.idhighlight {
+	background-color:#757575;
+}
+
+.idcurrent {
+	background-color:#cfcfcf;
+	color:black;
 }
 
 .id p {

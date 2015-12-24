@@ -28,6 +28,9 @@ function attackTable(){
   var id = "";
   var id2 = "";
   var id3 = "";
+  $(".character").hover(function(){
+    $(this).toggleClass("characterhighlight");
+  });
   $(".character").click(function(){
     $(".attack").remove();
     $(".subattack").remove();
@@ -38,6 +41,9 @@ function attackTable(){
     for (i=0;i<keys.length;i++){
       $(this).after('<div id="'+keys[i]+'" class="attack '+id+'"><p>'+keys[i]+'</p></div>');
     }
+    $(".attack").hover(function(){
+      $(this).toggleClass("attackhighlight");
+    });
     $(".attack").click(function(){
       $(".subattack").remove();
       $(".id").remove();
@@ -48,7 +54,12 @@ function attackTable(){
         for (j=0;j<keys2.length;j++){
           $(this).after('<div id="'+keys2[j]+'" class="id '+id2+' '+id+'"><p>'+keys2[j]+'</p></div>');
         }
+        $(".id").hover(function(){
+          $(this).toggleClass("idhighlight");
+        });
         $(".id").click(function(){
+          $(".id").removeClass("idcurrent");
+          $(this).addClass("idcurrent");
           $(".idstats").remove();
           id4 = $(this).attr("id");
           var hb = chars[id][id2][id4];
@@ -67,6 +78,9 @@ function attackTable(){
         for (k=0;k<keys2.length;k++){
           $(this).after('<div id="'+keys2[k]+'" class="subattack '+id2+' '+id+'"><p>'+keys2[k]+'</p></div>');
         }
+        $(".subattack").hover(function(){
+          $(this).toggleClass("subattackhighlight");
+        });
         $(".subattack").click(function(){
           $(".id").remove();
           $(".idstats").remove();
@@ -75,7 +89,12 @@ function attackTable(){
           for (l=0;l<keys3.length;l++){
             $(this).after('<div id="'+keys3[l]+'" class="id '+id3+' '+id2+' '+id+'"><p>'+keys3[l]+'</p></div>');
           }
+          $(".id").hover(function(){
+            $(this).toggleClass("idhighlight");
+          });
           $(".id").click(function(){
+            $(".id").removeClass("idcurrent");
+            $(this).addClass("idcurrent");
             $(".idstats").remove();
             id4 = $(this).attr("id");
             var hb = chars[id][id2][id3][id4];
