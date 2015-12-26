@@ -14,6 +14,8 @@ bzBottom = -108.8;
 bzLeft = -224;
 bzRight = 224;
 
+staleQueue = [false,false,false,false,false,false,false,false,false];
+
 curPositions = [];
 
 centreOffset = [bzRight*10+50,bzTop*10+50];
@@ -132,6 +134,13 @@ function SVG(tag)
 
 function drawTrajectory(percent,damage,growth,base,angle, character, NTSC, xPos, yPos){
 	$("#trajectory").empty();
+  var totalstale = 1.00;
+  for(i=0;i<staleQueue.length;i++){
+    if(staleQueue[i]){
+      totalstale -= (10-(i+1))/100;
+    }
+  }
+  damage *= totalstale;
 	var hit = new Hit(percent, damage, growth, base, angle, character, NTSC, xPos, yPos);
 	var positions = hit.positions;
 	curPositions = positions;
@@ -252,12 +261,15 @@ $(document).ready(function(){
 			var curNum = parseInt($("#percentNumberEdit").text());
 			if (id == "percentPlus"){
 				var newnum = curNum + 1;
-				percent += 1;
+				percent = newnum;
 			}
 			else {
 				var newnum = curNum - 1;
-				percent -= 1;
-			}
+        if (newnum < 0){
+          newnum = 0;
+        }
+				percent = newnum;
+      }
 			$("#percentNumberEdit").empty().append(newnum);
       if (trajFrozen){
         drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
@@ -270,6 +282,61 @@ $(document).ready(function(){
 	}).bind("mouseup mouseleave", function() {
     clearInterval(percentHold);
 	});
+
+  $(".staleQbutton").hover(function(){
+    $(this).toggleClass("staleQbuttonhighlight");
+  });
+
+  $(".staleQbutton").click(function(){
+    var id = $(this).attr("id");
+    id = parseInt(id[6]);
+    if (staleQueue[id-1]){
+      staleQueue[id-1] = false;
+      $(this).removeClass("staleQon");
+    }
+    else {
+      staleQueue[id-1] = true;
+      $(this).addClass("staleQon");
+    }
+    if (trajFrozen){
+      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+      trajPosInfo();
+    }
+    else {
+      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
+    }
+  });
+
+  /*$(".stalingButton").mousedown(function() {
+    var id = $(this).attr("id");
+    stalingHold = setInterval(function() {
+      var curNum = parseInt($("#stalingnumberedit").text());
+      if (id == "stalingPlus"){
+        var newnum = curNum + 1;
+        if (newnum > 9){
+          newnum = 9;
+        }
+        staling = newnum;
+      }
+      else {
+        var newnum = curNum - 1;
+        if (newnum < 0){
+          newnum = 0;
+        }
+        staling = newnum;
+      }
+      $("#stalingnumberedit").empty().append(newnum);
+      if (trajFrozen){
+        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+        trajPosInfo();
+      }
+      else {
+        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
+      }
+    }, 50);
+  }).bind("mouseup mouseleave", function() {
+    clearInterval(stalingHold);
+  });*/
 
   /*setTimeout(function(){
     trajOffset = $("#trajectory").offset();

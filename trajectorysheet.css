@@ -62,8 +62,104 @@
 	background-color:black;
 	display:inline-block;
 	vertical-align:top;
-	overflow-y:scroll;
+  position:relative;
+}
+#attackscroll {
+  width:150px;
+  height:580px;
+  display:block;
+	/*overflow-y:scroll;*/
 	overflow-x:hidden;
+  vertical-align:top;
+  position:relative;
+}
+
+#stalingselect {
+  width:150px;
+  height:60px;
+  display:inline-block;
+  background-color:#323232;
+}
+
+#stalingtitle {
+  width:150px;
+  height:35px;
+  display:inline-block;
+  text-align:center;
+}
+
+#stalingtitle p {
+  margin:5px 0px;
+  font-size:20px;
+}
+
+#stalingcontrol {
+  width:150px;
+  height:25px;
+  display:inline-block;
+}
+
+.staleQbutton {
+  width:16px;
+  height:25px;
+  display:inline-block;
+  background-color:#1a1a1a;
+  cursor:pointer;
+}
+
+.staleQbutton p {
+  margin:3px 0px;
+  text-align:center;
+}
+
+.staleQbuttonhighlight {
+  background-color:#3e3e3e;
+}
+
+.staleQon {
+  background-color:#fafafa;
+  color:black;
+}
+
+#staleQ1 {
+  margin-left:3px;
+}
+
+#stalingnumber {
+  width:100px;
+  height:70px;
+  display:inline-block;
+  vertical-align:top;
+  text-align:center;
+  font-size:40px;
+}
+
+#stalingnumber p {
+  margin:10px 0px;
+}
+
+#stalingbuttons {
+  width:50px;
+  height:70px;
+  display:inline-block;
+  vertical-align:top;
+  cursor:pointer;
+}
+
+#stalingPlus {
+  width:50px;
+  height:35px;
+  display:inline-block;
+  text-align:center;
+  font-size:26px;
+}
+
+#stalingMinus {
+  width:50px;
+  height:35px;
+  display:inline-block;
+  text-align:center;
+  font-size:26px;
 }
 
 #attackselecttitle {
@@ -86,6 +182,7 @@
 	height:50px;
 	display:inline-block;
 	background-color:#000000;
+  cursor:pointer;
 }
 
 .character p {
@@ -103,6 +200,7 @@
 	height:25px;
 	display:inline-block;
 	background-color:#333333;
+  cursor:pointer;
 }
 
 .attackhighlight {
@@ -118,6 +216,7 @@
 	height:25px;
 	display:inline-block;
 	background-color:#454545;
+  cursor:pointer;
 }
 
 .subattackhighlight {
@@ -133,6 +232,7 @@
 	height:25px;
 	display:inline-block;
 	background-color:#575757;
+  cursor:pointer;
 }
 
 .idhighlight {
@@ -165,6 +265,7 @@
 	height:3188px;
 	display:inline-block;
 	vertical-align:top;
+  cursor:crosshair;
 }
 
 #rightcontrols {

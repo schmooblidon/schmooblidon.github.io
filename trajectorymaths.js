@@ -1,11 +1,15 @@
-function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, yPos) {
+function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, yPos, crouch) {
 
     /******* Internal functions start *******/
 
     //Calculates base knockback from hit
     //Formula taken from http://www.ssbwiki.com/Knockback#Formula
-    function getKnockback(percent, damage, weight, growth, base) {
+    function getKnockback(percent, damage, weight, growth, base, crouch) {
         var percent = percent + damage;
+        var kb = ((((((percent / 10) + ((percent * damage) / 20)) * (200 / (weight + 100)) * 1.4) + 18) * (growth / 100)) + base);
+        if (crouch) {
+          kb *= 0.667;
+        }
         return ((((((percent / 10) + ((percent * damage) / 20)) * (200 / (weight + 100)) * 1.4) + 18) * (growth / 100)) + base);
     }
 
