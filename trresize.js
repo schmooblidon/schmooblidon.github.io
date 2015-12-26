@@ -5,6 +5,7 @@ disHeight = 3188;
 
 var resizingtype = function(){
 	//width/length.   width = ratio*height.   height = width/ratio
+
 	$("#display").width(windwidth-300);
 	$("#trajectory").width(windwidth-300);
 	$("#trajBackground").width(windwidth-300);
@@ -16,4 +17,6 @@ var resizingtype = function(){
 	$("#trajCanvas").height($("#trajCanvas").width()/ratio);
 	disHeight = $("#display").height();
 	trajOffset = $("#trajectory").offset();
+	$("#leftcontrols").height(disHeight);
+	$("#rightcontrols").height(disHeight);
 }

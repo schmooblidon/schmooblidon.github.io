@@ -1,3 +1,25 @@
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(255,255,255,0.2);
+}
+
 .framePos {
 	fill:#25d041;
 }
@@ -41,6 +63,22 @@
 	display:inline-block;
 	vertical-align:top;
 	overflow-y:scroll;
+	overflow-x:hidden;
+}
+
+#attackselecttitle {
+	width:150px;
+	height:30px;
+
+	background-color:#323232;
+	margin:0;
+	padding-top:10px;
+}
+
+#attackselecttitle p {
+	font-size:16px;
+	margin:0px 20px 10px 10px;
+	text-align:center;
 }
 
 .character {
@@ -48,7 +86,12 @@
 	height:50px;
 	display:inline-block;
 	background-color:#000000;
+}
 
+.character p {
+	font-size:20px;
+	margin:10px 20px 10px 10px;
+	text-align:center;
 }
 
 .characterhighlight {
@@ -67,7 +110,7 @@
 }
 
 .attack p {
-	margin:0px 0px 0px 20px;
+	margin:4px 0px 0px 10px;
 }
 
 .subattack {
@@ -82,7 +125,7 @@
 }
 
 .subattack p {
-	margin:0px 0px 0px 40px;
+	margin:4px 0px 0px 20px;
 }
 
 .id {
@@ -102,15 +145,19 @@
 }
 
 .id p {
-	margin:0px 0px 0px 60px;
+	margin:4px 0px 0px 30px;
 }
 
 .idstats {
 	width:150px;
-	height:75px;
+	height:95px;
 	display:inline-block;
 	background-color:#000000;
 	font-size:12px;
+}
+
+.idstats p {
+	margin:5px;
 }
 
 #display {

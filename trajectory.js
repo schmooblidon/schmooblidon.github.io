@@ -18,7 +18,7 @@ curPositions = [];
 
 centreOffset = [bzRight*10+50,bzTop*10+50];
 
-curHitbox = chars.Sh.usmash.hit2.id2;
+curHitbox = chars.Fx.NS.id0;
 
 var percent = 120;
 var NTSC = true;
