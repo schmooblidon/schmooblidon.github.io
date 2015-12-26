@@ -266,6 +266,7 @@
 	display:inline-block;
 	vertical-align:top;
   cursor:crosshair;
+  background-color:rgba(0, 0, 0, 0.76);
 }
 
 #rightcontrols {
@@ -299,6 +300,7 @@
 	height:50px;
 	text-align:center;
 	position:relative;
+  vertical-align:top;
 }
 
 #victimcharname {
