@@ -1,4 +1,4 @@
-function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, yPos, crouch) {
+function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, yPos, crouch, reverse) {
 
     /******* Internal functions start *******/
 
@@ -15,20 +15,44 @@ function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, y
 
     //Calculates Sakurai angle for grounded opponents. Once support for different starting points exists, will need a check for in air / on ground
     //Function by Yeroc
-    function getAngle(trajectory, knockback) {
+    function getAngle(trajectory, knockback, reverse) {
         if (trajectory == 361) {
             if (knockback < 32) {
+              if (reverse){
+                return 180;
+              }
+              else {
                 return 0;
+              }
             }
             else if (knockback > 32.1) {
+              if (reverse){
+                return 136;
+              }
+              else {
                 return 44;
+              }
             }
             else {
-                return 440*(knockback-32);
+              var temang = 440*(knockback-32);
+              if (reverse){
+                temang = 180 - temang;
+                  if (temang < 0){
+                    temang = 360 + temang;
+                  }
+              }
+              return temang;
             }
         }
         else {
-            return trajectory;
+          var temang = trajectory;
+          if (reverse){
+            temang = 180 - temang;
+              if (temang < 0){
+                temang = 360 + temang;
+              }
+          }
+          return temang;
         }
     }
 
@@ -156,7 +180,7 @@ function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, y
 
     var hitstun = getHitstun(knockback);
 
-    var angle = getAngle(trajectory, knockback);
+    var angle = getAngle(trajectory, knockback, reverse);
 
     var horizontalVelocity = getHorizontalVelocity(knockback, angle, gravity);
 

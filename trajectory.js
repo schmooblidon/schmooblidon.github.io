@@ -14,6 +14,10 @@ bzBottom = -108.8;
 bzLeft = -224;
 bzRight = 224;
 
+crouch = false;
+
+reverse = false;
+
 staleQueue = [false,false,false,false,false,false,false,false,false];
 
 curPositions = [];
@@ -68,11 +72,11 @@ function attackTable(){
           $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
           curHitbox = hb;
           if (trajFrozen){
-            drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+            drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF,crouch,reverse);
             trajPosInfo();
           }
           else {
-            drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
+            drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
           }
         });
       }
@@ -103,11 +107,11 @@ function attackTable(){
             $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
             curHitbox = hb;
             if (trajFrozen){
-              drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+              drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF,crouch,reverse);
               trajPosInfo();
             }
             else {
-              drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
+              drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
             }
 
           });
@@ -132,7 +136,7 @@ function SVG(tag)
 
 
 
-function drawTrajectory(percent,damage,growth,base,angle, character, NTSC, xPos, yPos){
+function drawTrajectory(percent,damage,growth,base,angle, character, NTSC, xPos, yPos, crouch, reverse){
 	$("#trajectory").empty();
   var totalstale = 1.00;
   for(i=0;i<staleQueue.length;i++){
@@ -141,7 +145,8 @@ function drawTrajectory(percent,damage,growth,base,angle, character, NTSC, xPos,
     }
   }
   damage *= totalstale;
-	var hit = new Hit(percent, damage, growth, base, angle, character, NTSC, xPos, yPos);
+
+	var hit = new Hit(percent, damage, growth, base, angle, character, NTSC, xPos, yPos, crouch, reverse);
 	var positions = hit.positions;
 	curPositions = positions;
 	var cla = "tLineS";
@@ -208,7 +213,7 @@ $(document).ready(function(){
     $("#mPosY").empty().append(mouseYMelee);
     if (trajFrozen == false){
 
-      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
+      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
     }
   });
 
@@ -225,7 +230,7 @@ $(document).ready(function(){
     }
   });
 
-	drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,0,0);
+	drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,0,0,crouch,reverse);
   trajPosInfo();
 
 	$("#victim-char").hover(function(){
@@ -245,11 +250,11 @@ $(document).ready(function(){
 		$("#victimcharname").empty().append(newchar);
 		character = newchar;
     if (trajFrozen){
-      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF,crouch,reverse);
       trajPosInfo();
     }
     else {
-		  drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
+		  drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
     }
 	});
 
@@ -272,11 +277,11 @@ $(document).ready(function(){
       }
 			$("#percentNumberEdit").empty().append(newnum);
       if (trajFrozen){
-        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF,crouch,reverse);
         trajPosInfo();
       }
       else {
-        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
+        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
       }
 		}, 50);
 	}).bind("mouseup mouseleave", function() {
@@ -298,14 +303,32 @@ $(document).ready(function(){
       staleQueue[id-1] = true;
       $(this).addClass("staleQon");
     }
+
+  });
+
+  $(".posButton").hover(function(){
+    $(this).toggleClass("posButtonHighlight");
+  });
+
+  $(".posButton").click(function(){
+    var id = $(this).attr("id");
+    $(".posButton").removeClass("posButtonSelected");
+    $(this).addClass("posButtonSelected");
+    if (id[9] == "L"){
+      reverse = true;
+    }
+    else {
+      reverse = false;
+    }
+
     if (trajFrozen){
-      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
+      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF,crouch,reverse);
       trajPosInfo();
     }
     else {
-      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
+      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
     }
-  });
+  })
 
   /*$(".stalingButton").mousedown(function() {
     var id = $(this).attr("id");

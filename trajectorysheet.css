@@ -266,7 +266,7 @@
 	display:inline-block;
 	vertical-align:top;
   cursor:crosshair;
-  background-color:rgba(0, 0, 0, 0.76);
+  background-color:rgba(0, 0, 0, 0.75);
 }
 
 #rightcontrols {
@@ -278,21 +278,41 @@
 
 }
 .posButton {
-	width:120px;
+	width:75px;
 	height:50px;
-	margin:15px;
+	display:inline-block;
+  background-image:url(assets/trajectory/rightarrow.png);
 }
 
-#posButton1 {
-	background-image:url(assets/trajectory/pos1.png);
+#posButtonLeft {
+
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  filter: FlipH;
+  -ms-filter: "FlipH";
 }
 
-#posButton2 {
-	background-image:url(assets/trajectory/pos2.png);
+
+
+.posButtonHighlight {
+  background-color:#333333;
 }
 
 .posButtonSelected {
 	background-color:white;
+  background-image:url(assets/trajectory/rightarrowon.png);
+}
+
+#posButtonTitle {
+  width:150px;
+  height:25px;
+  text-align:center;
+}
+
+#posButtonTitle p {
+  margin:6px 0px;
 }
 
 #victim-char {
