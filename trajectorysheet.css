@@ -24,6 +24,10 @@
 	fill:#25d041;
 }
 
+.framePos-t {
+  fill:transparent;
+}
+
 #trajLine {
 
 	stroke-width:10px;
@@ -34,6 +38,10 @@
 	fill:#34bffa;
 	stroke:#34bffa;
 	stroke-width:0;
+}
+
+#start-t {
+  fill:transparent;
 }
 
 .tLineK {

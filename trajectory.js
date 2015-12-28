@@ -133,6 +133,7 @@ function SVG(tag)
 function drawTrajectory(onlyDrawWhenUnfrozen){
   onlyDrawWhenUnfrozen = onlyDrawWhenUnfrozen || false;
 	$("#trajectory").empty();
+  $("#trajectory-t").empty();
   var totalstale = 1.00;
   var damage = curHitbox.dmg;
   for(i=0;i<staleQueue.length;i++){
@@ -163,6 +164,8 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   var lineText = "M"+temX+" "+temY+" ";
   $(SVG("path")).attr("id","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajectory");
 
+  $(SVG("path")).attr("id","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajectory-t");
+
 	for (i=0;i<positions.length;i++){
 		var x = positions[i][0];
 		var y = positions[i][1];
@@ -170,6 +173,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
 			var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
 			lineText += tempText;
 			$(SVG("circle")).attr("id","f"+(i+1)).attr("class","framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajectory");
+      $(SVG("circle")).attr("id","f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajectory-t");
 		}
 		else {
 			cla = "tLineK";
@@ -186,23 +190,25 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
 }
 
 function trajPosInfo(){
-  $(".framePos").hover(function(){
-    $(this).attr("r",30);
+  $(".framePos-t").hover(function(){
     var id = $(this).attr("id");
-    id = parseInt(id.substr(1,(id.length - 1)));
+    id = parseInt(id.substr(1,(id.length - 3)));
+    $("#f"+id).attr("r",30);
     $("#trajCanvas").after('<div class="framePosInfoBox">Frame of hitstun: '+id+'<br>Pos X:'+((Math.round(curPositions[id-1][0]*100))/100)+' Y:'+((Math.round(curPositions[id-1][1]*100))/100)+'<br>Vel X:'+((Math.round(curPositions[id-1][2]*100))/100)+' Y:'+((Math.round(curPositions[id-1][3]*100))/100)+'</div>');
-    $(".framePosInfoBox").css({"top":mouseY,"left":mouseX+10});
+    $(".framePosInfoBox").css({"top":mouseY+5,"left":(mouseX+160)});
   }, function(){
-    $(this).attr("r",15);
+    var id = $(this).attr("id");
+    id = parseInt(id.substr(1,(id.length - 3)));
+    $("#f"+id).attr("r",15);
     $(".framePosInfoBox").remove();
   });
 
-  $("#start").hover(function(){
-    $(this).css("stroke-width",20);
+  $("#start-t").hover(function(){
+    $("#start").css("stroke-width",20);
     $("#trajCanvas").after('<div class="framePosInfoBox">Position Hit<br>X: '+((Math.round(mouseXMeleeF*100))/100)+' Y: '+((Math.round(mouseYMeleeF*100))/100)+'</div>');
-    $(".framePosInfoBox").css({"top":mouseY,"left":mouseX+10});
+    $(".framePosInfoBox").css({"top":mouseY+5,"left":mouseX+160});
   }, function(){
-    $(this).css("stroke-width",0);
+    $("#start").css("stroke-width",0);
     $(".framePosInfoBox").remove();
   });
 }
@@ -215,7 +221,7 @@ $(document).ready(function(){
     //(disWidth/4580)*100 gives width in pixels of blastzone
 
 	});
-  $("#trajectory").mousemove(function(){
+  $("#trajectory-t").mousemove(function(){
     var widthRatio = disWidth/4580;
     var heightRatio = disHeight/3188;
     mouseXMelee = (Math.round(((mouseX/widthRatio)-2290)*10))/100;
@@ -249,7 +255,7 @@ $(document).ready(function(){
     }
   });
 
-  $("#trajectory").click(function(){
+  $("#trajectory-t").click(function(){
     if (trajFrozen == false){
       trajFrozen = true;
       mouseXMeleeF = mouseXMelee;
