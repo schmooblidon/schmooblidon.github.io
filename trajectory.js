@@ -18,6 +18,12 @@ crouch = false;
 
 reverse = false;
 
+//each surface is put into an element in the array. The surface is broken down into arrays of far left point X and y, and far right point X and Y. Use .length to find the number of surfaces to check
+
+surfaces = [[[-68.4,0],[68.4,0]],[[-57.6,27.2],[-20.0,27.2]],[[20,27.2],[57.6,27.2]],[[-18.8,54.4],[18.8,54.4]]];
+
+snapping = true;
+
 staleQueue = [false,false,false,false,false,false,false,false,false];
 
 curPositions = [];
@@ -217,7 +223,28 @@ $(document).ready(function(){
     $("#mPosX").empty().append(mouseXMelee);
     $("#mPosY").empty().append(mouseYMelee);
     if (trajFrozen == false){
+      if (snapping){
+        //will have to do some more maths for slanted surfaces like yoshis
+        for (i=0;i<surfaces.length;i++){
+          //if X position is in line with surface or within 10Mm on either side
+          if (mouseXMelee >= surfaces[i][0][0] - 10 && mouseXMelee <= surfaces[i][1][0] + 10){
 
+            //if Y is within 10Mm of surface on either side
+            if (mouseYMelee <= surfaces[i][0][1] + 10 && mouseYMelee >= surfaces[i][0][1] - 10){
+              //if X is just outside of the plat X plane, snap to the edge (left)
+              if (mouseXMelee >= surfaces[i][0][0] - 10 && mouseXMelee < surfaces[i][0][0]){
+                mouseXMelee = surfaces[i][0][0];
+              }
+              //(right)
+              if (mouseXMelee <= surfaces[i][1][0] + 10 && mouseXMelee > surfaces[i][1][0]){
+                mouseXMelee = surfaces[i][1][0];
+
+              }
+              mouseYMelee = surfaces[i][0][1];
+            }
+          }
+        }
+      }
       drawTrajectory(true);
     }
   });
@@ -316,6 +343,17 @@ $(document).ready(function(){
 
     drawTrajectory();
   });
+
+  $("#stsRealButton").click(function(){
+    if (snapping){
+      $("#stsSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("Off");
+      snapping = false;
+    }
+    else {
+      $("#stsSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
+      snapping = true;
+    }
+  })
 
   /*$(".stalingButton").mousedown(function() {
     var id = $(this).attr("id");

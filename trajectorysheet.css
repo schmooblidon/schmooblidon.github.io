@@ -362,12 +362,18 @@
 	height:80px;
 	display:inline-block;
 	font-size:40px;
+  vertical-align:top;
+}
+
+#percentNumber p {
+  margin:15px;
 }
 
 #percentButtonContainer {
 	display:inline-block;
 	width:40px;
 	height:80px;
+  vertical-align:top;
 }
 
 .percentButton {
@@ -378,8 +384,56 @@
 }
 
 .percentButton p {
-	margin:10px;
+	margin:0px 10px;
 	font-size:30px;
+}
+
+#snapToSurfaceContainer {
+  width:150px;
+  height:60px;
+  display:inline-block;
+  position:relative;
+  text-align:center;
+}
+
+#stsRealButton {
+  width:150px;
+  height:60px;
+  position:absolute;
+  cursor:pointer;
+}
+
+#stsVisual {
+  width:150px;
+  height:60px;
+  position:absolute;
+}
+
+#stsText {
+  width:90px;
+  height:60px;
+  background-color:#737373;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#stsSwitch {
+  width:60px;
+  height:60px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#stsSwitch p {
+  margin:20px;
+}
+
+.switchOn {
+  background-color:#33dd3f;
+}
+
+.switchOff {
+  background-color:#ff5555;
 }
 
 .framePosInfoBox {
