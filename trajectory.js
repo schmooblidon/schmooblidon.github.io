@@ -71,13 +71,7 @@ function attackTable(){
           var hb = chars[id][id2][id4];
           $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
           curHitbox = hb;
-          if (trajFrozen){
-            drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF,crouch,reverse);
-            trajPosInfo();
-          }
-          else {
-            drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
-          }
+          drawTrajectory();
         });
       }
       else {
@@ -106,13 +100,7 @@ function attackTable(){
             var hb = chars[id][id2][id3][id4];
             $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
             curHitbox = hb;
-            if (trajFrozen){
-              drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF,crouch,reverse);
-              trajPosInfo();
-            }
-            else {
-              drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
-            }
+            drawTrajectory();
 
           });
         })
@@ -136,17 +124,31 @@ function SVG(tag)
 
 
 
-function drawTrajectory(percent,damage,growth,base,angle, character, NTSC, xPos, yPos, crouch, reverse){
+function drawTrajectory(onlyDrawWhenUnfrozen){
+  onlyDrawWhenUnfrozen = onlyDrawWhenUnfrozen || false;
 	$("#trajectory").empty();
   var totalstale = 1.00;
+  var damage = curHitbox.dmg;
   for(i=0;i<staleQueue.length;i++){
     if(staleQueue[i]){
       totalstale -= (10-(i+1))/100;
     }
   }
   damage *= totalstale;
+  var xPos = 0;
+  var yPos = 0;
+  if (trajFrozen){
+    if (!onlyDrawWhenUnfrozen){
+      xPos = mouseXMeleeF;
+      yPos = mouseYMeleeF;
+    }
+  }
+  else {
+    xPos = mouseXMelee;
+    yPos = mouseYMelee;
+  }
 
-	var hit = new Hit(percent, damage, growth, base, angle, character, NTSC, xPos, yPos, crouch, reverse);
+	var hit = new Hit(percent,damage,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,xPos,yPos,crouch,reverse);
 	var positions = hit.positions;
 	curPositions = positions;
 	var cla = "tLineS";
@@ -172,6 +174,9 @@ function drawTrajectory(percent,damage,growth,base,angle, character, NTSC, xPos,
 	//var lineText = lineText.replace("L","M");
 	//lineText += "Z";
 	$(SVG("path")).attr("id","trajLine").attr("class",cla).attr("d",lineText).prependTo("#trajectory");
+  if (!onlyDrawWhenUnfrozen){
+    trajPosInfo();
+  }
 }
 
 function trajPosInfo(){
@@ -213,7 +218,7 @@ $(document).ready(function(){
     $("#mPosY").empty().append(mouseYMelee);
     if (trajFrozen == false){
 
-      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
+      drawTrajectory(true);
     }
   });
 
@@ -230,8 +235,7 @@ $(document).ready(function(){
     }
   });
 
-	drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,0,0,crouch,reverse);
-  trajPosInfo();
+	drawTrajectory();
 
 	$("#victim-char").hover(function(){
 		$(".hbcharselect").css("opacity",0.7);
@@ -249,13 +253,7 @@ $(document).ready(function(){
 		var newchar = $(this).children("p").text();
 		$("#victimcharname").empty().append(newchar);
 		character = newchar;
-    if (trajFrozen){
-      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF,crouch,reverse);
-      trajPosInfo();
-    }
-    else {
-		  drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
-    }
+    drawTrajectory();
 	});
 
 	var percentHold = 0;
@@ -276,13 +274,7 @@ $(document).ready(function(){
 				percent = newnum;
       }
 			$("#percentNumberEdit").empty().append(newnum);
-      if (trajFrozen){
-        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF,crouch,reverse);
-        trajPosInfo();
-      }
-      else {
-        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
-      }
+      drawTrajectory();
 		}, 50);
 	}).bind("mouseup mouseleave", function() {
     clearInterval(percentHold);
@@ -303,6 +295,7 @@ $(document).ready(function(){
       staleQueue[id-1] = true;
       $(this).addClass("staleQon");
     }
+    drawTrajectory();
 
   });
 
@@ -321,14 +314,8 @@ $(document).ready(function(){
       reverse = false;
     }
 
-    if (trajFrozen){
-      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF,crouch,reverse);
-      trajPosInfo();
-    }
-    else {
-      drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee,crouch,reverse);
-    }
-  })
+    drawTrajectory();
+  });
 
   /*$(".stalingButton").mousedown(function() {
     var id = $(this).attr("id");
