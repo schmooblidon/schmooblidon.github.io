@@ -18,6 +18,9 @@ crouch = false;
 
 reverse = false;
 
+charging = false;
+chargeF = 0;
+
 //each surface is put into an element in the array. The surface is broken down into arrays of far left point X and y, and far right point X and Y. Use .length to find the number of surfaces to check
 
 surfaces = [[[-68.4,0],[68.4,0]],[[-57.6,27.2],[-20.0,27.2]],[[20,27.2],[57.6,27.2]],[[-18.8,54.4],[18.8,54.4]]];
@@ -78,6 +81,14 @@ function attackTable(){
           $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
           curHitbox = hb;
           drawTrajectory();
+          if (id2.substr(1,id2.length) == "smash"){
+            charging = true;
+            $("#disableCharge").hide();
+          }
+          else {
+            charging = false;
+            $("#disableCharge").show();
+          }
         });
       }
       else {
@@ -107,6 +118,14 @@ function attackTable(){
             $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
             curHitbox = hb;
             drawTrajectory();
+            if (id2.substr(1,id2.length) == "smash"){
+              charging = true;
+              $("#disableCharge").hide();
+            }
+            else {
+              charging = false;
+              $("#disableCharge").show();
+            }
 
           });
         })
@@ -142,6 +161,9 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     }
   }
   damage *= totalstale;
+  if (charging){
+    damage *= 1 + (chargeF * (0.4/59));
+  }
   var xPos = 0;
   var yPos = 0;
   if (trajFrozen){
@@ -312,6 +334,33 @@ $(document).ready(function(){
 	}).bind("mouseup mouseleave", function() {
     clearInterval(percentHold);
 	});
+
+  var chargingHold = 0;
+
+  $(".chargingButton").mousedown(function() {
+    var id = $(this).attr("id");
+    chargingHold = setInterval(function() {
+      var curNum = parseInt($("#chargingNumberEdit").text());
+      if (id == "chargingPlus"){
+        var newnum = curNum + 1;
+        if (newnum > 59){
+          newnum = 59;
+        }
+        chargeF = newnum;
+      }
+      else {
+        var newnum = curNum - 1;
+        if (newnum < 0){
+          newnum = 0;
+        }
+        chargeF = newnum;
+      }
+      $("#chargingNumberEdit").empty().append(newnum);
+      drawTrajectory();
+    }, 50);
+  }).bind("mouseup mouseleave", function() {
+    clearInterval(chargingHold);
+  });
 
   $(".staleQbutton").hover(function(){
     $(this).toggleClass("staleQbuttonhighlight");
