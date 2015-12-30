@@ -20,6 +20,34 @@
 	background: rgba(255,255,255,0.2);
 }
 
+h1 {
+  display:inline-block;
+}
+
+.verButton {
+  width:70px;
+  height:30px;
+  background-color:#ffffff;
+  cursor:pointer;
+  display:inline-block;
+  color:#D48B39;
+  opacity:0.4;
+  border-radius:5px;
+  text-align:center;
+  float:right;
+  margin-top:2px;
+  margin-right:30px;
+}
+
+.verButton p {
+  margin:4px 0;
+  font-size:23px;
+}
+
+.verButtonOn {
+  opacity:1;
+}
+
 .framePos {
 	fill:#25d041;
 }
@@ -352,6 +380,7 @@
 	height:50px;
 	display:inline-block;
   background-image:url(assets/trajectory/rightarrow.png);
+  opacity:0.3;
 }
 
 #posButtonLeft {
@@ -368,11 +397,12 @@
 
 .posButtonHighlight {
   background-color:#333333;
+  opacity:0.7;
 }
 
 .posButtonSelected {
-	background-color:white;
-  background-image:url(assets/trajectory/rightarrowon.png);
+	opacity:1;
+  background-image:url(assets/trajectory/rightarrow.png);
 }
 
 #posButtonTitle {

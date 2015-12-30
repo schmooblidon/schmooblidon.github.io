@@ -38,7 +38,7 @@ centreOffset = [bzRight*10+50,bzTop*10+50];
 curHitbox = chars.Fx.NS.id0;
 
 var percent = 120;
-var NTSC = true;
+version = "NTSC";
 var character = "Fox";
 
 function attackTable(){
@@ -179,7 +179,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     yPos = mouseYMelee;
   }
 
-	var hit = new Hit(percent,damage,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,xPos,yPos,crouch,reverse,chargeInterrupt);
+	var hit = new Hit(percent,damage,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,version,xPos,yPos,crouch,reverse,chargeInterrupt);
 	var positions = hit.positions;
 	curPositions = positions;
 	var cla = "tLineS";
@@ -436,6 +436,19 @@ $(document).ready(function(){
       $("#cSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       crouch = true;
     }
+    drawTrajectory();
+  });
+
+  $(".verButton").click(function(){
+    $(".verButton").removeClass("verButtonOn");
+    var id = $(this).attr("id").substr(0,3);
+    if (id == "PAL"){
+      version = "PAL";
+    }
+    else {
+      version = "NTSC";
+    }
+    $(this).addClass("verButtonOn");
     drawTrajectory();
   });
 

@@ -1,4 +1,4 @@
-function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, yPos, crouch, reverse, chargeInterrupt) {
+function Hit(percent, damage, growth, base, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt) {
 
     /******* Internal functions start *******/
 
@@ -174,7 +174,7 @@ function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, y
 
     var weight;
 
-    if (NTSC == true) {
+    if (version == "NTSC") {
         weight = characters[character]["NTSCweight"];
     }
 
