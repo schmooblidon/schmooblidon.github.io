@@ -80,24 +80,29 @@ function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, y
         var positions = [];
         var hPos = xPos;
         var vPos = yPos;
+        var horVelChar = 0;
+        var verVelChar = 0;
+        var horVelKB = horizontalVelocity;
+        var verVelKB = verticalVelocity;
         //Gravity only plays into effect until max fallspeed is reached.
         var gravityFrames = Math.floor(characters[character]["terminalVelocity"] / characters[character]["gravity"]);
         //Since gravity generally doesn't divide into max fallspeed evenly, we have a < gravity frame
         var lastGravityFrame = characters[character]["terminalVelocity"] % characters[character]["gravity"];
 
         for (var i=0; i<hitstun; i++) {
-            horizontalVelocity = horizontalVelocity - horizontalDecay;
-            verticalVelocity = verticalVelocity - verticalDecay;
+            horVelKB -= horizontalDecay;
+            verVelKB -= verticalDecay;
+
             if (i < gravityFrames) {
-                verticalVelocity = verticalVelocity - characters[character]["gravity"];
+                verVelChar -= characters[character]["gravity"];
             }
             else if (i === gravityFrames) {
-                verticalVelocity = verticalVelocity - (lastGravityFrame * characters[character]["gravity"]);
+                verVelChar -= (lastGravityFrame * characters[character]["gravity"]);
             }
 
-            hPos = hPos + horizontalVelocity;
-            vPos = vPos + verticalVelocity;
-            positions.push([hPos, vPos, horizontalVelocity, verticalVelocity]);
+            hPos = hPos + horVelChar + horVelKB;
+            vPos = vPos + verVelChar + verVelKB;
+            positions.push([hPos, vPos, horVelKB, verVelKB, horVelChar, verVelChar]);
         }
 
         return positions;

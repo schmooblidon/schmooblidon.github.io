@@ -200,9 +200,12 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
       $(SVG("circle")).attr("id","f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajectory-t");
 		}
 		else {
-			cla = "tLineK";
-			isKilled = true;
-			$(".framePos").css("fill","#df3c3c");
+      //checks if vertical knockback velocity is greater or equal to 2.4 when above the top blastzone
+      if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && positions[i][3] >= 2.4)){
+        cla = "tLineK";
+        isKilled = true;
+        $(".framePos").css("fill","#df3c3c");
+      }
 		}
 	}
 	//var lineText = lineText.replace("L","M");
@@ -218,7 +221,7 @@ function trajPosInfo(){
     var id = $(this).attr("id");
     id = parseInt(id.substr(1,(id.length - 3)));
     $("#f"+id).attr("r",30);
-    $("#trajCanvas").after('<div class="framePosInfoBox">Frame of hitstun: '+id+'<br>Pos X:'+((Math.round(curPositions[id-1][0]*100))/100)+' Y:'+((Math.round(curPositions[id-1][1]*100))/100)+'<br>Vel X:'+((Math.round(curPositions[id-1][2]*100))/100)+' Y:'+((Math.round(curPositions[id-1][3]*100))/100)+'</div>');
+    $("#trajCanvas").after('<div class="framePosInfoBox">Frame of hitstun: '+id+'<br>Pos X:'+((Math.round(curPositions[id-1][0]*100))/100)+' Y:'+((Math.round(curPositions[id-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(curPositions[id-1][2]*100))/100)+' Y:'+((Math.round(curPositions[id-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(curPositions[id-1][4]*100))/100)+' Y:'+((Math.round(curPositions[id-1][5]*100))/100)+'</div>');
     $(".framePosInfoBox").css({"top":mouseY+5,"left":(mouseX+160)});
   }, function(){
     var id = $(this).attr("id");
