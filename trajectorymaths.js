@@ -1,16 +1,19 @@
-function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, yPos, crouch, reverse) {
+function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, yPos, crouch, reverse, chargeInterrupt) {
 
     /******* Internal functions start *******/
 
     //Calculates base knockback from hit
     //Formula taken from http://www.ssbwiki.com/Knockback#Formula
-    function getKnockback(percent, damage, weight, growth, base, crouch) {
+    function getKnockback(percent, damage, weight, growth, base, crouch, chargeInterrupt) {
         var percent = percent + damage;
         var kb = ((((((percent / 10) + ((percent * damage) / 20)) * (200 / (weight + 100)) * 1.4) + 18) * (growth / 100)) + base);
         if (crouch) {
           kb *= 0.667;
         }
-        return ((((((percent / 10) + ((percent * damage) / 20)) * (200 / (weight + 100)) * 1.4) + 18) * (growth / 100)) + base);
+        if (chargeInterrupt){
+          kb *= 1.2;
+        }
+        return kb;
     }
 
     //Calculates Sakurai angle for grounded opponents. Once support for different starting points exists, will need a check for in air / on ground
@@ -176,7 +179,7 @@ function Hit(percent, damage, growth, base, trajectory, character, NTSC, xPos, y
 
     var gravity = characters[character]["gravity"];
 
-    var knockback = getKnockback(percent, damage, weight, growth, base);
+    var knockback = getKnockback(percent, damage, weight, growth, base, crouch, chargeInterrupt);
 
     var hitstun = getHitstun(knockback);
 

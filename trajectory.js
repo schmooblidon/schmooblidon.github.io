@@ -18,6 +18,8 @@ crouch = false;
 
 reverse = false;
 
+chargeInterrupt = false;
+
 charging = false;
 chargeF = 0;
 
@@ -177,7 +179,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     yPos = mouseYMelee;
   }
 
-	var hit = new Hit(percent,damage,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,xPos,yPos,crouch,reverse);
+	var hit = new Hit(percent,damage,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,xPos,yPos,crouch,reverse,chargeInterrupt);
 	var positions = hit.positions;
 	curPositions = positions;
 	var cla = "tLineS";
@@ -408,7 +410,31 @@ $(document).ready(function(){
       $("#stsSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
       snapping = true;
     }
-  })
+  });
+
+  $("#hwcRealButton").click(function(){
+    if (chargeInterrupt){
+      $("#hwcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      chargeInterrupt = false;
+    }
+    else {
+      $("#hwcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      chargeInterrupt = true;
+    }
+    drawTrajectory();
+  });
+
+  $("#cRealButton").click(function(){
+    if (crouch){
+      $("#cSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      crouch = false;
+    }
+    else {
+      $("#cSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      crouch = true;
+    }
+    drawTrajectory();
+  });
 
   /*$(".stalingButton").mousedown(function() {
     var id = $(this).attr("id");

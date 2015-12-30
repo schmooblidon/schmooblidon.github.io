@@ -20,5 +20,6 @@ var resizingtype = function(){
 	disHeight = $("#display").height();
 	trajOffset = $("#trajectory").offset();
 	$("#leftcontrols").height(disHeight);
+	$("#attackscroll").height(disHeight-215);
 	$("#rightcontrols").height(disHeight);
 }

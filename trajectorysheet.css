@@ -458,6 +458,88 @@
 	font-size:30px;
 }
 
+#crouchingContainer {
+  width:150px;
+  height:45px;
+  display:inline-block;
+  position:relative;
+  text-align:center;
+}
+
+#cRealButton {
+  width:150px;
+  height:60px;
+  position:absolute;
+  cursor:pointer;
+}
+
+#cVisual {
+  width:150px;
+  height:60px;
+  position:absolute;
+}
+
+#cText {
+  width:90px;
+  height:60px;
+  background-color:#444444;
+  display:inline-block;
+  vertical-align:top;
+  font-size:14px;
+}
+
+#cSwitch {
+  width:60px;
+  height:60px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#cSwitch p {
+  margin:14px 0px;
+}
+
+#hitWhenChargingContainer {
+  width:150px;
+  height:45px;
+  display:inline-block;
+  position:relative;
+  text-align:center;
+}
+
+#hwcRealButton {
+  width:150px;
+  height:60px;
+  position:absolute;
+  cursor:pointer;
+}
+
+#hwcVisual {
+  width:150px;
+  height:60px;
+  position:absolute;
+}
+
+#hwcText {
+  width:90px;
+  height:60px;
+  background-color:#444444;
+  display:inline-block;
+  vertical-align:top;
+  font-size:11px;
+}
+
+#hwcSwitch {
+  width:60px;
+  height:60px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#hwcSwitch p {
+  margin:14px 0px;
+}
+
 #snapToSurfaceContainer {
   width:150px;
   height:60px;
