@@ -241,6 +241,7 @@ function trajPosInfo(){
 }
 
 $(document).ready(function(){
+  $("#header").hide();
   attackTable();
 	$(document).on('mousemove', function(e){
 		mouseX = e.pageX - trajOffset.left;
@@ -450,6 +451,48 @@ $(document).ready(function(){
     }
     $(this).addClass("verButtonOn");
     drawTrajectory();
+  });
+
+  $(".stageselect").hover(function(){
+    $(this).toggleClass("stagehighlight");
+  });
+
+  $(".stageselect").click(function(){
+    $(".stageselect").removeClass("stageselected");
+    $(this).addClass("stageselected");
+  });
+
+  $(".controlcollapsetb").hover(function(){
+    $(this).toggleClass("controlcollapsetbhighlight");
+  });
+
+  $(".controlcollapselr").hover(function(){
+    $(this).toggleClass("controlcollapselrhighlight");
+  });
+
+  $(".controlcollapse").click(function(){
+    var id = $(this).attr("id").substr(0,1);
+    $(this).toggleClass("controlarrowrotate");
+    if (collapsed[id]){
+      $("#"+id+"controls").show();
+      collapsed[id] = false;
+    }
+    else {
+      $("#"+id+"controls").hide();
+      collapsed[id] = true;
+    }
+    resizing();
+    setTimeout(resizing,500);
+  });
+
+  $("#homebutton").hover(function(){
+    $(this).toggleClass("homehighlight");
+  });
+
+  $("#homebutton").click(function(){
+    $("#header").toggle();
+    resizing();
+    setTimeout(resizing,500);
   });
 
   /*$(".stalingButton").mousedown(function() {

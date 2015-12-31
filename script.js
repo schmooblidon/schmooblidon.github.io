@@ -6,6 +6,8 @@ youtubeheightswitch = true;
 youtubeheightswitch2 = false;
 sideconwidth = 305;
 controlconwidth = 100;
+windwidth = 0;
+windheight = 0;
 
 var randomtile = function(){
 	rand = Math.random();
@@ -27,6 +29,7 @@ var randomtile = function(){
 };
 var resizing = function() {
 		windwidth = $(window).width();
+    windheight = $(window).height();
 		if (windwidth < 1500){
 			$("#main").addClass("smalltext");
 		}

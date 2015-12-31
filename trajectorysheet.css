@@ -20,8 +20,37 @@
 	background: rgba(255,255,255,0.2);
 }
 
-h1 {
+#pagetitle {
+  height:45px;
+  padding:0;
+}
+
+#homebutton {
+  border-radius:5px;
+  width:35px;
+  height:35px;
   display:inline-block;
+  margin:5px 10px;
+  cursor:pointer;
+}
+.hometrans {
+  opacity:0.5;
+}
+.homehighlight {
+  opacity:1;
+}
+
+#pagetitle h1 {
+  display:inline-block;
+  margin:5px 0px 0px 30px;
+  vertical-align:top;
+}
+
+#credits {
+  display:inline-block;
+  font-style:italic;
+  margin:20px 0 0 10px;
+  vertical-align:top;
 }
 
 .verButton {
@@ -35,7 +64,7 @@ h1 {
   border-radius:5px;
   text-align:center;
   float:right;
-  margin-top:2px;
+  margin-top:7px;
   margin-right:30px;
 }
 
@@ -92,7 +121,7 @@ h1 {
 	right:100px;
 }
 
-#leftcontrols {
+#lcontrols {
 	width:150px;
 	height:700px;
 	background-color:black;
@@ -358,6 +387,68 @@ h1 {
   font-size:40px;
 }
 
+#middlecontrols {
+  width:4580px;
+  height:3388px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#tcontrols {
+  width:4580px;
+  height:100px;
+  background-color:#000000;
+  vertical-align:top;
+}
+
+.stageselect {
+  display:inline-block;
+  border-radius:10px;
+  border:3px solid #b4b4b4;
+  width:82px;
+  height:65px;
+  opacity:0.7;
+  margin:15px 0px 15px 15px;
+  cursor:pointer;
+}
+
+.stagehighlight {
+  opacity:1;
+  border:3px solid #fcc1c1;
+}
+
+.stageselected {
+  opacity:1;
+  border:3px solid #ff4a4a;
+}
+
+
+
+#bfstageselect {
+  background-image:url(assets/trajectory/stageicons2/bf.png);
+}
+#fdstageselect {
+  background-image:url(assets/trajectory/stageicons2/fd.png);
+}
+#ysstageselect {
+  background-image:url(assets/trajectory/stageicons2/ys.png);
+}
+#fostageselect {
+  background-image:url(assets/trajectory/stageicons2/fo.png);
+}
+#dlstageselect {
+  background-image:url(assets/trajectory/stageicons2/dl.png);
+}
+#psstageselect {
+  background-image:url(assets/trajectory/stageicons2/ps.png);
+}
+
+#bcontrols {
+  width:4580px;
+  height:100px;
+  background-color:#000000;
+}
+
 #display {
 	width:4580px;
 	height:3188px;
@@ -365,9 +456,17 @@ h1 {
 	vertical-align:top;
   cursor:crosshair;
   background-color:rgba(0, 0, 0, 0.75);
+  border-color:#592626;
+  border-style:solid;
+  border-width:0px 0px;
 }
 
-#rightcontrols {
+#main {
+  min-height:0px;
+  vertical-align:top;
+}
+
+#rcontrols {
 	width:150px;
 	height:500px;
 	background-color:black;
@@ -627,4 +726,75 @@ h1 {
 	text-align:center;
 	font-size:10px;
 	padding-top:5px;
+}
+
+.controlcollapse {
+  cursor:pointer;
+  position:relative;
+}
+
+.controlcollapselr {
+  height:700px;
+  width:30px;
+  background-color:#303030;
+  display:inline-block;
+}
+
+.controlcollapsetb {
+  height:30px;
+  width:700px;
+  background-color:#1f1f1f;
+  display:inline-block;
+  vertical-align:top;
+}
+
+.controlcollapselrhighlight {
+  background-color:#3c3c3c;
+}
+
+.controlcollapsetbhighlight {
+  background-color:#282828;
+}
+
+.controlcollapsearrow {
+  opacity:0.5;
+  margin:0 auto;
+}
+
+.controlarrowrotate {
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+#lcontrolscollapsearrow {
+  width:30px;
+  height:112px;
+  background-image:url(assets/trajectory/collapse.png);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+#rcontrolscollapsearrow {
+  width:30px;
+  height:112px;
+  background-image:url(assets/trajectory/collapse.png);
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+#tcontrolscollapsearrow {
+  width:112px;
+  height:30px;
+  background-image:url(assets/trajectory/collapseh.png);
+
+}
+
+#bcontrolscollapsearrow {
+  width:112px;
+  height:30px;
+  background-image:url(assets/trajectory/collapseh.png);
 }

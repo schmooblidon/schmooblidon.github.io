@@ -18,11 +18,11 @@
 
 </script>-->
 <script src="jquery-1.11.3.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="script.js"></script>
 <script type="text/javascript" src="hitboxDB.js"></script>
 <script type="text/javascript" src="trresize.js"></script>
 <script type="text/javascript" src="trajectorymaths.js"></script>
 <script type="text/javascript" src="trajectory.js"></script>
-<script type="text/javascript" src="script.js"></script>
 <link rel="shortcut icon" href="favicon.ico" />
 <title>I KneeData | For your frame data kneeds</title>
 </head>
@@ -42,11 +42,11 @@
 
 </div>
 <div id="pagetitle" style="background-color:#D48B39">
-<h1>Trajectory Simulator</h1><div id="NTSCButton" class="verButton verButtonOn"><p>NTSC</p></div><div id="PALButton" class="verButton"><p>PAL</p></div>
+<img id="homebutton" class="hometrans" src="assets/kneesmalllogo.png" width="40" height="40"/><h1>Trajectory Simulator</h1><p id="credits">by Schmoo and GentleFox</p><div id="NTSCButton" class="verButton verButtonOn"><p>NTSC</p></div><div id="PALButton" class="verButton"><p>PAL</p></div>
 
 </div>
 <div id="main">
-<div id="leftcontrols"><div id="attackselecttitle"><p>Select Attack</p></div><div id="attackscroll"><div id="Fx" class="character"><p>Fox</p></div>
+<div id="lcontrols"><div id="attackselecttitle"><p>Select Attack</p></div><div id="attackscroll"><div id="Fx" class="character"><p>Fox</p></div>
 	<div id="Fc" class="character"><p>Falco</p></div>
 	<div id="Ms" class="character"><p>Marth</p></div>
 	<div id="Sh" class="character"><p>Sheik</p></div>
@@ -73,12 +73,12 @@
 	<div id="Bw" class="character"><p>Bowser</p></div>
 	<div id="Kb" class="character"><p>Kirby</p></div></div><div id="stalingselect"><div id="stalingtitle"><p>Stale Queue</p></div><div id="stalingcontrol"><div id="staleQ1" class="staleQbutton"><p>1</p></div><div id="staleQ2" class="staleQbutton"><p>2</p></div><div id="staleQ3" class="staleQbutton"><p>3</p></div><div id="staleQ4" class="staleQbutton"><p>4</p></div><div id="staleQ5" class="staleQbutton"><p>5</p></div><div id="staleQ6" class="staleQbutton"><p>6</p></div><div id="staleQ7" class="staleQbutton"><p>7</p></div><div id="staleQ8" class="staleQbutton"><p>8</p></div><div id="staleQ9" class="staleQbutton"><p>9</p></div><!--<div id="stalingnumber"><p id="stalingnumberedit">0</p></div><div id="stalingbuttons"><div id="stalingPlus" class="stalingButton">+</div><div id="stalingMinus" class="stalingButton">-</div></div>--></div></div>
 	<div id="charging"><div id="disableCharge"></div><div id="chargingtitle"><p>Smash Charge</p></div><div id="chargingNumber"><p><span id="chargingNumberEdit">0</span>frames</p></div><div id="chargingButtonContainer"><div id="chargingPlus" class="chargingButton"><p>+</p></div><div id="chargingMinus" class="chargingButton"><p>-</p></div></div></div>
-</div><div id="display">
+</div><div id="lcontrolscollapse" class="controlcollapse controlcollapselr controlarrowrotate"><div id="lcontrolscollapsearrow" class="controlcollapsearrow"></div></div><div id="middlecontrols"><div id="tcontrols"><div id="bfstageselect" class="stageselect stageselected"></div><div id="fdstageselect" class="stageselect"></div><div id="ysstageselect" class="stageselect"></div><div id="fostageselect" class="stageselect"></div><div id="dlstageselect" class="stageselect"></div><div id="psstageselect" class="stageselect"></div></div><div id="tcontrolscollapse" class="controlcollapse controlcollapsetb"><div id="tcontrolscollapsearrow" class="controlcollapsearrow"></div></div><div id="display">
   <img id="trajBackground" src="assets/trajectory/battlefield.png" style="position:absolute"/>
 	<svg version="1.1" id="trajectory" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="4580px" height="3188px" viewBox="0 0 4580 3188" enable-background="new 0 0 4580 3188" xml:space="preserve" style="position:absolute"></svg>
 	<div id="trajCanvas"><div id="mousePosition"><p>X: <span id="mPosX">0</span> Y: <span id="mPosY">0</span></p></div></div>
   <svg version="1.1" id="trajectory-t" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="4580px" height="3188px" viewBox="0 0 4580 3188" enable-background="new 0 0 4580 3188" xml:space="preserve" style="position:absolute"></svg>
-</div><div id="rightcontrols">
+</div><div id="bcontrolscollapse" class="controlcollapse controlcollapsetb"><div id="bcontrolscollapsearrow" class="controlcollapsearrow controlarrowrotate"></div></div><div id="bcontrols"></div></div><div id="rcontrolscollapse" class="controlcollapse controlcollapselr"><div id="rcontrolscollapsearrow" class="controlcollapsearrow"></div></div><div id="rcontrols">
   <div id="victim-position"><div id="posButtonTitle"><p>Hit Direction</p></div><div id="posButtonLeft" class="posButton"></div><div id="posButtonRight" class="posButton posButtonSelected"></div></div>
   <div id="victim-char"><p id="victimcharname">Fox</p><div id="chardropdown"><div class="hbcharselect hbcon"><p>Fox</p></div>
       <div class="hbcharselect hbcon"><p>Falco</p></div>
