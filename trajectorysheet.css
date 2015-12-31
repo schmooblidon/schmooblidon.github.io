@@ -93,6 +93,62 @@
   z-index:5;
 }
 
+#attackertitle {
+  width:150px;
+  height:40px;
+  background-color:#497cff;
+  text-align:center;
+  display:inline-block;
+}
+
+#attackertitle p {
+  font-size:25px;
+  margin:5px 0px;
+}
+
+#stagetitle {
+  width:40px;
+  height:100px;
+  background-color:#3bd941;
+  display:inline-block;
+  vertical-align:top;
+  display:inline-block;
+}
+
+#stagetitle p {
+  margin:5px 13px;
+  font-size:25px;
+  line-height:0.75;
+}
+
+#victimtitle {
+  width:150px;
+  height:40px;
+  background-color:#ff5353;
+  text-align:center;
+  vertical-align:top;
+  display:inline-block;
+}
+
+#victimtitle p {
+  font-size:25px;
+  margin:5px 0px;
+}
+
+#savetitle {
+  width:40px;
+  height:100px;
+  background-color:#b961ff;
+  vertical-align:top;
+  display:inline-block;
+}
+
+#savetitle p {
+  margin:7px 13px;
+  font-size:25px;
+  line-height:0.9;
+}
+
 #trajLine {
 
 	stroke-width:10px;

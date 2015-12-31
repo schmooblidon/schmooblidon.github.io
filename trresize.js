@@ -50,8 +50,8 @@ var resizingtype = function(){
 	$("#display").css("border-width",(vbuffer/2)+"px "+(hbuffer/2)+"px");
 
 	$("#middlecontrols, #lcontrols, #lcontrolscollapse, #rcontrols, #rcontrolscollapse").height(midheight);
-	
-	$("#attackscroll").height($("#lcontrols").height()-215);
+
+	$("#attackscroll").height($("#lcontrols").height()-255);
 	disWidth = $("#display").width();
 	disHeight = $("#display").height();
 	trajOffset = $("#trajectory").offset();
