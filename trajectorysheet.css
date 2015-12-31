@@ -73,6 +73,10 @@
   font-size:23px;
 }
 
+.verButtonHighlight {
+  opacity:0.7;
+}
+
 .verButtonOn {
   opacity:1;
 }
@@ -83,6 +87,10 @@
 
 .framePos-t {
   fill:transparent;
+}
+
+#trajectory-t {
+  z-index:5;
 }
 
 #trajLine {
@@ -459,6 +467,7 @@
   border-color:#592626;
   border-style:solid;
   border-width:0px 0px;
+  position:relative;
 }
 
 #main {
@@ -726,6 +735,7 @@
 	text-align:center;
 	font-size:10px;
 	padding-top:5px;
+  z-index:4;
 }
 
 .controlcollapse {

@@ -222,7 +222,15 @@ function trajPosInfo(){
     id = parseInt(id.substr(1,(id.length - 3)));
     $("#f"+id).attr("r",30);
     $("#trajCanvas").after('<div class="framePosInfoBox">Frame of hitstun: '+id+'<br>Pos X:'+((Math.round(curPositions[id-1][0]*100))/100)+' Y:'+((Math.round(curPositions[id-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(curPositions[id-1][2]*100))/100)+' Y:'+((Math.round(curPositions[id-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(curPositions[id-1][4]*100))/100)+' Y:'+((Math.round(curPositions[id-1][5]*100))/100)+'</div>');
-    $(".framePosInfoBox").css({"top":mouseY+5,"left":(mouseX+160)});
+    var frameposy = mouseY;
+    var frameposx = mouseX;
+    if (mouseY + trajOffset.top > windheight){
+      frameposy = windheight;
+    }
+    if (mouseX + trajOffset.left + 160 > windwidth){
+      frameposx = windwidth - trajOffset.left - 160;
+    }
+    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20)});
   }, function(){
     var id = $(this).attr("id");
     id = parseInt(id.substr(1,(id.length - 3)));
@@ -233,7 +241,15 @@ function trajPosInfo(){
   $("#start-t").hover(function(){
     $("#start").css("stroke-width",20);
     $("#trajCanvas").after('<div class="framePosInfoBox">Position Hit<br>X: '+((Math.round(mouseXMeleeF*100))/100)+' Y: '+((Math.round(mouseYMeleeF*100))/100)+'</div>');
-    $(".framePosInfoBox").css({"top":mouseY+5,"left":mouseX+160});
+    var frameposy = mouseY;
+    var frameposx = mouseX;
+    if (mouseY + trajOffset.top > windheight){
+      frameposy = windheight;
+    }
+    if (mouseX + trajOffset.left + 160 > windwidth){
+      frameposx = windwidth - trajOffset.left - 160;
+    }
+    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20)});
   }, function(){
     $("#start").css("stroke-width",0);
     $(".framePosInfoBox").remove();
@@ -246,6 +262,7 @@ $(document).ready(function(){
 	$(document).on('mousemove', function(e){
 		mouseX = e.pageX - trajOffset.left;
 		mouseY = e.pageY - trajOffset.top;
+
     //(disWidth/4580)*100 gives width in pixels of blastzone
 
 	});
@@ -438,6 +455,10 @@ $(document).ready(function(){
       crouch = true;
     }
     drawTrajectory();
+  });
+
+  $(".verButton").hover(function(){
+    $(this).toggleClass("verButtonHighlight");
   });
 
   $(".verButton").click(function(){
