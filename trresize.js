@@ -21,7 +21,7 @@ var resizingtype = function(){
 	if (collapsed.r){
 		midwidth += 150;
 	}
-	var midheight = windheight-53;
+	var midheight = windheight-45;
 	var displayheight = midheight - 260 ;
 	if (collapsed.t){
 		displayheight  += 100;
@@ -39,15 +39,20 @@ var resizingtype = function(){
 		hbuffer = 0;
 		$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").width(midwidth);
 		$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").height(midwidth/ratio);
+
+		$("#display").css("border-width",(vbuffer/2 + 1)+"px 0px");
 	}
 	else {
 		vbuffer = 0;
 		hbuffer = midwidth - (ratio*displayheight);
+
 		$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").width(ratio*displayheight);
 		$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").height(displayheight);
+
+		$("#display").css("border-width","0px "+(hbuffer/2 + 1)+"px");
 	}
 
-	$("#display").css("border-width",(vbuffer/2)+"px "+(hbuffer/2)+"px");
+
 
 	$("#middlecontrols, #lcontrols, #lcontrolscollapse, #rcontrols, #rcontrolscollapse").height(midheight);
 

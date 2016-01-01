@@ -27,6 +27,7 @@ body {
 #pagetitle {
   height:45px;
   padding:0;
+  vertical-align: top;
 }
 
 #homebutton {
