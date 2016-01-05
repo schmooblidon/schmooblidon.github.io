@@ -24,6 +24,24 @@ body {
   overflow:hidden;
 }
 
+.colourselectbox {
+  width:200px;
+  height:240px;
+  position:absolute;
+  bottom:40px;
+  right:-90px;
+  border:5px solid #383838;
+  border-radius:3px;
+  z-index:10;
+}
+
+.colourselect {
+  width:40px;
+  height:40px;
+  display:inline-block;
+  vertical-align: top;
+}
+
 #pagetitle {
   height:45px;
   padding:0;
@@ -154,19 +172,17 @@ body {
   line-height:0.9;
 }
 
-#trajLine {
+.trajLine {
 
 	stroke-width:10px;
 	fill:none;
 }
 
-#start {
-	fill:#34bffa;
-	stroke:#34bffa;
-	stroke-width:0;
+.start {
+  stroke-width:0;
 }
 
-#start-t {
+.start-t {
   fill:transparent;
 }
 
@@ -657,6 +673,147 @@ body {
 	font-size:30px;
 }
 
+#tdiBox {
+  width:150px;
+  height:190px;
+  display:inline-block;
+  background-color:#363636;
+}
+
+#tdiTitle {
+  width:150px;
+  height:20px;
+  display:inline-block;
+  text-align:center;
+  vertical-align:top;
+}
+
+#tdiTitle p {
+  margin:0px;
+}
+
+#tdiSelector {
+  width:130px;
+  height:130px;
+  display:inline-block;
+  background-color:#595959;
+  vertical-align:top;
+  position:relative;
+}
+
+#tdiCircle {
+  width:130px;
+  height:130px;
+  background-color:#acacac;
+  position:absolute;
+  border-radius:65px;
+}
+
+#tdiXDeadzone {
+  width:36.3px;
+  height:130px;
+  background-color:rgba(0, 0, 0, 0.2);
+  position:absolute;
+  margin-left:46.85px;
+}
+
+#tdiYDeadzone {
+  height:36.3px;
+  width:130px;
+  background-color:rgba(0, 0, 0, 0.2);
+  position:absolute;
+  margin-top:46.85px;
+}
+
+#tdiLAngle {
+  height:3px;
+  width:130px;
+  margin-top:64px;
+  position:absolute;
+
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+
+#tdiPAngle {
+  width:3px;
+  height:130px;
+  margin-left:64px;
+  position:absolute;
+  background-color:#3dee49;
+
+}
+
+#tdiLTrans {
+  height:3px;
+  width:65px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#tdiLSolid {
+  height:3px;
+  width:65px;
+  display:inline-block;
+  background-color:#de4d4d;
+  vertical-align:top;
+}
+
+#tdiVertical {
+  width:20px;
+  height:130px;
+  display:inline-block;
+  background-color:#414141;
+  vertical-align:top;
+  display:none;
+}
+
+#tdiUp {
+  width:20px;
+  height:65px;
+  display:inline-block;
+
+}
+
+#tdiDown {
+  width:20px;
+  height:65px;
+}
+
+#tdiHorizontal {
+  width:130px;
+  height:20px;
+  display:inline-block;
+  background-color:#414141;
+  vertical-align:top;
+}
+
+#tdiLeft {
+  width:65px;
+  height:20px;
+  display:inline-block;
+}
+
+#tdiRight {
+  width:65px;
+  height:20px;
+  display:inline-block;
+}
+
+#tdiValues {
+  width:150px;
+  height:20px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#tdiValues p {
+  margin:0;
+  font-size:14px;
+}
+
 #crouchingContainer {
   width:150px;
   height:45px;
@@ -798,6 +955,125 @@ body {
 	padding-top:5px;
   z-index:4;
 }
+
+.trajBox {
+  width:80px;
+  height:90px;
+  border-width:5px;
+  border-style: solid;
+  border-color: #4f4f4f;
+  background-color:#2d2d2d;
+  display:inline-block;
+  vertical-align:top;
+  cursor:pointer;
+}
+
+.trajColour {
+  width:30px;
+  height:50px;
+  background-color:#00ffff;
+  display:inline-block;
+  vertical-align:top;
+  border:5px;
+  border-style:solid;
+  border-color:#4f4f4f;
+  position:relative;
+}
+
+.trajAddBox {
+  width:80px;
+  height:90px;
+  border-width:5px;
+  border-style: solid;
+  border-color: #4f4f4f;
+  background-color:#2d2d2d;
+  display:inline-block;
+  vertical-align:top;
+  cursor:pointer;
+  color:#4f4f4f;
+}
+
+.trajAddBoxHighlight {
+  border-color:#696969;
+  color:#696969;
+}
+
+.trajBoxHighlight {
+  border-color:#696969;
+}
+
+.trajBoxSelected {
+  border-color:#8a8a8a;
+}
+
+.trajBoxSelected .trajNum {
+  background-color:#dddddd;
+  color:#333333;
+}
+
+#trajAdd p {
+  font-size:100px;
+  font-weight:bold;
+  text-align:center;
+  margin:0px;
+  line-height:0.8;
+}
+
+.trajNum {
+  width:40px;
+  height:60px;
+
+  font-size:50px;
+  font-weight:bold;
+  text-align:center;
+  display:inline-block;
+  vertical-align:top;
+
+}
+
+.trajNum p {
+  margin:0;
+}
+
+
+
+.trajLabel {
+  width:50px;
+  height:30px;
+  background-color:#707070;
+  display:inline-block;
+  vertical-align:top;
+}
+
+.trajLabel p {
+  margin:1px 0px;
+  font-size:12px;
+  text-align:center;
+}
+
+.trajDelete {
+  width:30px;
+  height:30px;
+  display:inline-block;
+  background-color:#ec6a6a;
+}
+
+.trajDelete p {
+  margin:1px 7px;
+  font-size:27px;
+  line-height:0.95;
+}
+
+.trajDeleteHighlight {
+  background-color:#fc9e9e;
+}
+
+.trajDeleteDisable {
+  background-color:#674949;
+  color:#666565;
+}
+
+
 
 .controlcollapse {
   cursor:pointer;

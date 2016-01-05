@@ -1,11 +1,71 @@
+asdasd = [];
+asdasd[0] = ["000000","333333","666666","999999","CCCCCC","FFFFFF"];
+asdasd[1] = ["FF0000","FF6666","990000","FF3300","FF6633","993300"];
+asdasd[2] = ["00ff00","66ff66","009900","ffff00","ffff66","999900"];
+asdasd[3] = ["0000ff","6666ff","000099","00ffff","66ffff","009999"];
+asdasd[4] = ["ff00ff","ff66ff","990099","9900CC","9966FF","330066"];
+asdasd[5] = ["","","","","",""];
+
+colourtext = '<div class="colourselectbox">';
+for(i=0;i<6;i++){
+  for(j=0;j<5;j++){
+    colourtext += '<div class="colourselect" style="background-color:#'+asdasd[j][i]+'"></div>';
+  }
+}
+colourtext += '</div>'
+
+aT = 1;
+
+charging = false;
+
+storedTrajs = 1;
+
+startColours = ["#00ffff","#ffff00","#ff00ff","#FF6633","#6666ff","#66ff66","#9966FF","#999999","#ffffff"];
+
+//trajectoryObject(trajFrozen,mouseXMelee,mouseYMelee,mouseXMeleeF,mouseYMeleeF,curHitbox,version,character,percent,crouch,reverse,chargeInterrupt,charging,chargeF,staleQueue,curPositions)
+
+function trajectoryObject(){
+  this.trajFrozen = false;
+  this.mouseXMelee = 0;
+  this.mouseYMelee = 0;
+  this.mouseXMeleeF = 0;
+  this.mouseYMeleeF = 0;
+  this.tdiMouseXMelee = 0;
+  this.tdiMouseYMelee = 0;
+  this.curHitbox = chars.Fx.NS.id0;
+  this.cHName = ["Fx","NS",false,"id0"];
+  this.version = "NTSC";
+  this.character = "Fox";
+  this.percent = 80;
+  this.crouch = false;
+  this.reverse = false;
+  this.chargeInterrupt = false;
+  this.chargeF = 0;
+  this.staleQueue = [false,false,false,false,false,false,false,false,false];
+  this.curPositions = 0;
+  this.colour;
+}
+
+t = {};
+for (i=0;i<9;i++){
+  t["t"+(i+1)] = new trajectoryObject();
+  t["t"+(i+1)].colour = startColours[i];
+}
+
+sakurai = 0;
 pointerfrozen = false;
+tdiPointerFrozen = false;
 mouseX = 0;
 mouseY = 0;
-trajFrozen = false;
-mouseXMelee = 0;
-mouseYMelee = 0;
-mouseXMeleeF = 0;
-mouseYMeleeF = 0;
+tdiMouseX = 0;
+tdiMouseY = 0;
+/*trajFrozen = false;
+
+mouseXMelee = [0,0,0,0,0,0,0,0,0];
+mouseYMelee = [0,0,0,0,0,0,0,0,0];
+
+mouseXMeleeF = [0,0,0,0,0,0,0,0,0];
+mouseYMeleeF = [0,0,0,0,0,0,0,0,0];*/
 
 isKilled = false;
 
@@ -14,14 +74,14 @@ bzBottom = -108.8;
 bzLeft = -224;
 bzRight = 224;
 
-crouch = false;
+/*crouch = false;
 
 reverse = false;
 
 chargeInterrupt = false;
 
 charging = false;
-chargeF = 0;
+chargeF = 0;*/
 
 //each surface is put into an element in the array. The surface is broken down into arrays of far left point X and y, and far right point X and Y. Use .length to find the number of surfaces to check
 
@@ -29,17 +89,179 @@ surfaces = [[[-68.4,0],[68.4,0]],[[-57.6,27.2],[-20.0,27.2]],[[20,27.2],[57.6,27
 
 snapping = true;
 
-staleQueue = [false,false,false,false,false,false,false,false,false];
+/*staleQueue = [false,false,false,false,false,false,false,false,false];
 
-curPositions = [];
+curPositions = [0,0,0,0,0,0,0,0,0];*/
+
+
 
 centreOffset = [bzRight*10+50,bzTop*10+50];
 
-curHitbox = chars.Fx.NS.id0;
+/*curHitbox = [chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0];
+
+percent = [80,80,80,80,80,80,80,80,80];
+
+charging = [false,false,false,false,false,false,false,false,false];
+chargeF = [0,0,0,0,0,0,0,0,0];
+
+chargeInterrupt = [false,false,false,false,false,false,false,false,false];
+reverse = [false,false,false,false,false,false,false,false,false];
+crouch = [false,false,false,false,false,false,false,false,false];
+
 
 var percent = 120;
 version = "NTSC";
-var character = "Fox";
+var character = "Fox";*/
+
+function drawAngle(){
+  var ang = t["t"+aT].curHitbox.angle;
+  if (ang == 361){
+    ang = sakurai;
+  }
+  if (t["t"+aT].reverse){
+    ang = 180 - ang;
+      if (ang < 0){
+        ang = 360 + ang;
+      }
+  }
+  $("#tdiLAngle").css({
+    "-moz-transform":"rotate("+(ang * -1)+"deg)",
+    "-ms-transform":"rotate("+(ang * -1)+"deg)",
+    "-o-transform":"rotate("+(ang * -1)+"deg)",
+    "transform":"rotate("+(ang * -1)+"deg)"
+  });
+
+  $("#tdiPAngle").css({
+    "-moz-transform":"rotate("+(ang * -1)+"deg)",
+    "-ms-transform":"rotate("+(ang * -1)+"deg)",
+    "-o-transform":"rotate("+(ang * -1)+"deg)",
+    "transform":"rotate("+(ang * -1)+"deg)"
+  });
+}
+
+
+function trajBoxHover(){
+  $(".trajBox").unbind("mouseenter").unbind("mouseleave");
+  $(".trajBox").hover(function(){
+    $(this).toggleClass("trajBoxHighlight");
+  });
+}
+
+function trajBoxClick(){
+  $(".trajBox").unbind("click");
+  $(".trajBox").click(function(){
+    $(".trajBox").removeClass("trajBoxSelected");
+    $(this).addClass("trajBoxSelected");
+    var pT = aT;
+    aT = parseInt($(this).attr("id").substr(7,8));
+    var id = "";
+    var id2 = "";
+    var id3 = "";
+    var id4 = "";
+    prompt(aT);
+    prompt(t["t"+aT].cHName);
+    $(".attack").remove();
+    $(".subattack").remove();
+    $(".id").remove();
+    $(".idstats").remove();
+    id = t["t"+aT].cHName[0];
+    var keys = Object.keys(chars[id]);
+    for (i=0;i<keys.length;i++){
+      $("#"+id).after('<div id="'+keys[i]+'" class="attack '+id+'"><p>'+keys[i]+'</p></div>');
+    }
+    id2 = t["t"+aT].cHName[1];
+    var keys2 = Object.keys(chars[id][id2]);
+    if (!t["t"+aT].cHName[2]){
+      for (j=0;j<keys2.length;j++){
+        $("#"+id2).after('<div id="'+keys2[j]+'" class="id '+id2+' '+id+'"><p>'+keys2[j]+'</p></div>');
+      }
+      id4 = t["t"+aT].cHName[2];
+      hb = t["t"+aT].curHitbox;
+      $("#"+id4).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+      drawTrajectory();
+      if (id2.substr(1,id2.length) == "smash"){
+        charging = true;
+        $("#disableCharge").hide();
+      }
+      else {
+        charging = false;
+        $("#disableCharge").show();
+      }
+    }
+    else {
+      for (k=0;k<keys2.length;k++){
+        $("#"+id2).after('<div id="'+keys2[k]+'" class="subattack '+id2+' '+id+'"><p>'+keys2[k]+'</p></div>');
+      }
+      id3 = t["t"+aT].cHName[2];
+      var keys3 = Object.keys(chars[id][id2][id3]);
+      for (l=0;l<keys3.length;l++){
+        $("#"+id3).after('<div id="'+keys3[l]+'" class="id '+id3+' '+id2+' '+id+'"><p>'+keys3[l]+'</p></div>');
+      }
+      id4 = t["t"+aT].cHName[2];
+      hb = t["t"+aT].curHitbox;
+      $("#"+id4).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+      t["t"+aT].curHitbox = hb;
+      drawTrajectory();
+      if (id2.substr(1,id2.length) == "smash"){
+        charging = true;
+        $("#disableCharge").hide();
+      }
+      else {
+        charging = false;
+        $("#disableCharge").show();
+      }
+    }
+  });
+}
+
+function trajColourClick(){
+  $(".trajColour").unbind("click");
+  $(".trajColour").click(function(){
+    var id = $(this).attr("id").substr(10,11);
+    if (!$(this).children(".colourselectbox").length){
+      $(".colourselectbox").remove();
+      $(this).append(colourtext);
+      colourChange(id);
+    }
+    else {
+      $(".colourselectbox").remove();
+    }
+  });
+}
+
+function trajColourHover(){
+  $(".trajColour").unbind("mouseenter").unbind("mouseleave");
+  $(".trajColour").hover(function(){
+    $(this).addClass("trajBoxHighlight");
+  },function(){
+    $(this).removeClass("trajBoxHighlight");
+  });
+}
+
+var colourChange = function(id){
+  $(".colourselect").click(function(){
+    newcolour = $(this).css("background-color");
+    $("#trajColour"+id).css("background-color",newcolour);
+    $("#start"+id).css({"fill":newcolour,"stroke":newcolour});
+    t["t"+aT].colour = newcolour;
+    $(".colourselectbox").remove();
+  });
+}
+
+function trajDeleteHover(){
+  $(".trajDelete").unbind("mouseenter").unbind("mouseleave");
+  $(".trajDelete").hover(function(){
+    $(this).toggleClass("trajDeleteHighlight");
+  });
+}
+
+function trajDeleteClick(){
+  $(".trajDelete").unbind("click");
+  $(".trajDelete").click(function(){
+    var id = parseInt($(this).attr("id").substr(7,8));
+
+  });
+}
 
 function attackTable(){
   var id = "";
@@ -54,6 +276,8 @@ function attackTable(){
     $(".id").remove();
     $(".idstats").remove();
     id = $(this).attr("id");
+    t["t"+aT].cHName[0] = id;
+    //prompt(t["t1".cHName]);
     var keys = Object.keys(chars[id]);
     for (i=0;i<keys.length;i++){
       $(this).after('<div id="'+keys[i]+'" class="attack '+id+'"><p>'+keys[i]+'</p></div>');
@@ -66,6 +290,7 @@ function attackTable(){
       $(".id").remove();
       $(".idstats").remove();
       id2 = $(this).attr("id");
+      t["t"+aT].cHName[1] = id2;
       var keys2 = Object.keys(chars[id][id2]);
       if (keys2[0][0] == "i" && keys2[0][1] == "d"){
         for (j=0;j<keys2.length;j++){
@@ -79,9 +304,11 @@ function attackTable(){
           $(this).addClass("idcurrent");
           $(".idstats").remove();
           id4 = $(this).attr("id");
+          t["t"+aT].cHName[2] = false;
+          t["t"+aT].cHName[3] = id4;
           var hb = chars[id][id2][id4];
           $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
-          curHitbox = hb;
+          t["t"+aT].curHitbox = hb;
           drawTrajectory();
           if (id2.substr(1,id2.length) == "smash"){
             charging = true;
@@ -91,6 +318,7 @@ function attackTable(){
             charging = false;
             $("#disableCharge").show();
           }
+          drawAngle();
         });
       }
       else {
@@ -104,6 +332,7 @@ function attackTable(){
           $(".id").remove();
           $(".idstats").remove();
           id3 = $(this).attr("id");
+          t["t"+aT].cHName[2] = id3;
           var keys3 = Object.keys(chars[id][id2][id3]);
           for (l=0;l<keys3.length;l++){
             $(this).after('<div id="'+keys3[l]+'" class="id '+id3+' '+id2+' '+id+'"><p>'+keys3[l]+'</p></div>');
@@ -116,9 +345,10 @@ function attackTable(){
             $(this).addClass("idcurrent");
             $(".idstats").remove();
             id4 = $(this).attr("id");
+            t["t"+aT].cHName[3] = id4;
             var hb = chars[id][id2][id3][id4];
             $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
-            curHitbox = hb;
+            t["t"+aT].curHitbox = hb;
             drawTrajectory();
             if (id2.substr(1,id2.length) == "smash"){
               charging = true;
@@ -128,67 +358,66 @@ function attackTable(){
               charging = false;
               $("#disableCharge").show();
             }
-
+            drawAngle();
+            //prompt(aT);
+            //prompt(t["t"+aT].cHName);
+            //prompt(t["t1"].cHName);
           });
         })
       }
     })
-
   });
-
-
-
 }
-
-
 
 function SVG(tag)
 {
    return document.createElementNS('http://www.w3.org/2000/svg', tag);
 }
 
-
-
-
-
 function drawTrajectory(onlyDrawWhenUnfrozen){
   onlyDrawWhenUnfrozen = onlyDrawWhenUnfrozen || false;
-	$("#trajectory").empty();
-  $("#trajectory-t").empty();
+	//$("#trajectory").empty();
+  //$("#trajectory-t").empty();
+  $("#trajGroup"+aT+", #trajGroup-t"+aT).remove();
+
   var totalstale = 1.00;
-  var damage = curHitbox.dmg;
-  for(i=0;i<staleQueue.length;i++){
-    if(staleQueue[i]){
+  var damage = t["t"+aT].curHitbox.dmg;
+  for(i=0;i<9;i++){
+    if(t["t"+aT].staleQueue[i]){
       totalstale -= (10-(i+1))/100;
     }
   }
   damage *= totalstale;
   if (charging){
-    damage *= 1 + (chargeF * (0.4/59));
+    damage *= 1 + (t["t"+aT].chargeF * (0.4/59));
   }
   var xPos = 0;
   var yPos = 0;
-  if (trajFrozen){
+  if (t["t"+aT].trajFrozen){
     if (!onlyDrawWhenUnfrozen){
-      xPos = mouseXMeleeF;
-      yPos = mouseYMeleeF;
+      xPos = t["t"+aT].mouseXMeleeF;
+      yPos = t["t"+aT].mouseYMeleeF;
     }
   }
   else {
-    xPos = mouseXMelee;
-    yPos = mouseYMelee;
+    xPos = t["t"+aT].mouseXMelee;
+    yPos = t["t"+aT].mouseYMelee;
   }
 
-	var hit = new Hit(percent,damage,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,version,xPos,yPos,crouch,reverse,chargeInterrupt);
+	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee);
 	var positions = hit.positions;
-	curPositions = positions;
+	t["t"+aT].curPositions = positions;
 	var cla = "tLineS";
   var temX = ((xPos*10)+centreOffset[0]);
   var temY = ((-yPos*10)+centreOffset[1]);
   var lineText = "M"+temX+" "+temY+" ";
-  $(SVG("path")).attr("id","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajectory");
+  $(SVG("g")).attr("id","trajGroup"+aT).prependTo("#trajectory");
+  $(SVG("g")).attr("id","trajGroup-t"+aT).prependTo("#trajectory-t");
+  //$(SVG("path")).attr("id","start"+activeTraj).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",startColours[activeTraj-1]).attr("stroke",startColours[activeTraj-1]).prependTo("#trajectory");
+  $(SVG("path")).attr("id","start"+aT).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",t["t"+aT].colour).attr("stroke",t["t"+aT].colour).prependTo("#trajGroup"+aT);
 
-  $(SVG("path")).attr("id","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajectory-t");
+  //$(SVG("path")).attr("id","start"+activeTraj+"-t").attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajectory-t");
+  $(SVG("path")).attr("id","start-t"+aT).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+aT);
 
 	for (i=0;i<positions.length;i++){
 		var x = positions[i][0];
@@ -196,21 +425,24 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
 		if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
 			var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
 			lineText += tempText;
-			$(SVG("circle")).attr("id","f"+(i+1)).attr("class","framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajectory");
-      $(SVG("circle")).attr("id","f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajectory-t");
+			//$(SVG("circle")).attr("id",activeTraj+"f"+(i+1)).attr("class","framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajectory");
+      $(SVG("circle")).attr("id",aT+"f"+(i+1)).attr("class","framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup"+aT);
+      //$(SVG("circle")).attr("id",activeTraj+"f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajectory-t");
+      $(SVG("circle")).attr("id",aT+"f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+aT);
 		}
 		else {
       //checks if vertical knockback velocity is greater or equal to 2.4 when above the top blastzone
       if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && positions[i][3] >= 2.4)){
         cla = "tLineK";
         isKilled = true;
-        $(".framePos").css("fill","#df3c3c");
+        $("#trajGroup"+aT+" .framePos").css("fill","#df3c3c");
       }
 		}
 	}
 	//var lineText = lineText.replace("L","M");
 	//lineText += "Z";
-	$(SVG("path")).attr("id","trajLine").attr("class",cla).attr("d",lineText).prependTo("#trajectory");
+	//$(SVG("path")).attr("id","trajLine"+activeTraj).attr("class","trajLine "+cla).attr("d",lineText).prependTo("#trajectory");
+  $(SVG("path")).attr("id","trajLine"+aT).attr("class","trajLine "+cla).attr("d",lineText).prependTo("#trajGroup"+aT);
   if (!onlyDrawWhenUnfrozen){
     trajPosInfo();
   }
@@ -219,9 +451,10 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
 function trajPosInfo(){
   $(".framePos-t").hover(function(){
     var id = $(this).attr("id");
-    id = parseInt(id.substr(1,(id.length - 3)));
-    $("#f"+id).attr("r",30);
-    $("#trajCanvas").after('<div class="framePosInfoBox">Frame of hitstun: '+id+'<br>Pos X:'+((Math.round(curPositions[id-1][0]*100))/100)+' Y:'+((Math.round(curPositions[id-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(curPositions[id-1][2]*100))/100)+' Y:'+((Math.round(curPositions[id-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(curPositions[id-1][4]*100))/100)+' Y:'+((Math.round(curPositions[id-1][5]*100))/100)+'</div>');
+    var fid = parseInt(id.substr(2,(id.length - 3)));
+    var tid = parseInt(id.substr(0,1));
+    $("#"+tid+"f"+fid).attr("r",30);
+    $("#trajCanvas").after('<div class="framePosInfoBox">Frame of hitstun: '+fid+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
     var frameposy = mouseY;
     var frameposx = mouseX;
     if (mouseY + trajOffset.top > windheight){
@@ -233,14 +466,16 @@ function trajPosInfo(){
     $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20)});
   }, function(){
     var id = $(this).attr("id");
-    id = parseInt(id.substr(1,(id.length - 3)));
-    $("#f"+id).attr("r",15);
+    var fid = parseInt(id.substr(2,(id.length - 3)));
+    var tid = parseInt(id.substr(0,1));
+    $("#"+tid+"f"+fid).attr("r",15);
     $(".framePosInfoBox").remove();
   });
 
-  $("#start-t").hover(function(){
-    $("#start").css("stroke-width",20);
-    $("#trajCanvas").after('<div class="framePosInfoBox">Position Hit<br>X: '+((Math.round(mouseXMeleeF*100))/100)+' Y: '+((Math.round(mouseYMeleeF*100))/100)+'</div>');
+  $(".start-t").hover(function(){
+    var id = parseInt($(this).attr("id").substr(7,8));
+    $("#start"+id).css("stroke-width",20);
+    $("#trajCanvas").after('<div class="framePosInfoBox">Position Hit<br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'</div>');
     var frameposy = mouseY;
     var frameposx = mouseX;
     if (mouseY + trajOffset.top > windheight){
@@ -250,8 +485,9 @@ function trajPosInfo(){
       frameposx = windwidth - trajOffset.left - 160;
     }
     $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20)});
+
   }, function(){
-    $("#start").css("stroke-width",0);
+    $(".start").css("stroke-width",0);
     $(".framePosInfoBox").remove();
   });
 }
@@ -262,36 +498,77 @@ $(document).ready(function(){
 	$(document).on('mousemove', function(e){
 		mouseX = e.pageX - trajOffset.left;
 		mouseY = e.pageY - trajOffset.top;
-
+    tdiMouseX = e.pageX - tdiOffset.left;
+    tdiMouseY = e.pageY - tdiOffset.top;
     //(disWidth/4580)*100 gives width in pixels of blastzone
 
 	});
+
+  $("#tdiSvg").mousemove(function(){
+    var widthRatio = 130/161;
+    var heightRatio = 130/161;
+    var x = Math.round(((tdiMouseX/widthRatio)-80))*0.0125;
+    var y = Math.round(((tdiMouseY/heightRatio)-80))*(-0.0125);
+    if (x >= 1 || x <= -1){
+      x = x.toPrecision(5);
+    }
+    else if (x >= 0.1 || x <= -0.1){
+      x = x.toPrecision(4);
+    }
+    else {
+      x = x.toPrecision(3);
+    }
+    if (y >= 1 || y <= -1){
+      y = y.toPrecision(5);
+    }
+    else if (y >= 0.1 || y <= -0.1){
+      y = y.toPrecision(4);
+    }
+    else {
+       y = y.toPrecision(3);
+    }
+    $("#tdiXInput").empty().append(x);
+    $("#tdiYInput").empty().append(y);
+
+
+    if (!tdiPointerFrozen){
+      t["t"+aT].tdiMouseXMelee = x;
+      t["t"+aT].tdiMouseYMelee = y;
+      $("#tdiSvgPointer").attr("cx",tdiMouseX/widthRatio).attr("cy",tdiMouseY/heightRatio);
+      drawTrajectory();
+    }
+  });
+
+  $("#tdiSvg").click(function(){
+    tdiPointerFrozen ^= true;
+  });
+
   $("#trajectory-t").mousemove(function(){
     var widthRatio = disWidth/4580;
     var heightRatio = disHeight/3188;
-    mouseXMelee = (Math.round(((mouseX/widthRatio)-2290)*10))/100;
-    mouseYMelee = (Math.round(((mouseY/heightRatio)-2050)*-10))/100;
-    $("#mPosX").empty().append(mouseXMelee);
-    $("#mPosY").empty().append(mouseYMelee);
-    if (trajFrozen == false){
+    t["t"+aT].mouseXMelee = (Math.round(((mouseX/widthRatio)-2290)*10))/100;
+    t["t"+aT].mouseYMelee = (Math.round(((mouseY/heightRatio)-2050)*-10))/100;
+    $("#mPosX").empty().append(t["t"+aT].mouseXMelee);
+    $("#mPosY").empty().append(t["t"+aT].mouseYMelee);
+    if (t["t"+aT].trajFrozen == false){
       if (snapping){
         //will have to do some more maths for slanted surfaces like yoshis
         for (i=0;i<surfaces.length;i++){
           //if X position is in line with surface or within 10Mm on either side
-          if (mouseXMelee >= surfaces[i][0][0] - 10 && mouseXMelee <= surfaces[i][1][0] + 10){
+          if (t["t"+aT].mouseXMelee >= surfaces[i][0][0] - 10 && t["t"+aT].mouseXMelee <= surfaces[i][1][0] + 10){
 
             //if Y is within 10Mm of surface on either side
-            if (mouseYMelee <= surfaces[i][0][1] + 10 && mouseYMelee >= surfaces[i][0][1] - 10){
+            if (t["t"+aT].mouseYMelee <= surfaces[i][0][1] + 10 && t["t"+aT].mouseYMelee >= surfaces[i][0][1] - 10){
               //if X is just outside of the plat X plane, snap to the edge (left)
-              if (mouseXMelee >= surfaces[i][0][0] - 10 && mouseXMelee < surfaces[i][0][0]){
-                mouseXMelee = surfaces[i][0][0];
+              if (t["t"+aT].mouseXMelee >= surfaces[i][0][0] - 10 && t["t"+aT].mouseXMelee < surfaces[i][0][0]){
+                t["t"+aT].mouseXMelee = surfaces[i][0][0];
               }
               //(right)
-              if (mouseXMelee <= surfaces[i][1][0] + 10 && mouseXMelee > surfaces[i][1][0]){
-                mouseXMelee = surfaces[i][1][0];
+              if (t["t"+aT].mouseXMelee <= surfaces[i][1][0] + 10 && t["t"+aT].mouseXMelee > surfaces[i][1][0]){
+                t["t"+aT].mouseXMelee = surfaces[i][1][0];
 
               }
-              mouseYMelee = surfaces[i][0][1];
+              t["t"+aT].mouseYMelee = surfaces[i][0][1];
             }
           }
         }
@@ -301,14 +578,14 @@ $(document).ready(function(){
   });
 
   $("#trajectory-t").click(function(){
-    if (trajFrozen == false){
-      trajFrozen = true;
-      mouseXMeleeF = mouseXMelee;
-      mouseYMeleeF = mouseYMelee;
+    if (t["t"+aT].trajFrozen == false){
+      t["t"+aT].trajFrozen = true;
+      t["t"+aT].mouseXMeleeF = t["t"+aT].mouseXMelee;
+      t["t"+aT].mouseYMeleeF = t["t"+aT].mouseYMelee;
       trajPosInfo();
     }
     else {
-      trajFrozen = false;
+      t["t"+aT].trajFrozen = false;
       $(".framePosInfoBox").remove();
     }
   });
@@ -330,7 +607,7 @@ $(document).ready(function(){
 	$(".hbcharselect").click(function(){
 		var newchar = $(this).children("p").text();
 		$("#victimcharname").empty().append(newchar);
-		character = newchar;
+		t["t"+aT].character = newchar;
     drawTrajectory();
 	});
 
@@ -342,14 +619,14 @@ $(document).ready(function(){
 			var curNum = parseInt($("#percentNumberEdit").text());
 			if (id == "percentPlus"){
 				var newnum = curNum + 1;
-				percent = newnum;
+				t["t"+aT].percent = newnum;
 			}
 			else {
 				var newnum = curNum - 1;
         if (newnum < 0){
           newnum = 0;
         }
-				percent = newnum;
+				t["t"+aT].percent = newnum;
       }
 			$("#percentNumberEdit").empty().append(newnum);
       drawTrajectory();
@@ -369,14 +646,14 @@ $(document).ready(function(){
         if (newnum > 59){
           newnum = 59;
         }
-        chargeF = newnum;
+        t["t"+aT].chargeF = newnum;
       }
       else {
         var newnum = curNum - 1;
         if (newnum < 0){
           newnum = 0;
         }
-        chargeF = newnum;
+        t["t"+aT].chargeF = newnum;
       }
       $("#chargingNumberEdit").empty().append(newnum);
       drawTrajectory();
@@ -392,12 +669,12 @@ $(document).ready(function(){
   $(".staleQbutton").click(function(){
     var id = $(this).attr("id");
     id = parseInt(id[6]);
-    if (staleQueue[id-1]){
-      staleQueue[id-1] = false;
+    if (t["t"+aT].staleQueue[id-1]){
+      t["t"+aT].staleQueue[id-1] = false;
       $(this).removeClass("staleQon");
     }
     else {
-      staleQueue[id-1] = true;
+      t["t"+aT].staleQueue[id-1] = true;
       $(this).addClass("staleQon");
     }
     drawTrajectory();
@@ -413,12 +690,12 @@ $(document).ready(function(){
     $(".posButton").removeClass("posButtonSelected");
     $(this).addClass("posButtonSelected");
     if (id[9] == "L"){
-      reverse = true;
+      t["t"+aT].reverse = true;
     }
     else {
-      reverse = false;
+      t["t"+aT].reverse = false;
     }
-
+    drawAngle();
     drawTrajectory();
   });
 
@@ -434,25 +711,25 @@ $(document).ready(function(){
   });
 
   $("#hwcRealButton").click(function(){
-    if (chargeInterrupt){
+    if (t["t"+aT].chargeInterrupt){
       $("#hwcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
-      chargeInterrupt = false;
+      t["t"+aT].chargeInterrupt = false;
     }
     else {
       $("#hwcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
-      chargeInterrupt = true;
+      t["t"+aT].chargeInterrupt = true;
     }
     drawTrajectory();
   });
 
   $("#cRealButton").click(function(){
-    if (crouch){
+    if (t["t"+aT].crouch){
       $("#cSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
-      crouch = false;
+      t["t"+aT].crouch = false;
     }
     else {
       $("#cSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
-      crouch = true;
+      t["t"+aT].crouch = true;
     }
     drawTrajectory();
   });
@@ -465,10 +742,10 @@ $(document).ready(function(){
     $(".verButton").removeClass("verButtonOn");
     var id = $(this).attr("id").substr(0,3);
     if (id == "PAL"){
-      version = "PAL";
+      t["t"+aT].version = "PAL";
     }
     else {
-      version = "NTSC";
+      t["t"+aT].version = "NTSC";
     }
     $(this).addClass("verButtonOn");
     drawTrajectory();
@@ -516,39 +793,44 @@ $(document).ready(function(){
     setTimeout(resizing,500);
   });
 
-  /*$(".stalingButton").mousedown(function() {
-    var id = $(this).attr("id");
-    stalingHold = setInterval(function() {
-      var curNum = parseInt($("#stalingnumberedit").text());
-      if (id == "stalingPlus"){
-        var newnum = curNum + 1;
-        if (newnum > 9){
-          newnum = 9;
-        }
-        staling = newnum;
-      }
-      else {
-        var newnum = curNum - 1;
-        if (newnum < 0){
-          newnum = 0;
-        }
-        staling = newnum;
-      }
-      $("#stalingnumberedit").empty().append(newnum);
-      if (trajFrozen){
-        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMeleeF,mouseYMeleeF);
-        trajPosInfo();
-      }
-      else {
-        drawTrajectory(percent,curHitbox.dmg,curHitbox.kg,curHitbox.bk,curHitbox.angle,character,NTSC,mouseXMelee,mouseYMelee);
-      }
-    }, 50);
-  }).bind("mouseup mouseleave", function() {
-    clearInterval(stalingHold);
-  });*/
+  $('html').click(function(e) {
+    if(!$(e.target).hasClass("colourselect") && !$(e.target).hasClass("trajColour"))
+    {
+      $(".colourselectbox").remove();
+    }
+  });
 
-  /*setTimeout(function(){
-    trajOffset = $("#trajectory").offset();
-  }, 1000);*/
+
+
+  trajBoxHover();
+  trajBoxClick();
+  trajColourClick();
+  trajColourHover();
+  trajDeleteHover();
+  trajDeleteClick();
+
+  $("#trajAdd").click(function(){
+    $(".trajBox").removeClass("trajBoxSelected");
+    $("#trajBox"+storedTrajs).after('<div id="trajBox'+(storedTrajs+1)+'" class="trajBox trajBoxSelected"><div id="trajNum'+(storedTrajs+1)+'" class="trajNum"><p>'+(storedTrajs+1)+'</p></div><div id="trajColour'+(storedTrajs+1)+'" class="trajColour" style="background-color:'+t["t"+(storedTrajs+1)].colour+'"></div><div id="trajLabel'+(storedTrajs+1)+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+(storedTrajs+1)+'" class="trajDelete"><p>x</p></div></div>');
+
+    storedTrajs++;
+    t["t"+storedTrajs] = t["t"+aT];
+    t["t"+storedTrajs].colour = startColours[storedTrajs-1];
+    aT = storedTrajs;
+
+    drawTrajectory();
+
+    trajBoxHover();
+    trajBoxClick();
+    trajColourClick();
+    trajColourHover();
+    $(".trajDelete").removeClass("trajDeleteDisable");
+    trajDeleteHover();
+    trajDeleteClick();
+  });
+
+  $("#trajAdd").hover(function(){
+    $(this).toggleClass("trajAddBoxHighlight");
+  });
 
 });

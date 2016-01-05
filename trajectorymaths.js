@@ -1,4 +1,4 @@
-function Hit(percent, damage, growth, base, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt) {
+function Hit(percent, damage, growth, base, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt, tdiX, tdiY) {
 
     /******* Internal functions start *******/
 
@@ -18,45 +18,103 @@ function Hit(percent, damage, growth, base, trajectory, character, version, xPos
 
     //Calculates Sakurai angle for grounded opponents. Once support for different starting points exists, will need a check for in air / on ground
     //Function by Yeroc
-    function getAngle(trajectory, knockback, reverse) {
+    function getAngle(trajectory, knockback, reverse, x, y) {
+      //p = cos(a-arctan(x/y))*sqrt(x^2+y^2)
+        var deadzone = false;
+        if (x < 0.2875 && x > -0.2875){
+          x = 0;
+        }
+        if (y < 0.2875 && y > -0.2875){
+          y = 0;
+        }
+
+        if (x == 0 && y < 0){
+          diAngle = 270;
+        }
+        else if (x == 0 && y > 0){
+          diAngle = 90;
+        }
+        else if (x == 0 && y == 0){
+          deadzone = true;
+        }
+        else {
+          diAngle = Math.atan(y/x) * (180 / Math.PI) * 1;
+          if (x < 0){
+            diAngle += 180;
+          }
+          else if (y < 0) {
+            diAngle += 360;
+          }
+        }
+
         if (trajectory == 361) {
             if (knockback < 32) {
               if (reverse){
-                return 180;
+                trajectory = 180;
               }
               else {
-                return 0;
+                trajectory = 0;
               }
+              sakurai = 0;
             }
             else if (knockback > 32.1) {
               if (reverse){
-                return 136;
+                trajectory = 136;
               }
               else {
-                return 44;
+                trajectory = 44;
               }
+              sakurai = 44;
             }
             else {
-              var temang = 440*(knockback-32);
+              trajectory = 440*(knockback-32);
               if (reverse){
-                temang = 180 - temang;
-                  if (temang < 0){
-                    temang = 360 + temang;
+                trajectory = 180 - trajectory;
+                  if (trajectory < 0){
+                    trajectory = 360 + trajectory;
                   }
               }
-              return temang;
             }
         }
         else {
-          var temang = trajectory;
           if (reverse){
-            temang = 180 - temang;
-              if (temang < 0){
-                temang = 360 + temang;
+            trajectory = 180 - trajectory;
+              if (trajectory < 0){
+                trajectory = 360 + trajectory;
               }
           }
-          return temang;
         }
+
+        if (!deadzone){
+          var rAngle = trajectory - diAngle;
+          if (rAngle > 180){
+            rAngle -= 360;
+          }
+
+          var pDistance = Math.sin(rAngle * angleConversion) * Math.sqrt(x*x+y*y);
+
+          var angleOffset = pDistance * pDistance * 18;
+          if (angleOffset > 18){
+            angleOffset = 18;
+          }
+
+          if (rAngle < 0 && rAngle > -180){
+              angleOffset *= -1;
+          }
+
+          $("#debugdIAngle").empty().append(diAngle);
+          $("#debugrAngle").empty().append(rAngle);
+        }
+        else {
+          var angleOffset = 0;
+        }
+
+        $("#debugAngle").empty().append(angleOffset);
+        var fCall = parseInt($("#debugFCall").text());
+        $("#debugFCall").empty().append((fCall+1));
+
+        return (trajectory - angleOffset);
+
     }
 
     //The initial horizontal velocity the hit causes
@@ -188,7 +246,7 @@ function Hit(percent, damage, growth, base, trajectory, character, version, xPos
 
     var hitstun = getHitstun(knockback);
 
-    var angle = getAngle(trajectory, knockback, reverse);
+    var angle = getAngle(trajectory, knockback, reverse, tdiX, tdiY);
 
     var horizontalVelocity = getHorizontalVelocity(knockback, angle, gravity);
 

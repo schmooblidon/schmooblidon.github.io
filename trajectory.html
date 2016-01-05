@@ -77,7 +77,7 @@
 	<svg version="1.1" id="trajectory" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="4580px" height="3188px" viewBox="0 0 4580 3188" enable-background="new 0 0 4580 3188" xml:space="preserve" style="position:absolute"></svg>
 	<div id="trajCanvas"><div id="mousePosition"><p>X: <span id="mPosX">0</span> Y: <span id="mPosY">0</span></p></div></div>
   <svg version="1.1" id="trajectory-t" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="4580px" height="3188px" viewBox="0 0 4580 3188" enable-background="new 0 0 4580 3188" xml:space="preserve" style="position:absolute"></svg>
-</div><div id="bcontrolscollapse" class="controlcollapse controlcollapsetb"><div id="bcontrolscollapsearrow" class="controlcollapsearrow controlarrowrotate"></div></div><div id="bcontrols"><div id="savetitle"><p>S<br>A<br>V<br>E</p></div></div></div><div id="rcontrolscollapse" class="controlcollapse controlcollapselr"><div id="rcontrolscollapsearrow" class="controlcollapsearrow"></div></div><div id="rcontrols"><div id="victimtitle"><p>VICTIM</p></div>
+</div><div id="bcontrolscollapse" class="controlcollapse controlcollapsetb"><div id="bcontrolscollapsearrow" class="controlcollapsearrow controlarrowrotate"></div></div><div id="bcontrols"><div id="savetitle"><p>S<br>A<br>V<br>E</p></div><div id="trajBox1" class="trajBox trajBoxSelected"><div id="trajNum1" class="trajNum"><p>1</p></div><div id="trajColour1" class="trajColour"></div><div id="trajLabel1" class="trajLabel"><p>Add label</p></div><div id="trajDelete1" class="trajDelete trajDeleteDisable"><p>x</p></div></div><div id="trajAdd" class="trajAddBox"><p>+</p></div></div></div><div id="rcontrolscollapse" class="controlcollapse controlcollapselr"><div id="rcontrolscollapsearrow" class="controlcollapsearrow"></div></div><div id="rcontrols"><div id="victimtitle"><p>VICTIM</p></div>
   <div id="victim-position"><div id="posButtonTitle"><p>Hit Direction</p></div><div id="posButtonLeft" class="posButton"></div><div id="posButtonRight" class="posButton posButtonSelected"></div></div>
   <div id="victim-char"><p id="victimcharname">Fox</p><div id="chardropdown"><div class="hbcharselect hbcon"><p>Fox</p></div>
       <div class="hbcharselect hbcon"><p>Falco</p></div>
@@ -93,12 +93,22 @@
       <div class="hbcharselect hbcon"><p>Ganon</p></div>
       <div class="hbcharselect hbcon"><p>Luigi</p></div>
       <div class="hbcharselect hbcon"><p>Mario</p></div></div></div>
-  <div id="percent"><div id="percentNumber"><p><span id="percentNumberEdit">120</span>%</p></div><div id="percentButtonContainer"><div id="percentPlus" class="percentButton"><p>+</p></div><div id="percentMinus" class="percentButton"><p>-</p></div></div></div>
+  <div id="percent"><div id="percentNumber"><p><span id="percentNumberEdit">80</span>%</p></div><div id="percentButtonContainer"><div id="percentPlus" class="percentButton"><p>+</p></div><div id="percentMinus" class="percentButton"><p>-</p></div></div></div>
+	<div id="tdiBox"><div id="tdiTitle"><p>Trajectory DI</p></div><div id="tdiSelector">
+		<div id="tdiCircle"></div>
+		<div id="tdiXDeadzone"></div>
+		<div id="tdiYDeadzone"></div>
+		<div id="tdiLAngle"><div id="tdiLTrans"></div><div id="tdiLSolid"></div></div>
+		<div id="tdiPAngle"></div>
+		<svg version="1.1" id="tdiSvg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="130px" height="130px" viewBox="0 0 161 161" enable-background="new 0 0 161 161" xml:space="preserve" style="position:absolute;display:inline-block;">
+		<circle id="tdiSvgPointer" cx="81" cy="81" r="5" fill="#59e6ff"></svg></div>
+	<div id="tdiVertical"><div id="tdiUp"></div><div id="tdiDown"></div></div><div id="tdiHorizontal"><div id="tdiLeft"></div><div id="tdiRight"></div></div><div id="tdiValues"><p>X:<span id="tdiXInput">0.00000</span> Y:<span id="tdiYInput">0.00000</span></p></div></div>
 	<div id="crouchingContainer"><div id="cVisual"><div id="cText"><p>Crouching</p></div><div id="cSwitch" class="switchOff"><p>False</p></div></div><div id="cRealButton"></div></div>
 	<div id="hitWhenChargingContainer"><div id="hwcVisual"><div id="hwcText"><p>Smash charge interruption</p></div><div id="hwcSwitch" class="switchOff"><p>False</p></div></div><div id="hwcRealButton"></div></div>
 	<div id="snapToSurfaceContainer"><div id="stsVisual"><div id="stsText"><p>Snap to surfaces</p></div><div id="stsSwitch" class="switchOn"><p>On</p></div></div><div id="stsRealButton"></div></div>
   <div id="DI-angle"></div>
   <div id="deathChecker"></div>
+	<div id="asdasdasd"><p>Offset: <span id="debugAngle">0</span></p><p>FCall: <span id="debugFCall">0</span></p><p>Relative: <span id="debugrAngle">0</span></p><p>Stick Angle:<span id="debugdIAngle">0</span></p></div>
 
 
 </div>
