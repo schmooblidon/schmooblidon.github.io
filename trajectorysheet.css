@@ -1003,11 +1003,11 @@ body {
 }
 
 .trajBoxSelected {
-  border-color:#8a8a8a;
+  border-color:#f2f2f2;
 }
 
 .trajBoxSelected .trajNum {
-  background-color:#dddddd;
+  background-color:#c8c8c8;
   color:#333333;
 }
 
