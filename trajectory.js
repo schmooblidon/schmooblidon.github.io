@@ -20,6 +20,8 @@ charging = false;
 
 storedTrajs = 1;
 
+currentTrajs = [true,false,false,false,false,false,false,false,false];
+
 startColours = ["#00ffff","#ffff00","#ff00ff","#FF6633","#6666ff","#66ff66","#9966FF","#999999","#ffffff"];
 
 //trajectoryObject(trajFrozen,mouseXMelee,mouseYMelee,mouseXMeleeF,mouseYMeleeF,curHitbox,version,character,percent,crouch,reverse,chargeInterrupt,charging,chargeF,staleQueue,curPositions)
@@ -276,13 +278,13 @@ function trajBoxClick(){
     $(this).addClass("trajBoxSelected");
     var pT = aT;
     aT = parseInt($(this).attr("id").substr(7,8));
-    var id = "";
-    var id2 = "";
-    var id3 = "";
-    var id4 = "";
     //prompt(aT);
     //prompt(t["t"+aT].cHName);
+    swapOptions();
+  });
+}
 
+function swapOptions(){
     $(".verButton").removeClass("verButtonOn");
     if (t["t"+aT].version == "PAL"){
       $("#PALButton").addClass("verButtonOn");
@@ -404,8 +406,6 @@ function trajBoxClick(){
       drawTrajectory();
 
     }
-
-  });
 }
 
 function trajColourClick(){
@@ -452,7 +452,23 @@ function trajDeleteHover(){
 function trajDeleteClick(){
   $(".trajDelete").unbind("click");
   $(".trajDelete").click(function(){
-    var id = parseInt($(this).attr("id").substr(7,8));
+    var id = parseInt($(this).attr("id").substr(10,11));
+    $("#trajBox"+id+", #trajGroup"+id+", #trajGroup-t"+id).remove();
+    currentTrajs[id-1] = false;
+    if (id == aT){
+      for (i=0;i<9;i++){
+        if (currentTrajs[i]){
+          aT = i+1;
+          $("#trajBox"+aT).addClass("trajBoxSelected");
+          swapOptions();
+          break;
+        }
+      }
+    }
+    storedTrajs--;
+    if (storedTrajs == 1){
+      $(".trajDelete").addClass("trajDeleteDisable");
+    }
 
   });
 }
@@ -955,35 +971,47 @@ $(document).ready(function(){
 
   $("#trajAdd").click(function(){
     $(".trajBox").removeClass("trajBoxSelected");
-    $("#trajBox"+storedTrajs).after('<div id="trajBox'+(storedTrajs+1)+'" class="trajBox trajBoxSelected"><div id="trajNum'+(storedTrajs+1)+'" class="trajNum"><p>'+(storedTrajs+1)+'</p></div><div id="trajColour'+(storedTrajs+1)+'" class="trajColour" style="background-color:'+t["t"+(storedTrajs+1)].colour+'"></div><div id="trajLabel'+(storedTrajs+1)+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+(storedTrajs+1)+'" class="trajDelete"><p>x</p></div></div>');
+    var highestTraj = 0;
+    var newTraj = 0;
+    var foundNew = false;
 
-    storedTrajs++;
-    /*for(var k in t["t"+aT]){
-      var m = t["t"+aT][k];
-      t["t"+storedTrajs][k] = m;
-    }*/
+    for (i=0;i<9;i++){
+      if (currentTrajs[i]){
+        highestTraj = i+1;
+      }
+      else if (!foundNew){
+        newTraj = i+1;
+        foundNew = true;
+      }
+    }
+    if (foundNew){
+      if (newTraj > 1){
+        $("#trajBox"+(newTraj-1)).after('<div id="trajBox'+newTraj+'" class="trajBox trajBoxSelected"><div id="trajNum'+newTraj+'" class="trajNum"><p>'+newTraj+'</p></div><div id="trajColour'+newTraj+'" class="trajColour" style="background-color:'+t["t"+newTraj].colour+'"></div><div id="trajLabel'+newTraj+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+newTraj+'" class="trajDelete"><p>x</p></div></div>');
+      }
+      else {
+        $("#savetitle").after('<div id="trajBox1" class="trajBox trajBoxSelected"><div id="trajNum1" class="trajNum"><p>1</p></div><div id="trajColour1" class="trajColour" style="background-color:'+t["t1"].colour+'"></div><div id="trajLabel1" class="trajLabel"><p>Add label</p></div><div id="trajDelete1" class="trajDelete"><p>x</p></div></div>');
+      }
 
-    //finally found a way to deep copy objects. fukin pointers man
-    $.extend(true,t["t"+storedTrajs],t["t"+aT]);
-    //t["t"+storedTrajs].cHName = "poop";
-    //t["t"+storedTrajs] = t["t"+aT];
+      currentTrajs[newTraj-1] = true;
 
-    /*Object.keys(t["t"+aT]).forEach(function(key) {
-      t["t"+storedTrajs][key] = t["t"+aT][key];
-    });*/
+      storedTrajs++;
+      //finally found a way to deep copy objects. fukin pointers man
+      $.extend(true,t["t"+newTraj],t["t"+aT]);
 
-    t["t"+storedTrajs].colour = startColours[storedTrajs-1];
-    aT = storedTrajs;
+      t["t"+newTraj].colour = startColours[newTraj-1];
+      aT = newTraj;
 
-    drawTrajectory();
+      drawTrajectory();
 
-    trajBoxHover();
-    trajBoxClick();
-    trajColourClick();
-    trajColourHover();
-    $(".trajDelete").removeClass("trajDeleteDisable");
-    trajDeleteHover();
-    trajDeleteClick();
+      trajBoxHover();
+      trajBoxClick();
+      trajColourClick();
+      trajColourHover();
+      $(".trajDelete").removeClass("trajDeleteDisable");
+      trajDeleteHover();
+      trajDeleteClick();
+    }
+
   });
 
   $("#trajAdd").hover(function(){
