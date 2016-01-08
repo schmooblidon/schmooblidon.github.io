@@ -32,6 +32,8 @@ function trajectoryObject(){
   this.mouseYMeleeF = 0;
   this.tdiMouseXMelee = 0;
   this.tdiMouseYMelee = 0;
+  this.tdiMouseXReal = 0;
+  this.tdiMouseYReal = 0;
   this.curHitbox = chars.Fx.NS.id0;
   this.cHName = ["Fx","NS",false,"id0"];
   this.version = "NTSC";
@@ -117,6 +119,7 @@ function drawAngle(){
   var ang = t["t"+aT].curHitbox.angle;
   if (ang == 361){
     ang = sakurai;
+
   }
   if (t["t"+aT].reverse){
     ang = 180 - ang;
@@ -147,6 +150,125 @@ function trajBoxHover(){
   });
 }
 
+function characterClick(){
+  $(".character").click(function(){
+    $(".attack").unbind("click").remove();
+    $(".subattack").unbind("click").remove();
+    $(".id").unbind("click").remove();
+    $(".idstats").unbind("click").remove();
+
+    id = $(this).attr("id");
+    //prompt(t["t1"].cHName);
+    //prompt(aT);
+
+    t["t"+aT].cHName[0] = id;
+
+    //prompt(t["t1"].cHName);
+    var keys = Object.keys(chars[id]);
+    for (i=0;i<keys.length;i++){
+      $(this).after('<div id="'+keys[i]+'" class="attack '+id+'"><p>'+keys[i]+'</p></div>');
+    }
+    $(".attack").hover(function(){
+      $(this).toggleClass("attackhighlight");
+    });
+    attackClick();
+  });
+}
+
+function attackClick(){
+  $(".attack").click(function(){
+    $(".subattack").unbind("click").remove();
+    $(".id").unbind("click").remove();
+    $(".idstats").unbind("click").remove();
+    id2 = $(this).attr("id");
+    t["t"+aT].cHName[1] = id2;
+    var keys2 = Object.keys(chars[id][id2]);
+    if (keys2[0][0] == "i" && keys2[0][1] == "d"){
+      for (j=0;j<keys2.length;j++){
+        $(this).after('<div id="'+keys2[j]+'" class="id '+id2+' '+id+'"><p>'+keys2[j]+'</p></div>');
+      }
+      $(".id").hover(function(){
+        $(this).toggleClass("idhighlight");
+      });
+      idClick2();
+    }
+    else {
+      for (k=0;k<keys2.length;k++){
+        $(this).after('<div id="'+keys2[k]+'" class="subattack '+id2+' '+id+'"><p>'+keys2[k]+'</p></div>');
+      }
+      $(".subattack").hover(function(){
+        $(this).toggleClass("subattackhighlight");
+      });
+      subattackClick();
+    }
+    //prompt(t["t1"].cHName);
+  });
+}
+
+function subattackClick(){
+  $(".subattack").click(function(){
+    $(".id").unbind("click").remove();
+    $(".idstats").unbind("click").remove();
+    id3 = $(this).attr("id");
+    t["t"+aT].cHName[2] = id3;
+    var keys3 = Object.keys(chars[id][id2][id3]);
+    for (l=0;l<keys3.length;l++){
+      $(this).after('<div id="'+keys3[l]+'" class="id '+id3+' '+id2+' '+id+'"><p>'+keys3[l]+'</p></div>');
+    }
+    $(".id").hover(function(){
+      $(this).toggleClass("idhighlight");
+    });
+    idClick();
+  });
+}
+
+function idClick(){
+  $(".id").click(function(){
+    $(".id").removeClass("idcurrent");
+    $(this).addClass("idcurrent");
+    $(".idstats").remove();
+    id4 = $(this).attr("id");
+    t["t"+aT].cHName[3] = id4;
+    var hb = chars[id][id2][id3][id4];
+    $(this).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+    t["t"+aT].curHitbox = hb;
+    drawTrajectory();
+    if (id2.substr(1,id2.length) == "smash"){
+      charging = true;
+      $("#disableCharge").hide();
+    }
+    else {
+      charging = false;
+      $("#disableCharge").show();
+    }
+    drawAngle();
+  });
+}
+
+function idClick2(){
+  $(".id").click(function(){
+    $(".id").removeClass("idcurrent");
+    $(this).addClass("idcurrent");
+    $(".idstats").remove();
+    id4 = $(this).attr("id");
+    t["t"+aT].cHName[2] = false;
+    t["t"+aT].cHName[3] = id4;
+    var hb = chars[id][id2][id4];
+    $(this).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+    t["t"+aT].curHitbox = hb;
+    drawTrajectory();
+    if (id2.substr(1,id2.length) == "smash"){
+      charging = true;
+      $("#disableCharge").hide();
+    }
+    else {
+      charging = false;
+      $("#disableCharge").show();
+    }
+    drawAngle();
+  });
+}
+
 function trajBoxClick(){
   $(".trajBox").unbind("click");
   $(".trajBox").click(function(){
@@ -158,26 +280,85 @@ function trajBoxClick(){
     var id2 = "";
     var id3 = "";
     var id4 = "";
-    prompt(aT);
-    prompt(t["t"+aT].cHName);
-    $(".attack").remove();
-    $(".subattack").remove();
-    $(".id").remove();
+    //prompt(aT);
+    //prompt(t["t"+aT].cHName);
+
+    $(".verButton").removeClass("verButtonOn");
+    if (t["t"+aT].version == "PAL"){
+      $("#PALButton").addClass("verButtonOn");
+    }
+    else {
+      $("#NTSCButton").addClass("verButtonOn");
+    }
+
+    $(".staleQbutton").removeClass("staleQon");
+    for(n=0;n<t["t"+aT].staleQueue.length;n++){
+      if (t["t"+aT].staleQueue[n]){
+        $("#staleQ"+n).addClass("staleQon");
+      }
+    }
+
+    $(".posButton").removeClass("posButtonSelected");
+    if (t["t"+aT].reverse){
+      $("#posButtonLeft").addClass("posButtonSelected");
+    }
+    else {
+      $("#posButtonRight").addClass("posButtonSelected");
+    }
+
+    $("#victimcharname").empty().append(t["t"+aT].character);
+
+    $("#percentNumberEdit").empty().append(t["t"+aT].percent);
+
+
+
+    $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
+
+
+    if (t["t"+aT].crouch){
+      $("#cSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+    }
+    else {
+      $("#cSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+    }
+
+    if (t["t"+aT].chargeInterrupt){
+      $("#hwcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+    }
+    else {
+      $("#hwcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+    }
+
+
+
+
+    $(".attack").unbind("click").remove();
+    $(".subattack").unbind("click").remove();
+    $(".id").unbind("click").remove();
     $(".idstats").remove();
     id = t["t"+aT].cHName[0];
     var keys = Object.keys(chars[id]);
     for (i=0;i<keys.length;i++){
       $("#"+id).after('<div id="'+keys[i]+'" class="attack '+id+'"><p>'+keys[i]+'</p></div>');
     }
+    $(".attack").hover(function(){
+      $(this).toggleClass("attackhighlight");
+    });
+    attackClick();
     id2 = t["t"+aT].cHName[1];
     var keys2 = Object.keys(chars[id][id2]);
     if (!t["t"+aT].cHName[2]){
       for (j=0;j<keys2.length;j++){
         $("#"+id2).after('<div id="'+keys2[j]+'" class="id '+id2+' '+id+'"><p>'+keys2[j]+'</p></div>');
       }
-      id4 = t["t"+aT].cHName[2];
+      $(".id").hover(function(){
+        $(this).toggleClass("idhighlight");
+      });
+      idClick2();
+      id4 = t["t"+aT].cHName[3];
+      $("#"+id4).addClass("idcurrent");
       hb = t["t"+aT].curHitbox;
-      $("#"+id4).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+      $("#"+id4).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
       drawTrajectory();
       if (id2.substr(1,id2.length) == "smash"){
         charging = true;
@@ -192,14 +373,23 @@ function trajBoxClick(){
       for (k=0;k<keys2.length;k++){
         $("#"+id2).after('<div id="'+keys2[k]+'" class="subattack '+id2+' '+id+'"><p>'+keys2[k]+'</p></div>');
       }
+      $(".subattack").hover(function(){
+        $(this).toggleClass("subattackhighlight");
+      });
+      subattackClick();
       id3 = t["t"+aT].cHName[2];
       var keys3 = Object.keys(chars[id][id2][id3]);
       for (l=0;l<keys3.length;l++){
         $("#"+id3).after('<div id="'+keys3[l]+'" class="id '+id3+' '+id2+' '+id+'"><p>'+keys3[l]+'</p></div>');
       }
-      id4 = t["t"+aT].cHName[2];
+      $(".id").hover(function(){
+        $(this).toggleClass("idhighlight");
+      });
+      idClick();
+      id4 = t["t"+aT].cHName[3];
+      $("#"+id4).addClass("idcurrent");
       hb = t["t"+aT].curHitbox;
-      $("#"+id4).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+      $("#"+id4).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
       t["t"+aT].curHitbox = hb;
       drawTrajectory();
       if (id2.substr(1,id2.length) == "smash"){
@@ -210,7 +400,9 @@ function trajBoxClick(){
         charging = false;
         $("#disableCharge").show();
       }
+
     }
+
   });
 }
 
@@ -262,111 +454,56 @@ function trajDeleteClick(){
 
   });
 }
+/*
+function thingy(){
+for (p=1;p<=26;p++){
+  prompt($("#attackscroll:nth-child(1)").attr("id"));
+  var id = $("#attackscroll div:nth-child("+p+")").attr("id");
+  //prompt(id);
+  var keys = Object.keys(chars[id]);
+  for (i=0;i<keys.length;i++){
+    $("#"+id).after('<div id="'+keys[i]+'" class="attack '+id+'"><p>'+keys[i]+'</p></div>');
+    var id2 = keys[i];
+    var keys2 = Object.keys(chars[id][id2]);
+    if (keys2[0][0] == "i" && keys2[0][1] == "d"){
+      for (j=0;j<keys2.length;j++){
+        $("#"+id2).after('<div id="'+keys2[j]+'" class="id '+id2+' '+id+'"><p>'+keys2[j]+'</p></div>');
+        var id3 = keys2[j];
+        var keys3 = Object.keys(chars[id][id2][id3]);
+        //for (l=0;l<keys3.length;l++){
+          var hb = chars[id][id2][id3];
+          $("#"+id3).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+        //}
+      }
+    }
+    else {
+      for (j=0;j<keys2.length;j++){
+        $("#"+id2).after('<div id="'+keys2[j]+'" class="id '+id2+' '+id+'"><p>'+keys2[j]+'</p></div>');
+        var id3 = keys2[j];
+        var keys3 = Object.keys(chars[id][id2][id3]);
+        for (l=0;l<keys3.length;l++){
+          $("#"+id3).after('<div id="'+keys3[l]+'" class="id '+id3+' '+id2+' '+id+'"><p>'+keys3[l]+'</p></div>');
+          var id4 = keys3[l];
+          var keys4 = Object.keys(chars[id][id2][id3][id4]);
+        //  for (k=0;k<keys4.length;k++){
+            var hb = chars[id][id2][id3][id4];
+            $("#"+id4).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+        //  }
+        }
+      }
+    }
+  }
+
+}
+}*/
+
+
 
 function attackTable(){
   var id = "";
   var id2 = "";
   var id3 = "";
-  $(".character").hover(function(){
-    $(this).toggleClass("characterhighlight");
-  });
-  $(".character").click(function(){
-    $(".attack").remove();
-    $(".subattack").remove();
-    $(".id").remove();
-    $(".idstats").remove();
-    id = $(this).attr("id");
-    t["t"+aT].cHName[0] = id;
-    //prompt(t["t1".cHName]);
-    var keys = Object.keys(chars[id]);
-    for (i=0;i<keys.length;i++){
-      $(this).after('<div id="'+keys[i]+'" class="attack '+id+'"><p>'+keys[i]+'</p></div>');
-    }
-    $(".attack").hover(function(){
-      $(this).toggleClass("attackhighlight");
-    });
-    $(".attack").click(function(){
-      $(".subattack").remove();
-      $(".id").remove();
-      $(".idstats").remove();
-      id2 = $(this).attr("id");
-      t["t"+aT].cHName[1] = id2;
-      var keys2 = Object.keys(chars[id][id2]);
-      if (keys2[0][0] == "i" && keys2[0][1] == "d"){
-        for (j=0;j<keys2.length;j++){
-          $(this).after('<div id="'+keys2[j]+'" class="id '+id2+' '+id+'"><p>'+keys2[j]+'</p></div>');
-        }
-        $(".id").hover(function(){
-          $(this).toggleClass("idhighlight");
-        });
-        $(".id").click(function(){
-          $(".id").removeClass("idcurrent");
-          $(this).addClass("idcurrent");
-          $(".idstats").remove();
-          id4 = $(this).attr("id");
-          t["t"+aT].cHName[2] = false;
-          t["t"+aT].cHName[3] = id4;
-          var hb = chars[id][id2][id4];
-          $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
-          t["t"+aT].curHitbox = hb;
-          drawTrajectory();
-          if (id2.substr(1,id2.length) == "smash"){
-            charging = true;
-            $("#disableCharge").hide();
-          }
-          else {
-            charging = false;
-            $("#disableCharge").show();
-          }
-          drawAngle();
-        });
-      }
-      else {
-        for (k=0;k<keys2.length;k++){
-          $(this).after('<div id="'+keys2[k]+'" class="subattack '+id2+' '+id+'"><p>'+keys2[k]+'</p></div>');
-        }
-        $(".subattack").hover(function(){
-          $(this).toggleClass("subattackhighlight");
-        });
-        $(".subattack").click(function(){
-          $(".id").remove();
-          $(".idstats").remove();
-          id3 = $(this).attr("id");
-          t["t"+aT].cHName[2] = id3;
-          var keys3 = Object.keys(chars[id][id2][id3]);
-          for (l=0;l<keys3.length;l++){
-            $(this).after('<div id="'+keys3[l]+'" class="id '+id3+' '+id2+' '+id+'"><p>'+keys3[l]+'</p></div>');
-          }
-          $(".id").hover(function(){
-            $(this).toggleClass("idhighlight");
-          });
-          $(".id").click(function(){
-            $(".id").removeClass("idcurrent");
-            $(this).addClass("idcurrent");
-            $(".idstats").remove();
-            id4 = $(this).attr("id");
-            t["t"+aT].cHName[3] = id4;
-            var hb = chars[id][id2][id3][id4];
-            $(this).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
-            t["t"+aT].curHitbox = hb;
-            drawTrajectory();
-            if (id2.substr(1,id2.length) == "smash"){
-              charging = true;
-              $("#disableCharge").hide();
-            }
-            else {
-              charging = false;
-              $("#disableCharge").show();
-            }
-            drawAngle();
-            //prompt(aT);
-            //prompt(t["t"+aT].cHName);
-            //prompt(t["t1"].cHName);
-          });
-        })
-      }
-    })
-  });
+  characterClick();
 }
 
 function SVG(tag)
@@ -445,6 +582,9 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   $(SVG("path")).attr("id","trajLine"+aT).attr("class","trajLine "+cla).attr("d",lineText).prependTo("#trajGroup"+aT);
   if (!onlyDrawWhenUnfrozen){
     trajPosInfo();
+  }
+  if (t["t"+aT].curHitbox.angle == 361){
+    drawAngle();
   }
 }
 
@@ -532,6 +672,8 @@ $(document).ready(function(){
 
 
     if (!tdiPointerFrozen){
+      t["t"+aT].tdiMouseXReal = tdiMouseX;
+      t["t"+aT].tdiMouseYReal = tdiMouseY;
       t["t"+aT].tdiMouseXMelee = x;
       t["t"+aT].tdiMouseYMelee = y;
       $("#tdiSvgPointer").attr("cx",tdiMouseX/widthRatio).attr("cy",tdiMouseY/heightRatio);
@@ -814,7 +956,20 @@ $(document).ready(function(){
     $("#trajBox"+storedTrajs).after('<div id="trajBox'+(storedTrajs+1)+'" class="trajBox trajBoxSelected"><div id="trajNum'+(storedTrajs+1)+'" class="trajNum"><p>'+(storedTrajs+1)+'</p></div><div id="trajColour'+(storedTrajs+1)+'" class="trajColour" style="background-color:'+t["t"+(storedTrajs+1)].colour+'"></div><div id="trajLabel'+(storedTrajs+1)+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+(storedTrajs+1)+'" class="trajDelete"><p>x</p></div></div>');
 
     storedTrajs++;
-    t["t"+storedTrajs] = t["t"+aT];
+    /*for(var k in t["t"+aT]){
+      var m = t["t"+aT][k];
+      t["t"+storedTrajs][k] = m;
+    }*/
+
+    //finally found a way to deep copy objects. fukin pointers man
+    $.extend(true,t["t"+storedTrajs],t["t"+aT]);
+    //t["t"+storedTrajs].cHName = "poop";
+    //t["t"+storedTrajs] = t["t"+aT];
+
+    /*Object.keys(t["t"+aT]).forEach(function(key) {
+      t["t"+storedTrajs][key] = t["t"+aT][key];
+    });*/
+
     t["t"+storedTrajs].colour = startColours[storedTrajs-1];
     aT = storedTrajs;
 
@@ -832,5 +987,11 @@ $(document).ready(function(){
   $("#trajAdd").hover(function(){
     $(this).toggleClass("trajAddBoxHighlight");
   });
+
+  $(".character").hover(function(){
+    $(this).toggleClass("characterhighlight");
+  });
+
+  //thingy();
 
 });
