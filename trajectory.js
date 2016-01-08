@@ -34,8 +34,8 @@ function trajectoryObject(){
   this.mouseYMeleeF = 0;
   this.tdiMouseXMelee = 0;
   this.tdiMouseYMelee = 0;
-  this.tdiMouseXReal = 81;
-  this.tdiMouseYReal = 81;
+  this.tdiMouseXReal = 65.4;
+  this.tdiMouseYReal = 65.4;
   this.curHitbox = chars.Fx.NS.id0;
   this.cHName = ["Fx","NS",false,"id0"];
   this.version = "NTSC";
