@@ -232,7 +232,6 @@ function idClick(){
     var hb = chars[id][id2][id3][id4];
     $(this).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
     t["t"+aT].curHitbox = hb;
-    drawTrajectory();
     if (id2.substr(1,id2.length) == "smash"){
       charging = true;
       $("#disableCharge").hide();
@@ -241,6 +240,7 @@ function idClick(){
       charging = false;
       $("#disableCharge").show();
     }
+    drawTrajectory();
     drawAngle();
   });
 }
@@ -256,7 +256,6 @@ function idClick2(){
     var hb = chars[id][id2][id4];
     $(this).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
     t["t"+aT].curHitbox = hb;
-    drawTrajectory();
     if (id2.substr(1,id2.length) == "smash"){
       charging = true;
       $("#disableCharge").hide();
@@ -265,6 +264,7 @@ function idClick2(){
       charging = false;
       $("#disableCharge").show();
     }
+    drawTrajectory();
     drawAngle();
   });
 }
@@ -297,6 +297,8 @@ function trajBoxClick(){
         $("#staleQ"+n).addClass("staleQon");
       }
     }
+
+    $("#chargingNumberEdit").empty().append(t["t"+aT].chargeF);
 
     $(".posButton").removeClass("posButtonSelected");
     if (t["t"+aT].reverse){
@@ -359,7 +361,6 @@ function trajBoxClick(){
       $("#"+id4).addClass("idcurrent");
       hb = t["t"+aT].curHitbox;
       $("#"+id4).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
-      drawTrajectory();
       if (id2.substr(1,id2.length) == "smash"){
         charging = true;
         $("#disableCharge").hide();
@@ -368,6 +369,7 @@ function trajBoxClick(){
         charging = false;
         $("#disableCharge").show();
       }
+      drawTrajectory();
     }
     else {
       for (k=0;k<keys2.length;k++){
@@ -391,7 +393,6 @@ function trajBoxClick(){
       hb = t["t"+aT].curHitbox;
       $("#"+id4).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
       t["t"+aT].curHitbox = hb;
-      drawTrajectory();
       if (id2.substr(1,id2.length) == "smash"){
         charging = true;
         $("#disableCharge").hide();
@@ -400,6 +401,7 @@ function trajBoxClick(){
         charging = false;
         $("#disableCharge").show();
       }
+      drawTrajectory();
 
     }
 
