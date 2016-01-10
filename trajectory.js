@@ -170,89 +170,109 @@ function readQueryString(){
     }
   }
   if (queryExist){
-    for (i=1;i<10;i++){
-      var exists = GetQueryStringParams(i+"a");
+    storedTrajs = 0;
+    $("#trajBox1").remove();
+    $("#trajGroup1").remove();
+    for (p=1;p<10;p++){
+      var exists = GetQueryStringParams(p+"a");
       if (exists){
-        currentTrajs[i-1] = true;
-        var ct = t["t"+i];
-        ct.trajFrozen = true;
+        currentTrajs[p-1] = true;
+        t["t"+p].trajFrozen = true;
         for (j=0;j<11;j++){
           var ja = String.fromCharCode(97 + j);
-          var temp = GetQueryStringParams(i+ja);
+          var temp = GetQueryStringParams(p+ja);
 
           switch (ja){
             case "a":
-              ct.mouseXMeleeF = parseFloat(temp);
+              t["t"+p].mouseXMeleeF = parseFloat(temp);
               break;
             case "b":
-              ct.mouseYMeleeF = parseFloat(temp);
+              t["t"+p].mouseYMeleeF = parseFloat(temp);
               break;
             case "c":
-              ct.tdiMouseXReal = parseFloat(temp);
+              t["t"+p].tdiMouseXReal = parseFloat(temp);
               break;
             case "d":
-              ct.tdiMouseYReal = parseFloat(temp);
-              var xy = convertPixelsToStick(ct.tdiMouseXReal,ct.tdiMouseYReal);
-              ct.tdiMouseXMelee = xy[0];
-              ct.tdiMouseYMelee = xy[1];
+              t["t"+p].tdiMouseYReal = parseFloat(temp);
+              var xy = convertPixelsToStick(t["t"+p].tdiMouseXReal,t["t"+p].tdiMouseYReal);
+              t["t"+p].tdiMouseXMelee = xy[0];
+              t["t"+p].tdiMouseYMelee = xy[1];
               break;
             case "e":
-              ct.cHName = temp.split(',');
-              if (ct.cHName[2] == "false"){
-                ct.cHName[2] = false;
-                ct.curHitbox = chars[ct.cHName[0]][ct.cHName[1]][ct.cHName[3]];
+              t["t"+p].cHName = temp.split(',');
+              if (t["t"+p].cHName[2] == "false"){
+                t["t"+p].cHName[2] = false;
+                t["t"+p].curHitbox = chars[t["t"+p].cHName[0]][t["t"+p].cHName[1]][t["t"+p].cHName[3]];
               }
               else {
-                ct.curHitbox = chars[ct.cHName[0]][ct.cHName[1]][ct.cHName[2]][ct.cHName[3]];
+                t["t"+p].curHitbox = chars[t["t"+p].cHName[0]][t["t"+p].cHName[1]][t["t"+p].cHName[2]][t["t"+p].cHName[3]];
               }
               break;
             case "f":
-              ct.character = temp;
+              t["t"+p].character = temp;
               break;
             case "g":
-              ct.percent = parseInt(temp);
+              t["t"+p].percent = parseInt(temp);
               break;
             case "h":
               if (Boolean(parseInt(temp[0]))){
-                ct.version = "PAL";
+                t["t"+p].version = "PAL";
               }
               else {
-                ct.version = "NTSC";
+                t["t"+p].version = "NTSC";
               }
-              ct.crouch = Boolean(parseInt(temp[1]));
-              ct.reverse = Boolean(parseInt(temp[2]));
-              ct.chargeInterrupt = Boolean(parseInt(temp[3]));
+              t["t"+p].crouch = Boolean(parseInt(temp[1]));
+              t["t"+p].reverse = Boolean(parseInt(temp[2]));
+              t["t"+p].chargeInterrupt = Boolean(parseInt(temp[3]));
               break;
             case "i":
-              ct.chargeF = parseInt(temp);
+              t["t"+p].chargeF = parseInt(temp);
               break;
             case "j":
               for(k=0;k<9;k++){
-                ct.staleQueue[k] = Boolean(parseInt(temp[k]));
+                t["t"+p].staleQueue[k] = Boolean(parseInt(temp[k]));
               }
               break;
             case "k":
-              //ct.colour = temp;
+              if (temp.length == 6){
+                t["t"+p].colour = "#"+temp;
+              }
+              else {
+                t["t"+p].colour = temp;
+              }
+              prompt(t["t"+p].colour);
               break;
             default:
               break;
           }
         }
 
-        aT = i;
+        aT = p;
         drawTrajectory();
+        $("#trajAdd").before('<div id="trajBox'+p+'" class="trajBox"><div id="trajNum'+p+'" class="trajNum"><p>'+p+'</p></div><div id="trajColour'+p+'" class="trajColour" style="background-color:'+t["t"+p].colour+'"></div><div id="trajLabel'+p+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+p+'" class="trajDelete"><p>x</p></div></div>');
+        storedTrajs++;
       }
       else {
-        currentTrajs[i-1] = false;
+        currentTrajs[p-1] = false;
       }
     }
     for (l=0;l<9;l++){
       if (currentTrajs[l]){
         aT = l+1;
+        $("#trajBox"+aT).addClass("trajBoxSelected");
         break;
       }
     }
     swapOptions();
+    trajBoxHover();
+    trajBoxClick();
+    trajColourClick();
+    trajColourHover();
+    trajDeleteHover();
+    trajDeleteClick();
+    if (storedTrajs == 1){
+      $(".trajDelete").addClass("trajDeleteDisable");
+    }
     tdiPointerFrozen = true;
   }
 }
@@ -345,6 +365,16 @@ function writeQueryString(){
             break;
           case 10:
             temp = t["t"+i].colour;
+            if (temp[0] == "#"){
+              temp = temp.substr(1,temp.length);
+            }
+            else {
+              temp = temp.split(',');
+              temp[0] = parseInt(temp[0].substr(4,temp[0].length)).toString(16);
+              temp[1] = parseInt(temp[1].substr(1,temp[1].length)).toString(16);
+              temp[2] = parseInt(temp[2].substr(1,temp[2].length-2)).toString(16);
+              temp = ""+temp[0]+temp[1]+temp[2];
+            }
             break;
           default:
             break;
@@ -1213,7 +1243,7 @@ $(document).ready(function(){
         $("#trajBox"+(newTraj-1)).after('<div id="trajBox'+newTraj+'" class="trajBox trajBoxSelected"><div id="trajNum'+newTraj+'" class="trajNum"><p>'+newTraj+'</p></div><div id="trajColour'+newTraj+'" class="trajColour" style="background-color:'+t["t"+newTraj].colour+'"></div><div id="trajLabel'+newTraj+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+newTraj+'" class="trajDelete"><p>x</p></div></div>');
       }
       else {
-        $("#savetitle").after('<div id="trajBox1" class="trajBox trajBoxSelected"><div id="trajNum1" class="trajNum"><p>1</p></div><div id="trajColour1" class="trajColour" style="background-color:'+t["t1"].colour+'"></div><div id="trajLabel1" class="trajLabel"><p>Add label</p></div><div id="trajDelete1" class="trajDelete"><p>x</p></div></div>');
+        $("#trajBoxContainer").prepend('<div id="trajBox1" class="trajBox trajBoxSelected"><div id="trajNum1" class="trajNum"><p>1</p></div><div id="trajColour1" class="trajColour" style="background-color:'+t["t1"].colour+'"></div><div id="trajLabel1" class="trajLabel"><p>Add label</p></div><div id="trajDelete1" class="trajDelete"><p>x</p></div></div>');
       }
 
       currentTrajs[newTraj-1] = true;

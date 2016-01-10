@@ -956,6 +956,12 @@ body {
   z-index:4;
 }
 
+#trajBoxContainer {
+  width:auto;
+  height:100px;
+  display:inline-block;
+}
+
 .trajBox {
   width:80px;
   height:90px;
