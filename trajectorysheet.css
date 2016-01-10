@@ -1073,6 +1073,109 @@ body {
   color:#666565;
 }
 
+#trajShare {
+  height:50px;
+  width:90px;
+  background-color:#3fc2a2;
+  display:inline-block;
+  float:right;
+  text-align:center;
+  cursor:pointer;
+}
+
+#trajShare p {
+  font-size:25px;
+  margin:5px;
+}
+
+#shareUrl {
+  height:30px;
+  width:120px;
+  display:inline-block;
+  float:right;
+}
+
+#shareUrl p {
+  margin:0;
+}
+
+#popout {
+  height:100%;
+  width:100%;
+  display:block;
+  position:absolute;
+  z-index:21;
+}
+
+#popoutOverlay {
+  height:100%;
+  width:100%;
+  display:block;
+  background-color:rgba(0, 0, 0, 0.5);
+  position:absolute;
+  z-index:20;
+}
+
+#popoutShare {
+  width:400px;
+  height:300px;
+  background-color:#4b4b4b;
+  vertical-align:middle;
+  top:50%;
+  left:50%;
+  position:absolute;
+  margin-top:-150px;
+  margin-left:-200px;
+
+}
+
+#ppSTitle {
+  width:350px;
+  height:50px;
+  display:inline-block;
+}
+
+#ppSTitle p {
+  margin:25px 30px 10px 30px;
+}
+
+#ppSUrl {
+  width:330px;
+  height:180px;
+  background-color:#1a1a1a;
+  display:inline-block;
+  margin:20px;
+  border:5px solid #606060;
+  text-overflow:clip;
+  word-wrap: break-word;
+  padding:10px;
+}
+
+#ppSUrl p {
+  margin:0;
+}
+
+#ppSClose {
+  width:50px;
+  height:50px;
+  display:inline-block;
+  vertical-align:top;
+  cursor:pointer;
+}
+
+.ppSClose {
+  background-color:#ff5353;
+}
+
+.ppSCloseHighlight {
+  background-color:#ff7070;
+}
+
+#ppSClose p {
+  margin:0px 14px;
+  font-size:40px;
+}
+
 
 
 .controlcollapse {

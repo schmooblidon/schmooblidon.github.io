@@ -38,9 +38,9 @@ function trajectoryObject(){
   this.tdiMouseYReal = 65.4;
   this.curHitbox = chars.Fx.NS.id0;
   this.cHName = ["Fx","NS",false,"id0"];
-  this.version = "NTSC";
   this.character = "Fox";
   this.percent = 80;
+  this.version = "NTSC";
   this.crouch = false;
   this.reverse = false;
   this.chargeInterrupt = false;
@@ -116,6 +116,245 @@ crouch = [false,false,false,false,false,false,false,false,false];
 var percent = 120;
 version = "NTSC";
 var character = "Fox";*/
+
+//"a0=00000000&a1=00000000&a2=00000000&a3=00000000&a4=chars.fx.ns.id0&a5=Fox&a6=080&a7=00&a8=00&a9=000&a10=00000000
+
+
+function convertPixelsToStick(pixelX,pixelY){
+  var widthRatio = 130/161;
+  var heightRatio = 130/161;
+  var x = Math.round(((pixelX/widthRatio)-80))*0.0125;
+  var y = Math.round(((pixelY/heightRatio)-80))*(-0.0125);
+  if (x >= 1 || x <= -1){
+    x = x.toPrecision(5);
+  }
+  else if (x >= 0.1 || x <= -0.1){
+    x = x.toPrecision(4);
+  }
+  else {
+    x = x.toPrecision(3);
+  }
+  if (y >= 1 || y <= -1){
+    y = y.toPrecision(5);
+  }
+  else if (y >= 0.1 || y <= -0.1){
+    y = y.toPrecision(4);
+  }
+  else {
+     y = y.toPrecision(3);
+  }
+
+  return [x,y];
+}
+
+
+
+function GetQueryStringParams(sParam){
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++){
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam){
+          return sParameterName[1];
+        }
+    }
+}
+
+function readQueryString(){
+  var queryExist = false;
+  for (m=1;m<10;m++){
+    var qEx = GetQueryStringParams(m+"a");
+    if (qEx){
+      queryExist = true;
+      break;
+    }
+  }
+  if (queryExist){
+    for (i=1;i<10;i++){
+      var exists = GetQueryStringParams(i+"a");
+      if (exists){
+        currentTrajs[i-1] = true;
+        var ct = t["t"+i];
+        ct.trajFrozen = true;
+        for (j=0;j<11;j++){
+          var ja = String.fromCharCode(97 + j);
+          var temp = GetQueryStringParams(i+ja);
+
+          switch (ja){
+            case "a":
+              ct.mouseXMeleeF = parseFloat(temp);
+              break;
+            case "b":
+              ct.mouseYMeleeF = parseFloat(temp);
+              break;
+            case "c":
+              ct.tdiMouseXReal = parseFloat(temp);
+              break;
+            case "d":
+              ct.tdiMouseYReal = parseFloat(temp);
+              var xy = convertPixelsToStick(ct.tdiMouseXReal,ct.tdiMouseYReal);
+              ct.tdiMouseXMelee = xy[0];
+              ct.tdiMouseYMelee = xy[1];
+              break;
+            case "e":
+              ct.cHName = temp.split(',');
+              if (ct.cHName[2] == "false"){
+                ct.cHName[2] = false;
+                ct.curHitbox = chars[ct.cHName[0]][ct.cHName[1]][ct.cHName[3]];
+              }
+              else {
+                ct.curHitbox = chars[ct.cHName[0]][ct.cHName[1]][ct.cHName[2]][ct.cHName[3]];
+              }
+              break;
+            case "f":
+              ct.character = temp;
+              break;
+            case "g":
+              ct.percent = parseInt(temp);
+              break;
+            case "h":
+              if (Boolean(parseInt(temp[0]))){
+                ct.version = "PAL";
+              }
+              else {
+                ct.version = "NTSC";
+              }
+              ct.crouch = Boolean(parseInt(temp[1]));
+              ct.reverse = Boolean(parseInt(temp[2]));
+              ct.chargeInterrupt = Boolean(parseInt(temp[3]));
+              break;
+            case "i":
+              ct.chargeF = parseInt(temp);
+              break;
+            case "j":
+              for(k=0;k<9;k++){
+                ct.staleQueue[k] = Boolean(parseInt(temp[k]));
+              }
+              break;
+            case "k":
+              //ct.colour = temp;
+              break;
+            default:
+              break;
+          }
+        }
+      }
+      else {
+        currentTrajs[i-1] = false;
+      }
+    }
+    for (l=0;l<9;l++){
+      if (currentTrajs[l]){
+        aT = l+1;
+        break;
+      }
+    }
+    swapOptions();
+    tdiPointerFrozen = true;
+  }
+}
+
+/*
+0-mouseXMeleeF
+1-mouseFMeleeF
+2-tdiMouseXReal
+3-tdiMouseYReal
+4-curHitbox
+5-character
+6-percent
+7-version,crouch,reverse,chargeInterrupt
+8-chargeF
+9-staleQueue
+10-colour*/
+
+function writeQueryString(){
+  var qstring = "?";
+  for (i=1;i<10;i++){
+    if (currentTrajs[i-1]){
+      for (j=0;j<11;j++){
+        var temp = "";
+        switch (j){
+          case 0:
+            temp = t["t"+i].mouseXMeleeF;
+            break;
+          case 1:
+            temp = t["t"+i].mouseYMeleeF;
+            break;
+          case 2:
+            temp = t["t"+i].tdiMouseXReal;
+            break;
+          case 3:
+            temp = t["t"+i].tdiMouseYReal;
+            break;
+          case 4:
+            temp = t["t"+i].cHName;
+            break;
+          case 5:
+            temp = t["t"+i].character;
+            break;
+          case 6:
+            temp = t["t"+i].percent;
+            break;
+          case 7:
+            var temp1 = t["t"+i].version;
+            if (temp1 == "NTSC"){
+              temp1 = "0";
+            }
+            else {
+              temp1 = "1";
+            }
+            var temp2 = t["t"+i].crouch;
+            if (temp2){
+              temp2 = "1";
+            }
+            else {
+              temp2 = "0";
+            }
+            var temp3 = t["t"+i].reverse;
+            if (temp3){
+              temp3 = "1";
+            }
+            else {
+              temp3 = "0";
+            }
+            var temp4 = t["t"+i].chargeInterrupt;
+            if (temp4){
+              temp4 = "1";
+            }
+            else {
+              temp4 = "0";
+            }
+            temp = temp1+temp2+temp3+temp4;
+            break;
+          case 8:
+            temp = t["t"+i].chargeF;
+            break;
+          case 9:
+            var tem = t["t"+i].staleQueue;
+            for (k=0;k<9;k++){
+              if (tem[k]){
+                temp += "1";
+              }
+              else {
+                temp += "0";
+              }
+            }
+            break;
+          case 10:
+            temp = t["t"+i].colour;
+            break;
+          default:
+            break;
+        }
+
+        jt = String.fromCharCode(97 + j);
+        qstring += i+jt+"="+temp+"&";
+      }
+    }
+  }
+  qstring = qstring.substr(0,qstring.length - 1);
+  return qstring;
+}
 
 function drawAngle(){
   var ang = t["t"+aT].curHitbox.angle;
@@ -566,8 +805,8 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   var temX = ((xPos*10)+centreOffset[0]);
   var temY = ((-yPos*10)+centreOffset[1]);
   var lineText = "M"+temX+" "+temY+" ";
-  $(SVG("g")).attr("id","trajGroup"+aT).prependTo("#trajectory");
-  $(SVG("g")).attr("id","trajGroup-t"+aT).prependTo("#trajectory-t");
+  $(SVG("g")).attr("id","trajGroup"+aT).appendTo("#trajectory");
+  $(SVG("g")).attr("id","trajGroup-t"+aT).appendTo("#trajectory-t");
   //$(SVG("path")).attr("id","start"+activeTraj).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",startColours[activeTraj-1]).attr("stroke",startColours[activeTraj-1]).prependTo("#trajectory");
   $(SVG("path")).attr("id","start"+aT).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",t["t"+aT].colour).attr("stroke",t["t"+aT].colour).prependTo("#trajGroup"+aT);
 
@@ -662,38 +901,20 @@ $(document).ready(function(){
 
 	});
 
+
   $("#tdiSvg").mousemove(function(){
     var widthRatio = 130/161;
     var heightRatio = 130/161;
-    var x = Math.round(((tdiMouseX/widthRatio)-80))*0.0125;
-    var y = Math.round(((tdiMouseY/heightRatio)-80))*(-0.0125);
-    if (x >= 1 || x <= -1){
-      x = x.toPrecision(5);
-    }
-    else if (x >= 0.1 || x <= -0.1){
-      x = x.toPrecision(4);
-    }
-    else {
-      x = x.toPrecision(3);
-    }
-    if (y >= 1 || y <= -1){
-      y = y.toPrecision(5);
-    }
-    else if (y >= 0.1 || y <= -0.1){
-      y = y.toPrecision(4);
-    }
-    else {
-       y = y.toPrecision(3);
-    }
-    $("#tdiXInput").empty().append(x);
-    $("#tdiYInput").empty().append(y);
+    var xy = convertPixelsToStick(tdiMouseX,tdiMouseY);
+    $("#tdiXInput").empty().append(xy[0]);
+    $("#tdiYInput").empty().append(xy[1]);
 
 
     if (!tdiPointerFrozen){
       t["t"+aT].tdiMouseXReal = tdiMouseX;
       t["t"+aT].tdiMouseYReal = tdiMouseY;
-      t["t"+aT].tdiMouseXMelee = x;
-      t["t"+aT].tdiMouseYMelee = y;
+      t["t"+aT].tdiMouseXMelee = xy[0];
+      t["t"+aT].tdiMouseYMelee = xy[1];
       $("#tdiSvgPointer").attr("cx",tdiMouseX/widthRatio).attr("cy",tdiMouseY/heightRatio);
       drawTrajectory();
     }
@@ -1022,6 +1243,23 @@ $(document).ready(function(){
     $(this).toggleClass("characterhighlight");
   });
 
+  $("#trajShare").click(function(){
+    var qstring = writeQueryString();
+
+    //$("#popout, #popoutOverlay").show();
+    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutShare"><div id="ppSTitle"><p>Copy the URL</p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppSUrl"><p id="shareUrlEdit">http://ikneedata.com/trajectory'+qstring+'</p></div></div></div>');
+    //$("#shareUrlEdit").empty().append(qstring);
+    $("#ppSClose").unbind("mouseover click");
+    $("#ppSClose").hover(function(){
+      $(this).toggleClass("ppSCloseHighlight");
+    });
+    $("#ppSClose").click(function(){
+      $("#popoutOverlay, #popout").remove();
+    });
+
+  });
+
+  readQueryString();
   //thingy();
 
 });
