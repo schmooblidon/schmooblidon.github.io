@@ -238,6 +238,9 @@ function readQueryString(){
               break;
           }
         }
+
+        aT = i;
+        drawTrajectory();
       }
       else {
         currentTrajs[i-1] = false;
