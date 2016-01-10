@@ -1149,10 +1149,12 @@ body {
   text-overflow:clip;
   word-wrap: break-word;
   padding:10px;
+  overflow-y:scroll;
 }
 
 #ppSUrl p {
   margin:0;
+
 }
 
 #ppSClose {
