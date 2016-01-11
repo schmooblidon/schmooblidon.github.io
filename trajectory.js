@@ -125,6 +125,8 @@ function convertPixelsToStick(pixelX,pixelY){
   var heightRatio = 130/161;
   var x = Math.round(((pixelX/widthRatio)-80))*0.0125;
   var y = Math.round(((pixelY/heightRatio)-80))*(-0.0125);
+  var x2 = "";
+  var y2 = "";
   if (x > 1){
     x = 1;
   }
@@ -138,25 +140,25 @@ function convertPixelsToStick(pixelX,pixelY){
     y = -1;
   }
   if (x >= 1 || x <= -1){
-    x = x.toPrecision(5);
+    x2 = x.toPrecision(5);
   }
   else if (x >= 0.1 || x <= -0.1){
-    x = x.toPrecision(4);
+    x2 = x.toPrecision(4);
   }
   else {
-    x = x.toPrecision(3);
+    x2 = x.toPrecision(3);
   }
   if (y >= 1 || y <= -1){
-    y = y.toPrecision(5);
+    y2 = y.toPrecision(5);
   }
   else if (y >= 0.1 || y <= -0.1){
-    y = y.toPrecision(4);
+    y2 = y.toPrecision(4);
   }
   else {
-     y = y.toPrecision(3);
+    y2 = y.toPrecision(3);
   }
 
-  return [x,y];
+  return [x,y,x2,y2];
 }
 
 
@@ -598,10 +600,36 @@ function swapOptions(){
 
     $("#percentNumberEdit").empty().append(t["t"+aT].percent);
 
-
-
     $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
 
+    var x = t["t"+aT].tdiMouseXMelee;
+    if (x >= 1 || x <= -1){
+      x = x.toPrecision(5);
+    }
+    else if (x >= 0.099 || x <= -0.099){
+      x = x.toPrecision(4);
+    }
+    else if (x == 0){
+      x = "0.0000";
+    }
+    else {
+      x = x.toPrecision(3);
+    }
+    $("#tdiXInput").empty().append(x);
+    var y = t["t"+aT].tdiMouseYMelee;
+    if (y >= 1 || y <= -1){
+      y = y.toPrecision(5);
+    }
+    else if (y >= 0.099 || y <= -0.099){
+      y = y.toPrecision(4);
+    }
+    else if (y == 0){
+      y = "0.0000";
+    }
+    else {
+       y = y.toPrecision(3);
+    }
+    $("#tdiYInput").empty().append(y);
 
     if (t["t"+aT].crouch){
       $("#cSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
@@ -953,12 +981,12 @@ $(document).ready(function(){
     var xy = convertPixelsToStick(tdiMouseX,tdiMouseY);
 
     if (!tdiPointerFrozen){
-      $("#tdiXInput").empty().append(xy[0]);
-      $("#tdiYInput").empty().append(xy[1]);
+      $("#tdiXInput").empty().append(xy[2]);
+      $("#tdiYInput").empty().append(xy[3]);
       t["t"+aT].tdiMouseXReal = tdiMouseX;
       t["t"+aT].tdiMouseYReal = tdiMouseY;
-      t["t"+aT].tdiMouseXMelee = parseFloat(xy[0]);
-      t["t"+aT].tdiMouseYMelee = parseFloat(xy[1]);
+      t["t"+aT].tdiMouseXMelee = xy[0];
+      t["t"+aT].tdiMouseYMelee = xy[1];
       $("#tdiSvgPointer").attr("cx",tdiMouseX/widthRatio).attr("cy",tdiMouseY/heightRatio);
       drawTrajectory();
     }
@@ -976,52 +1004,51 @@ $(document).ready(function(){
     tdiPointerFrozen = true;
     var id = $(this).attr("id");
     if (id[3] == "R" || id[3] == "L"){
-      var x = t["t"+aT].tdiMouseXMelee;
-      if (id[3] == "L" && !(x < -0.999)){
-        x -= 0.0125;
+      var x = "";
+      if (id[3] == "L" && !(t["t"+aT].tdiMouseXMelee < -0.999)){
+        t["t"+aT].tdiMouseXMelee -= 0.0125;
       }
-      else if (id[3] == "R" && !(x > 0.999)){
-        x += 0.0125;
+      else if (id[3] == "R" && !(t["t"+aT].tdiMouseXMelee > 0.999)){
+        t["t"+aT].tdiMouseXMelee += 0.0125;
       }
-      if (x >= 1 || x <= -1){
-        x = x.toPrecision(5);
+      if (t["t"+aT].tdiMouseXMelee >= 1 || t["t"+aT].tdiMouseXMelee <= -1){
+        x = t["t"+aT].tdiMouseXMelee.toPrecision(5);
       }
-      else if (x >= 0.099 || x <= -0.099){
-        x = x.toPrecision(4);
+      else if (t["t"+aT].tdiMouseXMelee >= 0.099 || t["t"+aT].tdiMouseXMelee <= -0.099){
+        x = t["t"+aT].tdiMouseXMelee.toPrecision(4);
       }
-      else if (x == 0){
+      else if (t["t"+aT].tdiMouseXMelee == 0){
         x = "0.0000";
       }
       else {
-        x = x.toPrecision(3);
+        x = t["t"+aT].tdiMouseXMelee.toPrecision(3);
       }
-      t["t"+aT].tdiMouseXMelee = parseFloat(x);
+      //t["t"+aT].tdiMouseXMelee = parseFloat(x);
       $("#tdiXInput").empty().append(x);
-      t["t"+aT].tdiMouseXReal = ((parseFloat(x)/0.0125)+80)*(130/161);
+      t["t"+aT].tdiMouseXReal = ((t["t"+aT].tdiMouseXMelee/0.0125)+80)*(130/161);
     }
     if (id[3] == "U" || id[3] == "D"){
-      var y = t["t"+aT].tdiMouseYMelee;
-      if (id[3] == "U" && !(y > 0.999)){
-        y += 0.0125;
+      var y = "";
+      if (id[3] == "U" && !(t["t"+aT].tdiMouseYMelee > 0.999)){
+        t["t"+aT].tdiMouseYMelee += 0.0125;
       }
-      else if (id[3] == "D" && !(y < -0.999)){
-        y -= 0.0125;
+      else if (id[3] == "D" && !(t["t"+aT].tdiMouseYMelee < -0.999)){
+        t["t"+aT].tdiMouseYMelee -= 0.0125;
       }
-      if (y >= 1 || y <= -1){
-        y = y.toPrecision(5);
+      if (t["t"+aT].tdiMouseYMelee >= 1 || t["t"+aT].tdiMouseYMelee <= -1){
+        y = t["t"+aT].tdiMouseYMelee.toPrecision(5);
       }
-      else if (y >= 0.099 || y <= -0.099){
-        y = y.toPrecision(4);
+      else if (t["t"+aT].tdiMouseYMelee >= 0.099 || t["t"+aT].tdiMouseYMelee <= -0.099){
+        y = t["t"+aT].tdiMouseYMelee.toPrecision(4);
       }
-      else if (y == 0){
+      else if (t["t"+aT].tdiMouseYMelee == 0){
         y = "0.0000";
       }
       else {
-         y = y.toPrecision(3);
+         y = t["t"+aT].tdiMouseYMelee.toPrecision(3);
       }
-      t["t"+aT].tdiMouseYMelee = parseFloat(y);
       $("#tdiYInput").empty().append(y);
-      t["t"+aT].tdiMouseYReal = ((parseFloat(y)/-0.0125)+80)*(130/161);
+      t["t"+aT].tdiMouseYReal = ((t["t"+aT].tdiMouseYMelee/-0.0125)+80)*(130/161);
     }
     $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
     drawTrajectory();
