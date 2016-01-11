@@ -125,6 +125,18 @@ function convertPixelsToStick(pixelX,pixelY){
   var heightRatio = 130/161;
   var x = Math.round(((pixelX/widthRatio)-80))*0.0125;
   var y = Math.round(((pixelY/heightRatio)-80))*(-0.0125);
+  if (x > 1){
+    x = 1;
+  }
+  else if (x < -1){
+    x = -1;
+  }
+  if (y > 1){
+    y = 1;
+  }
+  else if (y < -1){
+    y = -1;
+  }
   if (x >= 1 || x <= -1){
     x = x.toPrecision(5);
   }
@@ -240,7 +252,7 @@ function readQueryString(){
               else {
                 t["t"+p].colour = temp;
               }
-              prompt(t["t"+p].colour);
+              //prompt(t["t"+p].colour);
               break;
             default:
               break;
@@ -939,15 +951,14 @@ $(document).ready(function(){
     var widthRatio = 130/161;
     var heightRatio = 130/161;
     var xy = convertPixelsToStick(tdiMouseX,tdiMouseY);
-    $("#tdiXInput").empty().append(xy[0]);
-    $("#tdiYInput").empty().append(xy[1]);
-
 
     if (!tdiPointerFrozen){
+      $("#tdiXInput").empty().append(xy[0]);
+      $("#tdiYInput").empty().append(xy[1]);
       t["t"+aT].tdiMouseXReal = tdiMouseX;
       t["t"+aT].tdiMouseYReal = tdiMouseY;
-      t["t"+aT].tdiMouseXMelee = xy[0];
-      t["t"+aT].tdiMouseYMelee = xy[1];
+      t["t"+aT].tdiMouseXMelee = parseFloat(xy[0]);
+      t["t"+aT].tdiMouseYMelee = parseFloat(xy[1]);
       $("#tdiSvgPointer").attr("cx",tdiMouseX/widthRatio).attr("cy",tdiMouseY/heightRatio);
       drawTrajectory();
     }
@@ -955,6 +966,80 @@ $(document).ready(function(){
 
   $("#tdiSvg").click(function(){
     tdiPointerFrozen ^= true;
+  });
+
+  $(".tdiPrecise").hover(function(){
+    $(this).toggleClass("tdiPreciseHighlight");
+  });
+
+  $(".tdiPrecise").click(function(){
+    tdiPointerFrozen = true;
+    var id = $(this).attr("id");
+    if (id[3] == "R" || id[3] == "L"){
+      var x = t["t"+aT].tdiMouseXMelee;
+      if (id[3] == "L" && !(x < -0.999)){
+        x -= 0.0125;
+      }
+      else if (id[3] == "R" && !(x > 0.999)){
+        x += 0.0125;
+      }
+      if (x >= 1 || x <= -1){
+        x = x.toPrecision(5);
+      }
+      else if (x >= 0.099 || x <= -0.099){
+        x = x.toPrecision(4);
+      }
+      else if (x == 0){
+        x = "0.0000";
+      }
+      else {
+        x = x.toPrecision(3);
+      }
+      t["t"+aT].tdiMouseXMelee = parseFloat(x);
+      $("#tdiXInput").empty().append(x);
+      t["t"+aT].tdiMouseXReal = ((parseFloat(x)/0.0125)+80)*(130/161);
+    }
+    if (id[3] == "U" || id[3] == "D"){
+      var y = t["t"+aT].tdiMouseYMelee;
+      if (id[3] == "U" && !(y > 0.999)){
+        y += 0.0125;
+      }
+      else if (id[3] == "D" && !(y < -0.999)){
+        y -= 0.0125;
+      }
+      if (y >= 1 || y <= -1){
+        y = y.toPrecision(5);
+      }
+      else if (y >= 0.099 || y <= -0.099){
+        y = y.toPrecision(4);
+      }
+      else if (y == 0){
+        y = "0.0000";
+      }
+      else {
+         y = y.toPrecision(3);
+      }
+      t["t"+aT].tdiMouseYMelee = parseFloat(y);
+      $("#tdiYInput").empty().append(y);
+      t["t"+aT].tdiMouseYReal = ((parseFloat(y)/-0.0125)+80)*(130/161);
+    }
+    $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
+    drawTrajectory();
+  });
+
+  $("#tdiCentre").hover(function(){
+    $(this).toggleClass("tdiPreciseHighlight");
+  });
+
+  $("#tdiCentre").click(function(){
+    t["t"+aT].tdiMouseXMelee = 0;
+    t["t"+aT].tdiMouseYMelee = 0;
+    t["t"+aT].tdiMouseXReal = 65.4;
+    t["t"+aT].tdiMouseYReal = 65.4;
+    $("#tdiXInput").empty().append("0.0000");
+    $("#tdiYInput").empty().append("0.0000");
+    $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
+    drawTrajectory();    
   });
 
   $("#trajectory-t").mousemove(function(){

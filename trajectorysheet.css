@@ -767,23 +767,25 @@ body {
   display:inline-block;
   background-color:#414141;
   vertical-align:top;
-  display:none;
+
 }
 
 #tdiUp {
   width:20px;
   height:65px;
   display:inline-block;
-
+  background-image:url(assets/trajectory/preciseup.png);
 }
 
 #tdiDown {
   width:20px;
   height:65px;
+  display:inline-block;
+  background-image:url(assets/trajectory/precisedown.png);
 }
 
 #tdiHorizontal {
-  width:130px;
+  width:150px;
   height:20px;
   display:inline-block;
   background-color:#414141;
@@ -794,12 +796,29 @@ body {
   width:65px;
   height:20px;
   display:inline-block;
+  background-image:url(assets/trajectory/preciseleft.png);
 }
 
 #tdiRight {
   width:65px;
   height:20px;
   display:inline-block;
+  background-image:url(assets/trajectory/preciseright.png);
+}
+
+.tdiPrecise {
+  cursor:pointer;
+}
+
+.tdiPreciseHighlight {
+  background-color:#666666;
+}
+
+#tdiCentre {
+  height:20px;
+  width:20px;
+  display:inline-block;
+  background-image:url(assets/trajectory/tdicentre.png);
 }
 
 #tdiValues {
