@@ -580,7 +580,7 @@ function swapOptions(){
     $(".staleQbutton").removeClass("staleQon");
     for(n=0;n<t["t"+aT].staleQueue.length;n++){
       if (t["t"+aT].staleQueue[n]){
-        $("#staleQ"+n).addClass("staleQon");
+        $("#staleQ"+(n+1)).addClass("staleQon");
       }
     }
 
@@ -1039,7 +1039,7 @@ $(document).ready(function(){
     $("#tdiXInput").empty().append("0.0000");
     $("#tdiYInput").empty().append("0.0000");
     $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
-    drawTrajectory();    
+    drawTrajectory();
   });
 
   $("#trajectory-t").mousemove(function(){
@@ -1365,7 +1365,7 @@ $(document).ready(function(){
     var qstring = writeQueryString();
 
     //$("#popout, #popoutOverlay").show();
-    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutShare"><div id="ppSTitle"><p>Copy the URL</p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppSUrl"><p id="shareUrlEdit">http://ikneedata.com/trajectory'+qstring+'</p></div></div></div>');
+    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutShare"><div id="ppSTitle"><p>Share this URL</p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppSUrl"><p id="shareUrlEdit">http://ikneedata.com/trajectory'+qstring+'</p></div></div></div>');
     //$("#shareUrlEdit").empty().append(qstring);
     $("#ppSClose").unbind("mouseover click");
     $("#ppSClose").hover(function(){
