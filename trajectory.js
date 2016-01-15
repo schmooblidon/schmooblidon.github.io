@@ -119,6 +119,148 @@ var character = "Fox";*/
 
 //"a0=00000000&a1=00000000&a2=00000000&a3=00000000&a4=chars.fx.ns.id0&a5=Fox&a6=080&a7=00&a8=00&a9=000&a10=00000000
 
+function tdiSelector(){
+  $("#tdiSelector").unbind("mousemove");
+  $("#tdiSelector").mousemove(function(){
+    var widthRatio = 130/161;
+    var heightRatio = 130/161;
+    var xy = convertPixelsToStick(tdiMouseX,tdiMouseY);
+
+
+    if (!tdiPointerFrozen){
+
+      t["t"+aT].tdiMouseXReal = tdiMouseX;
+      t["t"+aT].tdiMouseYReal = tdiMouseY;
+      t["t"+aT].tdiMouseXMelee = xy[0];
+      t["t"+aT].tdiMouseYMelee = xy[1];
+      changeUserStick(xy[0],xy[1],"tdi");
+      //var xy = convertPixelsToStick(t["t"+aT].tdiMouseXReal,t["t"+aT].tdiMouseYReal);
+      var xy = convertPixelsToStick(t["t"+aT].tdiMouseXReal,t["t"+aT].tdiMouseYReal);
+      $("#tdiXInput").empty().append(xy[2]);
+      $("#tdiYInput").empty().append(xy[3]);
+      $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
+      drawTrajectory();
+    }
+  });
+}
+
+function getStickAngle(x,y){
+  var diAngle = 0;
+  if (x < 0.2875 && x > -0.2875){
+    x = 0;
+  }
+  if (y < 0.2875 && y > -0.2875){
+    y = 0;
+  }
+
+  if (x == 0 && y < 0){
+    diAngle = 270;
+  }
+  else if (x == 0 && y > 0){
+    diAngle = 90;
+  }
+  else if (x == 0 && y == 0){
+    diAngle = "deadzone";
+  }
+  else {
+    diAngle = Math.atan(y/x) * (180 / Math.PI) * 1;
+    if (x < 0){
+      diAngle += 180;
+    }
+    else if (y < 0) {
+      diAngle += 360;
+    }
+  }
+  return diAngle;
+}
+
+function changeUserStick(x,y,type,di){
+  diAngle = di || getStickAngle(x,y);
+  if (diAngle == "deadzone"){
+    $("#"+type+"User").hide();
+    $("#"+type+"UserCentre").show();
+  }
+  else {
+    $("#"+type+"UserCentre").hide();
+    var attackAngle = 0;
+    if (t["t"+aT].curHitbox.angle == 361){
+      attackAngle = sakurai;
+    }
+    else {
+      attackAngle = t["t"+aT].curHitbox.angle;
+    }
+    if (t["t"+aT].reverse){
+      attackAngle = 180 - attackAngle;
+        if (attackAngle < 0){
+          attackAngle = 360 + attackAngle;
+        }
+    }
+    var rAngle = attackAngle - diAngle;
+    if (rAngle > 180){
+      rAngle -= 360;
+    }
+    /*rAngle = Math.abs(rAngle);
+    if (rAngle > 180){
+      rAngle -= 180;
+    }
+    else {
+      rAngle -= 90;
+    }
+    rAngle = Math.abs(rAngle);*/
+
+
+    //radius = 1
+
+    var y = -Math.sin(diAngle * (Math.PI / 180));
+    var x = Math.cos(diAngle * (Math.PI / 180));
+
+    //prompt(t["t"+aT].tdiMouseYMelee);
+    t["t"+aT].tdiMouseXMelee = Math.round(x*80)/80;
+    t["t"+aT].tdiMouseYMelee = Math.round(-y*80)/80;
+    //prompt(t["t"+aT].tdiMouseYMelee);
+
+    t["t"+aT].tdiMouseXReal = Math.round(((t["t"+aT].tdiMouseXMelee/0.0125)+80)*(130/161));
+    t["t"+aT].tdiMouseYReal = Math.round(((-t["t"+aT].tdiMouseYMelee/0.0125)+80)*(130/161));
+
+    var pDistance = Math.sin(rAngle * (Math.PI / 180)) * Math.sqrt(t["t"+aT].tdiMouseXMelee*t["t"+aT].tdiMouseXMelee+t["t"+aT].tdiMouseYMelee*t["t"+aT].tdiMouseYMelee);
+
+    var angleOffset = pDistance * pDistance * 18;
+    if (angleOffset > 18){
+      angleOffset = 18;
+    }
+
+    if (rAngle < 0 && rAngle > -180){
+        angleOffset *= -1;
+    }
+    angleOffset = Math.abs(angleOffset);
+    $("#tdiDebug").empty().append(angleOffset);
+    $("#tdirAngle").empty().append(rAngle);
+    $("#tdiDiAngle").empty().append(Math.round(diAngle));
+    $("#tdiOffsetPercent").empty().append(Math.round(angleOffset/18*100));
+    $("#"+type+"User").show().css({
+        "-moz-transform":"rotate("+(diAngle * -1)+"deg)",
+        "-ms-transform":"rotate("+(diAngle * -1)+"deg)",
+        "-o-transform":"rotate("+(diAngle * -1)+"deg)",
+        "transform":"rotate("+(diAngle * -1)+"deg)"
+    });
+    calculateStickColor(angleOffset, type);
+  }
+}
+
+function calculateStickColor(angleOffset, type){
+  var red = 255;
+  var green = 0;
+  var num = Math.floor(angleOffset * (512/18));
+  if (num > 256){
+    red -= (num - 256);
+    green = 255;
+  }
+  else {
+    green = num;
+  }
+  $("#"+type+"USolid").css("background-color","rgb("+red+", "+green+", 0)");
+}
+
 
 function convertPixelsToStick(pixelX,pixelY){
   var widthRatio = 130/161;
@@ -428,6 +570,8 @@ function drawAngle(){
     "-o-transform":"rotate("+(ang * -1)+"deg)",
     "transform":"rotate("+(ang * -1)+"deg)"
   });
+  tdiSelector();
+  changeUserStick(t["t"+aT].tdiMouseXMelee, t["t"+aT].tdiMouseYMelee, "tdi");
 }
 
 
@@ -718,6 +862,7 @@ function swapOptions(){
       drawTrajectory();
 
     }
+    drawAngle();
 }
 
 function trajColourClick(){
@@ -784,50 +929,6 @@ function trajDeleteClick(){
 
   });
 }
-/*
-function thingy(){
-for (p=1;p<=26;p++){
-  prompt($("#attackscroll:nth-child(1)").attr("id"));
-  var id = $("#attackscroll div:nth-child("+p+")").attr("id");
-  //prompt(id);
-  var keys = Object.keys(chars[id]);
-  for (i=0;i<keys.length;i++){
-    $("#"+id).after('<div id="'+keys[i]+'" class="attack '+id+'"><p>'+keys[i]+'</p></div>');
-    var id2 = keys[i];
-    var keys2 = Object.keys(chars[id][id2]);
-    if (keys2[0][0] == "i" && keys2[0][1] == "d"){
-      for (j=0;j<keys2.length;j++){
-        $("#"+id2).after('<div id="'+keys2[j]+'" class="id '+id2+' '+id+'"><p>'+keys2[j]+'</p></div>');
-        var id3 = keys2[j];
-        var keys3 = Object.keys(chars[id][id2][id3]);
-        //for (l=0;l<keys3.length;l++){
-          var hb = chars[id][id2][id3];
-          $("#"+id3).after('<div id="'+id3+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
-        //}
-      }
-    }
-    else {
-      for (j=0;j<keys2.length;j++){
-        $("#"+id2).after('<div id="'+keys2[j]+'" class="id '+id2+' '+id+'"><p>'+keys2[j]+'</p></div>');
-        var id3 = keys2[j];
-        var keys3 = Object.keys(chars[id][id2][id3]);
-        for (l=0;l<keys3.length;l++){
-          $("#"+id3).after('<div id="'+keys3[l]+'" class="id '+id3+' '+id2+' '+id+'"><p>'+keys3[l]+'</p></div>');
-          var id4 = keys3[l];
-          var keys4 = Object.keys(chars[id][id2][id3][id4]);
-        //  for (k=0;k<keys4.length;k++){
-            var hb = chars[id][id2][id3][id4];
-            $("#"+id4).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
-        //  }
-        }
-      }
-    }
-  }
-
-}
-}*/
-
-
 
 function attackTable(){
   var id = "";
@@ -842,10 +943,8 @@ function SVG(tag)
 }
 
 function drawTrajectory(onlyDrawWhenUnfrozen){
+  //tried changing positions instead of redrawing, but didnt help firefox and created many other issues that'd have to be resolved in more code
   onlyDrawWhenUnfrozen = onlyDrawWhenUnfrozen || false;
-	//$("#trajectory").empty();
-  //$("#trajectory-t").empty();
-  $("#trajGroup"+aT+", #trajGroup-t"+aT).remove();
 
   var totalstale = 1.00;
   var damage = t["t"+aT].curHitbox.dmg;
@@ -878,38 +977,49 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   var temX = ((xPos*10)+centreOffset[0]);
   var temY = ((-yPos*10)+centreOffset[1]);
   var lineText = "M"+temX+" "+temY+" ";
-  $(SVG("g")).attr("id","trajGroup"+aT).appendTo("#trajectory");
-  $(SVG("g")).attr("id","trajGroup-t"+aT).appendTo("#trajectory-t");
-  //$(SVG("path")).attr("id","start"+activeTraj).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",startColours[activeTraj-1]).attr("stroke",startColours[activeTraj-1]).prependTo("#trajectory");
-  $(SVG("path")).attr("id","start"+aT).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",t["t"+aT].colour).attr("stroke",t["t"+aT].colour).prependTo("#trajGroup"+aT);
+  /*if ($("#trajGroup"+aT).length > 0){
+    $("#start"+aT).attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z");
+    $("#start-t"+aT).attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z");
+  }
+  else {*/
+    $("#trajGroup"+aT+", #trajGroup-t"+aT).remove();
+    $(SVG("g")).attr("id","trajGroup"+aT).appendTo("#trajectory");
+    $(SVG("g")).attr("id","trajGroup-t"+aT).appendTo("#trajectory-t");
 
-  //$(SVG("path")).attr("id","start"+activeTraj+"-t").attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajectory-t");
-  $(SVG("path")).attr("id","start-t"+aT).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+aT);
-
-	for (i=0;i<positions.length;i++){
-		var x = positions[i][0];
-		var y = positions[i][1];
-		if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
-			var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
-			lineText += tempText;
-			//$(SVG("circle")).attr("id",activeTraj+"f"+(i+1)).attr("class","framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajectory");
-      $(SVG("circle")).attr("id",aT+"f"+(i+1)).attr("class","framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup"+aT);
-      //$(SVG("circle")).attr("id",activeTraj+"f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajectory-t");
-      $(SVG("circle")).attr("id",aT+"f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+aT);
-		}
-		else {
+    $(SVG("path")).attr("id","start"+aT).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",t["t"+aT].colour).attr("stroke",t["t"+aT].colour).prependTo("#trajGroup"+aT);
+    $(SVG("path")).attr("id","start-t"+aT).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+aT);
+  //}
+  //$("#trajGroup"+aT+" .framePos").css("fill","#25d041");
+  for (i=0;i<positions.length;i++){
+  	var x = positions[i][0];
+  	var y = positions[i][1];
+  	if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
+  		var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
+  		lineText += tempText;
+      /*if ($("#"+aT+"f"+(i+1)).length > 0){
+        $("#"+aT+"f"+(i+1)).attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]);
+        $("#"+aT+"f"+(i+1)+"-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]);
+      }*/
+      //else {
+        $(SVG("circle")).attr("id",aT+"f"+(i+1)).attr("class","framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup"+aT);
+        $(SVG("circle")).attr("id",aT+"f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+aT);
+      //}
+  	}
+  	else {
+      //$("#"+aT+"f"+(i+1)+", #"+aT+"f"+(i+1)+"-t").remove();
       //checks if vertical knockback velocity is greater or equal to 2.4 when above the top blastzone
       if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && positions[i][3] >= 2.4)){
+
         cla = "tLineK";
         isKilled = true;
         $("#trajGroup"+aT+" .framePos").css("fill","#df3c3c");
       }
-		}
-	}
-	//var lineText = lineText.replace("L","M");
-	//lineText += "Z";
-	//$(SVG("path")).attr("id","trajLine"+activeTraj).attr("class","trajLine "+cla).attr("d",lineText).prependTo("#trajectory");
+  	}
+
+  }
+  //$("#trajLine"+aT).remove();
   $(SVG("path")).attr("id","trajLine"+aT).attr("class","trajLine "+cla).attr("d",lineText).prependTo("#trajGroup"+aT);
+
   if (!onlyDrawWhenUnfrozen){
     trajPosInfo();
   }
@@ -974,25 +1084,12 @@ $(document).ready(function(){
 
 	});
 
+  $("#tdiUser").hide();
 
-  $("#tdiSvg").mousemove(function(){
-    var widthRatio = 130/161;
-    var heightRatio = 130/161;
-    var xy = convertPixelsToStick(tdiMouseX,tdiMouseY);
 
-    if (!tdiPointerFrozen){
-      $("#tdiXInput").empty().append(xy[2]);
-      $("#tdiYInput").empty().append(xy[3]);
-      t["t"+aT].tdiMouseXReal = tdiMouseX;
-      t["t"+aT].tdiMouseYReal = tdiMouseY;
-      t["t"+aT].tdiMouseXMelee = xy[0];
-      t["t"+aT].tdiMouseYMelee = xy[1];
-      $("#tdiSvgPointer").attr("cx",tdiMouseX/widthRatio).attr("cy",tdiMouseY/heightRatio);
-      drawTrajectory();
-    }
-  });
 
-  $("#tdiSvg").click(function(){
+
+  $("#tdiSelector").click(function(){
     tdiPointerFrozen ^= true;
   });
 
@@ -1050,8 +1147,53 @@ $(document).ready(function(){
       $("#tdiYInput").empty().append(y);
       t["t"+aT].tdiMouseYReal = ((t["t"+aT].tdiMouseYMelee/-0.0125)+80)*(130/161);
     }
+    changeUserStick(t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,"tdi");
     $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
     drawTrajectory();
+  });
+
+  $(".tdiTurn").hover(function(){
+    $(this).toggleClass("tdiPreciseHighlight");
+  });
+
+  $(".tdiTurn").click(function(){
+    var id = $(this).attr("id");
+    var diAngle = parseInt($("#tdiDiAngle").text());
+    if (id[3] == "A"){
+      if (diAngle == 0 || diAngle == 90 || diAngle == 180 || diAngle == 270){
+        diAngle += 16;
+      }
+      diAngle++;
+      if (diAngle >= 360){
+        diAngle -= 360;
+      }
+    }
+    else {
+      if (diAngle == 0 || diAngle == 90 || diAngle == 180 || diAngle == 270){
+        diAngle -= 16;
+      }
+      diAngle--;
+      if (diAngle < 0){
+        diAngle += 360;
+      }
+    }
+    if (diAngle > 73 && diAngle < 107){
+      diAngle = 90;
+    }
+    else if (diAngle > 163 && diAngle < 197){
+      diAngle = 180;
+    }
+    else if (diAngle > 253 && diAngle < 287){
+      diAngle = 270;
+    }
+    else if (diAngle > 343 || diAngle < 17){
+      diAngle = 0.1;
+    }
+    changeUserStick(0,0,"tdi",diAngle);
+    var xy = convertPixelsToStick(t["t"+aT].tdiMouseXReal,t["t"+aT].tdiMouseYReal);
+    $("#tdiXInput").empty().append(xy[2]);
+    $("#tdiYInput").empty().append(xy[3]);
+    $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
   });
 
   $("#tdiCentre").hover(function(){
@@ -1065,7 +1207,11 @@ $(document).ready(function(){
     t["t"+aT].tdiMouseYReal = 65.4;
     $("#tdiXInput").empty().append("0.0000");
     $("#tdiYInput").empty().append("0.0000");
+    $("#tdiDiAngle").empty().append("0");
+    $("#tdiOffsetPercent").empty().append("0");
     $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
+    $("#tdiUser").hide();
+    $("#tdiUserCentre").show();
     drawTrajectory();
   });
 

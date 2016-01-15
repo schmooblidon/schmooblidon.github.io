@@ -1,5 +1,5 @@
 trajOffset = $("#trajectory").offset();
-tdiOffset = $("#tdiSvg").offset();
+tdiOffset = $("#tdiSelector").offset();
 ratio = 4580/3188;
 disWidth = 4580;
 disHeight = 3188;
@@ -61,5 +61,5 @@ var resizingtype = function(){
 	disWidth = $("#display").width();
 	disHeight = $("#display").height();
 	trajOffset = $("#trajectory").offset();
-	tdiOffset = $("#tdiSvg").offset();
+	tdiOffset = $("#tdiSelector").offset();
 }
