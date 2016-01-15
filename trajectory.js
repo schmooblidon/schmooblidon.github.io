@@ -36,6 +36,14 @@ function trajectoryObject(){
   this.tdiMouseYMelee = 0;
   this.tdiMouseXReal = 65.4;
   this.tdiMouseYReal = 65.4;
+  this.sdiMouseXMelee = 0;
+  this.sdiMouseYMelee = 0;
+  this.sdiMouseXReal = 65.4;
+  this.sdiMouseYReal = 65.4;
+  this.adiMouseXMelee = 0;
+  this.adiMouseYMelee = 0;
+  this.adiMouseXReal = 65.4;
+  this.adiMouseYReal = 65.4;
   this.curHitbox = chars.Fx.NS.id0;
   this.cHName = ["Fx","NS",false,"id0"];
   this.character = "Fox";
@@ -58,11 +66,21 @@ for (i=0;i<9;i++){
 
 sakurai = 0;
 pointerfrozen = false;
-tdiPointerFrozen = false;
+activeDI = "t";
+diPointerFrozen = {};
+diPointerFrozen.t = false;
+diPointerFrozen.a = false;
+diPointerFrozen.s = false;
 mouseX = 0;
 mouseY = 0;
-tdiMouseX = 0;
-tdiMouseY = 0;
+diMouseX = {};
+diMouseY = {};
+diMouseX.t = 0;
+diMouseY.t = 0;
+diMouseX.s = 0;
+diMouseY.s = 0;
+diMouseX.a = 0;
+diMouseY.a = 0;
 /*trajFrozen = false;
 
 mouseXMelee = [0,0,0,0,0,0,0,0,0];
@@ -119,29 +137,9 @@ var character = "Fox";*/
 
 //"a0=00000000&a1=00000000&a2=00000000&a3=00000000&a4=chars.fx.ns.id0&a5=Fox&a6=080&a7=00&a8=00&a9=000&a10=00000000
 
-function tdiSelector(){
+function diSelector(){
   $("#tdiSelector").unbind("mousemove");
-  $("#tdiSelector").mousemove(function(){
-    var widthRatio = 130/161;
-    var heightRatio = 130/161;
-    var xy = convertPixelsToStick(tdiMouseX,tdiMouseY);
 
-
-    if (!tdiPointerFrozen){
-
-      t["t"+aT].tdiMouseXReal = tdiMouseX;
-      t["t"+aT].tdiMouseYReal = tdiMouseY;
-      t["t"+aT].tdiMouseXMelee = xy[0];
-      t["t"+aT].tdiMouseYMelee = xy[1];
-      changeUserStick(xy[0],xy[1],"tdi");
-      //var xy = convertPixelsToStick(t["t"+aT].tdiMouseXReal,t["t"+aT].tdiMouseYReal);
-      var xy = convertPixelsToStick(t["t"+aT].tdiMouseXReal,t["t"+aT].tdiMouseYReal);
-      $("#tdiXInput").empty().append(xy[2]);
-      $("#tdiYInput").empty().append(xy[3]);
-      $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
-      drawTrajectory();
-    }
-  });
 }
 
 function getStickAngle(x,y){
@@ -177,73 +175,63 @@ function getStickAngle(x,y){
 function changeUserStick(x,y,type,di){
   diAngle = di || getStickAngle(x,y);
   if (diAngle == "deadzone"){
-    $("#"+type+"User").hide();
-    $("#"+type+"UserCentre").show();
+    $("#"+type+"diUser").hide();
+    $("#"+type+"diUserCentre").show();
   }
   else {
-    $("#"+type+"UserCentre").hide();
-    var attackAngle = 0;
-    if (t["t"+aT].curHitbox.angle == 361){
-      attackAngle = sakurai;
+    $("#"+type+"diUserCentre").hide();
+    if (type == "t"){
+      var attackAngle = 0;
+      if (t["t"+aT].curHitbox.angle == 361){
+        attackAngle = sakurai;
+      }
+      else {
+        attackAngle = t["t"+aT].curHitbox.angle;
+      }
+      if (t["t"+aT].reverse){
+        attackAngle = 180 - attackAngle;
+          if (attackAngle < 0){
+            attackAngle = 360 + attackAngle;
+          }
+      }
+      var rAngle = attackAngle - diAngle;
+      if (rAngle > 180){
+        rAngle -= 360;
+      }
     }
-    else {
-      attackAngle = t["t"+aT].curHitbox.angle;
-    }
-    if (t["t"+aT].reverse){
-      attackAngle = 180 - attackAngle;
-        if (attackAngle < 0){
-          attackAngle = 360 + attackAngle;
-        }
-    }
-    var rAngle = attackAngle - diAngle;
-    if (rAngle > 180){
-      rAngle -= 360;
-    }
-    /*rAngle = Math.abs(rAngle);
-    if (rAngle > 180){
-      rAngle -= 180;
-    }
-    else {
-      rAngle -= 90;
-    }
-    rAngle = Math.abs(rAngle);*/
-
-
-    //radius = 1
-
     var y = -Math.sin(diAngle * (Math.PI / 180));
     var x = Math.cos(diAngle * (Math.PI / 180));
 
-    //prompt(t["t"+aT].tdiMouseYMelee);
-    t["t"+aT].tdiMouseXMelee = Math.round(x*80)/80;
-    t["t"+aT].tdiMouseYMelee = Math.round(-y*80)/80;
-    //prompt(t["t"+aT].tdiMouseYMelee);
+    t["t"+aT][type+"diMouseXMelee"] = Math.round(x*80)/80;
+    t["t"+aT][type+"diMouseYMelee"] = Math.round(-y*80)/80;
 
-    t["t"+aT].tdiMouseXReal = Math.round(((t["t"+aT].tdiMouseXMelee/0.0125)+80)*(130/161));
-    t["t"+aT].tdiMouseYReal = Math.round(((-t["t"+aT].tdiMouseYMelee/0.0125)+80)*(130/161));
+    t["t"+aT][type+"diMouseXReal"] = Math.round(((t["t"+aT][type+"diMouseXMelee"]/0.0125)+80)*(130/161));
+    t["t"+aT][type+"diMouseYReal"] = Math.round(((-t["t"+aT][type+"diMouseYMelee"]/0.0125)+80)*(130/161));
+    if (type == "t"){
+      var pDistance = Math.sin(rAngle * (Math.PI / 180)) * Math.sqrt(t["t"+aT][type+"diMouseXMelee"]*t["t"+aT][type+"diMouseXMelee"]+t["t"+aT][type+"diMouseYMelee"]*t["t"+aT][type+"diMouseYMelee"]);
 
-    var pDistance = Math.sin(rAngle * (Math.PI / 180)) * Math.sqrt(t["t"+aT].tdiMouseXMelee*t["t"+aT].tdiMouseXMelee+t["t"+aT].tdiMouseYMelee*t["t"+aT].tdiMouseYMelee);
+      var angleOffset = pDistance * pDistance * 18;
+      if (angleOffset > 18){
+        angleOffset = 18;
+      }
 
-    var angleOffset = pDistance * pDistance * 18;
-    if (angleOffset > 18){
-      angleOffset = 18;
+      if (rAngle < 0 && rAngle > -180){
+          angleOffset *= -1;
+      }
+      angleOffset = Math.abs(angleOffset);
+      //$("#tdiDebug").empty().append(angleOffset);
+      //$("#tdirAngle").empty().append(rAngle);
+
+      $("#tdiOffsetPercent").empty().append(Math.round(angleOffset/18*100));
+      calculateStickColor(angleOffset, type);
     }
-
-    if (rAngle < 0 && rAngle > -180){
-        angleOffset *= -1;
-    }
-    angleOffset = Math.abs(angleOffset);
-    $("#tdiDebug").empty().append(angleOffset);
-    $("#tdirAngle").empty().append(rAngle);
-    $("#tdiDiAngle").empty().append(Math.round(diAngle));
-    $("#tdiOffsetPercent").empty().append(Math.round(angleOffset/18*100));
-    $("#"+type+"User").show().css({
+    $("#"+type+"diDiAngle").empty().append(Math.round(diAngle));
+    $("#"+type+"diUser").show().css({
         "-moz-transform":"rotate("+(diAngle * -1)+"deg)",
         "-ms-transform":"rotate("+(diAngle * -1)+"deg)",
         "-o-transform":"rotate("+(diAngle * -1)+"deg)",
         "transform":"rotate("+(diAngle * -1)+"deg)"
     });
-    calculateStickColor(angleOffset, type);
   }
 }
 
@@ -258,7 +246,7 @@ function calculateStickColor(angleOffset, type){
   else {
     green = num;
   }
-  $("#"+type+"USolid").css("background-color","rgb("+red+", "+green+", 0)");
+  $("#"+type+"diUSolid").css("background-color","rgb("+red+", "+green+", 0)");
 }
 
 
@@ -429,7 +417,9 @@ function readQueryString(){
     if (storedTrajs == 1){
       $(".trajDelete").addClass("trajDeleteDisable");
     }
-    tdiPointerFrozen = true;
+    diPointerFrozen.t = true;
+    diPointerFrozen.s = true;
+    diPointerFrozen.a = true;
   }
 }
 
@@ -570,8 +560,8 @@ function drawAngle(){
     "-o-transform":"rotate("+(ang * -1)+"deg)",
     "transform":"rotate("+(ang * -1)+"deg)"
   });
-  tdiSelector();
-  changeUserStick(t["t"+aT].tdiMouseXMelee, t["t"+aT].tdiMouseYMelee, "tdi");
+  //tdiSelector();
+  changeUserStick(t["t"+aT].tdiMouseXMelee, t["t"+aT].tdiMouseYMelee, "t");
 }
 
 
@@ -1078,87 +1068,118 @@ $(document).ready(function(){
 	$(document).on('mousemove', function(e){
 		mouseX = e.pageX - trajOffset.left;
 		mouseY = e.pageY - trajOffset.top;
-    tdiMouseX = e.pageX - tdiOffset.left;
-    tdiMouseY = e.pageY - tdiOffset.top;
+    diMouseX = e.pageX - diOffset.left;
+    diMouseY = e.pageY - diOffset.top;
+    //diMouseX.s = e.pageX - diOffset.s.left;
+    //diMouseY.s = e.pageY - diOffset.s.top;
+    //diMouseX.a = e.pageX - diOffset.a.left;
+    //diMouseY.a = e.pageY - diOffset.a.top;
     //(disWidth/4580)*100 gives width in pixels of blastzone
 
 	});
 
   $("#tdiUser").hide();
+  $("#sdiUser").hide();
+  $("#adiUser").hide();
+  $("#sdiBox").hide();
+  $("#adiBox").hide();
 
+  $(".diSelector").mousemove(function(){
+    var id = $(this).attr("id");
+    var type = id[0];
+    var widthRatio = 130/161;
+    var heightRatio = 130/161;
+    var xy = convertPixelsToStick(diMouseX,diMouseY);
 
-
-
-  $("#tdiSelector").click(function(){
-    tdiPointerFrozen ^= true;
+    if (!diPointerFrozen[type]){
+      t["t"+aT][type+"diMouseXReal"] = diMouseX;
+      t["t"+aT][type+"diMouseYReal"] = diMouseY;
+      t["t"+aT][type+"diMouseXMelee"] = xy[0];
+      t["t"+aT][type+"diMouseYMelee"] = xy[1];
+      changeUserStick(xy[0],xy[1],type);
+      //var xy = convertPixelsToStick(t["t"+aT].tdiMouseXReal,t["t"+aT].tdiMouseYReal);
+      var xy = convertPixelsToStick(t["t"+aT][type+"diMouseXReal"],t["t"+aT][type+"diMouseYReal"]);
+      $("#"+type+"diXInput").empty().append(xy[2]);
+      $("#"+type+"diYInput").empty().append(xy[3]);
+      $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
+      drawTrajectory();
+    }
   });
 
-  $(".tdiPrecise").hover(function(){
+
+  $(".diSelector").click(function(){
+    var type = $(this).attr("id");
+    diPointerFrozen[type[0]] ^= true;
+  });
+
+  $(".diPrecise").hover(function(){
     $(this).toggleClass("tdiPreciseHighlight");
   });
 
-  $(".tdiPrecise").click(function(){
-    tdiPointerFrozen = true;
+  $(".diPrecise").click(function(){
+    diPointerFrozen.t = true;
     var id = $(this).attr("id");
+    var type = id[0];
     if (id[3] == "R" || id[3] == "L"){
       var x = "";
-      if (id[3] == "L" && !(t["t"+aT].tdiMouseXMelee < -0.999)){
-        t["t"+aT].tdiMouseXMelee -= 0.0125;
+      if (id[3] == "L" && !(t["t"+aT][type+"diMouseXMelee"] < -0.999)){
+        t["t"+aT][type+"diMouseXMelee"] -= 0.0125;
       }
-      else if (id[3] == "R" && !(t["t"+aT].tdiMouseXMelee > 0.999)){
-        t["t"+aT].tdiMouseXMelee += 0.0125;
+      else if (id[3] == "R" && !(t["t"+aT][type+"diMouseXMelee"] > 0.999)){
+        t["t"+aT][type+"diMouseXMelee"] += 0.0125;
       }
-      if (t["t"+aT].tdiMouseXMelee >= 1 || t["t"+aT].tdiMouseXMelee <= -1){
-        x = t["t"+aT].tdiMouseXMelee.toPrecision(5);
+      if (t["t"+aT][type+"diMouseXMelee"] >= 1 || t["t"+aT][type+"diMouseXMelee"] <= -1){
+        x = t["t"+aT][type+"diMouseXMelee"].toPrecision(5);
       }
-      else if (t["t"+aT].tdiMouseXMelee >= 0.099 || t["t"+aT].tdiMouseXMelee <= -0.099){
-        x = t["t"+aT].tdiMouseXMelee.toPrecision(4);
+      else if (t["t"+aT][type+"diMouseXMelee"] >= 0.099 || t["t"+aT][type+"diMouseXMelee"] <= -0.099){
+        x = t["t"+aT][type+"diMouseXMelee"].toPrecision(4);
       }
-      else if (t["t"+aT].tdiMouseXMelee == 0){
+      else if (t["t"+aT][type+"diMouseXMelee"] == 0){
         x = "0.0000";
       }
       else {
-        x = t["t"+aT].tdiMouseXMelee.toPrecision(3);
+        x = t["t"+aT][type+"diMouseXMelee"].toPrecision(3);
       }
       //t["t"+aT].tdiMouseXMelee = parseFloat(x);
       $("#tdiXInput").empty().append(x);
-      t["t"+aT].tdiMouseXReal = ((t["t"+aT].tdiMouseXMelee/0.0125)+80)*(130/161);
+      t["t"+aT][type+"diMouseXReal"] = ((t["t"+aT][type+"diMouseXMelee"]/0.0125)+80)*(130/161);
     }
     if (id[3] == "U" || id[3] == "D"){
       var y = "";
-      if (id[3] == "U" && !(t["t"+aT].tdiMouseYMelee > 0.999)){
-        t["t"+aT].tdiMouseYMelee += 0.0125;
+      if (id[3] == "U" && !(t["t"+aT][type+"diMouseYMelee"] > 0.999)){
+        t["t"+aT][type+"diMouseYMelee"] += 0.0125;
       }
-      else if (id[3] == "D" && !(t["t"+aT].tdiMouseYMelee < -0.999)){
-        t["t"+aT].tdiMouseYMelee -= 0.0125;
+      else if (id[3] == "D" && !(t["t"+aT][type+"diMouseYMelee"] < -0.999)){
+        t["t"+aT][type+"diMouseYMelee"] -= 0.0125;
       }
-      if (t["t"+aT].tdiMouseYMelee >= 1 || t["t"+aT].tdiMouseYMelee <= -1){
-        y = t["t"+aT].tdiMouseYMelee.toPrecision(5);
+      if (t["t"+aT][type+"diMouseYMelee"] >= 1 || t["t"+aT][type+"diMouseYMelee"] <= -1){
+        y = t["t"+aT][type+"diMouseYMelee"].toPrecision(5);
       }
-      else if (t["t"+aT].tdiMouseYMelee >= 0.099 || t["t"+aT].tdiMouseYMelee <= -0.099){
-        y = t["t"+aT].tdiMouseYMelee.toPrecision(4);
+      else if (t["t"+aT][type+"diMouseYMelee"] >= 0.099 || t["t"+aT][type+"diMouseYMelee"] <= -0.099){
+        y = t["t"+aT][type+"diMouseYMelee"].toPrecision(4);
       }
-      else if (t["t"+aT].tdiMouseYMelee == 0){
+      else if (t["t"+aT][type+"diMouseYMelee"] == 0){
         y = "0.0000";
       }
       else {
-         y = t["t"+aT].tdiMouseYMelee.toPrecision(3);
+         y = t["t"+aT][type+"diMouseYMelee"].toPrecision(3);
       }
       $("#tdiYInput").empty().append(y);
-      t["t"+aT].tdiMouseYReal = ((t["t"+aT].tdiMouseYMelee/-0.0125)+80)*(130/161);
+      t["t"+aT][type+"diMouseYReal"] = ((t["t"+aT][type+"diMouseYReal"]/-0.0125)+80)*(130/161);
     }
-    changeUserStick(t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,"tdi");
-    $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
+    changeUserStick(t["t"+aT][type+"diMouseXMelee"],t["t"+aT][type+"diMouseYMelee"],"tdi");
+    $("#tdiSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
     drawTrajectory();
   });
 
-  $(".tdiTurn").hover(function(){
-    $(this).toggleClass("tdiPreciseHighlight");
+  $(".diTurn").hover(function(){
+    $(this).toggleClass("diPreciseHighlight");
   });
 
-  $(".tdiTurn").click(function(){
+  $(".diTurn").click(function(){
     var id = $(this).attr("id");
-    var diAngle = parseInt($("#tdiDiAngle").text());
+    var type = id[0];
+    var diAngle = parseInt($("#"+type+"diDiAngle").text());
     if (id[3] == "A"){
       if (diAngle == 0 || diAngle == 90 || diAngle == 180 || diAngle == 270){
         diAngle += 16;
@@ -1189,30 +1210,55 @@ $(document).ready(function(){
     else if (diAngle > 343 || diAngle < 17){
       diAngle = 0.1;
     }
-    changeUserStick(0,0,"tdi",diAngle);
-    var xy = convertPixelsToStick(t["t"+aT].tdiMouseXReal,t["t"+aT].tdiMouseYReal);
-    $("#tdiXInput").empty().append(xy[2]);
-    $("#tdiYInput").empty().append(xy[3]);
-    $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
+    changeUserStick(0,0,type,diAngle);
+    var xy = convertPixelsToStick(t["t"+aT][type+"diMouseXReal"],t["t"+aT][type+"diMouseYReal"]);
+    $("#"+type+"diXInput").empty().append(xy[2]);
+    $("#"+type+"diYInput").empty().append(xy[3]);
+    $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
   });
 
-  $("#tdiCentre").hover(function(){
-    $(this).toggleClass("tdiPreciseHighlight");
+  $(".diCentre").hover(function(){
+    $(this).toggleClass("diPreciseHighlight");
   });
 
-  $("#tdiCentre").click(function(){
-    t["t"+aT].tdiMouseXMelee = 0;
-    t["t"+aT].tdiMouseYMelee = 0;
-    t["t"+aT].tdiMouseXReal = 65.4;
-    t["t"+aT].tdiMouseYReal = 65.4;
-    $("#tdiXInput").empty().append("0.0000");
-    $("#tdiYInput").empty().append("0.0000");
-    $("#tdiDiAngle").empty().append("0");
-    $("#tdiOffsetPercent").empty().append("0");
-    $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
-    $("#tdiUser").hide();
-    $("#tdiUserCentre").show();
+  $(".diCentre").click(function(){
+    var id = $(this).attr("id");
+    var type = id[0];
+    t["t"+aT][type+"diMouseXMelee"] = 0;
+    t["t"+aT][type+"diMouseYMelee"] = 0;
+    t["t"+aT][type+"diMouseXReal"] = 65.4;
+    t["t"+aT][type+"diMouseYReal"] = 65.4;
+    $("#"+type+"diXInput").empty().append("0.0000");
+    $("#"+type+"diYInput").empty().append("0.0000");
+    $("#"+type+"diDiAngle").empty().append("0");
+    $("#"+type+"diOffsetPercent").empty().append("0");
+    $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
+    $("#"+type+"diUser").hide();
+    $("#"+type+"diUserCentre").show();
     drawTrajectory();
+  });
+
+  $("#diSwitchButton").hover(function(){
+    $(this).toggleClass("diPreciseHighlight");
+  });
+
+  $("#diSwitchButton").click(function(){
+    if (activeDI == "t"){
+      $("#tdiBox").hide();
+      $("#sdiBox").show();
+      activeDI = "s";
+    }
+    else if (activeDI == "s"){
+      $("#sdiBox").hide();
+      $("#adiBox").show();
+      activeDI = "a";
+    }
+    else {
+      $("#adiBox").hide();
+      $("#tdiBox").show();
+      activeDI = "t";
+    }
+    diOffset = $("#"+activeDI+"diSelector").offset();
   });
 
   $("#trajectory-t").mousemove(function(){

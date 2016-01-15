@@ -1,5 +1,8 @@
 trajOffset = $("#trajectory").offset();
-tdiOffset = $("#tdiSelector").offset();
+//diOffset = {};
+diOffset = $("#tdiSelector").offset();
+//diOffset.s = $("#sdiSelector").offset();
+//diOffset.a = $("#adiSelector").offset();
 ratio = 4580/3188;
 disWidth = 4580;
 disHeight = 3188;
@@ -9,6 +12,8 @@ collapsed.l = false;
 collapsed.r = false;
 collapsed.t = false;
 collapsed.b = false;
+
+activeDI = "t";
 
 var resizingtype = function(){
 	//width/length.   width = ratio*height.   height = width/ratio
@@ -61,5 +66,7 @@ var resizingtype = function(){
 	disWidth = $("#display").width();
 	disHeight = $("#display").height();
 	trajOffset = $("#trajectory").offset();
-	tdiOffset = $("#tdiSelector").offset();
+	diOffset = $("#"+activeDI+"diSelector").offset();
+	//diOffset.s = $("#sdiSelector").offset();
+	//diOffset.a = $("#adiSelector").offset();
 }

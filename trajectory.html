@@ -94,7 +94,8 @@
       <div class="hbcharselect hbcon"><p>Luigi</p></div>
       <div class="hbcharselect hbcon"><p>Mario</p></div></div></div>
   <div id="percent"><div id="percentNumber"><p><span id="percentNumberEdit">80</span>%</p></div><div id="percentButtonContainer"><div id="percentPlus" class="percentButton"><p>+</p></div><div id="percentMinus" class="percentButton"><p>-</p></div></div></div>
-	<div id="tdiBox"><div id="tdiTitle"><p>Trajectory DI</p></div><div id="tdiSelector">
+	<div id="diSwitchContainer"><div id="diSwitchButton"><p>></p></div></div>
+	<div id="tdiBox"><div id="tdiTitle"><p><span id="dismalltext">Trajectory </span>DI</p></div><div id="tdiSelector" class="diSelector">
 		<div id="tdiCircle"></div>
 		<div id="tdiXDeadzone"></div>
 		<div id="tdiYDeadzone"></div>
@@ -103,13 +104,29 @@
 		<div id="tdiUserCentre"></div>
 		<div id="tdiUser"><div id="tdiUTrans"></div><div id="tdiUSolid"></div></div>
 		<svg version="1.1" id="tdiSvg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="130px" height="130px" viewBox="0 0 161 161" enable-background="new 0 0 161 161" xml:space="preserve" style="position:absolute;display:inline-block;">
-			<circle id="tdiSvgPointer" cx="81" cy="81" r="5" fill="#59e6ff"></svg></div><div id="tdiVertical"><div id="tdiAnti" class="tdiTurn"></div><div id="tdiCentre"></div><div id="tdiClock" class="tdiTurn"></div></div><div id="tdiValues"><p>X:<span id="tdiXInput">0.00000</span> Y:<span id="tdiYInput">0.00000</span></p><p><span id="tdiDiAngle">0</span>° Strength: <span id="tdiOffsetPercent">0</span>%</div></div>
+			<circle id="tdiSvgPointer" cx="81" cy="81" r="5" fill="#59e6ff"></svg></div><div id="tdiVertical"><div id="tdiAnti" class="diTurn"></div><div id="tdiCentre" class="diCentre"></div><div id="tdiClock" class="diTurn"></div></div><div id="tdiValues"><p>X:<span id="tdiXInput">0.00000</span> Y:<span id="tdiYInput">0.00000</span></p><p><span id="tdiDiAngle">0</span>° Strength: <span id="tdiOffsetPercent">0</span>%</div></div>
+		<div id="sdiBox"><div id="sdiTitle"><p>SDI</p></div><div id="sdiSelector" class="diSelector">
+			<div id="sdiCircle"></div>
+			<div id="sdiXDeadzone"></div>
+			<div id="sdiYDeadzone"></div>
+			<div id="sdiUserCentre"></div>
+			<div id="sdiUser"><div id="sdiUTrans"></div><div id="sdiUSolid"></div></div>
+			<svg version="1.1" id="sdiSvg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="130px" height="130px" viewBox="0 0 161 161" enable-background="new 0 0 161 161" xml:space="preserve" style="position:absolute;display:inline-block;">
+				<circle id="sdiSvgPointer" cx="81" cy="81" r="5" fill="#59e6ff"></svg></div><div id="sdiVertical"><div id="sdiAnti" class="diTurn"></div><div id="sdiCentre" class="diCentre"></div><div id="sdiClock" class="diTurn"></div></div><div id="sdiValues"><p>X:<span id="sdiXInput">0.00000</span> Y:<span id="sdiYInput">0.00000</span></p><p><span id="sdiDiAngle">0</span>° Strength: <span id="sdiOffsetPercent">0</span>%</div></div>
+			<div id="adiBox"><div id="adiTitle"><p>ASDI</p></div><div id="adiSelector" class="diSelector">
+				<div id="adiCircle"></div>
+				<div id="adiXDeadzone"></div>
+				<div id="adiYDeadzone"></div>
+				<div id="adiUserCentre"></div>
+				<div id="adiUser"><div id="adiUTrans"></div><div id="adiUSolid"></div></div>
+				<svg version="1.1" id="adiSvg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="130px" height="130px" viewBox="0 0 161 161" enable-background="new 0 0 161 161" xml:space="preserve" style="position:absolute;display:inline-block;">
+					<circle id="adiSvgPointer" cx="81" cy="81" r="5" fill="#59e6ff"></svg></div><div id="adiVertical"><div id="adiAnti" class="diTurn"></div><div id="adiCentre" class="diCentre"></div><div id="adiClock" class="diTurn"></div></div><div id="adiValues"><p>X:<span id="adiXInput">0.00000</span> Y:<span id="adiYInput">0.00000</span></p><p><span id="adiDiAngle">0</span>° Strength: <span id="adiOffsetPercent">0</span>%</div></div>
 	<div id="crouchingContainer"><div id="cVisual"><div id="cText"><p>Crouching</p></div><div id="cSwitch" class="switchOff"><p>False</p></div></div><div id="cRealButton"></div></div>
 	<div id="hitWhenChargingContainer"><div id="hwcVisual"><div id="hwcText"><p>Smash charge interruption</p></div><div id="hwcSwitch" class="switchOff"><p>False</p></div></div><div id="hwcRealButton"></div></div>
 	<div id="snapToSurfaceContainer"><div id="stsVisual"><div id="stsText"><p>Snap to surfaces</p></div><div id="stsSwitch" class="switchOn"><p>On</p></div></div><div id="stsRealButton"></div></div>
   <div id="DI-angle"></div>
   <div id="deathChecker"></div>
-	<div id="asdasdasd"><p>Offset: <span id="debugAngle">0</span></p><p>TDI Offset: <span id="tdiDebug">0</span></p><p>FCall: <span id="debugFCall">0</span></p><p>Relative: <span id="debugrAngle">0</span></p><p>TDI Relative: <span id="tdirAngle">0</span></p><p>Stick Angle:<span id="debugdIAngle">0</span></p></div>
+	<!--<div id="asdasdasd"><p>Offset: <span id="debugAngle">0</span></p><p>TDI Offset: <span id="tdiDebug">0</span></p><p>FCall: <span id="debugFCall">0</span></p><p>Relative: <span id="debugrAngle">0</span></p><p>TDI Relative: <span id="tdirAngle">0</span></p><p>Stick Angle:<span id="debugdIAngle">0</span></p></div>-->
 
 
 </div>

@@ -602,7 +602,7 @@ body {
 
 #victim-char {
 	width:150px;
-	height:50px;
+	height:36px;
 	text-align:center;
 	position:relative;
   vertical-align:top;
@@ -610,6 +610,7 @@ body {
 
 #victimcharname {
 	font-size:30px;
+  margin:0;
 }
 
 #chardropdown {
@@ -638,34 +639,35 @@ body {
 
 #percent {
 	width:150px;
-	height:80px;
+	height:60px;
 	display:inline-block;
 }
 
 #percentNumber {
 	width:110px;
-	height:80px;
+	height:60px;
 	display:inline-block;
 	font-size:40px;
   vertical-align:top;
 }
 
 #percentNumber p {
-  margin:15px;
+  margin:5px;
 }
 
 #percentButtonContainer {
 	display:inline-block;
 	width:40px;
-	height:80px;
+	height:60px;
   vertical-align:top;
 }
 
 .percentButton {
 	display:inline-block;
 	width:40px;
-	height:40px;
+	height:30px;
 	cursor:pointer;
+  line-height:0.8;
 }
 
 .percentButton p {
@@ -673,23 +675,46 @@ body {
 	font-size:30px;
 }
 
+#diSwitchContainer {
+  width:150px;
+  height:40px;
+  position:absolute;
+}
+
+#diSwitchButton {
+  width:40px;
+  height:40px;
+  margin-left:110px;
+  cursor:pointer;
+}
+
+#diSwitchButton p {
+  text-align:center;
+  margin:0px 0px;
+  font-size:30px;
+}
+
 #tdiBox {
   width:150px;
-  height:190px;
+  height:210px;
   display:inline-block;
   background-color:#363636;
 }
 
 #tdiTitle {
   width:150px;
-  height:20px;
+  height:40px;
   display:inline-block;
-  text-align:center;
   vertical-align:top;
 }
 
 #tdiTitle p {
-  margin:0px;
+  font-size:30px;
+  margin:0px 0px 0px 8px;
+}
+
+#dismalltext {
+  font-size:11px;
 }
 
 #tdiSelector {
@@ -709,7 +734,7 @@ body {
   border-radius:65px;
 }
 
-#tdiXDeadzone {
+.diXDeadzone {
   width:36.3px;
   height:130px;
   background-color:rgba(0, 0, 0, 0.2);
@@ -717,7 +742,7 @@ body {
   margin-left:46.85px;
 }
 
-#tdiYDeadzone {
+.diYDeadzone {
   height:36.3px;
   width:130px;
   background-color:rgba(0, 0, 0, 0.2);
@@ -800,6 +825,23 @@ body {
   vertical-align:top;
 }
 
+#tdiXDeadzone {
+  width:36.3px;
+  height:130px;
+  background-color:rgba(0, 0, 0, 0.2);
+  position:absolute;
+  margin-left:46.85px;
+}
+
+#tdiYDeadzone {
+  height:36.3px;
+  width:130px;
+  background-color:rgba(0, 0, 0, 0.2);
+  position:absolute;
+  margin-top:46.85px;
+}
+
+
 #tdiVertical {
   width:20px;
   height:130px;
@@ -845,19 +887,20 @@ body {
   background-image:url(assets/trajectory/preciseright.png);
 }
 
-.tdiPrecise {
+.diPrecise {
   cursor:pointer;
 }
 
-.tdiPreciseHighlight {
+.diPreciseHighlight {
   background-color:#666666;
 }
 
-.tdiTurn {
+.diTurn {
   width:20px;
   height:55px;
   display:inline-block;
   cursor:pointer;
+  vertical-align:top;
 }
 
 #tdiAnti {
@@ -868,11 +911,12 @@ body {
   background-image:url(assets/trajectory/clock.png);
 }
 
-#tdiCentre {
+.diCentre {
   height:20px;
   width:20px;
   display:inline-block;
   background-image:url(assets/trajectory/tdicentre.png);
+  vertical-align:top;
 }
 
 #tdiValues {
@@ -885,6 +929,243 @@ body {
 #tdiValues p {
   margin:0;
   font-size:14px;
+}
+#sdiBox {
+  width:150px;
+  height:210px;
+  display:inline-block;
+  background-color:#363636;
+}
+
+#sdiTitle {
+  width:150px;
+  height:40px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#sdiTitle p {
+  font-size:30px;
+  margin:0px 0px 0px 15px;
+}
+
+#sdiSelector {
+  width:130px;
+  height:130px;
+  display:inline-block;
+  background-color:#595959;
+  vertical-align:top;
+  position:relative;
+}
+
+#sdiCircle {
+  width:130px;
+  height:130px;
+  background-color:#acacac;
+  position:absolute;
+  border-radius:65px;
+}
+
+#sdiXDeadzone {
+  width:36.3px;
+  height:130px;
+  background-color:rgba(0, 0, 0, 0.2);
+  position:absolute;
+  margin-left:46.85px;
+}
+
+#sdiYDeadzone {
+  height:36.3px;
+  width:130px;
+  background-color:rgba(0, 0, 0, 0.2);
+  position:absolute;
+  margin-top:46.85px;
+}
+
+
+#sdiUserCentre {
+  height:10px;
+  width:10px;
+  margin-top:61px;
+  margin-left:61px;
+  position:absolute;
+  border-radius:10px;
+  background-color:#ff0000;
+}
+
+#sdiUser {
+  height:3px;
+  width:130px;
+  margin-top:64px;
+  position:absolute;
+
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+
+#sdiUTrans {
+  height:3px;
+  width:65px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#sdiUSolid {
+  height:3px;
+  width:65px;
+  display:inline-block;
+  background-color:#ffffff;
+  vertical-align:top;
+}
+
+#sdiVertical {
+  width:20px;
+  height:130px;
+  display:inline-block;
+  background-color:#414141;
+  vertical-align:top;
+
+}
+
+#sdiValues {
+  width:150px;
+  height:20px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#sdiValues p {
+  margin:0;
+  font-size:14px;
+}
+
+#sdiAnti {
+  background-image:url(assets/trajectory/anti.png);
+}
+
+#sdiClock {
+  background-image:url(assets/trajectory/clock.png);
+}
+
+#adiBox {
+  width:150px;
+  height:210px;
+  display:inline-block;
+  background-color:#363636;
+}
+
+#adiTitle {
+  width:150px;
+  height:40px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#adiTitle p {
+  font-size:30px;
+  margin:0px 0px 0px 15px;
+}
+
+#adiSelector {
+  width:130px;
+  height:130px;
+  display:inline-block;
+  background-color:#595959;
+  vertical-align:top;
+  position:relative;
+}
+
+#adiCircle {
+  width:130px;
+  height:130px;
+  background-color:#acacac;
+  position:absolute;
+  border-radius:65px;
+}
+
+#adiXDeadzone {
+  width:36.3px;
+  height:130px;
+  background-color:rgba(0, 0, 0, 0.2);
+  position:absolute;
+  margin-left:46.85px;
+}
+
+#adiYDeadzone {
+  height:36.3px;
+  width:130px;
+  background-color:rgba(0, 0, 0, 0.2);
+  position:absolute;
+  margin-top:46.85px;
+}
+
+
+#adiUserCentre {
+  height:10px;
+  width:10px;
+  margin-top:61px;
+  margin-left:61px;
+  position:absolute;
+  border-radius:10px;
+  background-color:#ff0000;
+}
+
+#adiUser {
+  height:3px;
+  width:130px;
+  margin-top:64px;
+  position:absolute;
+
+  -moz-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+
+#adiUTrans {
+  height:3px;
+  width:65px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#adiUSolid {
+  height:3px;
+  width:65px;
+  display:inline-block;
+  background-color:#ffffff;
+  vertical-align:top;
+}
+
+#adiVertical {
+  width:20px;
+  height:130px;
+  display:inline-block;
+  background-color:#414141;
+  vertical-align:top;
+
+}
+
+#adiValues {
+  width:150px;
+  height:20px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#adiValues p {
+  margin:0;
+  font-size:14px;
+}
+
+#adiAnti {
+  background-image:url(assets/trajectory/anti.png);
+}
+
+#adiClock {
+  background-image:url(assets/trajectory/clock.png);
 }
 
 #crouchingContainer {

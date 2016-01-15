@@ -107,16 +107,16 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
               angleOffset *= -1;
           }
 
-          $("#debugdIAngle").empty().append(diAngle);
-          $("#debugrAngle").empty().append(rAngle);
+          //$("#debugdIAngle").empty().append(diAngle);
+          //$("#debugrAngle").empty().append(rAngle);
         }
         else {
           var angleOffset = 0;
         }
 
-        $("#debugAngle").empty().append(angleOffset);
+        //$("#debugAngle").empty().append(angleOffset);
         var fCall = parseInt($("#debugFCall").text());
-        $("#debugFCall").empty().append((fCall+1));
+        //$("#debugFCall").empty().append((fCall+1));
 
         return (trajectory - angleOffset);
 
