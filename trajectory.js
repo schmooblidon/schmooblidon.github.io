@@ -1215,6 +1215,7 @@ $(document).ready(function(){
     $("#"+type+"diXInput").empty().append(xy[2]);
     $("#"+type+"diYInput").empty().append(xy[3]);
     $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
+    drawTrajectory();
   });
 
   $(".diCentre").hover(function(){
