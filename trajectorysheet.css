@@ -200,6 +200,173 @@ body {
 	position:absolute;
 }
 
+.labelBox {
+  width:70px;
+  height:30px;
+  position:absolute;
+  background-color:#3d3d3d;
+  z-index:20;
+  margin:10px;
+  color:white;
+  top:0;
+  left:0;
+}
+
+.labelOptions {
+  width:90px;
+  height:90px;
+  position:absolute;
+  background-color:#212121;
+  z-index:20;
+  margin:0px;
+  color:white;
+  display:none;
+  cursor:pointer;
+}
+
+.labelFontSize {
+  width:90px;
+  height:30px;
+
+}
+
+.labelFontIcon {
+  width:30px;
+  height:30px;
+  display:inline-block;
+  vertical-align: top;
+  background-image:url(assets/trajectory/labelfontsize.png);
+}
+
+.labelFontChange {
+  width:60px;
+  height:30px;
+  display:inline-block;
+  vertical-align: top;
+  background-color:#303030;
+  font-size:25px;
+  text-align:center;
+}
+
+.labelFontChange div p {
+  margin:0;
+}
+
+.labelFontUp {
+  width:30px;
+  height:30px;
+  display:inline-block;
+  vertical-align: top;
+}
+
+
+.labelFontDown {
+  width:30px;
+  height:30px;
+  display:inline-block;
+  vertical-align: top;
+}
+
+.labelOpacity {
+  width:90px;
+  height:30px;
+}
+
+.labelOpacityIcon {
+  width:30px;
+  height:30px;
+  display:inline-block;
+  vertical-align: top;
+  background-image:url(assets/trajectory/labelopacity.png);
+}
+
+.labelOpacityChange {
+  width:60px;
+  height:30px;
+  display:inline-block;
+  vertical-align: top;
+  background-color:#303030;
+  font-size:25px;
+  text-align:center;
+}
+
+.labelControlHighlight {
+  background-color:#504f4f;
+}
+
+.labelOpacityChange div p {
+  margin:0;
+}
+
+.labelOpacityUp {
+  width:30px;
+  height:30px;
+  display:inline-block;
+  vertical-align: top;
+}
+
+.labelOpacityDown {
+  width:30px;
+  height:30px;
+  display:inline-block;
+  vertical-align: top;
+}
+
+.labelColor {
+  width:90px;
+  height:15px;
+  text-align:center;
+  font-size:12px;
+}
+
+.labelColor p {
+  margin:0;
+}
+
+.labelHitbox {
+  width:90px;
+  height:15px;
+  text-align:center;
+  font-size:12px;
+}
+
+.labelHitbox p {
+  margin:0;
+}
+
+/*.labelBox textarea {
+  width:70px;
+  height:30px;
+  background-color:#3d3d3d;
+  color:white;
+}*/
+
+/*.labelBox .labelDrag {
+  width:30px;
+  height:30px;
+
+  background-color:rgb(87, 87, 87);
+  vertical-align: top;
+  display:none;
+  cursor:grab;
+}*/
+
+/*.labelBox textarea {
+  width:100px;
+  height:50px;
+  background-color:#3d3d3d;
+
+  display:inline-block;
+}*/
+
+.labelTitle input {
+  width:500px;
+  height:50px;
+  background-color:#3d3d3d;
+  border:0;
+  color:white;
+}
+
 #mousePosition {
 	position:absolute;
 	bottom:0px;
@@ -1400,9 +1567,13 @@ body {
 .trajLabel {
   width:50px;
   height:30px;
-  background-color:#707070;
+  background-color:#6f6f6f;
   display:inline-block;
   vertical-align:top;
+}
+
+.trajLabelHighlight {
+  background-color:#a29d9d;
 }
 
 .trajLabel p {

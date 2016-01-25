@@ -7,6 +7,8 @@ ratio = 4580/3188;
 disWidth = 4580;
 disHeight = 3188;
 
+disMagnification = 1;
+
 collapsed = {};
 collapsed.l = false;
 collapsed.r = false;
@@ -65,6 +67,10 @@ var resizingtype = function(){
 	$("#attackscroll").height($("#lcontrols").height()-255);
 	disWidth = $("#display").width();
 	disHeight = $("#display").height();
+	disMagnification = disWidth/4580;
+	for(i=1;i<=9;i++){
+		$("#labelBox"+i).css({"top":t["t"+i].labelY * disMagnification,"left":t["t"+i].labelX *disMagnification});
+	}
 	trajOffset = $("#trajectory").offset();
 	diOffset = $("#"+activeDI+"diSelector").offset();
 	//diOffset.s = $("#sdiSelector").offset();

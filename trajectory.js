@@ -56,6 +56,8 @@ function trajectoryObject(){
   this.staleQueue = [false,false,false,false,false,false,false,false,false];
   this.curPositions = 0;
   this.colour;
+  this.labelX = 0;
+  this.labelY = 0;
 }
 
 t = {};
@@ -1595,6 +1597,104 @@ $(document).ready(function(){
       $("#popoutOverlay, #popout").remove();
     });
 
+  });
+
+  $(".trajLabel").hover(function(){
+    $(this).toggleClass("trajLabelHighlight");
+  });
+
+  $(document).mouseup(function (e)
+{
+    var container = $(".labelOptions");
+
+    if (!container.is(e.target) // if the target of the click isn't the container...
+        && container.has(e.target).length === 0) // ... nor a descendant of the container
+    {
+        container.hide();
+    }
+});
+
+  $(".trajLabel").click(function(){
+    var id = $(this).attr("id").substr(9,10);
+    $("#display").append('<textarea id="labelBox'+id+'" class="labelBox" name="label'+id+'" cols="30" rows="3"></textarea><div id="labelOptions'+id+'" class="labelOptions"><div id="labelFontSize'+id+'" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity'+id+'" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div><div class="labelColor labelControl"><p>Add color box</p></div><div class="labelHitbox labelControl"><p>Add hitbox</p></div></div>');
+    $("#labelBox"+id).click(function(){
+      var x = $("#labelBox"+id).css("width");
+      x = parseInt(x.substr(0,x.length - 2));
+      var a = $("#labelBox"+id).css("left");
+      a = parseInt(a.substr(0,a.length - 2));
+      /*var y = $("#labelBox"+id).css("height");
+      y = parseInt(y.substr(0,y.length - 2));*/
+      var b = $("#labelBox"+id).css("top");
+      b = parseInt(b.substr(0,b.length - 2));
+      $("#labelOptions"+id).show().css({"top":b+10,"left":x+a+16});
+      $("#labelOptions"+id+" .labelControl").hover(function(){
+        $(this).toggleClass("labelControlHighlight");
+      });
+      $("#labelOptions"+id+" .labelFontChange .labelControl").click(function(){
+        var temp = $("#labelBox"+id).css("font-size");
+        temp = parseInt(temp.substr(0,temp.length - 2));
+        if ($(this).hasClass("labelFontUp")){
+          temp++;
+          if (temp > 40){
+            temp = 40;
+          }
+        }
+        else {
+          temp--;
+          if (temp < 5){
+            temp = 5;
+          }
+        }
+        $("#labelBox"+id).css("font-size",temp+"px");
+      });
+      $("#labelOptions"+id+" .labelOpacityChange .labelControl").click(function(){
+        var temp = parseFloat($("#labelBox"+id).css("opacity"));
+        //temp = parseInt(temp.substr(0,temp.length - 2));
+        if ($(this).hasClass("labelOpacityUp")){
+          temp += 0.1;
+          if (temp > 1){
+            temp = 1;
+          }
+        }
+        else {
+          temp -= 0.1;
+          if (temp < 0.1){
+            temp = 0.1;
+          }
+        }
+        $("#labelBox"+id).css("opacity",temp);
+      });
+      //$("#labelOptions"+id).hide();
+    });
+    $("#labelBox"+id).draggable({cancel: '',containment: "parent",start:function(){
+      $("#labelBox"+id).unbind("mouseenter").unbind("mouseleave");
+      $(".labelControl").unbind("mouseenter").unbind("mouseleave");
+      $("#labelOptions"+id+" .labelOpacityChange .labelControl").unbind("click");
+      $("#labelOptions"+id+" .labelFontChange .labelControl").unbind("click");
+      $("#labelOptions"+id).hide();
+    },stop:function(){
+      var posx = $("#labelBox"+id).css("left");
+      var posy = $("#labelBox"+id).css("top");
+      posx = parseInt(posx.substr(0,posx.length - 2));
+      posy = parseInt(posy.substr(0,posy.length - 2));
+      t["t"+id].labelX = posx/disMagnification;
+      t["t"+id].labelY = posy/disMagnification;
+      $("#labelBox"+id).click(function(){
+        var x = $("#labelBox"+id).css("width");
+        x = parseInt(x.substr(0,x.length - 2));
+        var a = $("#labelBox"+id).css("left");
+        a = parseInt(a.substr(0,a.length - 2));
+        /*var y = $("#labelBox"+id).css("height");
+        y = parseInt(y.substr(0,y.length - 2));*/
+        var b = $("#labelBox"+id).css("top");
+        b = parseInt(b.substr(0,b.length - 2));
+        $("#labelOptions"+id).show().css({"top":b+10,"left":x+a+16});
+        $("#labelOptions"+id+" .labelControl").hover(function(){
+          $(this).toggleClass("labelControlHighlight");
+        });
+        //$("#labelOptions"+id).hide();
+      });
+    }});
   });
 
   readQueryString();
