@@ -58,6 +58,7 @@ function trajectoryObject(){
   this.colour;
   this.labelX = 0;
   this.labelY = 0;
+  this.hasLabel = false;
 }
 
 t = {};
@@ -138,6 +139,137 @@ version = "NTSC";
 var character = "Fox";*/
 
 //"a0=00000000&a1=00000000&a2=00000000&a3=00000000&a4=chars.fx.ns.id0&a5=Fox&a6=080&a7=00&a8=00&a9=000&a10=00000000
+
+function labelBoxResize(id){
+  $("#labelBox"+id).resizable();
+}
+
+function labelBoxDrag(id){
+  $("#labelBox"+id).draggable({cancel: "text",containment: "parent",start:function(){
+    $("#labelBox"+id).unbind("click");
+    $(".labelControl").unbind("mouseenter").unbind("mouseleave");
+    $("#labelOptions"+id+" .labelOpacityChange .labelControl").unbind("click");
+    $("#labelOptions"+id+" .labelFontChange .labelControl").unbind("click");
+    $("#labelOptions"+id).hide();
+    $("#textarea"+id).focus();
+  },stop:function(){
+    $("#textarea"+id).focus();
+    var posx = $("#labelBox"+id).css("left");
+    var posy = $("#labelBox"+id).css("top");
+    posx = parseInt(posx.substr(0,posx.length - 2));
+    posy = parseInt(posy.substr(0,posy.length - 2));
+    t["t"+id].labelX = posx/disMagnification;
+    t["t"+id].labelY = posy/disMagnification;
+    labelBoxClick(id);
+  }});
+}
+
+function trajLabelHover(){
+  $(".trajLabel").unbind("mouseenter").unbind("mouseleave");
+  $(".trajLabel").hover(function(){
+    $(this).toggleClass("trajLabelHighlight");
+  });
+}
+
+function trajLabelClick(){
+  $(".trajLabel").unbind("click");
+  $(".trajLabel").click(function(){
+    var id = $(this).attr("id").substr(9,10);
+    if ($(this).hasClass("removeLabel")){
+      $(this).removeClass("removeLabel").children("p").empty().append("Add Label");
+      $("#labelBox"+id+", #labelOptions"+id).remove();
+      t["t"+id].hasLabel = false;
+    }
+    else {
+      $(this).addClass("removeLabel").children("p").empty().append("Remove Label");
+      $("#display").append('<div id="labelBox'+id+'" class="labelBox"><textarea id="textarea'+id+'" class="textarea" name="label'+id+'" cols="30" rows="3"></textarea></div><div id="labelOptions'+id+'" class="labelOptions"><div id="labelFontSize'+id+'" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity'+id+'" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div><div class="labelHitbox labelControl"><p>Add hitbox text</p></div></div>');
+      t["t"+id].hasLabel = true;
+      $("#labelBox"+id).css("border-color",t["t"+id].colour);
+
+      labelBoxClick(id);
+      labelBoxDrag(id);
+      labelBoxResize(id);
+    }
+  });
+}
+
+function labelColorClick(id){
+  /*$("#labelOptions"+id+" .labelColor").unbind("click");
+  $("#labelOptions"+id+" .labelColor").click(function(){
+    //$("#labelBox"+id).css({"background-color":"white","border":"3px solid "+t["t"+id].color});
+    $("#labelBox"+id).css("border-color",t["t"+id].colour);
+  });*/
+}
+
+function labelOpacityClick(id){
+  $("#labelOptions"+id+" .labelOpacityChange .labelControl").unbind("click");
+  $("#labelOptions"+id+" .labelOpacityChange .labelControl").click(function(){
+    var temp = parseFloat($("#labelBox"+id).css("opacity"));
+    //temp = parseInt(temp.substr(0,temp.length - 2));
+    if ($(this).hasClass("labelOpacityUp")){
+      temp += 0.1;
+      if (temp > 1){
+        temp = 1;
+      }
+    }
+    else {
+      temp -= 0.1;
+      if (temp < 0.1){
+        temp = 0.1;
+      }
+    }
+    $("#labelBox"+id).css("opacity",temp);
+  });
+}
+
+function labelFontClick(id){
+  $("#labelOptions"+id+" .labelFontChange .labelControl").unbind("click");
+  $("#labelOptions"+id+" .labelFontChange .labelControl").click(function(){
+    var temp = $("#textarea"+id).css("font-size");
+    temp = parseInt(temp.substr(0,temp.length - 2));
+    if ($(this).hasClass("labelFontUp")){
+      temp++;
+      if (temp > 40){
+        temp = 40;
+      }
+    }
+    else {
+      temp--;
+      if (temp < 5){
+        temp = 5;
+      }
+    }
+    $("#textarea"+id).css("font-size",temp+"px");
+  });
+}
+
+function labelControlHover(id){
+  $("#labelOptions"+id+" .labelControl").unbind("mouseenter").unbind("mouseleave");
+  $("#labelOptions"+id+" .labelControl").hover(function(){
+    $(this).toggleClass("labelControlHighlight");
+  });
+}
+
+function labelBoxClick(id){
+  $("#labelBox"+id).unbind("click");
+  $("#labelBox"+id).click(function(){
+    var x = $("#labelBox"+id).css("width");
+    x = parseInt(x.substr(0,x.length - 2));
+    var a = $("#labelBox"+id).css("left");
+    a = parseInt(a.substr(0,a.length - 2));
+    /*var y = $("#labelBox"+id).css("height");
+    y = parseInt(y.substr(0,y.length - 2));*/
+    var b = $("#labelBox"+id).css("top");
+    b = parseInt(b.substr(0,b.length - 2));
+    $(".labelOptions").hide();
+    $("#labelOptions"+id).show().css({"top":b+10,"left":x+a+16});
+    labelControlHover(id);
+    labelFontClick(id);
+    labelOpacityClick(id);
+    labelColorClick(id);
+    //$("#labelOptions"+id).hide();
+  });
+}
 
 function diSelector(){
   $("#tdiSelector").unbind("mousemove");
@@ -324,7 +456,7 @@ function readQueryString(){
       if (exists){
         currentTrajs[p-1] = true;
         t["t"+p].trajFrozen = true;
-        for (j=0;j<11;j++){
+        for (j=0;j<19;j++){
           var ja = String.fromCharCode(97 + j);
           var temp = GetQueryStringParams(p+ja);
 
@@ -388,6 +520,76 @@ function readQueryString(){
               }
               //prompt(t["t"+p].colour);
               break;
+            case "l":
+              //prompt("test");
+              if (temp == 1){
+                var id = p;
+                t["t"+p].hasLabel = true;
+                $("#display").append('<div id="labelBox'+p+'" class="labelBox"><textarea id="textarea'+p+'" class="textarea" name="label'+p+'" cols="30" rows="3"></textarea></div><div id="labelOptions'+p+'" class="labelOptions"><div id="labelFontSize'+p+'" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity'+p+'" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div><div class="labelHitbox labelControl"><p>Add hitbox text</p></div></div>');
+                $("#labelBox"+p).css("border-color",t["t"+p].colour);
+
+              }
+              else {
+                t["t"+p].hasLabel = false;
+              }
+              break;
+            case "m":
+              //label text
+              if (t["t"+p].hasLabel){
+                var translated = "";
+                for (v=0;v<temp.length;v++){
+                  if (temp[v] == "_"){
+                    translated += " ";
+                  }
+                  else if (temp[v] == "%"){
+                    translated += String.fromCharCode(parseInt(temp[v+1]+temp[v+2], 16));
+                    v+=2;
+                  }
+                  else {
+                    translated += temp[v];
+                  }
+                }
+                $("#textarea"+p).val(translated);
+              }
+              break;
+            case "n":
+              if (t["t"+p].hasLabel){
+                $("#labelBox"+p).css("opacity",temp);
+              }
+              //label opacity
+              break;
+            case "o":
+              if (t["t"+p].hasLabel){
+                $("#textarea"+p).css("font-size",temp+"px");
+              }
+              //label font size
+              break;
+            case "p":
+              if (t["t"+p].hasLabel){
+                $("#labelBox"+p).width(temp);
+              }
+              //label width
+              break;
+            case "q":
+              if (t["t"+p].hasLabel){
+                $("#labelBox"+p).height(temp);
+              }
+              //label height
+              break;
+            case "r":
+              if (t["t"+p].hasLabel){
+                t["t"+p].labelX = temp;
+                $("#labelBox"+p).css("left",temp*disMagnification);
+              }
+              // label x
+              break;
+            case "s":
+              if (t["t"+p].hasLabel){
+                t["t"+p].labelY = temp;
+                $("#labelBox"+p).css("top",temp*disMagnification);
+              }
+              // label y
+              break;
             default:
               break;
           }
@@ -396,6 +598,13 @@ function readQueryString(){
         aT = p;
         drawTrajectory();
         $("#trajAdd").before('<div id="trajBox'+p+'" class="trajBox"><div id="trajNum'+p+'" class="trajNum"><p>'+p+'</p></div><div id="trajColour'+p+'" class="trajColour" style="background-color:'+t["t"+p].colour+'"></div><div id="trajLabel'+p+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+p+'" class="trajDelete"><p>x</p></div></div>');
+        if (t["t"+p].hasLabel){
+          var id = p;
+          $("#trajLabel"+p).addClass("removeLabel").children("p").empty().append("Remove Label");
+          labelBoxClick(id);
+          labelBoxDrag(id);
+          labelBoxResize(id);
+        }
         storedTrajs++;
       }
       else {
@@ -416,6 +625,8 @@ function readQueryString(){
     trajColourHover();
     trajDeleteHover();
     trajDeleteClick();
+    trajLabelHover();
+    trajLabelClick();
     if (storedTrajs == 1){
       $(".trajDelete").addClass("trajDeleteDisable");
     }
@@ -442,7 +653,7 @@ function writeQueryString(){
   var qstring = "?";
   for (i=1;i<10;i++){
     if (currentTrajs[i-1]){
-      for (j=0;j<11;j++){
+      for (j=0;j<19;j++){
         var temp = "";
         switch (j){
           case 0:
@@ -522,6 +733,109 @@ function writeQueryString(){
               temp[1] = parseInt(temp[1].substr(1,temp[1].length)).toString(16);
               temp[2] = parseInt(temp[2].substr(1,temp[2].length-2)).toString(16);
               temp = ""+temp[0]+temp[1]+temp[2];
+            }
+            break;
+          case 11:
+            if (t["t"+i].hasLabel){
+              temp = "1";
+            }
+            else {
+              temp = "0";
+            }
+            break;
+          case 12:
+            if (t["t"+i].hasLabel){
+              var temp1 = $("#textarea"+i).val();
+              temp = "";
+              for (v=0;v<temp1.length;v++){
+                switch(temp1[v]){
+                  case " ":
+                    temp += "_";
+                    break;
+
+                  case "#":
+                  case "%":
+                  case "{":
+                  case "}":
+                  case "|":
+                  case "^":
+                  case "~":
+                  case "[":
+                  case "]":
+                  case "`":
+                  case "'":
+                  case ";":
+                  case "/":
+                  case ":":
+                  case "=":
+                  case "&":
+                  case "+":
+                  case '"':
+                    temp += "%";
+                    temp += temp1[v].charCodeAt(0).toString(16);
+                    break;
+                  default:
+                    if ((temp1[v].charCodeAt(0) >= 65 && temp1[v].charCodeAt(0) <= 90) || (temp1[v].charCodeAt(0) >= 97 && temp1[v].charCodeAt(0) <= 122) || (temp1[v].charCodeAt(0) >= 48 && temp1[v].charCodeAt(0) <= 57)){
+                      temp += temp1[v];
+                    }
+                    else {
+                      temp += "_";
+                    }
+                    break;
+                }
+              }
+            }
+            else {
+              temp = "0";
+            }
+            break;
+          case 13:
+            if (t["t"+i].hasLabel){
+              temp = $("#labelBox"+i).css("opacity");
+            }
+            else {
+              temp = "0";
+            }
+            break;
+          case 14:
+            if (t["t"+i].hasLabel){
+              temp = $("#textarea"+i).css("font-size");
+              temp = temp.substr(0,temp.length - 2);
+            }
+            else {
+              temp = "0";
+            }
+            break;
+          case 15:
+            if (t["t"+i].hasLabel){
+              temp = $("#labelBox"+i).width();
+            }
+            else {
+              temp = "0";
+            }
+            break;
+          case 16:
+            if (t["t"+i].hasLabel){
+              temp = $("#labelBox"+i).height();
+            }
+            else {
+              temp = "0";
+            }
+            break;
+          case 17:
+            if (t["t"+i].hasLabel){
+              temp = Math.round(t["t"+i].labelX);
+            }
+            else {
+              temp = "0";
+            }
+            break;
+          case 18:
+            if (t["t"+i].hasLabel){
+              temp = Math.round(t["t"+i].labelY);
+            }
+            else {
+              temp = "0";
             }
             break;
           default:
@@ -887,6 +1201,7 @@ var colourChange = function(id){
     $("#trajColour"+id).css("background-color",newcolour);
     $("#start"+id).css({"fill":newcolour,"stroke":newcolour});
     t["t"+aT].colour = newcolour;
+    $("#labelBox"+id).css("border-color",newcolour);
     $(".colourselectbox").remove();
   });
 }
@@ -902,7 +1217,7 @@ function trajDeleteClick(){
   $(".trajDelete").unbind("click");
   $(".trajDelete").click(function(){
     var id = parseInt($(this).attr("id").substr(10,11));
-    $("#trajBox"+id+", #trajGroup"+id+", #trajGroup-t"+id).remove();
+    $("#trajBox"+id+", #trajGroup"+id+", #trajGroup-t"+id+", #labelBox"+id+", #labelOptions"+id).remove();
     currentTrajs[id-1] = false;
     if (id == aT){
       for (i=0;i<9;i++){
@@ -1299,16 +1614,18 @@ $(document).ready(function(){
   });
 
   $("#trajectory-t").click(function(){
-    if (t["t"+aT].trajFrozen == false){
-      t["t"+aT].trajFrozen = true;
-      t["t"+aT].mouseXMeleeF = t["t"+aT].mouseXMelee;
-      t["t"+aT].mouseYMeleeF = t["t"+aT].mouseYMelee;
-      trajPosInfo();
-    }
-    else {
-      t["t"+aT].trajFrozen = false;
-      $(".framePosInfoBox").remove();
-    }
+    //if ($(".labelOptions").css("display") == "none"){
+      if (t["t"+aT].trajFrozen == false){
+        t["t"+aT].trajFrozen = true;
+        t["t"+aT].mouseXMeleeF = t["t"+aT].mouseXMelee;
+        t["t"+aT].mouseYMeleeF = t["t"+aT].mouseYMelee;
+        trajPosInfo();
+      }
+      else {
+        t["t"+aT].trajFrozen = false;
+        $(".framePosInfoBox").remove();
+      }
+    //}
   });
 
 	drawTrajectory();
@@ -1529,6 +1846,8 @@ $(document).ready(function(){
   trajColourHover();
   trajDeleteHover();
   trajDeleteClick();
+  trajLabelHover();
+  trajLabelClick();
 
   $("#trajAdd").click(function(){
     $(".trajBox").removeClass("trajBoxSelected");
@@ -1559,6 +1878,7 @@ $(document).ready(function(){
       //finally found a way to deep copy objects. fukin pointers man
       $.extend(true,t["t"+newTraj],t["t"+aT]);
 
+      t["t"+newTraj].hasLabel = false;
       t["t"+newTraj].colour = startColours[newTraj-1];
       aT = newTraj;
 
@@ -1571,6 +1891,8 @@ $(document).ready(function(){
       $(".trajDelete").removeClass("trajDeleteDisable");
       trajDeleteHover();
       trajDeleteClick();
+      trajLabelHover();
+      trajLabelClick();
     }
 
   });
@@ -1599,103 +1921,17 @@ $(document).ready(function(){
 
   });
 
-  $(".trajLabel").hover(function(){
-    $(this).toggleClass("trajLabelHighlight");
-  });
-
   $(document).mouseup(function (e)
 {
     var container = $(".labelOptions");
+    var container2 = $(".labelBox");
 
-    if (!container.is(e.target) // if the target of the click isn't the container...
+    if (!container.is(e.target) && !container2.is(e.target) // if the target of the click isn't the container...
         && container.has(e.target).length === 0) // ... nor a descendant of the container
     {
         container.hide();
     }
 });
-
-  $(".trajLabel").click(function(){
-    var id = $(this).attr("id").substr(9,10);
-    $("#display").append('<textarea id="labelBox'+id+'" class="labelBox" name="label'+id+'" cols="30" rows="3"></textarea><div id="labelOptions'+id+'" class="labelOptions"><div id="labelFontSize'+id+'" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity'+id+'" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div><div class="labelColor labelControl"><p>Add color box</p></div><div class="labelHitbox labelControl"><p>Add hitbox</p></div></div>');
-    $("#labelBox"+id).click(function(){
-      var x = $("#labelBox"+id).css("width");
-      x = parseInt(x.substr(0,x.length - 2));
-      var a = $("#labelBox"+id).css("left");
-      a = parseInt(a.substr(0,a.length - 2));
-      /*var y = $("#labelBox"+id).css("height");
-      y = parseInt(y.substr(0,y.length - 2));*/
-      var b = $("#labelBox"+id).css("top");
-      b = parseInt(b.substr(0,b.length - 2));
-      $("#labelOptions"+id).show().css({"top":b+10,"left":x+a+16});
-      $("#labelOptions"+id+" .labelControl").hover(function(){
-        $(this).toggleClass("labelControlHighlight");
-      });
-      $("#labelOptions"+id+" .labelFontChange .labelControl").click(function(){
-        var temp = $("#labelBox"+id).css("font-size");
-        temp = parseInt(temp.substr(0,temp.length - 2));
-        if ($(this).hasClass("labelFontUp")){
-          temp++;
-          if (temp > 40){
-            temp = 40;
-          }
-        }
-        else {
-          temp--;
-          if (temp < 5){
-            temp = 5;
-          }
-        }
-        $("#labelBox"+id).css("font-size",temp+"px");
-      });
-      $("#labelOptions"+id+" .labelOpacityChange .labelControl").click(function(){
-        var temp = parseFloat($("#labelBox"+id).css("opacity"));
-        //temp = parseInt(temp.substr(0,temp.length - 2));
-        if ($(this).hasClass("labelOpacityUp")){
-          temp += 0.1;
-          if (temp > 1){
-            temp = 1;
-          }
-        }
-        else {
-          temp -= 0.1;
-          if (temp < 0.1){
-            temp = 0.1;
-          }
-        }
-        $("#labelBox"+id).css("opacity",temp);
-      });
-      //$("#labelOptions"+id).hide();
-    });
-    $("#labelBox"+id).draggable({cancel: '',containment: "parent",start:function(){
-      $("#labelBox"+id).unbind("mouseenter").unbind("mouseleave");
-      $(".labelControl").unbind("mouseenter").unbind("mouseleave");
-      $("#labelOptions"+id+" .labelOpacityChange .labelControl").unbind("click");
-      $("#labelOptions"+id+" .labelFontChange .labelControl").unbind("click");
-      $("#labelOptions"+id).hide();
-    },stop:function(){
-      var posx = $("#labelBox"+id).css("left");
-      var posy = $("#labelBox"+id).css("top");
-      posx = parseInt(posx.substr(0,posx.length - 2));
-      posy = parseInt(posy.substr(0,posy.length - 2));
-      t["t"+id].labelX = posx/disMagnification;
-      t["t"+id].labelY = posy/disMagnification;
-      $("#labelBox"+id).click(function(){
-        var x = $("#labelBox"+id).css("width");
-        x = parseInt(x.substr(0,x.length - 2));
-        var a = $("#labelBox"+id).css("left");
-        a = parseInt(a.substr(0,a.length - 2));
-        /*var y = $("#labelBox"+id).css("height");
-        y = parseInt(y.substr(0,y.length - 2));*/
-        var b = $("#labelBox"+id).css("top");
-        b = parseInt(b.substr(0,b.length - 2));
-        $("#labelOptions"+id).show().css({"top":b+10,"left":x+a+16});
-        $("#labelOptions"+id+" .labelControl").hover(function(){
-          $(this).toggleClass("labelControlHighlight");
-        });
-        //$("#labelOptions"+id).hide();
-      });
-    }});
-  });
 
   readQueryString();
   //thingy();
