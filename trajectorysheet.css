@@ -655,8 +655,10 @@ textarea
 }
 
 #chargingNumber p {
-  margin:15px;
+  margin:35px 0px 20px 0px;
   font-size:15px;
+  display:inline-block;
+  vertical-align:top;
 }
 
 #chargingButtonContainer {
@@ -680,6 +682,14 @@ textarea
 
 #chargingNumberEdit{
   font-size:40px;
+  width:50px;
+  height:50px;
+  display:inline-block;
+  background-color:#252525;
+  color:white;
+  resize:none;
+  padding:0;
+  margin:15px 0px 15px 10px
 }
 
 #middlecontrols {
@@ -696,6 +706,13 @@ textarea
   vertical-align:top;
 }
 
+#stageSelectContainer {
+  display:inline-block;
+  overflow-x:hidden;
+  overflow-y:scroll;
+  height:100px;
+}
+
 .stageselect {
   display:inline-block;
   border-radius:10px;
@@ -703,7 +720,7 @@ textarea
   width:82px;
   height:65px;
   opacity:0.7;
-  margin:15px 0px 15px 15px;
+  margin:15px 0px 14px 15px;
   cursor:pointer;
 }
 
@@ -862,7 +879,20 @@ textarea
 }
 
 #percentNumber p {
-  margin:5px;
+  display:inline-block;
+  vertical-align: top;
+  margin:5px 0px;
+}
+
+#percentNumberEdit {
+  width:83px;
+  height:60px;
+  display:inline-block;
+  background-color:black;
+  color:white;
+  font-size:45px;
+  border:none;
+  resize: none;
 }
 
 #percentButtonContainer {
@@ -1524,6 +1554,8 @@ textarea
   width:auto;
   height:100px;
   display:inline-block;
+
+  overflow-y:scroll;
 }
 
 .trajBox {
@@ -1647,19 +1679,54 @@ textarea
   color:#666565;
 }
 
-#trajShare {
-  height:50px;
-  width:90px;
-  background-color:#3fc2a2;
+#trajExtra {
+  height:100px;
+  width:100px;
   display:inline-block;
   float:right;
+}
+
+#trajShare {
+  height:50px;
+  width:100px;
+  display:inline-block;
   text-align:center;
   cursor:pointer;
 }
 
+.trajShare {
+  background-color:#2ba77a;
+}
+
+.trajShareHighlight {
+  background-color:#4dcc9e;
+}
+
 #trajShare p {
   font-size:25px;
-  margin:5px;
+  margin:9px 5px;
+}
+
+#trajTitle {
+  height:50px;
+  width:100px;
+  display:inline-block;
+  text-align:center;
+  cursor:pointer;
+}
+
+.trajTitle {
+  background-color:#3f40c2;
+}
+
+.trajTitleHighlight {
+  background-color:#6162f6;
+}
+
+#trajTitle p {
+  font-size:19px;
+  font-weight:bold;
+  margin:3px 5px;
 }
 
 #shareUrl {

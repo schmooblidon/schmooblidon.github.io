@@ -84,6 +84,9 @@ diMouseX.s = 0;
 diMouseY.s = 0;
 diMouseX.a = 0;
 diMouseY.a = 0;
+
+titleX = 0;
+titleY = 0;
 /*trajFrozen = false;
 
 mouseXMelee = [0,0,0,0,0,0,0,0,0];
@@ -140,6 +143,67 @@ var character = "Fox";*/
 
 //"a0=00000000&a1=00000000&a2=00000000&a3=00000000&a4=chars.fx.ns.id0&a5=Fox&a6=080&a7=00&a8=00&a9=000&a10=00000000
 
+function translateText(temp){
+  var translated = "";
+  for (v=0;v<temp.length;v++){
+    if (temp[v] == "_"){
+      translated += " ";
+    }
+    else if (temp[v] == "%"){
+      translated += String.fromCharCode(parseInt(temp[v+1]+temp[v+2], 16));
+      v+=2;
+    }
+    else {
+      translated += temp[v];
+    }
+  }
+  return translated;
+}
+
+function makeTextCompatible(i){
+  var temp1 = $("#textarea"+i).val();
+  var temp2 = "";
+  for (v=0;v<temp1.length;v++){
+    switch(temp1[v]){
+      case " ":
+        temp2 += "_";
+        break;
+
+      case "#":
+      case "%":
+      case "{":
+      case "}":
+      case "|":
+      case "^":
+      case "~":
+      case "[":
+      case "]":
+      case "`":
+      case "'":
+      case ";":
+      case "/":
+      case ":":
+      case "=":
+      case "&":
+      case "+":
+      case '"':
+        temp2 += "%";
+        temp2 += temp1[v].charCodeAt(0).toString(16);
+        break;
+      default:
+        if ((temp1[v].charCodeAt(0) >= 65 && temp1[v].charCodeAt(0) <= 90) || (temp1[v].charCodeAt(0) >= 97 && temp1[v].charCodeAt(0) <= 122) || (temp1[v].charCodeAt(0) >= 48 && temp1[v].charCodeAt(0) <= 57)){
+          temp2 += temp1[v];
+        }
+        else {
+          temp2 += "_";
+        }
+        break;
+    }
+  }
+
+  return temp2;
+}
+
 function labelBoxResize(id){
   $("#labelBox"+id).resizable();
 }
@@ -158,8 +222,14 @@ function labelBoxDrag(id){
     var posy = $("#labelBox"+id).css("top");
     posx = parseInt(posx.substr(0,posx.length - 2));
     posy = parseInt(posy.substr(0,posy.length - 2));
-    t["t"+id].labelX = posx/disMagnification;
-    t["t"+id].labelY = posy/disMagnification;
+    if (id == 0){
+      titleX = posx/disMagnification;
+      titleY = posy/disMagnification;
+    }
+    else{
+      t["t"+id].labelX = posx/disMagnification;
+      t["t"+id].labelY = posy/disMagnification;
+    }
     labelBoxClick(id);
   }});
 }
@@ -451,6 +521,18 @@ function readQueryString(){
     storedTrajs = 0;
     $("#trajBox1").remove();
     $("#trajGroup1").remove();
+    if (GetQueryStringParams("tt")){
+      titleX = GetQueryStringParams("tx");
+      titleY = GetQueryStringParams("ty");
+      $("#trajTitle").addClass("activeTitle").children("p").empty().append("Remove Title");
+      $("#display").append('<div id="labelBox0" class="labelBox"><textarea id="textarea0" class="textarea" name="label0" cols="30" rows="3"></textarea></div><div id="labelOptions0" class="labelOptions"><div id="labelFontSize0" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity0" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div><div class="labelHitbox labelControl"><p>Add hitbox text</p></div></div>');
+
+      $("#textarea0").val(translateText(GetQueryStringParams("tt"))).css("font-size",GetQueryStringParams("tf")+"px");
+      $("#labelBox0").css({"opacity":GetQueryStringParams("to"),"width":GetQueryStringParams("tw"),"height":GetQueryStringParams("th"),"top":titleY,"left":titleX});
+      labelBoxClick(0);
+      labelBoxDrag(0);
+      labelBoxResize(0);
+    }
     for (p=1;p<10;p++){
       var exists = GetQueryStringParams(p+"a");
       if (exists){
@@ -536,20 +618,7 @@ function readQueryString(){
             case "m":
               //label text
               if (t["t"+p].hasLabel){
-                var translated = "";
-                for (v=0;v<temp.length;v++){
-                  if (temp[v] == "_"){
-                    translated += " ";
-                  }
-                  else if (temp[v] == "%"){
-                    translated += String.fromCharCode(parseInt(temp[v+1]+temp[v+2], 16));
-                    v+=2;
-                  }
-                  else {
-                    translated += temp[v];
-                  }
-                }
-                $("#textarea"+p).val(translated);
+                $("#textarea"+p).val(translateText(temp));
               }
               break;
             case "n":
@@ -651,6 +720,15 @@ function readQueryString(){
 
 function writeQueryString(){
   var qstring = "?";
+  if ($("#trajTitle").hasClass("activeTitle")){
+    var tt = makeTextCompatible(0);
+    var to = $("#labelBox0").css("opacity");
+    var tf = $("#textarea0").css("font-size");
+    tf = tf.substr(0,tf.length-2);
+    var tw = $("#labelBox0").width();
+    var th = $("#labelBox0").height();
+    qstring += "tt="+tt+"&to="+to+"&tf="+tf+"&tw="+tw+"&th="+th+"&tx="+Math.round(titleX)+"&ty="+Math.round(titleY)+"&";
+  }
   for (i=1;i<10;i++){
     if (currentTrajs[i-1]){
       for (j=0;j<19;j++){
@@ -745,45 +823,7 @@ function writeQueryString(){
             break;
           case 12:
             if (t["t"+i].hasLabel){
-              var temp1 = $("#textarea"+i).val();
-              temp = "";
-              for (v=0;v<temp1.length;v++){
-                switch(temp1[v]){
-                  case " ":
-                    temp += "_";
-                    break;
-
-                  case "#":
-                  case "%":
-                  case "{":
-                  case "}":
-                  case "|":
-                  case "^":
-                  case "~":
-                  case "[":
-                  case "]":
-                  case "`":
-                  case "'":
-                  case ";":
-                  case "/":
-                  case ":":
-                  case "=":
-                  case "&":
-                  case "+":
-                  case '"':
-                    temp += "%";
-                    temp += temp1[v].charCodeAt(0).toString(16);
-                    break;
-                  default:
-                    if ((temp1[v].charCodeAt(0) >= 65 && temp1[v].charCodeAt(0) <= 90) || (temp1[v].charCodeAt(0) >= 97 && temp1[v].charCodeAt(0) <= 122) || (temp1[v].charCodeAt(0) >= 48 && temp1[v].charCodeAt(0) <= 57)){
-                      temp += temp1[v];
-                    }
-                    else {
-                      temp += "_";
-                    }
-                    break;
-                }
-              }
+              temp = makeTextCompatible(i);
             }
             else {
               temp = "0";
@@ -1048,7 +1088,7 @@ function swapOptions(){
 
     $("#victimcharname").empty().append(t["t"+aT].character);
 
-    $("#percentNumberEdit").empty().append(t["t"+aT].percent);
+    $("#percentNumberEdit").val(t["t"+aT].percent);
 
     $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
 
@@ -1654,9 +1694,12 @@ $(document).ready(function(){
 	$(".percentButton").mousedown(function() {
 		var id = $(this).attr("id");
 		percentHold = setInterval(function() {
-			var curNum = parseInt($("#percentNumberEdit").text());
+			var curNum = parseInt($("#percentNumberEdit").val());
 			if (id == "percentPlus"){
 				var newnum = curNum + 1;
+        if (newnum > 999){
+          newnum = 999;
+        }
 				t["t"+aT].percent = newnum;
 			}
 			else {
@@ -1666,7 +1709,7 @@ $(document).ready(function(){
         }
 				t["t"+aT].percent = newnum;
       }
-			$("#percentNumberEdit").empty().append(newnum);
+			$("#percentNumberEdit").val(newnum);
       drawTrajectory();
 		}, 50);
 	}).bind("mouseup mouseleave", function() {
@@ -1850,7 +1893,7 @@ $(document).ready(function(){
   trajLabelClick();
 
   $("#trajAdd").click(function(){
-    $(".trajBox").removeClass("trajBoxSelected");
+
     var highestTraj = 0;
     var newTraj = 0;
     var foundNew = false;
@@ -1865,6 +1908,7 @@ $(document).ready(function(){
       }
     }
     if (foundNew){
+      $(".trajBox").removeClass("trajBoxSelected");
       if (newTraj > 1){
         $("#trajBox"+(newTraj-1)).after('<div id="trajBox'+newTraj+'" class="trajBox trajBoxSelected"><div id="trajNum'+newTraj+'" class="trajNum"><p>'+newTraj+'</p></div><div id="trajColour'+newTraj+'" class="trajColour" style="background-color:'+t["t"+newTraj].colour+'"></div><div id="trajLabel'+newTraj+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+newTraj+'" class="trajDelete"><p>x</p></div></div>');
       }
@@ -1907,10 +1951,7 @@ $(document).ready(function(){
 
   $("#trajShare").click(function(){
     var qstring = writeQueryString();
-
-    //$("#popout, #popoutOverlay").show();
     $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutShare"><div id="ppSTitle"><p>Share this URL</p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppSUrl"><p id="shareUrlEdit">http://ikneedata.com/trajectory'+qstring+'</p></div></div></div>');
-    //$("#shareUrlEdit").empty().append(qstring);
     $("#ppSClose").unbind("mouseover click");
     $("#ppSClose").hover(function(){
       $(this).toggleClass("ppSCloseHighlight");
@@ -1921,19 +1962,68 @@ $(document).ready(function(){
 
   });
 
-  $(document).mouseup(function (e)
-{
+  $("#trajShare").hover(function(){
+    $(this).toggleClass("trajShareHighlight");
+  });
+
+  $("#trajTitle").hover(function(){
+    $(this).toggleClass("trajTitleHighlight");
+  });
+
+  $("#trajTitle").click(function(){
+    if ($(this).hasClass("activeTitle")){
+      $(this).removeClass("activeTitle").children("p").empty().append("Add Title");
+      $("#labelBox0").remove();
+    }
+    else {
+      $(this).addClass("activeTitle").children("p").empty().append("Remove Title");
+      $("#display").append('<div id="labelBox0" class="labelBox"><textarea id="textarea0" class="textarea" name="label0" cols="30" rows="3"></textarea></div><div id="labelOptions0" class="labelOptions"><div id="labelFontSize0" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity0" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div><div class="labelHitbox labelControl"><p>Add hitbox text</p></div></div>');
+      labelBoxClick(0);
+      labelBoxDrag(0);
+      labelBoxResize(0);
+    }
+  });
+
+  $(document).mouseup(function (e){
     var container = $(".labelOptions");
     var container2 = $(".labelBox");
+    var container3 = $("#percentNumberEdit");
+    var container4 = $("#chargingNumberEdit");
 
-    if (!container.is(e.target) && !container2.is(e.target) // if the target of the click isn't the container...
-        && container.has(e.target).length === 0) // ... nor a descendant of the container
-    {
+    if (!container.is(e.target) && !container2.is(e.target) && container.has(e.target).length === 0){
         container.hide();
     }
-});
+    if (!container3.is(e.target)){
+      if (container3.val() == ""){
+        container3.val("0");
+        t["t"+aT].percent = 0;
+        drawTrajectory();
+      }
+    }
+    if (!container4.is(e.target)){
+      if(container4.val() == ""){
+        container4.val("0");
+        t["t"+aT].chargeF = 0;
+        drawTrajectory();
+      }
+    }
+  });
+
+  $("#percentNumberEdit").on("keyup blur", function() {
+    t["t"+aT].percent = parseInt($(this).val());
+    drawTrajectory();
+  });
+
+  $("#chargingNumberEdit").on("keyup blur", function() {
+    var temp = parseInt($(this).val());
+    if (temp > 59){
+      temp = 59;
+      $(this).val(59);
+    }
+    t["t"+aT].chargeF = temp;
+    drawTrajectory();
+  });
 
   readQueryString();
-  //thingy();
 
 });

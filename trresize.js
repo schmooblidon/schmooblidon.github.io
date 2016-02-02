@@ -39,6 +39,8 @@ var resizingtype = function(){
 	}
 
 	$("#middlecontrols, #tcontrols, #tcontrolscollapse, #bcontrols, #bcontrolscollapse").width(midwidth);
+	$("#trajBoxContainer").width(midwidth-140);
+	$("#stageSelectContainer").width(midwidth-40);
 
 	//find blastzone buffer
 
@@ -71,6 +73,7 @@ var resizingtype = function(){
 	for(i=1;i<=9;i++){
 		$("#labelBox"+i).css({"top":t["t"+i].labelY * disMagnification,"left":t["t"+i].labelX *disMagnification});
 	}
+	$("#labelBox0").css({"top":titleY * disMagnification,"left":titleX *disMagnification});
 	trajOffset = $("#trajectory").offset();
 	diOffset = $("#"+activeDI+"diSelector").offset();
 	//diOffset.s = $("#sdiSelector").offset();
