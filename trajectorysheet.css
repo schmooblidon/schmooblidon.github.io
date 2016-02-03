@@ -793,6 +793,7 @@ textarea
 	display:inline-block;
   background-image:url(assets/trajectory/rightarrow.png);
   opacity:0.3;
+  cursor:pointer;
 }
 
 #posButtonLeft {
@@ -835,6 +836,10 @@ textarea
   vertical-align:top;
 }
 
+.victimCharHighlight {
+  background-color:#393939;
+}
+
 #victimcharname {
 	font-size:30px;
   margin:0;
@@ -843,13 +848,25 @@ textarea
 #chardropdown {
 	display:none;
 	position:absolute;
-	width:140px;
-	height:350px;
+	width:280px;
+	height:325px;
 	right:140px;
-	top:-25px;
+	top:0px;
 	z-index:100;
 	text-align:center;
 	font-size:14px;
+}
+
+#chardropdown1 {
+  height:325px;
+  width:140px;
+  display:inline-block;
+}
+
+#chardropdown2 {
+  height:325px;
+  width:140px;
+  display:inline-block;
 }
 
 .hbcharselect {
@@ -1568,6 +1585,32 @@ textarea
   display:inline-block;
   vertical-align:top;
   cursor:pointer;
+  position:relative;
+}
+
+.trajFreeze {
+  width:17px;
+  height:17px;
+  background-image:url(assets/trajectory/freeze.png);
+  position:absolute;
+  left:23px;
+  margin-top:3px;
+  border-radius:10px;
+  background-color:#5c5c5c;
+  display:inline-block;
+  z-index:3;
+}
+
+.diFreeze {
+  left:2px;
+}
+
+.freezeOff {
+  opacity:0.2;
+}
+
+.freezeOn {
+  opacity:1;
 }
 
 .trajColour {
@@ -1630,11 +1673,14 @@ textarea
   text-align:center;
   display:inline-block;
   vertical-align:top;
-
+  z-index:4;
+  position:relative
 }
 
 .trajNum p {
   margin:0;
+  z-index:4;
+  position:relative;
 }
 
 
@@ -1890,4 +1936,19 @@ textarea
   width:112px;
   height:30px;
   background-image:url(assets/trajectory/collapseh.png);
+}
+
+#tutorial {
+  height:160px;
+  width:280px;
+  border-radius:15px;
+  background-color:rgba(0, 0, 0, 0.4);
+  position:absolute;
+  margin-top:25%;
+  margin-left:5%;
+  font-size:18px;
+}
+
+#tutorial p {
+  margin:15px;
 }

@@ -27,7 +27,7 @@ startColours = ["#00ffff","#ffff00","#ff00ff","#FF6633","#6666ff","#66ff66","#99
 //trajectoryObject(trajFrozen,mouseXMelee,mouseYMelee,mouseXMeleeF,mouseYMeleeF,curHitbox,version,character,percent,crouch,reverse,chargeInterrupt,charging,chargeF,staleQueue,curPositions)
 
 function trajectoryObject(){
-  this.trajFrozen = false;
+  this.trajFrozen = true;
   this.mouseXMelee = 0;
   this.mouseYMelee = 0;
   this.mouseXMeleeF = 0;
@@ -68,7 +68,7 @@ for (i=0;i<9;i++){
 }
 
 sakurai = 0;
-pointerfrozen = false;
+pointerfrozen = true;
 activeDI = "t";
 diPointerFrozen = {};
 diPointerFrozen.t = false;
@@ -528,7 +528,7 @@ function readQueryString(){
       $("#display").append('<div id="labelBox0" class="labelBox"><textarea id="textarea0" class="textarea" name="label0" cols="30" rows="3"></textarea></div><div id="labelOptions0" class="labelOptions"><div id="labelFontSize0" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity0" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div><div class="labelHitbox labelControl"><p>Add hitbox text</p></div></div>');
 
       $("#textarea0").val(translateText(GetQueryStringParams("tt"))).css("font-size",GetQueryStringParams("tf")+"px");
-      $("#labelBox0").css({"opacity":GetQueryStringParams("to"),"width":GetQueryStringParams("tw"),"height":GetQueryStringParams("th"),"top":titleY,"left":titleX});
+      $("#labelBox0").css({"opacity":GetQueryStringParams("to"),"width":GetQueryStringParams("tw"),"height":GetQueryStringParams("th"),"top":titleY*disMagnification,"left":titleX*disMagnification});
       labelBoxClick(0);
       labelBoxDrag(0);
       labelBoxResize(0);
@@ -666,7 +666,7 @@ function readQueryString(){
 
         aT = p;
         drawTrajectory();
-        $("#trajAdd").before('<div id="trajBox'+p+'" class="trajBox"><div id="trajNum'+p+'" class="trajNum"><p>'+p+'</p></div><div id="trajColour'+p+'" class="trajColour" style="background-color:'+t["t"+p].colour+'"></div><div id="trajLabel'+p+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+p+'" class="trajDelete"><p>x</p></div></div>');
+        $("#trajAdd").before('<div id="trajBox'+p+'" class="trajBox"><div id="trajNum'+p+'" class="trajNum"><div class="trajFreeze freezeOn"></div><p>'+p+'</p></div><div id="trajColour'+p+'" class="trajColour" style="background-color:'+t["t"+p].colour+'"></div><div id="trajLabel'+p+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+p+'" class="trajDelete"><p>x</p></div></div>');
         if (t["t"+p].hasLabel){
           var id = p;
           $("#trajLabel"+p).addClass("removeLabel").children("p").empty().append("Remove Label");
@@ -1467,6 +1467,12 @@ $(document).ready(function(){
   $(".diSelector").click(function(){
     var type = $(this).attr("id");
     diPointerFrozen[type[0]] ^= true;
+    if (diPointerFrozen[type[0]]){
+      $(this).children(".diFreeze").removeClass("freezeOff").addClass("freezeOn");
+    }
+    else {
+      $(this).children(".diFreeze").removeClass("freezeOn").addClass("freezeOff");
+    }
   });
 
   $(".diPrecise").hover(function(){
@@ -1655,13 +1661,16 @@ $(document).ready(function(){
 
   $("#trajectory-t").click(function(){
     //if ($(".labelOptions").css("display") == "none"){
+    $("#tutorial").fadeOut();
       if (t["t"+aT].trajFrozen == false){
+        $("#trajBox"+aT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
         t["t"+aT].trajFrozen = true;
         t["t"+aT].mouseXMeleeF = t["t"+aT].mouseXMelee;
         t["t"+aT].mouseYMeleeF = t["t"+aT].mouseYMelee;
         trajPosInfo();
       }
       else {
+        $("#trajBox"+aT+" .trajFreeze").removeClass("freezeOn").addClass("freezeOff");
         t["t"+aT].trajFrozen = false;
         $(".framePosInfoBox").remove();
       }
@@ -1673,8 +1682,10 @@ $(document).ready(function(){
 	$("#victim-char").hover(function(){
 		$(".hbcharselect").css("opacity",0.7);
 		$("#chardropdown").show();
+    $(this).addClass("victimCharHighlight");
 	}, function(){
 		$("#chardropdown").hide();
+    $(this).removeClass("victimCharHighlight");
 	});
 
 	$(".hbcharselect").hover(function(){
@@ -1910,10 +1921,10 @@ $(document).ready(function(){
     if (foundNew){
       $(".trajBox").removeClass("trajBoxSelected");
       if (newTraj > 1){
-        $("#trajBox"+(newTraj-1)).after('<div id="trajBox'+newTraj+'" class="trajBox trajBoxSelected"><div id="trajNum'+newTraj+'" class="trajNum"><p>'+newTraj+'</p></div><div id="trajColour'+newTraj+'" class="trajColour" style="background-color:'+t["t"+newTraj].colour+'"></div><div id="trajLabel'+newTraj+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+newTraj+'" class="trajDelete"><p>x</p></div></div>');
+        $("#trajBox"+(newTraj-1)).after('<div id="trajBox'+newTraj+'" class="trajBox trajBoxSelected"><div id="trajNum'+newTraj+'" class="trajNum"><div class="trajFreeze freezeOn"></div><p>'+newTraj+'</p></div><div id="trajColour'+newTraj+'" class="trajColour" style="background-color:'+t["t"+newTraj].colour+'"></div><div id="trajLabel'+newTraj+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+newTraj+'" class="trajDelete"><p>x</p></div></div>');
       }
       else {
-        $("#trajBoxContainer").prepend('<div id="trajBox1" class="trajBox trajBoxSelected"><div id="trajNum1" class="trajNum"><p>1</p></div><div id="trajColour1" class="trajColour" style="background-color:'+t["t1"].colour+'"></div><div id="trajLabel1" class="trajLabel"><p>Add label</p></div><div id="trajDelete1" class="trajDelete"><p>x</p></div></div>');
+        $("#trajBoxContainer").prepend('<div id="trajBox1" class="trajBox trajBoxSelected"><div id="trajNum1" class="trajNum"><div class="trajFreeze freezeOn"></div><p>1</p></div><div id="trajColour1" class="trajColour" style="background-color:'+t["t1"].colour+'"></div><div id="trajLabel1" class="trajLabel"><p>Add label</p></div><div id="trajDelete1" class="trajDelete"><p>x</p></div></div>');
       }
 
       currentTrajs[newTraj-1] = true;
