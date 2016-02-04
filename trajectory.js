@@ -1700,6 +1700,10 @@ $(document).ready(function(){
     drawTrajectory();
 	});
 
+  $(".percentButton").hover(function(){
+    $(this).toggleClass("percentButtonHighlight");
+  });
+
 	var percentHold = 0;
 
 	$(".percentButton").mousedown(function() {
@@ -1726,6 +1730,10 @@ $(document).ready(function(){
 	}).bind("mouseup mouseleave", function() {
     clearInterval(percentHold);
 	});
+
+  $(".chargingButton").hover(function(){
+    $(this).toggleClass("chargingButtonHighlight");
+  });
 
   var chargingHold = 0;
 
@@ -1789,6 +1797,10 @@ $(document).ready(function(){
     }
     drawAngle();
     drawTrajectory();
+  });
+
+  $(".realButton").hover(function(){
+    $(this).toggleClass("realButtonHighlight");
   });
 
   $("#stsRealButton").click(function(){
