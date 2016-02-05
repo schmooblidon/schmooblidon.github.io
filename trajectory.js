@@ -97,10 +97,6 @@ mouseYMeleeF = [0,0,0,0,0,0,0,0,0];*/
 
 isKilled = false;
 
-bzTop = 200;
-bzBottom = -108.8;
-bzLeft = -224;
-bzRight = 224;
 
 /*crouch = false;
 
@@ -113,7 +109,11 @@ chargeF = 0;*/
 
 //each surface is put into an element in the array. The surface is broken down into arrays of far left point X and y, and far right point X and Y. Use .length to find the number of surfaces to check
 
-surfaces = [[[-68.4,0],[68.4,0]],[[-57.6,27.2],[-20.0,27.2]],[[20,27.2],[57.6,27.2]],[[-18.8,54.4],[18.8,54.4]]];
+surfaces = {};
+surfaces.bf = [[[-68.4,0],[68.4,0]],[[-57.6,27.2],[-20.0,27.2]],[[20,27.2],[57.6,27.2]],[[-18.8,54.4],[18.8,54.4]]];
+surfaces.fd = [[[-85.56570,0],[85.56570,0]]];
+
+
 
 snapping = true;
 
@@ -123,7 +123,7 @@ curPositions = [0,0,0,0,0,0,0,0,0];*/
 
 
 
-centreOffset = [bzRight*10+50,bzTop*10+50];
+centreOffset = [-bzLeft*10+50,bzTop*10+50];
 
 /*curHitbox = [chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0];
 
@@ -142,6 +142,87 @@ version = "NTSC";
 var character = "Fox";*/
 
 //"a0=00000000&a1=00000000&a2=00000000&a3=00000000&a4=chars.fx.ns.id0&a5=Fox&a6=080&a7=00&a8=00&a9=000&a10=00000000
+
+function changeStage(id){
+  $("#trajBackground").attr("src","assets/trajectory/stages/"+id+".png").attr("width",dimensions[id][0]).attr("height",dimensions[id][1]);
+  bzTop = bz[id][0];
+  bzRight = bz[id][1];
+  bzBottom = bz[id][2];
+  bzLeft = bz[id][3];
+
+  disWidth = dimensions[id][0];
+  disHeight = dimensions[id][1];
+  ratio = disWidth/disHeight;
+  centreOffset = [-bzLeft*10+50,bzTop*10+50];
+
+  //viewBox element is weird and had to use vanilla javascript and also avoid changing the di selector svg elements
+  var svg = document.getElementsByTagName("svg")[0];
+  var svg2 = document.getElementsByTagName("svg")[1];
+
+  $("#trajectory, #trajectory-t").attr("width",disWidth).attr("height",disHeight).attr("enable-background","new 0 0 "+disWidth+" "+disHeight);
+  svg.setAttribute("viewBox","0 0 "+disWidth+" "+disHeight);
+  svg2.setAttribute("viewBox","0 0 "+disWidth+" "+disHeight);
+
+  resizing();
+}
+
+function trajectoryHover(){
+  $("#trajectory-t").unbind("mouseenter").unbind("mouseleave");
+  $("#trajectory-t").mousemove(function(){
+    var widthRatio = disWidth/dimensions[activeStage][0];
+    var heightRatio = disHeight/dimensions[activeStage][1];
+    t["t"+aT].mouseXMelee = (Math.round(((mouseX/widthRatio)-(-bzLeft*10+50))*10))/100;
+    t["t"+aT].mouseYMelee = (Math.round(((mouseY/heightRatio)-(bzTop*10+50))*-10))/100;
+    $("#mPosX").empty().append(t["t"+aT].mouseXMelee);
+    $("#mPosY").empty().append(t["t"+aT].mouseYMelee);
+    if (t["t"+aT].trajFrozen == false){
+      if (snapping){
+        //will have to do some more maths for slanted surfaces like yoshis
+        for (i=0;i<surfaces[activeStage].length;i++){
+          //if X position is in line with surface or within 10Mm on either side
+          if (t["t"+aT].mouseXMelee >= surfaces[activeStage][i][0][0] - 10 && t["t"+aT].mouseXMelee <= surfaces[activeStage][i][1][0] + 10){
+
+            //if Y is within 10Mm of surface on either side
+            if (t["t"+aT].mouseYMelee <= surfaces[activeStage][i][0][1] + 10 && t["t"+aT].mouseYMelee >= surfaces[activeStage][i][0][1] - 10){
+              //if X is just outside of the plat X plane, snap to the edge (left)
+              if (t["t"+aT].mouseXMelee >= surfaces[activeStage][i][0][0] - 10 && t["t"+aT].mouseXMelee < surfaces[activeStage][i][0][0]){
+                t["t"+aT].mouseXMelee = surfaces[activeStage][i][0][0];
+              }
+              //(right)
+              if (t["t"+aT].mouseXMelee <= surfaces[activeStage][i][1][0] + 10 && t["t"+aT].mouseXMelee > surfaces[activeStage][i][1][0]){
+                t["t"+aT].mouseXMelee = surfaces[activeStage][i][1][0];
+
+              }
+              t["t"+aT].mouseYMelee = surfaces[activeStage][i][0][1];
+            }
+          }
+        }
+      }
+      drawTrajectory(true);
+    }
+  });
+}
+
+function trajectoryClick(){
+  $("#trajectory-t").unbind("click");
+  $("#trajectory-t").click(function(){
+    //if ($(".labelOptions").css("display") == "none"){
+    $("#tutorial").fadeOut();
+      if (t["t"+aT].trajFrozen == false){
+        $("#trajBox"+aT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
+        t["t"+aT].trajFrozen = true;
+        t["t"+aT].mouseXMeleeF = t["t"+aT].mouseXMelee;
+        t["t"+aT].mouseYMeleeF = t["t"+aT].mouseYMelee;
+        trajPosInfo();
+      }
+      else {
+        $("#trajBox"+aT+" .trajFreeze").removeClass("freezeOn").addClass("freezeOff");
+        t["t"+aT].trajFrozen = false;
+        $(".framePosInfoBox").remove();
+      }
+    //}
+  });
+}
 
 function translateText(temp){
   var translated = "";
@@ -518,9 +599,15 @@ function readQueryString(){
     }
   }
   if (queryExist){
+    $("#tutorial").remove();
     storedTrajs = 0;
     $("#trajBox1").remove();
     $("#trajGroup1").remove();
+    activeStage = GetQueryStringParams("stage");
+    $(".stageselect").removeClass("stageselected");
+    $("#"+activeStage+"stageselect").addClass("stageselected");
+    changeStage(activeStage);
+
     if (GetQueryStringParams("tt")){
       titleX = GetQueryStringParams("tx");
       titleY = GetQueryStringParams("ty");
@@ -720,6 +807,7 @@ function readQueryString(){
 
 function writeQueryString(){
   var qstring = "?";
+  qstring += "stage="+activeStage+"&";
   if ($("#trajTitle").hasClass("activeTitle")){
     var tt = makeTextCompatible(0);
     var to = $("#labelBox0").css("opacity");
@@ -1625,57 +1713,9 @@ $(document).ready(function(){
     diOffset = $("#"+activeDI+"diSelector").offset();
   });
 
-  $("#trajectory-t").mousemove(function(){
-    var widthRatio = disWidth/4580;
-    var heightRatio = disHeight/3188;
-    t["t"+aT].mouseXMelee = (Math.round(((mouseX/widthRatio)-2290)*10))/100;
-    t["t"+aT].mouseYMelee = (Math.round(((mouseY/heightRatio)-2050)*-10))/100;
-    $("#mPosX").empty().append(t["t"+aT].mouseXMelee);
-    $("#mPosY").empty().append(t["t"+aT].mouseYMelee);
-    if (t["t"+aT].trajFrozen == false){
-      if (snapping){
-        //will have to do some more maths for slanted surfaces like yoshis
-        for (i=0;i<surfaces.length;i++){
-          //if X position is in line with surface or within 10Mm on either side
-          if (t["t"+aT].mouseXMelee >= surfaces[i][0][0] - 10 && t["t"+aT].mouseXMelee <= surfaces[i][1][0] + 10){
+  trajectoryHover();
 
-            //if Y is within 10Mm of surface on either side
-            if (t["t"+aT].mouseYMelee <= surfaces[i][0][1] + 10 && t["t"+aT].mouseYMelee >= surfaces[i][0][1] - 10){
-              //if X is just outside of the plat X plane, snap to the edge (left)
-              if (t["t"+aT].mouseXMelee >= surfaces[i][0][0] - 10 && t["t"+aT].mouseXMelee < surfaces[i][0][0]){
-                t["t"+aT].mouseXMelee = surfaces[i][0][0];
-              }
-              //(right)
-              if (t["t"+aT].mouseXMelee <= surfaces[i][1][0] + 10 && t["t"+aT].mouseXMelee > surfaces[i][1][0]){
-                t["t"+aT].mouseXMelee = surfaces[i][1][0];
-
-              }
-              t["t"+aT].mouseYMelee = surfaces[i][0][1];
-            }
-          }
-        }
-      }
-      drawTrajectory(true);
-    }
-  });
-
-  $("#trajectory-t").click(function(){
-    //if ($(".labelOptions").css("display") == "none"){
-    $("#tutorial").fadeOut();
-      if (t["t"+aT].trajFrozen == false){
-        $("#trajBox"+aT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
-        t["t"+aT].trajFrozen = true;
-        t["t"+aT].mouseXMeleeF = t["t"+aT].mouseXMelee;
-        t["t"+aT].mouseYMeleeF = t["t"+aT].mouseYMelee;
-        trajPosInfo();
-      }
-      else {
-        $("#trajBox"+aT+" .trajFreeze").removeClass("freezeOn").addClass("freezeOff");
-        t["t"+aT].trajFrozen = false;
-        $(".framePosInfoBox").remove();
-      }
-    //}
-  });
+  trajectoryClick();
 
 	drawTrajectory();
 
@@ -1859,11 +1899,6 @@ $(document).ready(function(){
     $(this).toggleClass("stagehighlight");
   });
 
-  $(".stageselect").click(function(){
-    $(".stageselect").removeClass("stageselected");
-    $(this).addClass("stageselected");
-  });
-
   $(".controlcollapsetb").hover(function(){
     $(this).toggleClass("controlcollapsetbhighlight");
   });
@@ -2045,6 +2080,26 @@ $(document).ready(function(){
     }
     t["t"+aT].chargeF = temp;
     drawTrajectory();
+  });
+
+  $(".stageselect").click(function(){
+    $(".stageselect").removeClass("stageselected");
+    $(this).addClass("stageselected");
+    var id = $(this).attr("id");
+    id = id.substr(0,2);
+    activeStage = id;
+
+    changeStage(id);
+    var savedaT = aT;
+
+    for(x=0;x<9;x++){
+      if(currentTrajs[x]){
+        aT = x+1;
+        drawTrajectory();
+      }
+    }
+    aT = savedaT;
+
   });
 
   readQueryString();

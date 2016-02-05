@@ -7,6 +7,21 @@ ratio = 4580/3188;
 disWidth = 4580;
 disHeight = 3188;
 
+activeStage = "bf";
+
+dimensions = {};
+dimensions.bf = [4580,3188];
+dimensions.fd = [5020,3380];
+
+bz = {};
+bz.bf = [200,224,-108.8,-224];
+bz.fd = [188,246,-140,-246];
+
+bzTop = 200;
+bzBottom = -108.8;
+bzLeft = -224;
+bzRight = 224;
+
 disMagnification = 1;
 
 collapsed = {};
@@ -69,7 +84,7 @@ var resizingtype = function(){
 	$("#attackscroll").height($("#lcontrols").height()-255);
 	disWidth = $("#display").width();
 	disHeight = $("#display").height();
-	disMagnification = disWidth/4580;
+	disMagnification = disWidth/dimensions[activeStage][0];
 	for(i=1;i<=9;i++){
 		$("#labelBox"+i).css({"top":t["t"+i].labelY * disMagnification,"left":t["t"+i].labelX *disMagnification});
 	}
