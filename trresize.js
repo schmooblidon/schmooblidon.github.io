@@ -12,10 +12,12 @@ activeStage = "bf";
 dimensions = {};
 dimensions.bf = [4580,3188];
 dimensions.fd = [5020,3380];
+dimensions.dl = [5200,3830];
 
 bz = {};
 bz.bf = [200,224,-108.8,-224];
 bz.fd = [188,246,-140,-246];
+bz.dl = [250,255,-123,-255];
 
 bzTop = 200;
 bzBottom = -108.8;
