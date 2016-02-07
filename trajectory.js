@@ -59,6 +59,8 @@ function trajectoryObject(){
   this.labelX = 0;
   this.labelY = 0;
   this.hasLabel = false;
+  this.fadeIn = true;
+  this.doubleJump = false;
 }
 
 t = {};
@@ -95,7 +97,7 @@ mouseYMelee = [0,0,0,0,0,0,0,0,0];
 mouseXMeleeF = [0,0,0,0,0,0,0,0,0];
 mouseYMeleeF = [0,0,0,0,0,0,0,0,0];*/
 
-isKilled = false;
+//isKilled = false;
 
 
 /*crouch = false;
@@ -1434,7 +1436,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     yPos = t["t"+aT].mouseYMelee;
   }
 
-	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee);
+	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump);
 	var positions = hit.positions;
 	t["t"+aT].curPositions = positions;
 	var cla = "tLineS";
@@ -1454,23 +1456,23 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     $(SVG("path")).attr("id","start-t"+aT).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+aT);
   //}
   //$("#trajGroup"+aT+" .framePos").css("fill","#25d041");
+  var isKilled = false;
   for (i=0;i<positions.length;i++){
+    if (!isKilled){
   	var x = positions[i][0];
   	var y = positions[i][1];
   	if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
   		var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
   		lineText += tempText;
-      /*if ($("#"+aT+"f"+(i+1)).length > 0){
-        $("#"+aT+"f"+(i+1)).attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]);
-        $("#"+aT+"f"+(i+1)+"-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]);
-      }*/
-      //else {
+
         $(SVG("circle")).attr("id",aT+"f"+(i+1)).attr("class","framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup"+aT);
         $(SVG("circle")).attr("id",aT+"f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+aT);
-      //}
+        if (i > hit.hitstun){
+          $("#"+aT+"f"+(i+1)).css("fill","#abffb9");
+        }
+
   	}
   	else {
-      //$("#"+aT+"f"+(i+1)+", #"+aT+"f"+(i+1)+"-t").remove();
       //checks if vertical knockback velocity is greater or equal to 2.4 when above the top blastzone
       if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && positions[i][3] >= 2.4)){
 
@@ -1479,6 +1481,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
         $("#trajGroup"+aT+" .framePos").css("fill","#df3c3c");
       }
   	}
+    }
 
   }
   //$("#trajLine"+aT).remove();
@@ -1903,6 +1906,29 @@ $(document).ready(function(){
     else {
       $("#cSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].crouch = true;
+    }
+    drawTrajectory();
+  });
+
+  $("#fiRealButton").click(function(){
+    if (t["t"+aT].fadeIn){
+      $("#fiSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      t["t"+aT].fadeIn = false;
+    }
+    else {
+      $("#fiSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      t["t"+aT].fadeIn = true;
+    }
+    drawTrajectory();
+  });
+  $("#djRealButton").click(function(){
+    if (t["t"+aT].doubleJump){
+      $("#djSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      t["t"+aT].doubleJump = false;
+    }
+    else {
+      $("#djSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      t["t"+aT].doubleJump = true;
     }
     drawTrajectory();
   });

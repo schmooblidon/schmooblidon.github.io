@@ -1,4 +1,4 @@
-function Hit(percent, damage, growth, base, setKnockback, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt, tdiX, tdiY) {
+function Hit(percent, damage, growth, base, setKnockback, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt, tdiX, tdiY, fadeIn, doubleJump) {
 
     /******* Internal functions start *******/
 
@@ -124,22 +124,24 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
 
     //The initial horizontal velocity the hit causes
     function getHorizontalVelocity(knockback, angle) {
-        var initialVelocity = knockback * .03;
+        var initialVelocity = knockback * 0.03;
         var horizontalAngle = Math.cos(angle * angleConversion);
         var horizontalVelocity = initialVelocity * horizontalAngle;
+        horizontalVelocity = Math.round(horizontalVelocity * 100000) / 100000;
         return horizontalVelocity;
     }
 
     //The initial vertical velocity the hit causes
     function getVerticalVelocity(knockback, angle) {
-        var initialVelocity = knockback * .03;
+        var initialVelocity = knockback * 0.03;
         var verticalAngle = Math.sin(angle * angleConversion);
         var verticalVelocity = initialVelocity * verticalAngle;
+        verticalVelocity = Math.round(verticalVelocity * 100000) / 100000;
         return verticalVelocity;
     }
 
     //Calculate position for every frame of hitstun
-    function knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos) {
+    function knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump) {
         var positions = [];
         var hPos = xPos;
         var vPos = yPos;
@@ -153,8 +155,34 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
         var lastGravityFrame = characters[character]["terminalVelocity"] % characters[character]["gravity"];
 
         for (var i=0; i<hitstun; i++) {
-            horVelKB -= horizontalDecay;
-            verVelKB -= verticalDecay;
+            if (horVelKB != 0){
+              if (horVelKB > 0){
+                horVelKB -= horizontalDecay;
+                if (horVelKB < 0){
+                  horVelKB = 0;
+                }
+              }
+              else {
+                horVelKB -= horizontalDecay;
+                if (horVelKB > 0){
+                  horVelKB = 0;
+                }
+              }
+            }
+            if (verVelKB != 0){
+              if (verVelKB > 0){
+                verVelKB -= verticalDecay;
+                if (verVelKB < 0){
+                  verVelKB = 0;
+                }
+              }
+              else {
+                verVelKB -= verticalDecay;
+                if (verVelKB > 0){
+                  verVelKB = 0;
+                }
+              }
+            }
 
             if (i < gravityFrames) {
                 verVelChar -= characters[character]["gravity"];
@@ -168,18 +196,114 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
             positions.push([hPos, vPos, horVelKB, verVelKB, horVelChar, verVelChar]);
         }
 
+        var hasDoubleJumped = false;
+
+        while (Math.abs(horVelKB) > 0 || Math.abs(verVelKB) > 0){
+
+          i++;
+
+          if (horVelKB != 0){
+            if (horVelKB > 0){
+              horVelKB -= horizontalDecay;
+              if (horVelKB < 0){
+                horVelKB = 0;
+              }
+            }
+            else {
+              horVelKB -= horizontalDecay;
+              if (horVelKB > 0){
+                horVelKB = 0;
+              }
+            }
+          }
+          if (verVelKB != 0){
+            if (verVelKB > 0){
+              verVelKB -= verticalDecay;
+              if (verVelKB < 0){
+                verVelKB = 0;
+              }
+            }
+            else {
+              verVelKB -= verticalDecay;
+              if (verVelKB > 0){
+                verVelKB = 0;
+              }
+            }
+          }
+
+          if (i < gravityFrames) {
+              verVelChar -= characters[character]["gravity"];
+          }
+          else if (i == gravityFrames) {
+              verVelChar -= (lastGravityFrame * characters[character]["gravity"]);
+          }
+
+          if (hasDoubleJumped){
+            verVelChar -= characters[character]["gravity"];
+            if (verVelChar < -characters[character]["terminalVelocity"]){
+              verVelChar = -characters[character]["terminalVelocity"];
+            }
+          }
+
+          if (doubleJump && !hasDoubleJumped){
+            verVelChar = characters[character]["djInitY"];
+            if (fadeIn){
+              if (hPos > 0){
+                horVelChar = -characters[character]["djInitX"];
+              }
+              else if (hPos < 0){
+                horVelChar = characters[character]["djInitX"];
+              }
+            }
+            hasDoubleJumped = true;
+          }
+
+
+
+          if (fadeIn){
+            if (hPos > 0){
+              if (horVelChar < -characters[character]["maxDrift"]){
+                horVelChar += characters[character]["airFriction"];
+              }
+              else {
+                horVelChar -= characters[character]["driftAcc"];
+                if (horVelChar < -characters[character]["maxDrift"]){
+                  horVelChar = -characters[character]["maxDrift"]
+                }
+              }
+            }
+            else if (hPos < 0){
+              if (horVelChar > characters[character]["maxDrift"]){
+                horVelChar -= characters[character]["airFriction"];
+              }
+              horVelChar += characters[character]["driftAcc"];
+              if (horVelChar > characters[character]["maxDrift"]){
+                horVelChar = characters[character]["maxDrift"]
+              }
+            }
+          }
+
+          hPos = hPos + horVelChar + horVelKB;
+          vPos = vPos + verVelChar + verVelKB;
+          positions.push([hPos, vPos, horVelKB, verVelKB, horVelChar, verVelChar]);
+        }
+
         return positions;
     }
 
     //Rate at which horizontal velocity decreases
     function getHorizontalDecay(angle) {
-        return .051 * Math.cos(angle * angleConversion);
+      var decay = 0.051 * Math.cos(angle * angleConversion)
+      decay = Math.round(decay * 100000) / 100000;
+      return decay;
     }
 
     //Rate at which vertical velocity decreases
     //Gravity also plays a role, but that is done in knockbackTravel
-    function getVerticalDecay(angle, gravity) {
-        return .051 * Math.sin(angle * angleConversion);
+    function getVerticalDecay(angle) {
+      var decay = 0.051 * Math.sin(angle * angleConversion)
+      decay = Math.round(decay * 100000) / 100000;
+      return decay;
     }
 
     //Frames of hitstun
@@ -202,7 +326,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
         "Samus": {NTSCweight:110, PALweight: 110, gravity: 0.066, terminalVelocity: 1.4},
         "Ganon": {NTSCweight:109, PALweight: 109, gravity: 0.13, terminalVelocity: 2},
         "Yoshi": {NTSCweight:108, PALweight: 111, gravity: 0.093, terminalVelocity: 1.93},
-        "Falcon": {NTSCweight:104, PALweight: 104, gravity: 0.13, terminalVelocity: 2.9},
+        "Falcon": {NTSCweight:104, PALweight: 104, gravity: 0.13, terminalVelocity: 2.9, driftAcc: 0.06, driftMax: 1.12, djInitX: 0.97, djInitY: 2.66, airFriction: 0.01},
         "Link": {NTSCweight:104, PALweight: 104, gravity: 0.11, terminalVelocity: 2.13},
         "Doc": {NTSCweight:100, PALweight: 100, gravity: 0.095, terminalVelocity: 1.7},
         "Luigi": {NTSCweight:100, PALweight: 100, gravity: 0.069, terminalVelocity: 1.6},
@@ -212,13 +336,13 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
         "Sheik": {NTSCweight:90, PALweight: 90, gravity: 0.12, terminalVelocity: 2.13},
         "Zelda": {NTSCweight:90, PALweight: 90, gravity: 0.073, terminalVelocity: 1.4},
         "ICs": {NTSCweight:88, PALweight: 88, gravity: 0.1, terminalVelocity: 1.6},
-        "Marth": {NTSCweight:87, PALweight: 85, gravity: 0.085, terminalVelocity: 2.2},
+        "Marth": {NTSCweight:87, PALweight: 85, gravity: 0.085, terminalVelocity: 2.2, driftAcc: 0.05, driftMax: 0.9, djInitX: 1.0, djInitY: 2.027, airFriction: 0.005},
         "Mewtwo": {NTSCweight:85, PALweight: 85, gravity: 0.082, terminalVelocity: 1.5},
         "Roy": {NTSCweight:85, PALweight: 85, gravity: 0.114, terminalVelocity: 2.4},
         "Y.Link": {NTSCweight:85, PALweight: 85, gravity: 0.11, terminalVelocity: 2.13},
         "Falco": {NTSCweight:80, PALweight: 80, gravity: 0.17, terminalVelocity: 3.1},
         "Pika": {NTSCweight:80, PALweight: 80, gravity: 0.11, terminalVelocity: 1.9},
-        "Fox": {NTSCweight:75, PALweight: 73, gravity: 0.23, terminalVelocity: 2.8},
+        "Fox": {NTSCweight:75, PALweight: 73, gravity: 0.23, terminalVelocity: 2.8, driftAcc: 0.08, driftMax: 0.83, djInitX: 0.90, djInitY: 4.186, airFriction: 0.02},
         "Kirby": {NTSCweight:70, PALweight: 74, gravity: 0.08, terminalVelocity: 1.6},
         "Puff": {NTSCweight:60, PALweight: 60, gravity: 0.064, terminalVelocity: 1.3},
         "MrG&W": {NTSCweight:60, PALweight: 60, gravity: 0.095, terminalVelocity: 1.7},
@@ -259,12 +383,14 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
 
     var horizontalDecay = getHorizontalDecay(angle);
 
-    var verticalDecay = getVerticalDecay(angle, gravity);
+    var verticalDecay = getVerticalDecay(angle);
 
-    this.positions = knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos);
+    this.positions = knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump);
+
+    this.hitstun = hitstun;
 
     //Position on the last frame of hitstun. Not used yet, but potentially useful.
-    var endPosition = this.positions[this.positions.length - 1];
+    //var endPosition = this.positions[this.positions.length - 1];
 
     /******* Variable setup end *******/
 
