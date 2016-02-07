@@ -114,8 +114,8 @@ surfaces.bf = [[[-68.4,0],[68.4,0]],[[-57.6,27.2],[-20.0,27.2]],[[20,27.2],[57.6
 surfaces.fd = [[[-85.56570,0],[85.56570,0]]];
 surfaces.dl = [[[-77.2713,0.0089],[77.2713,0.0089]],[[-61.3929,30.1422],[-31.7254,30.1422]],[[31.7036,30.2426],[63.0745,30.2426]],[[-19.0181,51.4254],[19.0171,51.4254]]];
 surfaces.ps = [[[-87.75,0],[87.75,0]],[[-55,25],[-25,25]],[[25,25],[55,25]]];
-surfaces.ys = [[[-39.2,0],[39.2,0]],[[-59.5,23.45],[-28,23.45]],[[28,23.45],[59.5,23.45]],[[-15.75,42],[15.75,42]]];
-surfaces.fo = [[[-51.262,0.00288],[51.262,0.00288]],[[-14.25,42.75],[14.25,42.75]]];
+surfaces.ys = [[[-56,0],[56,0]],[[-59.5,23.45],[-28,23.45]],[[28,23.45],[59.5,23.45]],[[-15.75,42],[15.75,42]]];
+surfaces.fo = [[[-63.34755,0.00288],[63.34755,0.00288]],[[-14.25,42.75],[14.25,42.75]]];
 
 
 snapping = true;
@@ -196,7 +196,33 @@ function trajectoryHover(){
                 t["t"+aT].mouseXMelee = surfaces[activeStage][i][1][0];
 
               }
-              t["t"+aT].mouseYMelee = surfaces[activeStage][i][0][1];
+
+              if (i == 0 && activeStage == "ys" && t["t"+aT].mouseXMelee > 39.2){
+                var angle = Math.atan(3.5/16.8);
+                var x = t["t"+aT].mouseXMelee - 39.2;
+                t["t"+aT].mouseYMelee = -x * Math.tan(angle);
+              }
+              else if (i == 0 && activeStage == "ys" && t["t"+aT].mouseXMelee < -39.2){
+                var angle = Math.atan(3.5/16.8);
+                var x = -t["t"+aT].mouseXMelee - 39.2;
+                t["t"+aT].mouseYMelee = -x * Math.tan(angle);
+              }
+              else if (i == 0 && activeStage == "fo" && t["t"+aT].mouseXMelee > 51.261 && t["t"+aT].mouseXMelee < 53.583){
+                var angle = Math.atan(0.621/2.322);
+                var x = t["t"+aT].mouseXMelee - 51.261;
+                t["t"+aT].mouseYMelee = x * Math.tan(angle);
+              }
+              else if (i == 0 && activeStage == "fo" && t["t"+aT].mouseXMelee < -51.261 && t["t"+aT].mouseXMelee > -53.583){
+                var angle = Math.atan(0.621/2.322);
+                var x = -t["t"+aT].mouseXMelee - 51.261;
+                t["t"+aT].mouseYMelee = x * Math.tan(angle);
+              }
+              else if (i == 0 && activeStage == "fo" && (t["t"+aT].mouseXMelee >= 53.583 || t["t"+aT].mouseXMelee <= -53.583)){
+                t["t"+aT].mouseYMelee = 0.62388
+              }
+              else {
+                t["t"+aT].mouseYMelee = surfaces[activeStage][i][0][1];
+              }
             }
           }
         }
