@@ -777,6 +777,22 @@ function readQueryString(){
               }
               // label y
               break;
+            case "t":
+              if (temp == "1"){
+                t["t"+p].fadeIn = true;
+              }
+              else {
+                t["t"+p].fadeIn = false;
+              }
+              break;
+            case "u":
+              if (temp == "1"){
+                t["t"+p].doubleJump = true;
+              }
+              else {
+                t["t"+p].doubleJump = false;
+              }
+              break;
             default:
               break;
           }
@@ -997,9 +1013,26 @@ function writeQueryString(){
               temp = "0";
             }
             break;
+          case 19:
+            if (t["t"+i].fadeIn){
+              temp = "1";
+            }
+            else {
+              temp = "0";
+            }
+            break;
+          case 20:
+            if (t["t"+i].doubleJump){
+              temp = "1";
+            }
+            else {
+              temp = "0";
+            }
+            break;
           default:
             break;
         }
+
 
         jt = String.fromCharCode(97 + j);
         qstring += i+jt+"="+temp+"&";
