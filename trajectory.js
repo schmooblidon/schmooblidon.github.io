@@ -1,19 +1,3 @@
-asdasd = [];
-asdasd[0] = ["000000","333333","666666","999999","CCCCCC","FFFFFF"];
-asdasd[1] = ["FF0000","FF6666","990000","FF3300","FF6633","993300"];
-asdasd[2] = ["00ff00","66ff66","009900","ffff00","ffff66","999900"];
-asdasd[3] = ["0000ff","6666ff","000099","00ffff","66ffff","009999"];
-asdasd[4] = ["ff00ff","ff66ff","990099","9900CC","9966FF","330066"];
-asdasd[5] = ["","","","","",""];
-
-colourtext = '<div class="colourselectbox">';
-for(i=0;i<6;i++){
-  for(j=0;j<5;j++){
-    colourtext += '<div class="colourselect" style="background-color:#'+asdasd[j][i]+'"></div>';
-  }
-}
-colourtext += '</div>'
-
 aT = 1;
 
 charging = false;
@@ -1367,9 +1351,12 @@ function trajColourClick(){
   $(".trajColour").unbind("click");
   $(".trajColour").click(function(){
     var id = $(this).attr("id").substr(10,11);
-    if (!$(this).children(".colourselectbox").length){
+    if (!$("#csb"+id).length){
       $(".colourselectbox").remove();
-      $(this).append(colourtext);
+      var left = $(this).offset().left;
+      var top = $(this).offset().top;
+      $("body").append('<div id="csb'+id+'" class="colourselectbox"><div class="colourselect" style="background-color:#000000"></div><div class="colourselect" style="background-color:#FF0000"></div><div class="colourselect" style="background-color:#00ff00"></div><div class="colourselect" style="background-color:#0000ff"></div><div class="colourselect" style="background-color:#ff00ff"></div><div class="colourselect" style="background-color:#333333"></div><div class="colourselect" style="background-color:#FF6666"></div><div class="colourselect" style="background-color:#66ff66"></div><div class="colourselect" style="background-color:#6666ff"></div><div class="colourselect" style="background-color:#ff66ff"></div><div class="colourselect" style="background-color:#666666"></div><div class="colourselect" style="background-color:#990000"></div><div class="colourselect" style="background-color:#009900"></div><div class="colourselect" style="background-color:#000099"></div><div class="colourselect" style="background-color:#990099"></div><div class="colourselect" style="background-color:#999999"></div><div class="colourselect" style="background-color:#FF3300"></div><div class="colourselect" style="background-color:#ffff00"></div><div class="colourselect" style="background-color:#00ffff"></div><div class="colourselect" style="background-color:#9900CC"></div><div class="colourselect" style="background-color:#CCCCCC"></div><div class="colourselect" style="background-color:#FF6633"></div><div class="colourselect" style="background-color:#ffff66"></div><div class="colourselect" style="background-color:#66ffff"></div><div class="colourselect" style="background-color:#9966FF"></div><div class="colourselect" style="background-color:#FFFFFF"></div><div class="colourselect" style="background-color:#993300"></div><div class="colourselect" style="background-color:#999900"></div><div class="colourselect" style="background-color:#009999"></div><div class="colourselect" style="background-color:#330066"></div></div>');
+      $("#csb"+id).css({"top":(top-240)+"px","left":(left-85)+"px"});
       colourChange(id);
     }
     else {

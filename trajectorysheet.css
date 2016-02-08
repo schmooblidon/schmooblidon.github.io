@@ -36,7 +36,7 @@ textarea {
   right:-90px;
   border:5px solid #383838;
   border-radius:3px;
-  z-index:25;
+  z-index:30;
 }
 
 .colourselect {
