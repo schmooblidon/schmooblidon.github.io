@@ -32,8 +32,6 @@ textarea {
   width:200px;
   height:240px;
   position:absolute;
-  bottom:40px;
-  right:-90px;
   border:5px solid #383838;
   border-radius:3px;
   z-index:30;

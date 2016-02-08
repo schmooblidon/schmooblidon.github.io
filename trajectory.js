@@ -45,6 +45,7 @@ function trajectoryObject(){
   this.hasLabel = false;
   this.fadeIn = true;
   this.doubleJump = false;
+  this.hitstun = 0;
 }
 
 t = {};
@@ -1459,6 +1460,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
 	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump);
 	var positions = hit.positions;
 	t["t"+aT].curPositions = positions;
+  t["t"+aT].hitstun = hit.hitstun;
 	var cla = "tLineS";
   var temX = ((xPos*10)+centreOffset[0]);
   var temY = ((-yPos*10)+centreOffset[1]);
@@ -1487,7 +1489,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
 
         $(SVG("circle")).attr("id",aT+"f"+(i+1)).attr("class","framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup"+aT);
         $(SVG("circle")).attr("id",aT+"f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+aT);
-        if (i > hit.hitstun){
+        if (i+1 > hit.hitstun){
           $("#"+aT+"f"+(i+1)).css("fill","#abffb9");
         }
 
@@ -1521,7 +1523,12 @@ function trajPosInfo(){
     var fid = parseInt(id.substr(2,(id.length - 3)));
     var tid = parseInt(id.substr(0,1));
     $("#"+tid+"f"+fid).attr("r",30);
-    $("#trajCanvas").after('<div class="framePosInfoBox">Frame of hitstun: '+fid+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
+    if (fid > t["t"+tid].hitstun){
+      $("#trajCanvas").after('<div class="framePosInfoBox">Actionable frame: '+(fid-t["t"+tid].hitstun)+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
+    }
+    else {
+      $("#trajCanvas").after('<div class="framePosInfoBox">Frame of hitstun: '+fid+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
+    }
     var frameposy = mouseY;
     var frameposx = mouseX;
     if (mouseY + trajOffset.top > windheight){
