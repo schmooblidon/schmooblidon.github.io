@@ -88,6 +88,7 @@ var resizingtype = function(){
 
 
 	$("#middlecontrols, #lcontrols, #lcontrolscollapse, #rcontrols, #rcontrolscollapse").height(midheight);
+	$("#rcontrolsOptions").height(midheight - 40);
 
 	$("#attackscroll").height($("#lcontrols").height()-255);
 	disWidth = $("#display").width();

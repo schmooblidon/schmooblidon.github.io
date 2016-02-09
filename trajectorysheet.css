@@ -787,10 +787,17 @@ textarea
 	background-color:black;
 	display:inline-block;
 	vertical-align:top;
+}
 
+#rcontrolsOptions {
+  width:150px;
+  height:500px;
+  vertical-align:top;
+  overflow-y:scroll;
+  overflow-x:hidden;
 }
 .posButton {
-	width:75px;
+	width:69px;
 	height:50px;
 	display:inline-block;
   background-image:url(assets/trajectory/rightarrow.png);
@@ -1108,7 +1115,8 @@ textarea
 #tdiVertical {
   width:20px;
   height:130px;
-  display:inline-block;
+  /*display:inline-block;*/
+  display:none;
   background-color:#414141;
   vertical-align:top;
 
@@ -1191,7 +1199,7 @@ textarea
 
 #tdiValues p {
   margin:0;
-  font-size:14px;
+  font-size:13px;
 }
 #sdiBox {
   width:150px;
@@ -1286,7 +1294,8 @@ textarea
 #sdiVertical {
   width:20px;
   height:130px;
-  display:inline-block;
+  /*display:inline-block;*/
+  display:none;
   background-color:#414141;
   vertical-align:top;
 
@@ -1301,7 +1310,7 @@ textarea
 
 #sdiValues p {
   margin:0;
-  font-size:14px;
+  font-size:13px;
 }
 
 #sdiAnti {
@@ -1405,7 +1414,8 @@ textarea
 #adiVertical {
   width:20px;
   height:130px;
-  display:inline-block;
+  /*display:inline-block;*/
+  display:none;
   background-color:#414141;
   vertical-align:top;
 
@@ -1420,7 +1430,7 @@ textarea
 
 #adiValues p {
   margin:0;
-  font-size:14px;
+  font-size:13px;
 }
 
 #adiAnti {
@@ -1432,7 +1442,7 @@ textarea
 }
 
 #crouchingContainer {
-  width:150px;
+  width:140px;
   height:45px;
   display:inline-block;
   position:relative;
@@ -1441,7 +1451,7 @@ textarea
 }
 
 #cRealButton {
-  width:150px;
+  width:140px;
   height:45px;
   position:absolute;
   cursor:pointer;
@@ -1452,13 +1462,13 @@ textarea
 }
 
 #cVisual {
-  width:150px;
+  width:140px;
   height:45px;
   position:absolute;
 }
 
 #cText {
-  width:90px;
+  width:80px;
   height:45px;
   background-color:#444444;
   display:inline-block;
@@ -1478,7 +1488,7 @@ textarea
 }
 
 #hitWhenChargingContainer {
-  width:150px;
+  width:140px;
   height:45px;
   display:inline-block;
   position:relative;
@@ -1487,20 +1497,20 @@ textarea
 }
 
 #hwcRealButton {
-  width:150px;
+  width:140px;
   height:45px;
   position:absolute;
   cursor:pointer;
 }
 
 #hwcVisual {
-  width:150px;
+  width:140px;
   height:45px;
   position:absolute;
 }
 
 #hwcText {
-  width:90px;
+  width:80px;
   height:45px;
   background-color:#444444;
   display:inline-block;
@@ -1520,7 +1530,7 @@ textarea
 }
 
 #snapToSurfaceContainer {
-  width:150px;
+  width:140px;
   height:60px;
   display:inline-block;
   position:relative;
@@ -1529,20 +1539,20 @@ textarea
 }
 
 #stsRealButton {
-  width:150px;
+  width:140px;
   height:60px;
   position:absolute;
   cursor:pointer;
 }
 
 #stsVisual {
-  width:150px;
+  width:140px;
   height:60px;
   position:absolute;
 }
 
 #stsText {
-  width:90px;
+  width:80px;
   height:60px;
   background-color:#737373;
   display:inline-block;
@@ -1561,7 +1571,7 @@ textarea
 }
 
 #fadeInContainer {
-  width:150px;
+  width:140px;
   height:45px;
   display:inline-block;
   position:relative;
@@ -1570,20 +1580,20 @@ textarea
 }
 
 #fiRealButton {
-  width:150px;
+  width:140px;
   height:45px;
   position:absolute;
   cursor:pointer;
 }
 
 #fiVisual {
-  width:150px;
+  width:140px;
   height:45px;
   position:absolute;
 }
 
 #fiText {
-  width:90px;
+  width:80px;
   height:45px;
   background-color:#494949;
   display:inline-block;
@@ -1602,7 +1612,7 @@ textarea
 }
 
 #doubleJumpContainer {
-  width:150px;
+  width:140px;
   height:45px;
   display:inline-block;
   position:relative;
@@ -1611,24 +1621,25 @@ textarea
 }
 
 #djRealButton {
-  width:150px;
+  width:140px;
   height:45px;
   position:absolute;
   cursor:pointer;
 }
 
 #djVisual {
-  width:150px;
+  width:140px;
   height:45px;
   position:absolute;
 }
 
 #djText {
-  width:90px;
+  width:80px;
   height:45px;
   background-color:#494949;
   display:inline-block;
   vertical-align:top;
+  font-size:13px;
 }
 
 #djSwitch {

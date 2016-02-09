@@ -56,6 +56,7 @@ for (i=0;i<9;i++){
 
 sakurai = 0;
 pointerfrozen = true;
+hoverDropdown = false;
 activeDI = "t";
 diPointerFrozen = {};
 diPointerFrozen.t = false;
@@ -1810,12 +1811,28 @@ $(document).ready(function(){
 
 	$("#victim-char").hover(function(){
 		$(".hbcharselect").css("opacity",0.7);
-		$("#chardropdown").show();
+		$("#chardropdown").fadeIn();
+    var left = $(this).offset().left;
+    var top = $(this).offset().top;
+    $("#chardropdown").css({"top":top+"px","left":(left-270)+"px"});
     $(this).addClass("victimCharHighlight");
 	}, function(){
-		$("#chardropdown").hide();
+		setTimeout(function(){
+      if (!hoverDropdown){
+        $("#chardropdown").fadeOut();
+      }
+    },300);
     $(this).removeClass("victimCharHighlight");
 	});
+
+  $("#chardropdown").hover(function(){
+    $("#victim-char").addClass("victimCharHighlight");
+    hoverDropdown = true;
+  },function(){
+    hoverDropdown = false;
+    $(this).fadeOut();
+    $("#victim-char").removeClass("victimCharHighlight");
+  });
 
 	$(".hbcharselect").hover(function(){
 		$(".hbcharselect").css("opacity",0.7);
