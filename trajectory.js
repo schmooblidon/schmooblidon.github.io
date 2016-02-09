@@ -134,6 +134,23 @@ var character = "Fox";*/
 
 //"a0=00000000&a1=00000000&a2=00000000&a3=00000000&a4=chars.fx.ns.id0&a5=Fox&a6=080&a7=00&a8=00&a9=000&a10=00000000
 
+function deleteNonNumbers(text){
+  var newtext = "";
+  for (i=0;i<text.length;i++){
+    var asc = text[i].charCodeAt();
+    if (asc >= 48 && asc <= 57){
+       newtext += text[i];
+    }
+  }
+  if (newtext == ""){
+    newtext = 0;
+  }
+  else {
+    newtext = parseInt(newtext);
+  }
+  return newtext;
+}
+
 function changeStage(id){
   $("#trajBackground").attr("src","assets/trajectory/stages/"+id+".png").attr("width",dimensions[id][0]).attr("height",dimensions[id][1]);
   bzTop = bz[id][0];
@@ -2201,17 +2218,22 @@ $(document).ready(function(){
     }
   });
 
+
   $("#percentNumberEdit").on("keyup blur", function() {
-    t["t"+aT].percent = parseInt($(this).val());
+    var temp = deleteNonNumbers($(this).val());
+    temp = Math.abs(temp);
+    $(this).val(temp);
+    t["t"+aT].percent = temp;
     drawTrajectory();
   });
 
   $("#chargingNumberEdit").on("keyup blur", function() {
-    var temp = parseInt($(this).val());
+    var temp = deleteNonNumbers($(this).val());
     if (temp > 59){
       temp = 59;
-      $(this).val(59);
     }
+    temp = Math.abs(temp);
+    $(this).val(temp);
     t["t"+aT].chargeF = temp;
     drawTrajectory();
   });
