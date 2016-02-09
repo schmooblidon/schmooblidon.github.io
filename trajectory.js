@@ -641,7 +641,7 @@ function readQueryString(){
       if (exists){
         currentTrajs[p-1] = true;
         t["t"+p].trajFrozen = true;
-        for (j=0;j<19;j++){
+        for (j=0;j<25;j++){
           var ja = String.fromCharCode(97 + j);
           var temp = GetQueryStringParams(p+ja);
 
@@ -778,6 +778,24 @@ function readQueryString(){
                 t["t"+p].doubleJump = false;
               }
               break;
+            case "v":
+              t["t"+p].sdiMouseXReal = parseFloat(temp);
+              break;
+            case "w":
+              t["t"+p].sdiMouseYReal = parseFloat(temp);
+              var xy = convertPixelsToStick(t["t"+p].sdiMouseXReal,t["t"+p].sdiMouseYReal);
+              t["t"+p].sdiMouseXMelee = xy[0];
+              t["t"+p].sdiMouseYMelee = xy[1];
+              break;
+            case "x":
+              t["t"+p].adiMouseXReal = parseFloat(temp);
+              break;
+            case "y":
+              t["t"+p].adiMouseYReal = parseFloat(temp);
+              var xy = convertPixelsToStick(t["t"+p].adiMouseXReal,t["t"+p].adiMouseYReal);
+              t["t"+p].adiMouseXMelee = xy[0];
+              t["t"+p].adiMouseYMelee = xy[1];
+              break;
             default:
               break;
           }
@@ -851,7 +869,7 @@ function writeQueryString(){
   }
   for (i=1;i<10;i++){
     if (currentTrajs[i-1]){
-      for (j=0;j<19;j++){
+      for (j=0;j<25;j++){
         var temp = "";
         switch (j){
           case 0:
@@ -1013,6 +1031,18 @@ function writeQueryString(){
             else {
               temp = "0";
             }
+            break;
+          case 21:
+            temp = t["t"+i].sdiMouseXReal;
+            break;
+          case 22:
+            temp = t["t"+i].sdiMouseYReal;
+            break;
+          case 23:
+            temp = t["t"+i].adiMouseXReal;
+            break;
+          case 24:
+            temp = t["t"+i].adiMouseYReal;
             break;
           default:
             break;
@@ -1457,7 +1487,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     yPos = t["t"+aT].mouseYMelee;
   }
 
-	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump);
+	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee);
 	var positions = hit.positions;
 	t["t"+aT].curPositions = positions;
   t["t"+aT].hitstun = hit.hitstun;

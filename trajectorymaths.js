@@ -1,4 +1,4 @@
-function Hit(percent, damage, growth, base, setKnockback, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt, tdiX, tdiY, fadeIn, doubleJump) {
+function Hit(percent, damage, growth, base, setKnockback, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt, tdiX, tdiY, fadeIn, doubleJump, sdix, sdiy, adix, adiy) {
 
     /******* Internal functions start *******/
 
@@ -141,7 +141,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
     }
 
     //Calculate position for every frame of hitstun
-    function knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump) {
+    function knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump, sdiVector, asdiVector) {
         var positions = [];
         var hPos = xPos;
         var vPos = yPos;
@@ -193,6 +193,10 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
 
             hPos = hPos + horVelChar + horVelKB;
             vPos = vPos + verVelChar + verVelKB;
+            if (i == 0){
+              hPos += sdiVector[0] + asdiVector[0];
+              vPos += sdiVector[1] + asdiVector[1];
+            }
             positions.push([hPos, vPos, horVelKB, verVelKB, horVelChar, verVelChar]);
         }
 
@@ -337,6 +341,16 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
         return Math.floor(knockback * .4);
     }
 
+    function calculateSDI(x,y,type){
+      var xDistance = 6 * x;
+      var yDistance = 6 * y;
+      if (type == "a"){
+        xDistance *= 0.5;
+        yDistance *= 0.5;
+      }
+      return [xDistance, yDistance];
+    }
+
 		/******* Internal functions end *******/
 
 		/******* Constants start *******/
@@ -411,7 +425,11 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
 
     var verticalDecay = getVerticalDecay(angle);
 
-    this.positions = knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump);
+    var sdiVector = calculateSDI(sdix,sdiy,"s");
+
+    var asdiVector = calculateSDI(adix,adiy,"a");
+
+    this.positions = knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump, sdiVector, asdiVector);
 
     this.hitstun = hitstun;
 
