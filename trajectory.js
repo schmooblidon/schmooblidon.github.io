@@ -949,6 +949,11 @@ function writeQueryString(){
               temp[0] = parseInt(temp[0].substr(4,temp[0].length)).toString(16);
               temp[1] = parseInt(temp[1].substr(1,temp[1].length)).toString(16);
               temp[2] = parseInt(temp[2].substr(1,temp[2].length-2)).toString(16);
+              for (g=0;g<3;g++){
+                if (temp[g].length == 1){
+                  temp[g] = "0"+temp[g];
+                }
+              }
               temp = ""+temp[0]+temp[1]+temp[2];
             }
             break;
