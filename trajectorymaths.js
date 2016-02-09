@@ -342,6 +342,12 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
     }
 
     function calculateSDI(x,y,type){
+      if (x < 0.2875 && x > -0.2875){
+        x = 0;
+      }
+      if (y < 0.2875 && y > -0.2875){
+        y = 0;
+      }
       var xDistance = 6 * x;
       var yDistance = 6 * y;
       if (type == "a"){
