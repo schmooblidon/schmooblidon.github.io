@@ -46,6 +46,7 @@ function trajectoryObject(){
   this.fadeIn = true;
   this.doubleJump = false;
   this.hitstun = 0;
+  this.meteorCancel = false;
 }
 
 t = {};
@@ -72,6 +73,11 @@ diMouseX.s = 0;
 diMouseY.s = 0;
 diMouseX.a = 0;
 diMouseY.a = 0;
+
+diSwitch = {};
+diSwitch.t = 0;
+diSwitch.s = 0;
+diSwitch.a = 0;
 
 titleX = 0;
 titleY = 0;
@@ -134,19 +140,35 @@ var character = "Fox";*/
 
 //"a0=00000000&a1=00000000&a2=00000000&a3=00000000&a4=chars.fx.ns.id0&a5=Fox&a6=080&a7=00&a8=00&a9=000&a10=00000000
 
-function deleteNonNumbers(text){
+function deleteNonNumbers(text,allowNegative,allowPoint){
   var newtext = "";
+  var hasPoint = false;
   for (i=0;i<text.length;i++){
     var asc = text[i].charCodeAt();
     if (asc >= 48 && asc <= 57){
        newtext += text[i];
+    }
+    else if (allowPoint && asc == 46){
+      for (j=0;j<newtext.length;j++){
+        if (newtext[j] == "."){
+          hasPoint = true;
+        }
+      }
+      if (!hasPoint){
+        newtext += text[i];
+      }
+    }
+    else if (allowNegative && asc == 45){
+      newtext += text[i];
     }
   }
   if (newtext == ""){
     newtext = 0;
   }
   else {
-    newtext = parseInt(newtext);
+    if (!allowPoint){
+      newtext = parseInt(newtext);
+    }
   }
   return newtext;
 }
@@ -181,8 +203,8 @@ function trajectoryHover(){
     var heightRatio = disHeight/dimensions[activeStage][1];
     t["t"+aT].mouseXMelee = (Math.round(((mouseX/widthRatio)-(-bzLeft*10+50))*10))/100;
     t["t"+aT].mouseYMelee = (Math.round(((mouseY/heightRatio)-(bzTop*10+50))*-10))/100;
-    $("#mPosX").empty().append(t["t"+aT].mouseXMelee);
-    $("#mPosY").empty().append(t["t"+aT].mouseYMelee);
+    $("#mPosX").val(t["t"+aT].mouseXMelee);
+    $("#mPosY").val(t["t"+aT].mouseYMelee);
     if (t["t"+aT].trajFrozen == false){
       if (snapping){
         //will have to do some more maths for slanted surfaces like yoshis
@@ -248,11 +270,13 @@ function trajectoryClick(){
         t["t"+aT].mouseXMeleeF = t["t"+aT].mouseXMelee;
         t["t"+aT].mouseYMeleeF = t["t"+aT].mouseYMelee;
         trajPosInfo();
+        $("#mousePosition").css("z-index",28);
       }
       else {
         $("#trajBox"+aT+" .trajFreeze").removeClass("freezeOn").addClass("freezeOff");
         t["t"+aT].trajFrozen = false;
         $(".framePosInfoBox").remove();
+        $("#mousePosition").css("z-index",1);
       }
     //}
   });
@@ -518,8 +542,14 @@ function changeUserStick(x,y,type,di){
         rAngle -= 360;
       }
     }
-    var y = -Math.sin(diAngle * (Math.PI / 180));
-    var x = Math.cos(diAngle * (Math.PI / 180));
+
+    if (!diSwitch[type]){
+      y = -Math.sin(diAngle * (Math.PI / 180));
+      x = Math.cos(diAngle * (Math.PI / 180));
+    }
+    else {
+      y = -y;
+    }
 
     t["t"+aT][type+"diMouseXMelee"] = Math.round(x*80)/80;
     t["t"+aT][type+"diMouseYMelee"] = Math.round(-y*80)/80;
@@ -659,7 +689,7 @@ function readQueryString(){
       if (exists){
         currentTrajs[p-1] = true;
         t["t"+p].trajFrozen = true;
-        for (j=0;j<25;j++){
+        for (j=0;j<24;j++){
           var ja = String.fromCharCode(97 + j);
           var temp = GetQueryStringParams(p+ja);
 
@@ -671,15 +701,29 @@ function readQueryString(){
               t["t"+p].mouseYMeleeF = parseFloat(temp);
               break;
             case "c":
-              t["t"+p].tdiMouseXReal = parseFloat(temp);
+              diSwitch["t"] = parseInt(temp[0]);
+              diSwitch["s"] = parseInt(temp[1]);
+              diSwitch["a"] = parseInt(temp[2]);
+              if (diSwitch["t"]){
+                $("#tdiSwitch").children("p").empty().append("Precise");
+              }
+              if (diSwitch["s"]){
+                $("#sdiSwitch").children("p").empty().append("Precise");
+              }
+              if (diSwitch["a"]){
+                $("#adiSwitch").children("p").empty().append("Precise");
+              }
               break;
             case "d":
+              t["t"+p].tdiMouseXReal = parseFloat(temp);
+              break;
+            case "e":
               t["t"+p].tdiMouseYReal = parseFloat(temp);
               var xy = convertPixelsToStick(t["t"+p].tdiMouseXReal,t["t"+p].tdiMouseYReal);
               t["t"+p].tdiMouseXMelee = xy[0];
               t["t"+p].tdiMouseYMelee = xy[1];
               break;
-            case "e":
+            case "f":
               t["t"+p].cHName = temp.split(',');
               if (t["t"+p].cHName[2] == "false"){
                 t["t"+p].cHName[2] = false;
@@ -689,13 +733,13 @@ function readQueryString(){
                 t["t"+p].curHitbox = chars[t["t"+p].cHName[0]][t["t"+p].cHName[1]][t["t"+p].cHName[2]][t["t"+p].cHName[3]];
               }
               break;
-            case "f":
+            case "g":
               t["t"+p].character = temp;
               break;
-            case "g":
+            case "h":
               t["t"+p].percent = parseInt(temp);
               break;
-            case "h":
+            case "i":
               if (Boolean(parseInt(temp[0]))){
                 t["t"+p].version = "PAL";
               }
@@ -705,16 +749,19 @@ function readQueryString(){
               t["t"+p].crouch = Boolean(parseInt(temp[1]));
               t["t"+p].reverse = Boolean(parseInt(temp[2]));
               t["t"+p].chargeInterrupt = Boolean(parseInt(temp[3]));
-              break;
-            case "i":
-              t["t"+p].chargeF = parseInt(temp);
+              t["t"+p].meteorCancel = Boolean(parseInt(temp[4]));
+              t["t"+p].fadeIn = Boolean(parseInt(temp[5]));
+              t["t"+p].doubleJump = Boolean(parseInt(temp[6]));
               break;
             case "j":
+              t["t"+p].chargeF = parseInt(temp);
+              break;
+            case "k":
               for(k=0;k<9;k++){
                 t["t"+p].staleQueue[k] = Boolean(parseInt(temp[k]));
               }
               break;
-            case "k":
+            case "l":
               if (temp.length == 6){
                 t["t"+p].colour = "#"+temp;
               }
@@ -723,7 +770,7 @@ function readQueryString(){
               }
               //prompt(t["t"+p].colour);
               break;
-            case "l":
+            case "m":
               //prompt("test");
               if (temp == 1){
                 var id = p;
@@ -736,79 +783,63 @@ function readQueryString(){
                 t["t"+p].hasLabel = false;
               }
               break;
-            case "m":
+            case "n":
               //label text
               if (t["t"+p].hasLabel){
                 $("#textarea"+p).val(translateText(temp));
               }
               break;
-            case "n":
+            case "o":
               if (t["t"+p].hasLabel){
                 $("#labelBox"+p).css("opacity",temp);
               }
               //label opacity
               break;
-            case "o":
+            case "p":
               if (t["t"+p].hasLabel){
                 $("#textarea"+p).css("font-size",temp+"px");
               }
               //label font size
               break;
-            case "p":
+            case "q":
               if (t["t"+p].hasLabel){
                 $("#labelBox"+p).width(temp);
               }
               //label width
               break;
-            case "q":
+            case "r":
               if (t["t"+p].hasLabel){
                 $("#labelBox"+p).height(temp);
               }
               //label height
               break;
-            case "r":
+            case "s":
               if (t["t"+p].hasLabel){
                 t["t"+p].labelX = temp;
                 $("#labelBox"+p).css("left",temp*disMagnification);
               }
               // label x
               break;
-            case "s":
+            case "t":
               if (t["t"+p].hasLabel){
                 t["t"+p].labelY = temp;
                 $("#labelBox"+p).css("top",temp*disMagnification);
               }
               // label y
               break;
-            case "t":
-              if (temp == "1"){
-                t["t"+p].fadeIn = true;
-              }
-              else {
-                t["t"+p].fadeIn = false;
-              }
-              break;
             case "u":
-              if (temp == "1"){
-                t["t"+p].doubleJump = true;
-              }
-              else {
-                t["t"+p].doubleJump = false;
-              }
-              break;
-            case "v":
               t["t"+p].sdiMouseXReal = parseFloat(temp);
               break;
-            case "w":
+            case "v":
               t["t"+p].sdiMouseYReal = parseFloat(temp);
               var xy = convertPixelsToStick(t["t"+p].sdiMouseXReal,t["t"+p].sdiMouseYReal);
               t["t"+p].sdiMouseXMelee = xy[0];
               t["t"+p].sdiMouseYMelee = xy[1];
               break;
-            case "x":
+            case "w":
               t["t"+p].adiMouseXReal = parseFloat(temp);
               break;
-            case "y":
+            case "x":
               t["t"+p].adiMouseYReal = parseFloat(temp);
               var xy = convertPixelsToStick(t["t"+p].adiMouseXReal,t["t"+p].adiMouseYReal);
               t["t"+p].adiMouseXMelee = xy[0];
@@ -887,7 +918,7 @@ function writeQueryString(){
   }
   for (i=1;i<10;i++){
     if (currentTrajs[i-1]){
-      for (j=0;j<25;j++){
+      for (j=0;j<24;j++){
         var temp = "";
         switch (j){
           case 0:
@@ -897,21 +928,27 @@ function writeQueryString(){
             temp = t["t"+i].mouseYMeleeF;
             break;
           case 2:
-            temp = t["t"+i].tdiMouseXReal;
+            temp = "";
+            temp += diSwitch["t"];
+            temp += diSwitch["s"];
+            temp += diSwitch["a"];
             break;
           case 3:
-            temp = t["t"+i].tdiMouseYReal;
+            temp = t["t"+i].tdiMouseXReal;
             break;
           case 4:
-            temp = t["t"+i].cHName;
+            temp = t["t"+i].tdiMouseYReal;
             break;
           case 5:
-            temp = t["t"+i].character;
+            temp = t["t"+i].cHName;
             break;
           case 6:
-            temp = t["t"+i].percent;
+            temp = t["t"+i].character;
             break;
           case 7:
+            temp = t["t"+i].percent;
+            break;
+          case 8:
             var temp1 = t["t"+i].version;
             if (temp1 == "NTSC"){
               temp1 = "0";
@@ -940,12 +977,33 @@ function writeQueryString(){
             else {
               temp4 = "0";
             }
-            temp = temp1+temp2+temp3+temp4;
-            break;
-          case 8:
-            temp = t["t"+i].chargeF;
+            var temp5 = t["t"+i].meteorCancel;
+            if (temp5){
+              temp5 = "1";
+            }
+            else {
+              temp5 = "0";
+            }
+            var temp6 = t["t"+i].fadeIn;
+            if (temp6){
+              temp6 = "1";
+            }
+            else {
+              temp6 = "0";
+            }
+            var temp7 = t["t"+i].doubleJump;
+            if (temp7){
+              temp7 = "1";
+            }
+            else {
+              temp7 = "0";
+            }
+            temp = temp1+temp2+temp3+temp4+temp5+temp6+temp7;
             break;
           case 9:
+            temp = t["t"+i].chargeF;
+            break;
+          case 10:
             var tem = t["t"+i].staleQueue;
             for (k=0;k<9;k++){
               if (tem[k]){
@@ -956,7 +1014,7 @@ function writeQueryString(){
               }
             }
             break;
-          case 10:
+          case 11:
             temp = t["t"+i].colour;
             if (temp[0] == "#"){
               temp = temp.substr(1,temp.length);
@@ -974,7 +1032,7 @@ function writeQueryString(){
               temp = ""+temp[0]+temp[1]+temp[2];
             }
             break;
-          case 11:
+          case 12:
             if (t["t"+i].hasLabel){
               temp = "1";
             }
@@ -982,7 +1040,7 @@ function writeQueryString(){
               temp = "0";
             }
             break;
-          case 12:
+          case 13:
             if (t["t"+i].hasLabel){
               temp = makeTextCompatible(i);
             }
@@ -990,7 +1048,7 @@ function writeQueryString(){
               temp = "0";
             }
             break;
-          case 13:
+          case 14:
             if (t["t"+i].hasLabel){
               temp = $("#labelBox"+i).css("opacity");
             }
@@ -998,7 +1056,7 @@ function writeQueryString(){
               temp = "0";
             }
             break;
-          case 14:
+          case 15:
             if (t["t"+i].hasLabel){
               temp = $("#textarea"+i).css("font-size");
               temp = temp.substr(0,temp.length - 2);
@@ -1007,7 +1065,7 @@ function writeQueryString(){
               temp = "0";
             }
             break;
-          case 15:
+          case 16:
             if (t["t"+i].hasLabel){
               temp = $("#labelBox"+i).width();
             }
@@ -1015,7 +1073,7 @@ function writeQueryString(){
               temp = "0";
             }
             break;
-          case 16:
+          case 17:
             if (t["t"+i].hasLabel){
               temp = $("#labelBox"+i).height();
             }
@@ -1023,7 +1081,7 @@ function writeQueryString(){
               temp = "0";
             }
             break;
-          case 17:
+          case 18:
             if (t["t"+i].hasLabel){
               temp = Math.round(t["t"+i].labelX);
             }
@@ -1031,7 +1089,7 @@ function writeQueryString(){
               temp = "0";
             }
             break;
-          case 18:
+          case 19:
             if (t["t"+i].hasLabel){
               temp = Math.round(t["t"+i].labelY);
             }
@@ -1039,32 +1097,16 @@ function writeQueryString(){
               temp = "0";
             }
             break;
-          case 19:
-            if (t["t"+i].fadeIn){
-              temp = "1";
-            }
-            else {
-              temp = "0";
-            }
-            break;
           case 20:
-            if (t["t"+i].doubleJump){
-              temp = "1";
-            }
-            else {
-              temp = "0";
-            }
-            break;
-          case 21:
             temp = t["t"+i].sdiMouseXReal;
             break;
-          case 22:
+          case 21:
             temp = t["t"+i].sdiMouseYReal;
             break;
-          case 23:
+          case 22:
             temp = t["t"+i].adiMouseXReal;
             break;
-          case 24:
+          case 23:
             temp = t["t"+i].adiMouseYReal;
             break;
           default:
@@ -1110,11 +1152,128 @@ function drawAngle(){
   changeUserStick(t["t"+aT].tdiMouseXMelee, t["t"+aT].tdiMouseYMelee, "t");
 }
 
+function convertCharName(name){
+  var newname;
+  switch (name){
+    case "Fx":
+      newname = "Fox";
+      break;
+    case "Fc":
+      newname = "Falco";
+      break;
+    case "Ms":
+      newname = "Marth";
+      break;
+    case "Sh":
+      newname = "Sheik";
+      break;
+    case "Jp":
+      newname = "Puff";
+      break;
+    case "Pc":
+      newname = "Peach";
+      break;
+    case "Po":
+      newname = "ICs";
+      break;
+    case "CF":
+      newname = "Falcon";
+      break;
+    case "Pk":
+      newname = "Pika";
+      break;
+    case "Sm":
+      newname = "Samus";
+      break;
+    case "DM":
+      newname = "Doc";
+      break;
+    case "Ys":
+      newname = "Yoshi";
+      break;
+    case "Lg":
+      newname = "Luigi";
+      break;
+    case "Gn":
+      newname = "Ganon";
+      break;
+    case "Ma":
+      newname = "Mario";
+      break;
+    case "YL":
+      newname = "Y.Link";
+      break;
+    case "DK":
+      newname = "DK";
+      break;
+    case "Lk":
+      newname = "Link";
+      break;
+    case "GW":
+      newname = "MrG&W";
+      break;
+    case "Ry":
+      newname = "Roy";
+      break;
+    case "Mw":
+      newname = "Mewtwo";
+      break;
+    case "Zd":
+      newname = "Zelda";
+      break;
+    case "Ns":
+      newname = "Ness";
+      break;
+    case "Pi":
+      newname = "Pichu";
+      break;
+    case "Bw":
+      newname = "Bowser";
+      break;
+    case "Kb":
+      newname = "Kirby";
+      break;
+    default:
+      newname = "NoName";
+      break;
+  }
+  return newname;
+}
+
 
 function trajBoxHover(){
   $(".trajBox").unbind("mouseenter").unbind("mouseleave");
   $(".trajBox").hover(function(){
-    $(this).toggleClass("trajBoxHighlight");
+    $(this).addClass("trajBoxHighlight");
+    var id = $(this).attr("id");
+    id = id[7];
+    var left = $(this).offset().left;
+    var top = $(this).offset().top;
+    var attackText = "";
+    var victimText = "";
+    for(i=0;i<4;i++){
+      if (t["t"+id].cHName[i]){
+        if (i == 0){
+          attackText += convertCharName(t["t"+id].cHName[i]);
+        }
+        else {
+          attackText += t["t"+id].cHName[i];
+        }
+        if (i != 3){
+          attackText += " ";
+        }
+      }
+    }
+    victimText += t["t"+id].character+" "+t["t"+id].percent;
+    $("body").append('<div id="trajBoxInfo'+id+'" class="trajBoxInfo"><div class="attackSection"><p class="sectionTitle">Attack</p><p>'+attackText+'</p></div><div class="trajBoxInfoDivider"></div><div class="victimSection"><p class="sectionTitle">Victim</p><p>'+victimText+'%</p></div></div>');
+    $("#trajBoxInfo"+id).css({"top":(top-115)+"px","left":left+"px"});
+
+  },
+  function(){
+    var id = $(this).attr("id");
+    id = id[7];
+    $(this).removeClass("trajBoxHighlight");
+    $("#trajBoxInfo"+id).remove();
   });
 }
 
@@ -1247,6 +1406,10 @@ function trajBoxClick(){
     //prompt(aT);
     //prompt(t["t"+aT].cHName);
     swapOptions();
+    if (pT != aT){
+      t["t"+pT].trajFrozen = true;
+      $("#trajNum"+pT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
+    }
   });
 }
 
@@ -1323,6 +1486,25 @@ function swapOptions(){
     }
     else {
       $("#hwcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+    }
+
+    if (t["t"+aT].meteorCancel){
+      $("#mcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+    }
+    else {
+      $("#mcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+    }
+    if (t["t"+aT].fadeIn){
+      $("#fiSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+    }
+    else {
+      $("#fiSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+    }
+    if (t["t"+aT].doubleJump){
+      $("#djSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+    }
+    else {
+      $("#djSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
     }
 
 
@@ -1510,10 +1692,13 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     yPos = t["t"+aT].mouseYMelee;
   }
 
-	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee);
+	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee,t["t"+aT].meteorCancel);
 	var positions = hit.positions;
 	t["t"+aT].curPositions = positions;
   t["t"+aT].hitstun = hit.hitstun;
+  if (hit.meteorCancelled){
+    t["t"+aT].hitstun = 8;
+  }
 	var cla = "tLineS";
   var temX = ((xPos*10)+centreOffset[0]);
   var temY = ((-yPos*10)+centreOffset[1]);
@@ -1542,7 +1727,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
 
         $(SVG("circle")).attr("id",aT+"f"+(i+1)).attr("class","framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup"+aT);
         $(SVG("circle")).attr("id",aT+"f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+aT);
-        if (i+1 > hit.hitstun){
+        if (i+1 > t["t"+aT].hitstun){
           $("#"+aT+"f"+(i+1)).css("fill","#abffb9");
         }
 
@@ -1676,20 +1861,36 @@ $(document).ready(function(){
   });
 
   $(".diPrecise").hover(function(){
-    $(this).toggleClass("tdiPreciseHighlight");
+    $(this).toggleClass("diPreciseHighlight");
   });
 
   $(".diPrecise").click(function(){
-    diPointerFrozen.t = true;
     var id = $(this).attr("id");
     var type = id[0];
+    diPointerFrozen[type] = true;
     if (id[3] == "R" || id[3] == "L"){
       var x = "";
       if (id[3] == "L" && !(t["t"+aT][type+"diMouseXMelee"] < -0.999)){
-        t["t"+aT][type+"diMouseXMelee"] -= 0.0125;
+        if ($("#"+type+"diXInput").text() == "0.2875"){
+          t["t"+aT][type+"diMouseXMelee"] = 0;
+        }
+        else if (t["t"+aT][type+"diMouseXMelee"] < 0.2875 && t["t"+aT][type+"diMouseXMelee"] > -0.2875){
+          t["t"+aT][type+"diMouseXMelee"] = -0.2875;
+        }
+        else {
+          t["t"+aT][type+"diMouseXMelee"] -= 0.0125;
+        }
       }
       else if (id[3] == "R" && !(t["t"+aT][type+"diMouseXMelee"] > 0.999)){
-        t["t"+aT][type+"diMouseXMelee"] += 0.0125;
+        if ($("#"+type+"diXInput").text() == "-0.2875"){
+          t["t"+aT][type+"diMouseXMelee"] = 0;
+        }
+        else if (t["t"+aT][type+"diMouseXMelee"] < 0.2875 && t["t"+aT][type+"diMouseXMelee"] > -0.2875){
+          t["t"+aT][type+"diMouseXMelee"] = 0.2875;
+        }
+        else {
+          t["t"+aT][type+"diMouseXMelee"] += 0.0125;
+        }
       }
       if (t["t"+aT][type+"diMouseXMelee"] >= 1 || t["t"+aT][type+"diMouseXMelee"] <= -1){
         x = t["t"+aT][type+"diMouseXMelee"].toPrecision(5);
@@ -1704,16 +1905,32 @@ $(document).ready(function(){
         x = t["t"+aT][type+"diMouseXMelee"].toPrecision(3);
       }
       //t["t"+aT].tdiMouseXMelee = parseFloat(x);
-      $("#tdiXInput").empty().append(x);
-      t["t"+aT][type+"diMouseXReal"] = ((t["t"+aT][type+"diMouseXMelee"]/0.0125)+80)*(130/161);
+      $("#"+type+"diXInput").empty().append(x);
+    //  t["t"+aT][type+"diMouseXReal"] = ((t["t"+aT][type+"diMouseXMelee"]/0.0125)+80)*(130/161);
     }
     if (id[3] == "U" || id[3] == "D"){
       var y = "";
       if (id[3] == "U" && !(t["t"+aT][type+"diMouseYMelee"] > 0.999)){
-        t["t"+aT][type+"diMouseYMelee"] += 0.0125;
+        if ($("#"+type+"diYInput").text() == "-0.2875"){
+          t["t"+aT][type+"diMouseYMelee"] = 0;
+        }
+        else if (t["t"+aT][type+"diMouseYMelee"] < 0.2875 && t["t"+aT][type+"diMouseYMelee"] > -0.2875){
+          t["t"+aT][type+"diMouseYMelee"] = 0.2875;
+        }
+        else {
+          t["t"+aT][type+"diMouseYMelee"] += 0.0125;
+        }
       }
       else if (id[3] == "D" && !(t["t"+aT][type+"diMouseYMelee"] < -0.999)){
-        t["t"+aT][type+"diMouseYMelee"] -= 0.0125;
+        if ($("#"+type+"diYInput").text() == "0.2875"){
+          t["t"+aT][type+"diMouseYMelee"] = 0;
+        }
+        else if (t["t"+aT][type+"diMouseYMelee"] < 0.2875 && t["t"+aT][type+"diMouseYMelee"] > -0.2875){
+          t["t"+aT][type+"diMouseYMelee"] = -0.2875;
+        }
+        else {
+          t["t"+aT][type+"diMouseYMelee"] -= 0.0125;
+        }
       }
       if (t["t"+aT][type+"diMouseYMelee"] >= 1 || t["t"+aT][type+"diMouseYMelee"] <= -1){
         y = t["t"+aT][type+"diMouseYMelee"].toPrecision(5);
@@ -1727,11 +1944,14 @@ $(document).ready(function(){
       else {
          y = t["t"+aT][type+"diMouseYMelee"].toPrecision(3);
       }
-      $("#tdiYInput").empty().append(y);
-      t["t"+aT][type+"diMouseYReal"] = ((t["t"+aT][type+"diMouseYReal"]/-0.0125)+80)*(130/161);
+      $("#"+type+"diYInput").empty().append(y);
+      //prompt(t["t"+aT][type+"diMouseYReal"]);
+      //t["t"+aT][type+"diMouseYReal"] = ((t["t"+aT][type+"diMouseYReal"]/-0.0125)+80);
+      //prompt(t["t"+aT][type+"diMouseYReal"]);
     }
-    changeUserStick(t["t"+aT][type+"diMouseXMelee"],t["t"+aT][type+"diMouseYMelee"],"tdi");
-    $("#tdiSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
+
+    changeUserStick(t["t"+aT][type+"diMouseXMelee"],t["t"+aT][type+"diMouseYMelee"],type);
+    $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
     drawTrajectory();
   });
 
@@ -1806,6 +2026,27 @@ $(document).ready(function(){
     $(this).toggleClass("diPreciseHighlight");
   });
 
+  $(".diSwitch").hover(function(){
+    $(this).toggleClass("diPreciseHighlight");
+  });
+
+  $(".diSwitch").click(function(){
+    var id = $(this).attr("id");
+    id = id[0];
+    if (diSwitch[id]){
+      $(this).children("p").empty().append("Simple");
+      diSwitch[id] = 0;
+      $("#"+id+"diButtons").show();
+      $("#"+id+"diButtonsP").hide();
+    }
+    else {
+      $(this).children("p").empty().append("Precise");
+      diSwitch[id] = 1;
+      $("#"+id+"diButtonsP").show();
+      $("#"+id+"diButtons").hide();
+    }
+  });
+
   $("#diSwitchButton").click(function(){
     if (activeDI == "t"){
       $("#tdiBox").hide();
@@ -1832,20 +2073,21 @@ $(document).ready(function(){
 	drawTrajectory();
 
 	$("#victim-char").hover(function(){
-		$(".hbcharselect").css("opacity",0.7);
-		$("#chardropdown").fadeIn();
-    var left = $(this).offset().left;
-    var top = $(this).offset().top;
-    $("#chardropdown").css({"top":top+"px","left":(left-270)+"px"});
-    $(this).addClass("victimCharHighlight");
-	}, function(){
-		setTimeout(function(){
-      if (!hoverDropdown){
-        $("#chardropdown").fadeOut();
-      }
-    },300);
-    $(this).removeClass("victimCharHighlight");
+    $(this).toggleClass("victimCharHighlight");
 	});
+
+  $("#victim-char").click(function(){
+    if ($("#chardropdown").css("display") == "none"){
+      $(".hbcharselect").css("opacity",0.7);
+      $("#chardropdown").fadeIn();
+      var left = $(this).offset().left;
+      var top = $(this).offset().top;
+      $("#chardropdown").css({"top":top+"px","left":(left-280)+"px"});
+    }
+    else {
+      $("#chardropdown").fadeOut();
+    }
+  });
 
   $("#chardropdown").hover(function(){
     $("#victim-char").addClass("victimCharHighlight");
@@ -2006,6 +2248,20 @@ $(document).ready(function(){
     drawTrajectory();
   });
 
+  $("#mcRealButton").click(function(){
+    if (t["t"+aT].meteorCancel){
+      $("#mcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      t["t"+aT].meteorCancel = false;
+    }
+    else {
+      $("#mcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      t["t"+aT].meteorCancel = true;
+      $("#djSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      t["t"+aT].doubleJump = true;
+    }
+    drawTrajectory();
+  });
+
   $("#fiRealButton").click(function(){
     if (t["t"+aT].fadeIn){
       $("#fiSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
@@ -2021,6 +2277,8 @@ $(document).ready(function(){
     if (t["t"+aT].doubleJump){
       $("#djSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
       t["t"+aT].doubleJump = false;
+      $("#mcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      t["t"+aT].meteorCancel = false;
     }
     else {
       $("#djSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
@@ -2198,6 +2456,11 @@ $(document).ready(function(){
     var container2 = $(".labelBox");
     var container3 = $("#percentNumberEdit");
     var container4 = $("#chargingNumberEdit");
+    var container5 = $("#chardropdown");
+    var container6 = $(".hbcharselect");
+    var container7 = $("#chardropdown1");
+    var container8 = $("#chardropdown2");
+    var container9 = $(".hbcharselect p")
 
     if (!container.is(e.target) && !container2.is(e.target) && container.has(e.target).length === 0){
         container.hide();
@@ -2216,11 +2479,14 @@ $(document).ready(function(){
         drawTrajectory();
       }
     }
+    if (!container5.is(e.target) && !container6.is(e.target) && !container7.is(e.target) && !container8.is(e.target) && !container9.is(e.target)){
+      container5.fadeOut();
+    }
   });
 
 
   $("#percentNumberEdit").on("keyup blur", function() {
-    var temp = deleteNonNumbers($(this).val());
+    var temp = deleteNonNumbers($(this).val(),false,false);
     temp = Math.abs(temp);
     $(this).val(temp);
     t["t"+aT].percent = temp;
@@ -2228,13 +2494,48 @@ $(document).ready(function(){
   });
 
   $("#chargingNumberEdit").on("keyup blur", function() {
-    var temp = deleteNonNumbers($(this).val());
+    var temp = deleteNonNumbers($(this).val(),false,false);
     if (temp > 59){
       temp = 59;
     }
     temp = Math.abs(temp);
     $(this).val(temp);
     t["t"+aT].chargeF = temp;
+    drawTrajectory();
+  });
+
+  $("#mousePosition").hover(function(){
+    $("#mPosX").val(t["t"+aT].mouseXMeleeF);
+    $("#mPosY").val(t["t"+aT].mouseYMeleeF);
+  });
+
+  $("#mPosX").on("keyup blur", function() {
+    var temp = deleteNonNumbers($(this).val(),true,true);
+    if (temp >= 1000){
+      temp = 999.9;
+    }
+    //temp = Math.abs(temp);
+    $(this).val(temp);
+    var newFloat = parseFloat(temp);
+    if (!(newFloat > 0 || newFloat < 0)){
+      newFloat = 0;
+    }
+    t["t"+aT].mouseXMeleeF = newFloat;
+    drawTrajectory();
+  });
+
+  $("#mPosY").on("keyup blur", function() {
+    var temp = deleteNonNumbers($(this).val(),true,true);
+    if (temp >= 1000){
+      temp = 999.9;
+    }
+    //temp = Math.abs(temp);
+    $(this).val(temp);
+    var newFloat = parseFloat(temp);
+    if (!(newFloat > 0 || newFloat < 0)){
+      newFloat = 0;
+    }
+    t["t"+aT].mouseYMeleeF = newFloat;
     drawTrajectory();
   });
 
@@ -2257,6 +2558,11 @@ $(document).ready(function(){
     aT = savedaT;
 
   });
+
+  $("#rcontrolsOptions").perfectScrollbar();
+  $("#attackscroll").perfectScrollbar();
+  $("#trajBoxContainer").perfectScrollbar();
+  $("#stageSelectContainer").perfectScrollbar();
 
   readQueryString();
 

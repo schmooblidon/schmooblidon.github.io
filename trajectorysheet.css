@@ -22,6 +22,7 @@
 
 body {
   overflow:hidden;
+  font-family:'Ubuntu Mono', Consolas, "Courier New" ;
 }
 
 textarea {
@@ -48,6 +49,7 @@ textarea {
   height:45px;
   padding:0;
   vertical-align: top;
+  font-family:'Share Tech Mono', 'Ubuntu Mono', Consolas, "Courier New" ;
 }
 
 #homebutton {
@@ -258,7 +260,7 @@ textarea
   height:90px;
   position:absolute;
   background-color:#212121;
-  z-index:20;
+  z-index:28;
   margin:0px;
   color:white;
   display:none;
@@ -409,9 +411,33 @@ textarea
 }
 
 #mousePosition {
+  width:160px;
+  height:30px;
 	position:absolute;
 	bottom:0px;
 	right:100px;
+  background-color:rgba(0, 0, 0, 0.5);
+  z-index:28;
+  border-radius:5px;
+}
+
+#mousePosition p {
+  display:inline-block;
+  margin:8px 2px 2px 2px;
+  vertical-align:top;
+}
+
+#mPosX, #mPosY {
+  width:60px;
+  height:20px;
+  background-color:rgba(0,0,0,0);
+  display:inline-block;
+  color:white;
+  margin:8px 0px 2px 0px;
+  padding:0px;
+  vertical-align:top;
+  border:none;
+  resize: none;
 }
 
 #lcontrols {
@@ -713,6 +739,7 @@ textarea
   overflow-x:hidden;
   overflow-y:scroll;
   height:100px;
+  position: relative;
 }
 
 .stageselect {
@@ -795,6 +822,7 @@ textarea
   vertical-align:top;
   overflow-y:scroll;
   overflow-x:hidden;
+  position:relative;
 }
 .posButton {
 	width:69px;
@@ -828,7 +856,7 @@ textarea
 }
 
 #posButtonTitle {
-  width:150px;
+  width:135px;
   height:25px;
   text-align:center;
 }
@@ -838,11 +866,12 @@ textarea
 }
 
 #victim-char {
-	width:150px;
+	width:135px;
 	height:36px;
 	text-align:center;
 	position:relative;
   vertical-align:top;
+  cursor:pointer;
 }
 
 .victimCharHighlight {
@@ -891,13 +920,13 @@ textarea
 }
 
 #percent {
-	width:150px;
+	width:135px;
 	height:60px;
 	display:inline-block;
 }
 
 #percentNumber {
-	width:110px;
+	width:105px;
 	height:60px;
 	display:inline-block;
 	font-size:40px;
@@ -911,7 +940,7 @@ textarea
 }
 
 #percentNumberEdit {
-  width:83px;
+  width:78px;
   height:60px;
   display:inline-block;
   background-color:black;
@@ -923,14 +952,14 @@ textarea
 
 #percentButtonContainer {
 	display:inline-block;
-	width:40px;
+	width:30px;
 	height:60px;
   vertical-align:top;
 }
 
 .percentButton {
 	display:inline-block;
-	width:40px;
+	width:30px;
 	height:30px;
 	cursor:pointer;
   line-height:0.8;
@@ -952,7 +981,7 @@ textarea
 }
 
 #diSwitchButton {
-  width:40px;
+  width:30px;
   height:40px;
   margin-left:110px;
   cursor:pointer;
@@ -965,8 +994,8 @@ textarea
 }
 
 #tdiBox {
-  width:150px;
-  height:210px;
+  width:140px;
+  height:255px;
   display:inline-block;
   background-color:#363636;
 }
@@ -987,6 +1016,17 @@ textarea
   font-size:11px;
 }
 
+.diSwitch {
+  height:20px;
+  width:140px;
+  cursor:pointer;
+}
+
+.diSwitch p {
+  text-align:center;
+  margin:0;
+}
+
 #tdiSelector {
   width:130px;
   height:130px;
@@ -994,6 +1034,7 @@ textarea
   background-color:#595959;
   vertical-align:top;
   position:relative;
+  margin:5px;
 }
 
 #tdiCircle {
@@ -1122,16 +1163,32 @@ textarea
 
 }
 
-#tdiUp {
-  width:20px;
-  height:65px;
+#tdiButtons {
+  width:140px;
+  height:20px;
+  display:inline-block;
+  background-color:#414141;
+  vertical-align:top;
+}
+
+#tdiButtonsP {
+  width:140px;
+  height:20px;
+  display:none;
+  background-color:#414141;
+  vertical-align:top;
+}
+
+.diUp {
+  width:30px;
+  height:20px;
   display:inline-block;
   background-image:url(assets/trajectory/preciseup.png);
 }
 
-#tdiDown {
-  width:20px;
-  height:65px;
+.diDown {
+  width:30px;
+  height:20px;
   display:inline-block;
   background-image:url(assets/trajectory/precisedown.png);
 }
@@ -1144,15 +1201,15 @@ textarea
   vertical-align:top;
 }
 
-#tdiLeft {
-  width:65px;
+.diLeft {
+  width:30px;
   height:20px;
   display:inline-block;
   background-image:url(assets/trajectory/preciseleft.png);
 }
 
-#tdiRight {
-  width:65px;
+.diRight {
+  width:30px;
   height:20px;
   display:inline-block;
   background-image:url(assets/trajectory/preciseright.png);
@@ -1167,8 +1224,8 @@ textarea
 }
 
 .diTurn {
-  width:20px;
-  height:55px;
+  width:60px;
+  height:20px;
   display:inline-block;
   cursor:pointer;
   vertical-align:top;
@@ -1188,6 +1245,7 @@ textarea
   display:inline-block;
   background-image:url(assets/trajectory/tdicentre.png);
   vertical-align:top;
+  cursor:pointer;
 }
 
 #tdiValues {
@@ -1202,8 +1260,8 @@ textarea
   font-size:13px;
 }
 #sdiBox {
-  width:150px;
-  height:210px;
+  width:140px;
+  height:255px;
   display:inline-block;
   background-color:#363636;
 }
@@ -1227,6 +1285,7 @@ textarea
   background-color:#595959;
   vertical-align:top;
   position:relative;
+  margin:5px;
 }
 
 #sdiCircle {
@@ -1301,6 +1360,22 @@ textarea
 
 }
 
+#sdiButtons {
+  width:140px;
+  height:20px;
+  display:inline-block;
+  background-color:#414141;
+  vertical-align:top;
+}
+
+#sdiButtonsP {
+  width:140px;
+  height:20px;
+  display:none;
+  background-color:#414141;
+  vertical-align:top;
+}
+
 #sdiValues {
   width:150px;
   height:20px;
@@ -1322,8 +1397,8 @@ textarea
 }
 
 #adiBox {
-  width:150px;
-  height:210px;
+  width:140px;
+  height:255px;
   display:inline-block;
   background-color:#363636;
 }
@@ -1347,6 +1422,7 @@ textarea
   background-color:#595959;
   vertical-align:top;
   position:relative;
+  margin:5px;
 }
 
 #adiCircle {
@@ -1419,6 +1495,22 @@ textarea
   background-color:#414141;
   vertical-align:top;
 
+}
+
+#adiButtons {
+  width:140px;
+  height:20px;
+  display:inline-block;
+  background-color:#414141;
+  vertical-align:top;
+}
+
+#adiButtonsP {
+  width:140px;
+  height:20px;
+  display:none;
+  background-color:#414141;
+  vertical-align:top;
 }
 
 #adiValues {
@@ -1526,6 +1618,52 @@ textarea
 }
 
 #hwcSwitch p {
+  margin:14px 0px;
+}
+
+#meteorCancelContainer {
+  width:140px;
+  height:45px;
+  display:inline-block;
+  position:relative;
+  text-align:center;
+  vertical-align:top;
+}
+
+#mcRealButton {
+  width:140px;
+  height:45px;
+  position:absolute;
+  cursor:pointer;
+}
+
+#mcVisual {
+  width:140px;
+  height:45px;
+  position:absolute;
+}
+
+#mcText {
+  width:80px;
+  height:45px;
+  background-color:#444444;
+  display:inline-block;
+  vertical-align:top;
+  font-size:14px;
+}
+
+#mcText p {
+  margin:5px 0px;
+}
+
+#mcSwitch {
+  width:60px;
+  height:45px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#mcSwitch p {
   margin:14px 0px;
 }
 
@@ -1655,7 +1793,7 @@ textarea
 
 #ooHitstunTitle {
   height:20px;
-  width:150px;
+  width:140px;
   background-color:#494949;
   text-align:center;
   vertical-align:top;
@@ -1689,7 +1827,7 @@ textarea
   width:auto;
   height:100px;
   display:inline-block;
-
+  position: relative;
   overflow-y:scroll;
 }
 
@@ -2069,4 +2207,26 @@ textarea
 
 #tutorial p {
   margin:15px;
+}
+
+.trajBoxInfo {
+  position:absolute;
+  width:auto;
+  background-color:black;
+  z-index:29;
+  border-radius:15px;
+  font-size:13px;
+  padding:5px;
+  line-height:0.7;
+  text-align:center;
+}
+
+.trajBoxInfoDivider {
+  height:1px;
+  width:100%;
+  background-color:white;
+}
+
+.sectionTitle {
+  font-size:10px;
 }
