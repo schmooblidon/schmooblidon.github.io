@@ -1,10 +1,10 @@
-function Hit(percent, damage, growth, base, setKnockback, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt, tdiX, tdiY, fadeIn, doubleJump, sdix, sdiy, adix, adiy, meteorCancel) {
+function Hit(percent, damage, growth, base, setKnockback, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt, tdiX, tdiY, fadeIn, doubleJump, sdix, sdiy, adix, adiy, meteorCancel, vcancel) {
 
     /******* Internal functions start *******/
 
     //Calculates base knockback from hit
     //Formula taken from http://www.ssbwiki.com/Knockback#Formula
-    function getKnockback(percent, damage, weight, growth, base, setKnockback, crouch, chargeInterrupt) {
+    function getKnockback(percent, damage, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel) {
       if (setKnockback == 0){
         var percent = percent + damage;
         var kb = ((((((percent / 10) + ((percent * damage) / 20)) * (200 / (weight + 100)) * 1.4) + 18) * (growth / 100)) + base);
@@ -17,6 +17,9 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
       }
       if (chargeInterrupt){
         kb *= 1.2;
+      }
+      if (vcancel){
+        kb *= 0.95;
       }
       return kb;
     }
@@ -428,7 +431,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
 
     var gravity = characters[character]["gravity"];
 
-    var knockback = getKnockback(percent, damage, weight, growth, base, setKnockback, crouch, chargeInterrupt);
+    var knockback = getKnockback(percent, damage, weight, growth, base, setKnockback, crouch, chargeInterrupt,vcancel);
 
     var hitstun = getHitstun(knockback);
 

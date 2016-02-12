@@ -1663,6 +1663,48 @@ textarea
   margin:14px 0px;
 }
 
+#vCancelContainer {
+  width:140px;
+  height:45px;
+  display:inline-block;
+  position:relative;
+  text-align:center;
+  vertical-align:top;
+}
+
+#vcRealButton {
+  width:140px;
+  height:45px;
+  position:absolute;
+  cursor:pointer;
+}
+
+#vcVisual {
+  width:140px;
+  height:45px;
+  position:absolute;
+}
+
+#vcText {
+  width:80px;
+  height:45px;
+  background-color:#444444;
+  display:inline-block;
+  vertical-align:top;
+  font-size:14px;
+}
+
+#vcSwitch {
+  width:60px;
+  height:45px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#vcSwitch p {
+  margin:14px 0px;
+}
+
 #meteorCancelContainer {
   width:140px;
   height:45px;

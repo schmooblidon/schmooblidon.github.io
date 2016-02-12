@@ -28,8 +28,8 @@ function trajectoryObject(){
   this.adiMouseYMelee = 0;
   this.adiMouseXReal = 65.4;
   this.adiMouseYReal = 65.4;
-  this.curHitbox = chars.Fx.NS.id0;
-  this.cHName = ["Fx","NS",false,"id0"];
+  this.curHitbox = chars.Fx.neutralSpecial.id0;
+  this.cHName = ["Fx","neutralSpecial",false,"id0"];
   this.character = "Fox";
   this.percent = 80;
   this.version = "NTSC";
@@ -47,6 +47,7 @@ function trajectoryObject(){
   this.doubleJump = false;
   this.hitstun = 0;
   this.meteorCancel = false;
+  this.vcancel = false;
 }
 
 t = {};
@@ -752,6 +753,7 @@ function readQueryString(){
               t["t"+p].meteorCancel = Boolean(parseInt(temp[4]));
               t["t"+p].fadeIn = Boolean(parseInt(temp[5]));
               t["t"+p].doubleJump = Boolean(parseInt(temp[6]));
+              t["t"+p].vcancel = Boolean(parseInt(temp[7]));
               break;
             case "j":
               t["t"+p].chargeF = parseInt(temp);
@@ -998,7 +1000,14 @@ function writeQueryString(){
             else {
               temp7 = "0";
             }
-            temp = temp1+temp2+temp3+temp4+temp5+temp6+temp7;
+            var temp8 = t["t"+i].vcancel;
+            if (temp8){
+              temp8 = "1";
+            }
+            else {
+              temp8 = "0";
+            }
+            temp = temp1+temp2+temp3+temp4+temp5+temp6+temp7+temp8;
             break;
           case 9:
             temp = t["t"+i].chargeF;
@@ -1297,7 +1306,7 @@ function characterClick(){
       $(".attack").unbind("click").remove();
       $(this).children(".expandcharacter").removeClass("expandfalse").addClass("expandtrue");
 
-      t["t"+aT].cHName[0] = id;
+      //t["t"+aT].cHName[0] = id;
       //prompt(t["t1"].cHName);
       var keys = Object.keys(chars[id]);
       for (i=0;i<keys.length;i++){
@@ -1326,7 +1335,7 @@ function attackClick(){
     $(this).children(".expandattack").removeClass("expandfalse").addClass("expandtrue");
 
 
-    t["t"+aT].cHName[1] = id2;
+    //t["t"+aT].cHName[1] = id2;
     var keys2 = Object.keys(chars[id][id2]);
     if (keys2[0][0] == "i" && keys2[0][1] == "d"){
       for (j=0;j<keys2.length;j++){
@@ -1364,7 +1373,7 @@ function subattackClick(){
       $(".id").unbind("click").remove();
       $(this).children(".expandsubattack").removeClass("expandfalse").addClass("expandtrue");
 
-      t["t"+aT].cHName[2] = id3;
+      //t["t"+aT].cHName[2] = id3;
       var keys3 = Object.keys(chars[id][id2][id3]);
       for (l=0;l<keys3.length;l++){
         $(this).after('<div id="'+keys3[l]+'" class="id '+id3+' '+id2+' '+id+'"><p>'+keys3[l]+'</p></div>');
@@ -1387,7 +1396,9 @@ function idClick(){
     else {
       $(this).addClass("idcurrent");
       $(".idstats").remove();
-
+      t["t"+aT].cHName[0] = id;
+      t["t"+aT].cHName[1] = id2;
+      t["t"+aT].cHName[2] = id3;
       t["t"+aT].cHName[3] = id4;
       var hb = chars[id][id2][id3][id4];
       $(this).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
@@ -1417,6 +1428,8 @@ function idClick2(){
       $(this).addClass("idcurrent");
       $(".idstats").remove();
 
+      t["t"+aT].cHName[0] = id;
+      t["t"+aT].cHName[1] = id2;
       t["t"+aT].cHName[2] = false;
       t["t"+aT].cHName[3] = id4;
       var hb = chars[id][id2][id4];
@@ -1526,6 +1539,12 @@ function swapOptions(){
     }
     else {
       $("#hwcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+    }
+    if (t["t"+aT].vcancel){
+      $("#vcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+    }
+    else {
+      $("#vcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
     }
 
     if (t["t"+aT].meteorCancel){
@@ -1733,7 +1752,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     yPos = t["t"+aT].mouseYMelee;
   }
 
-	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee,t["t"+aT].meteorCancel);
+	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee,t["t"+aT].meteorCancel,t["t"+aT].vcancel);
 	var positions = hit.positions;
 	t["t"+aT].curPositions = positions;
   t["t"+aT].hitstun = hit.hitstun;
@@ -2285,6 +2304,18 @@ $(document).ready(function(){
     else {
       $("#cSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].crouch = true;
+    }
+    drawTrajectory();
+  });
+
+  $("#vcRealButton").click(function(){
+    if (t["t"+aT].vcancel){
+      $("#vcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      t["t"+aT].vcancel = false;
+    }
+    else {
+      $("#vcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      t["t"+aT].vcancel = true;
     }
     drawTrajectory();
   });
