@@ -1292,7 +1292,7 @@ function characterClick(){
     $(".subattack").unbind("click").remove();
     $(".id").unbind("click").remove();
     $(".idstats").unbind("click").remove();
-    $(".expand").removeClass("expandtrue").addClass("expandfalse");
+    $(".expandcharacter").removeClass("expandtrue").addClass("expandfalse");
 
     id = $(this).attr("id");
     //prompt(t["t1"].cHName);
