@@ -571,12 +571,48 @@ textarea
 
 .character p {
 	font-size:20px;
-	margin:10px 20px 10px 10px;
+	margin:10px 20px 10px 5px;
 	text-align:center;
+  vertical-align: top;
+  display:inline-block;
 }
 
 .characterhighlight {
 	background-color:#383838;
+}
+
+.expandcharacter {
+  height:40px;
+  width:40px;
+  display:inline-block;
+  background-image:url(assets/trajectory/expandbig.png);
+  margin-top:5px;
+  vertical-align: top;
+}
+
+.expandattack, .expandsubattack, .expandid {
+  height:20px;
+  width:20px;
+  display:inline-block;
+  background-image:url(assets/trajectory/expand.png);
+  margin-top:2px;
+  vertical-align: top;
+}
+
+.expandsubattack {
+  margin-left:10px;
+}
+
+.expandid {
+  margin-left:20px;
+}
+
+.expandfalse {
+  opacity:0.05;
+}
+
+.expandtrue {
+  opacity:0.9;
 }
 
 .attack {
@@ -592,7 +628,9 @@ textarea
 }
 
 .attack p {
-	margin:4px 0px 0px 10px;
+  vertical-align: top;
+  display:inline-block;
+	margin:4px 0px 0px 0px;
 }
 
 .subattack {
@@ -608,7 +646,9 @@ textarea
 }
 
 .subattack p {
-	margin:4px 0px 0px 20px;
+  vertical-align: top;
+  display:inline-block;
+	margin:4px 0px 0px 0px;
 }
 
 .id {
@@ -629,7 +669,9 @@ textarea
 }
 
 .id p {
-	margin:4px 0px 0px 30px;
+  vertical-align: top;
+  display:inline-block;
+	margin:4px 0px 0px 40px;
 }
 
 .idstats {
