@@ -63,7 +63,7 @@ var resizingtype = function(){
 
 	$("#middlecontrols, #tcontrols, #tcontrolscollapse, #bcontrols, #bcontrolscollapse").width(midwidth);
 	$("#trajBoxContainer").width(midwidth-140);
-	$("#stageSelectContainer").width(midwidth-40);
+	$("#stageSelectContainer").width(midwidth-180);
 
 	//find blastzone buffer
 

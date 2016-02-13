@@ -82,25 +82,6 @@ diSwitch.a = 0;
 
 titleX = 0;
 titleY = 0;
-/*trajFrozen = false;
-
-mouseXMelee = [0,0,0,0,0,0,0,0,0];
-mouseYMelee = [0,0,0,0,0,0,0,0,0];
-
-mouseXMeleeF = [0,0,0,0,0,0,0,0,0];
-mouseYMeleeF = [0,0,0,0,0,0,0,0,0];*/
-
-//isKilled = false;
-
-
-/*crouch = false;
-
-reverse = false;
-
-chargeInterrupt = false;
-
-charging = false;
-chargeF = 0;*/
 
 //each surface is put into an element in the array. The surface is broken down into arrays of far left point X and y, and far right point X and Y. Use .length to find the number of surfaces to check
 
@@ -114,32 +95,8 @@ surfaces.fo = [[[-63.34755,0.00288],[63.34755,0.00288]],[[-14.25,42.75],[14.25,4
 
 
 snapping = true;
-
-/*staleQueue = [false,false,false,false,false,false,false,false,false];
-
-curPositions = [0,0,0,0,0,0,0,0,0];*/
-
-
-
 centreOffset = [-bzLeft*10+50,bzTop*10+50];
 
-/*curHitbox = [chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0,chars.Fx.NS.id0];
-
-percent = [80,80,80,80,80,80,80,80,80];
-
-charging = [false,false,false,false,false,false,false,false,false];
-chargeF = [0,0,0,0,0,0,0,0,0];
-
-chargeInterrupt = [false,false,false,false,false,false,false,false,false];
-reverse = [false,false,false,false,false,false,false,false,false];
-crouch = [false,false,false,false,false,false,false,false,false];
-
-
-var percent = 120;
-version = "NTSC";
-var character = "Fox";*/
-
-//"a0=00000000&a1=00000000&a2=00000000&a3=00000000&a4=chars.fx.ns.id0&a5=Fox&a6=080&a7=00&a8=00&a9=000&a10=00000000
 
 function deleteNonNumbers(text,allowNegative,allowPoint){
   var newtext = "";
@@ -186,7 +143,7 @@ function changeStage(id){
   ratio = disWidth/disHeight;
   centreOffset = [-bzLeft*10+50,bzTop*10+50];
 
-  //viewBox element is weird and had to use vanilla javascript and also avoid changing the di selector svg elements
+  //viewBox attribute is weird and had to use vanilla javascript and also avoid changing the di selector svg elements
   var svg = document.getElementsByTagName("svg")[0];
   var svg2 = document.getElementsByTagName("svg")[1];
 
@@ -225,6 +182,7 @@ function trajectoryHover(){
 
               }
 
+              //moving the Y position up or down for slanted parts of the stages
               if (i == 0 && activeStage == "ys" && t["t"+aT].mouseXMelee > 39.2){
                 var angle = Math.atan(3.5/16.8);
                 var x = t["t"+aT].mouseXMelee - 39.2;
@@ -1566,9 +1524,6 @@ function swapOptions(){
       $("#djSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
     }
 
-
-
-
     $(".attack").unbind("click").remove();
     $(".subattack").unbind("click").remove();
     $(".id").unbind("click").remove();
@@ -1781,9 +1736,9 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     if (!isKilled){
   	var x = positions[i][0];
   	var y = positions[i][1];
+    var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
+    lineText += tempText;
   	if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
-  		var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
-  		lineText += tempText;
 
         $(SVG("circle")).attr("id",aT+"f"+(i+1)).attr("class","framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup"+aT);
         $(SVG("circle")).attr("id",aT+"f"+(i+1)+"-t").attr("class","framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+aT);
@@ -1795,7 +1750,10 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   	else {
       //checks if vertical knockback velocity is greater or equal to 2.4 when above the top blastzone
       if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && positions[i][3] >= 2.4)){
-
+        temX = ((x*10)+centreOffset[0]);
+        temY = ((-y*10)+centreOffset[1]);
+        $(SVG("path")).attr("id","kill"+aT).attr("class","kill").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup"+aT);
+        $(SVG("path")).attr("id","kill-t"+aT).attr("class","kill-t").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup-t"+aT);
         cla = "tLineK";
         isKilled = true;
         $("#trajGroup"+aT+" .framePos").css("fill","#df3c3c");
@@ -1860,6 +1818,25 @@ function trajPosInfo(){
 
   }, function(){
     $(".start").css("stroke-width",0);
+    $(".framePosInfoBox").remove();
+  });
+
+  $(".kill-t").hover(function(){
+    var id = parseInt($(this).attr("id").substr(6,7));
+    $("#kill"+id).css("stroke-width",20);
+    $("#trajCanvas").after('<div class="framePosInfoBox"><span style="font-size:25px">KILLED!</span></div>');
+    var frameposy = mouseY;
+    var frameposx = mouseX;
+    if (mouseY + trajOffset.top > windheight){
+      frameposy = windheight;
+    }
+    if (mouseX + trajOffset.left + 160 > windwidth){
+      frameposx = windwidth - trajOffset.left - 160;
+    }
+    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20)});
+
+  }, function(){
+    $(".kill").css("stroke-width",0);
     $(".framePosInfoBox").remove();
   });
 }
@@ -2490,7 +2467,7 @@ $(document).ready(function(){
 
   $("#trajShare").click(function(){
     var qstring = writeQueryString();
-    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutShare"><div id="ppSTitle"><p>Share this URL</p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppSUrl"><p id="shareUrlEdit">http://ikneedata.com/trajectory'+qstring+'</p></div></div></div>');
+    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutShare"><div id="ppSTitle"><p>Share this URL <span style="font-size:10px">(triple click to select all)</span></p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppSUrl"><p id="shareUrlEdit">http://ikneedata.com/trajectory'+qstring+'</p></div></div></div>');
     $("#ppSClose").unbind("mouseover click");
     $("#ppSClose").hover(function(){
       $(this).toggleClass("ppSCloseHighlight");

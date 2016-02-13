@@ -213,7 +213,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
         var hasDoubleJumped = false;
         var e = 0;
 
-        while (Math.abs(horVelKB) > 0 || Math.abs(verVelKB) > 0 || (meteorCancelled && extendedDisplay < 25)){
+        while (Math.abs(horVelKB) > 0.001 || Math.abs(verVelKB) > 0.001 || (meteorCancelled && extendedDisplay < 25)){
 
           i++;
 

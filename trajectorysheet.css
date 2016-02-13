@@ -116,6 +116,16 @@ textarea {
   fill:transparent;
 }
 
+.kill {
+  fill:#ff4141;
+  stroke-width:0;
+  stroke:#ff4141;
+}
+
+.kill-t {
+  fill:transparent;
+}
+
 #trajectory-t {
   z-index:5;
 }
@@ -185,6 +195,7 @@ textarea {
 .start {
   stroke-width:0;
 }
+
 
 .start-t {
   fill:transparent;
@@ -1758,6 +1769,7 @@ textarea
   position:relative;
   text-align:center;
   vertical-align:top;
+  top:40px;
 }
 
 #stsRealButton {
