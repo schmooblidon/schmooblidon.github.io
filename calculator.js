@@ -1776,8 +1776,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     $("#trajGroup"+aT+", #trajGroup-t"+aT).remove();
     $(SVG("g")).attr("id","trajGroup"+aT).appendTo("#trajectory");
     $(SVG("g")).attr("id","trajGroup-t"+aT).appendTo("#trajectory-t");
-
-    $(SVG("path")).attr("id","start"+aT).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",palettes[t["t"+aT].palette][0]).attr("stroke",palettes[t["t"+aT].palette][0]).prependTo("#trajGroup"+aT);
+    $(SVG("path")).attr("id","start"+aT).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",palettes[t["t"+aT].palette][1]).attr("stroke",palettes[t["t"+aT].palette][1]).prependTo("#trajGroup"+aT);
     $(SVG("path")).attr("id","start-t"+aT).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+aT);
   //}
   //$("#trajGroup"+aT+" .framePos").css("fill","#25d041");
