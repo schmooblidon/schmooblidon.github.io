@@ -826,7 +826,7 @@ function readQueryString(){
 
         aT = p;
         drawTrajectory();
-        $("#trajAdd").before('<div id="trajBox'+p+'" class="trajBox"><div id="trajNum'+p+'" class="trajNum"><div class="trajFreeze freezeOn"></div><p>'+p+'</p></div><div id="trajColour'+p+'" class="trajColour"><div id="t'+p+'minicolour1" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][0]+'"></div><div id="t'+p+'minicolour2" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][1]+'"></div><div id="t'+p+'minicolour3" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][2]+'"></div><div id="trajColourReal'+p+'" class="trajColourReal"></div></div><div id="trajLabel'+p+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+p+'" class="trajDelete"><p>x</p></div></div>');
+        $("#trajAdd").before('<div id="trajBox'+p+'" class="trajBox"><div id="trajNum'+p+'" class="trajNum"><div class="trajFreeze freezeOn"></div><p>'+p+'</p></div><div id="trajColour'+p+'" class="trajColour"><div id="t'+p+'minicolour1" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][0]+'"></div><div id="t'+p+'minicolour2" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][1]+'"></div><div id="t'+p+'minicolour3" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][2]+'"></div></div><div id="trajLabel'+p+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+p+'" class="trajDelete"><p>x</p></div></div>');
         if (t["t"+p].hasLabel){
           var id = p;
           $("#trajLabel"+p).addClass("removeLabel").children("p").empty().append("Remove Label");
@@ -1613,14 +1613,14 @@ function swapOptions(){
 }
 
 function trajColourClick(){
-  $(".trajColourReal").unbind("click");
-  $(".trajColourReal").click(function(){
-    var id = $(this).attr("id").substr(14,15);
+  $(".tminicolour").unbind("click");
+  $(".tminicolour").click(function(){
+    var id = $(this).attr("id")[1];
     if (!$("#csb"+id).length){
       $(".colourselectbox").remove();
-      var left = $(this).offset().left;
-      var top = $(this).offset().top;
-      $("body").append('<div id="csb'+id+'" class="colourselectbox"><div id="colourselect1" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#FF0000"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#FF6666"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#990000"></div></div><div id="colourselect2" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#FF3300"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#FF6633"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#993300"></div></div><div id="colourselect3" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#ffff00"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#ffff66"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#999900"></div></div><div id="colourselect4" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#00ff00"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#66ff66"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#009900"></div></div><div id="colourselect5" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#00ffff"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#66ffff"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#009999"></div></div><div id="colourselect6" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#0000ff"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#6666ff"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#000099"></div></div><div id="colourselect7" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#9900CC"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#9966FF"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#330066"></div></div><div id="colourselect8" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#ff00ff"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#ff66ff"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#990099"></div></div><div id="colourselect9" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#999999"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#FFFFFF"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#666666"></div></div></div>');
+      var left = $("#trajColour"+id).offset().left;
+      var top = $("#trajColour"+id).offset().top;
+      $("body").append('<div id="csb'+id+'" class="colourselectbox"><div id="colourselect1" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#FF0000"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#FF6666"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#990000"></div><div id="colourselectReal1" class="colourselectReal"></div></div><div id="colourselect2" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#FF3300"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#FF6633"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#993300"></div><div id="colourselectReal2" class="colourselectReal"></div></div><div id="colourselect3" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#ffff00"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#ffff66"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#999900"></div><div id="colourselectReal3" class="colourselectReal"></div></div><div id="colourselect4" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#00ff00"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#66ff66"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#009900"></div><div id="colourselectReal4" class="colourselectReal"></div></div><div id="colourselect5" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#00ffff"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#66ffff"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#009999"></div><div id="colourselectReal5" class="colourselectReal"></div></div><div id="colourselect6" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#0000ff"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#6666ff"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#000099"></div><div id="colourselectReal6" class="colourselectReal"></div></div><div id="colourselect7" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#9900CC"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#9966FF"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#330066"></div><div id="colourselectReal7" class="colourselectReal"></div></div><div id="colourselect8" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#ff00ff"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#ff66ff"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#990099"></div><div id="colourselectReal8" class="colourselectReal"></div></div><div id="colourselect9" class="colourselect"><div id="minicolourbox1" class="minicolourbox" style="background-color:#999999"></div><div id="minicolourbox2" class="minicolourbox" style="background-color:#FFFFFF"></div><div id="minicolourbox3" class="minicolourbox" style="background-color:#666666"></div><div id="colourselectReal9" class="colourselectReal"></div></div></div>');
       $("#csb"+id).css({"top":(top-180)+"px","left":(left-45)+"px"});
       colourChange(id);
     }
@@ -1632,17 +1632,39 @@ function trajColourClick(){
 
 function trajColourHover(){
   $(".trajColour").unbind("mouseenter").unbind("mouseleave");
+  $(".tminicolour").unbind("mouseenter").unbind("mouseleave");
   $(".trajColour").hover(function(){
     $(this).addClass("trajBoxHighlight");
   },function(){
     $(this).removeClass("trajBoxHighlight");
   });
+  $(".tminicolour").hover(function(){
+    var id = $(this).attr("id")[1];
+    var cid = $(this).attr("id")[12];
+    var left = $(this).offset().left;
+    var top = $(this).offset().top;
+    var text;
+    if (cid == 1){
+      text = "Safe (in hitstun)";
+    }
+    else if (cid == 2){
+      text = "Safe (out of hitstun)";
+    }
+    else if (cid == 3){
+      text = "Killed";
+    }
+    $("body").append('<div class="minicolourinfo"><p>'+text+'</p></div>');
+    $(".minicolourinfo").css({"top":top+"px","left":(left-130)+"px"});
+  }, function(){
+    $(".minicolourinfo").remove();
+  });
 }
 
 var colourChange = function(id){
-  $(".colourselect").click(function(){
+  $(".colourselectReal").unbind("click").unbind("mouseover").unbind("mouseleave");
+  $(".colourselectReal").click(function(){
     var pid = $(this).attr("id");
-    newp = parseInt(pid[12]);
+    newp = parseInt(pid[16]);
     newp -= 1;
     $("#t"+id+"minicolour1").css("background-color",palettes[newp][0]);
     $("#t"+id+"minicolour2").css("background-color",palettes[newp][1]);
@@ -1658,6 +1680,9 @@ var colourChange = function(id){
     savedPalettes[id-1] = newp;
     $("#labelBox"+id).css("border-color",palettes[newp][0]);
     $(".colourselectbox").remove();
+  });
+  $(".colourselectReal").hover(function(){
+    $(this).toggleClass("colourselectRealHighlight");
   });
 }
 
@@ -2424,7 +2449,7 @@ $(document).ready(function(){
   });
 
   $('html').click(function(e) {
-    if(!$(e.target).hasClass("colourselect") && !$(e.target).hasClass("trajColourReal"))
+    if(!$(e.target).hasClass("colourselect") && !$(e.target).hasClass("tminicolour"))
     {
       $(".colourselectbox").remove();
     }
@@ -2471,10 +2496,10 @@ $(document).ready(function(){
       aT = newTraj;
 
       if (newTraj > 1){
-        $("#trajBox"+(newTraj-1)).after('<div id="trajBox'+newTraj+'" class="trajBox trajBoxSelected"><div id="trajNum'+newTraj+'" class="trajNum"><div class="trajFreeze freezeOn"></div><p>'+newTraj+'</p></div><div id="trajColour'+newTraj+'" class="trajColour"><div id="t'+newTraj+'minicolour1" class="tminicolour" style="background-color:'+palettes[t["t"+newTraj].palette][0]+'"></div><div id="t'+newTraj+'minicolour2" class="tminicolour" style="background-color:'+palettes[t["t"+newTraj].palette][1]+'"></div><div id="t'+newTraj+'minicolour3" class="tminicolour" style="background-color:'+palettes[t["t"+newTraj].palette][2]+'"></div><div id="trajColourReal'+newTraj+'" class="trajColourReal"></div></div><div id="trajLabel'+newTraj+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+newTraj+'" class="trajDelete"><p>x</p></div></div>');
+        $("#trajBox"+(newTraj-1)).after('<div id="trajBox'+newTraj+'" class="trajBox trajBoxSelected"><div id="trajNum'+newTraj+'" class="trajNum"><div class="trajFreeze freezeOn"></div><p>'+newTraj+'</p></div><div id="trajColour'+newTraj+'" class="trajColour"><div id="t'+newTraj+'minicolour1" class="tminicolour" style="background-color:'+palettes[t["t"+newTraj].palette][0]+'"></div><div id="t'+newTraj+'minicolour2" class="tminicolour" style="background-color:'+palettes[t["t"+newTraj].palette][1]+'"></div><div id="t'+newTraj+'minicolour3" class="tminicolour" style="background-color:'+palettes[t["t"+newTraj].palette][2]+'"></div></div><div id="trajLabel'+newTraj+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+newTraj+'" class="trajDelete"><p>x</p></div></div>');
       }
       else {
-        $("#trajBoxContainer").prepend('<div id="trajBox1" class="trajBox trajBoxSelected"><div id="trajNum1" class="trajNum"><div class="trajFreeze freezeOn"></div><p>1</p></div><div id="trajColour1" class="trajColour"><div id="t1minicolour1" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][0]+'"></div><div id="t1minicolour2" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][1]+'"></div><div id="t1minicolour3" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][2]+'"></div><div id="trajColourReal1" class="trajColourReal"></div></div><div id="trajLabel1" class="trajLabel"><p>Add label</p></div><div id="trajDelete1" class="trajDelete"><p>x</p></div></div>');
+        $("#trajBoxContainer").prepend('<div id="trajBox1" class="trajBox trajBoxSelected"><div id="trajNum1" class="trajNum"><div class="trajFreeze freezeOn"></div><p>1</p></div><div id="trajColour1" class="trajColour"><div id="t1minicolour1" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][0]+'"></div><div id="t1minicolour2" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][1]+'"></div><div id="t1minicolour3" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][2]+'"></div></div><div id="trajLabel1" class="trajLabel"><p>Add label</p></div><div id="trajDelete1" class="trajDelete"><p>x</p></div></div>');
       }
 
       drawTrajectory();
