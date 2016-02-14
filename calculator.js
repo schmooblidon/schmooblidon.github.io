@@ -10,15 +10,15 @@ startColours = ["#00ffff","#ffff00","#ff00ff","#FF6633","#6666ff","#66ff66","#99
 
 savedPalettes = [0,1,2,3,4,5,6,7,8];
 
-palettes = [["#FF0000","#FF6666","#990000"],
-["#FF3300","#FF6633","#993300"],
-["#ffff00","#ffff66","#999900"],
-["#00ff00","#66ff66","#009900"],
-["#00ffff","#66ffff","#009999"],
-["#0000ff","#6666ff","#000099"],
-["#9900CC","#9966FF","#330066"],
-["#ff00ff","#ff66ff","#990099"],
-["#999999","#FFFFFF","#666666"]];
+palettes = [["#fe3a3a","#fe7f7f","#953636"],
+["#fa5d36","#ffaa7a","#8e431d"],
+["#fff508","#fcfc8d","#b9b91c"],
+["#08fb08","#89fe89","#299f29"],
+["#00bdf9","#77ffff","#009999"],
+["#4040ff","#8787fc","#2d2da2"],
+["#813ffc","#ac82ff","#5b2293"],
+["#fa36fa","#fa7afa","#990099"],
+["#9e9e9e","#FFFFFF","#595959"]];
 
 //trajectoryObject(trajFrozen,mouseXMelee,mouseYMelee,mouseXMeleeF,mouseYMeleeF,curHitbox,version,character,percent,crouch,reverse,chargeInterrupt,charging,chargeF,staleQueue,curPositions)
 
@@ -1733,8 +1733,8 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   }
 
 	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee,t["t"+aT].meteorCancel,t["t"+aT].vcancel);
-	var positions = hit.positions;
-	t["t"+aT].curPositions = positions;
+
+	t["t"+aT].curPositions = hit.positions;
   t["t"+aT].hitstun = hit.hitstun;
   if (hit.meteorCancelled){
     t["t"+aT].hitstun = 8;
@@ -1757,10 +1757,11 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   //}
   //$("#trajGroup"+aT+" .framePos").css("fill","#25d041");
   var isKilled = false;
-  for (i=0;i<positions.length;i++){
-    if (!isKilled){
-  	var x = positions[i][0];
-  	var y = positions[i][1];
+  var i = 0;
+
+  while (!isKilled && i < hit.positions.length){
+  	var x = hit.positions[i][0];
+  	var y = hit.positions[i][1];
     var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
     lineText += tempText;
   	if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
@@ -1770,22 +1771,23 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
         if (i+1 > t["t"+aT].hitstun){
           $("#"+aT+"f"+(i+1)).attr("class","fPnH"+aT+" framePos").attr("fill",palettes[t["t"+aT].palette][1]).attr("stroke",palettes[t["t"+aT].palette][1]);
         }
-
   	}
   	else {
       //checks if vertical knockback velocity is greater or equal to 2.4 when above the top blastzone
-      if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && positions[i][3] >= 2.4)){
+      if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && hit.positions[i][3] >= 2.4)){
         temX = ((x*10)+centreOffset[0]);
         temY = ((-y*10)+centreOffset[1]);
         $(SVG("path")).attr("id","kill"+aT).attr("class","kill").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").attr("fill",palettes[t["t"+aT].palette][2]).attr("stroke",palettes[t["t"+aT].palette][2]).appendTo("#trajGroup"+aT);
         $(SVG("path")).attr("id","kill-t"+aT).attr("class","kill-t").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup-t"+aT);
         cla = "tLineK";
         isKilled = true;
-        $("#trajGroup"+aT+" .framePos").attr("class","fPK"+aT+" framePos").attr("fill",palettes[t["t"+aT].palette][2]).attr("stroke",palettes[t["t"+aT].palette][2]);;
+        if (i <= hit.hitstun){
+          $("#trajGroup"+aT+" .framePos").attr("class","fPK"+aT+" framePos").attr("fill",palettes[t["t"+aT].palette][2]).attr("stroke",palettes[t["t"+aT].palette][2]);;
+        }
       }
-  	}
     }
 
+    i++;
   }
   //$("#trajLine"+aT).remove();
   $(SVG("path")).attr("id","trajLine"+aT).attr("class","trajLine "+cla+aT).attr("d",lineText).prependTo("#trajGroup"+aT);
