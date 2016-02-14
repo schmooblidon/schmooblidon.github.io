@@ -61,6 +61,8 @@ function trajectoryObject(){
   this.meteorCancel = false;
   this.vcancel = false;
   this.palette = 0;
+  this.useFractionals = false;
+  this.fractional = "00000";
 }
 
 t = {};
@@ -111,7 +113,7 @@ snapping = true;
 centreOffset = [-bzLeft*10+50,bzTop*10+50];
 
 
-function deleteNonNumbers(text,allowNegative,allowPoint){
+function deleteNonNumbers(text,allowNegative,allowPoint,allowZeros){
   var newtext = "";
   var hasPoint = false;
   for (i=0;i<text.length;i++){
@@ -137,7 +139,7 @@ function deleteNonNumbers(text,allowNegative,allowPoint){
     newtext = 0;
   }
   else {
-    if (!allowPoint){
+    if (!allowPoint && !allowZeros){
       newtext = parseInt(newtext);
     }
   }
@@ -363,7 +365,7 @@ function trajLabelClick(){
     }
     else {
       $(this).addClass("removeLabel").children("p").empty().append("Remove Label");
-      $("#display").append('<div id="labelBox'+id+'" class="labelBox"><textarea id="textarea'+id+'" class="textarea" name="label'+id+'" cols="30" rows="3"></textarea></div><div id="labelOptions'+id+'" class="labelOptions"><div id="labelFontSize'+id+'" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity'+id+'" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div><div class="labelHitbox labelControl"><p>Add hitbox text</p></div></div>');
+      $("#display").append('<div id="labelBox'+id+'" class="labelBox"><textarea id="textarea'+id+'" class="textarea" name="label'+id+'" cols="30" rows="3"></textarea></div><div id="labelOptions'+id+'" class="labelOptions"><div id="labelFontSize'+id+'" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity'+id+'" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div></div>');
       t["t"+id].hasLabel = true;
       $("#labelBox"+id).css("border-color",palettes[t["t"+id].palette][0]);
 
@@ -661,7 +663,7 @@ function readQueryString(){
       if (exists){
         currentTrajs[p-1] = true;
         t["t"+p].trajFrozen = true;
-        for (j=0;j<24;j++){
+        for (j=0;j<25;j++){
           var ja = String.fromCharCode(97 + j);
           var temp = GetQueryStringParams(p+ja);
 
@@ -725,6 +727,7 @@ function readQueryString(){
               t["t"+p].fadeIn = Boolean(parseInt(temp[5]));
               t["t"+p].doubleJump = Boolean(parseInt(temp[6]));
               t["t"+p].vcancel = Boolean(parseInt(temp[7]));
+              t["t"+p].useFractionals = Boolean(parseInt(temp[8]));
               break;
             case "j":
               t["t"+p].chargeF = parseInt(temp);
@@ -735,23 +738,14 @@ function readQueryString(){
               }
               break;
             case "l":
-              /*if (temp.length == 6){
-                t["t"+p].colour = "#"+temp;
-              }
-              else {
-                t["t"+p].colour = temp;
-              }*/
               t["t"+p].palette = parseInt(temp);
-              //prompt(t["t"+p].colour);
               break;
             case "m":
-              //prompt("test");
               if (temp == 1){
                 var id = p;
                 t["t"+p].hasLabel = true;
                 $("#display").append('<div id="labelBox'+p+'" class="labelBox"><textarea id="textarea'+p+'" class="textarea" name="label'+p+'" cols="30" rows="3"></textarea></div><div id="labelOptions'+p+'" class="labelOptions"><div id="labelFontSize'+p+'" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity'+p+'" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div><div class="labelHitbox labelControl"><p>Add hitbox text</p></div></div>');
                 $("#labelBox"+p).css("border-color",palettes[t["t"+p].palette][0]);
-
               }
               else {
                 t["t"+p].hasLabel = false;
@@ -818,6 +812,12 @@ function readQueryString(){
               var xy = convertPixelsToStick(t["t"+p].adiMouseXReal,t["t"+p].adiMouseYReal);
               t["t"+p].adiMouseXMelee = xy[0];
               t["t"+p].adiMouseYMelee = xy[1];
+              break;
+            case "y":
+              t["t"+p].fractional = temp;
+              if (t["t"+p].useFractionals){
+                t["t"+p].percent = parseFloat(t["t"+p].percent+"."+t["t"+p].fractional);
+              }
               break;
             default:
               break;
@@ -892,7 +892,7 @@ function writeQueryString(){
   }
   for (i=1;i<10;i++){
     if (currentTrajs[i-1]){
-      for (j=0;j<24;j++){
+      for (j=0;j<25;j++){
         var temp = "";
         switch (j){
           case 0:
@@ -920,7 +920,7 @@ function writeQueryString(){
             temp = t["t"+i].character;
             break;
           case 7:
-            temp = t["t"+i].percent;
+            temp = Math.floor(t["t"+i].percent);
             break;
           case 8:
             var temp1 = t["t"+i].version;
@@ -930,56 +930,15 @@ function writeQueryString(){
             else {
               temp1 = "1";
             }
-            var temp2 = t["t"+i].crouch;
-            if (temp2){
-              temp2 = "1";
-            }
-            else {
-              temp2 = "0";
-            }
-            var temp3 = t["t"+i].reverse;
-            if (temp3){
-              temp3 = "1";
-            }
-            else {
-              temp3 = "0";
-            }
-            var temp4 = t["t"+i].chargeInterrupt;
-            if (temp4){
-              temp4 = "1";
-            }
-            else {
-              temp4 = "0";
-            }
-            var temp5 = t["t"+i].meteorCancel;
-            if (temp5){
-              temp5 = "1";
-            }
-            else {
-              temp5 = "0";
-            }
-            var temp6 = t["t"+i].fadeIn;
-            if (temp6){
-              temp6 = "1";
-            }
-            else {
-              temp6 = "0";
-            }
-            var temp7 = t["t"+i].doubleJump;
-            if (temp7){
-              temp7 = "1";
-            }
-            else {
-              temp7 = "0";
-            }
-            var temp8 = t["t"+i].vcancel;
-            if (temp8){
-              temp8 = "1";
-            }
-            else {
-              temp8 = "0";
-            }
-            temp = temp1+temp2+temp3+temp4+temp5+temp6+temp7+temp8;
+            var temp2 = ~~t["t"+i].crouch;
+            var temp3 = ~~t["t"+i].reverse;
+            var temp4 = ~~t["t"+i].chargeInterrupt;
+            var temp5 = ~~t["t"+i].meteorCancel;
+            var temp6 = ~~t["t"+i].fadeIn;
+            var temp7 = ~~t["t"+i].doubleJump;
+            var temp8 = ~~t["t"+i].vcancel;
+            var temp9 = ~~t["t"+i].useFractionals;
+            temp = temp1+temp2+temp3+temp4+temp5+temp6+temp7+temp8+temp9;
             break;
           case 9:
             temp = t["t"+i].chargeF;
@@ -997,21 +956,6 @@ function writeQueryString(){
             break;
           case 11:
             temp = t["t"+i].palette;
-            /*if (temp[0] == "#"){
-              temp = temp.substr(1,temp.length);
-            }
-            else {
-              temp = temp.split(',');
-              temp[0] = parseInt(temp[0].substr(4,temp[0].length)).toString(16);
-              temp[1] = parseInt(temp[1].substr(1,temp[1].length)).toString(16);
-              temp[2] = parseInt(temp[2].substr(1,temp[2].length-2)).toString(16);
-              for (g=0;g<3;g++){
-                if (temp[g].length == 1){
-                  temp[g] = "0"+temp[g];
-                }
-              }
-              temp = ""+temp[0]+temp[1]+temp[2];
-            }*/
             break;
           case 12:
             if (t["t"+i].hasLabel){
@@ -1089,6 +1033,9 @@ function writeQueryString(){
             break;
           case 23:
             temp = t["t"+i].adiMouseYReal;
+            break;
+          case 24:
+            temp = t["t"+i].fractional;
             break;
           default:
             break;
@@ -1466,7 +1413,20 @@ function swapOptions(){
 
     $("#victimcharname").empty().append(t["t"+aT].character);
 
-    $("#percentNumberEdit").val(t["t"+aT].percent);
+    $("#percentNumberEdit").val(Math.floor(t["t"+aT].percent));
+    $("#percentPreciseWhole").empty().append(Math.floor(t["t"+aT].percent));
+    $("#percentPreciseEdit").val(t["t"+aT].fractional);
+    if (t["t"+aT].useFractionals){
+      $("#percentPrecise").show();
+      $("#percentPreciseIcon").removeClass("percentPreciseIconExpand").addClass("percentPreciseIconCollapse");
+      $(this).children("p").empty().append("Close Fractionals");
+    }
+    else {
+      $("#percentPrecise").hide();
+      $("#percentPreciseIcon").removeClass("percentPreciseIconCollapse").addClass("percentPreciseIconExpand");
+      $(this).children("p").empty().append("Open Fractionals");
+    }
+    diOffset = $("#"+activeDI+"diSelector").offset();
 
     $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
 
@@ -2219,16 +2179,22 @@ $(document).ready(function(){
         if (newnum > 999){
           newnum = 999;
         }
-				t["t"+aT].percent = newnum;
 			}
 			else {
 				var newnum = curNum - 1;
         if (newnum < 0){
           newnum = 0;
         }
-				t["t"+aT].percent = newnum;
       }
+      if ($("#percentPreciseIcon").hasClass("percentPreciseIconCollapse")){
+        t["t"+aT].percent = parseFloat(newnum+"."+t["t"+aT].fractional);
+      }
+      else {
+        t["t"+aT].percent = newnum;
+      }
+
 			$("#percentNumberEdit").val(newnum);
+      $("#percentPreciseWhole").empty().append(newnum);
       drawTrajectory();
 		}, 50);
 	}).bind("mouseup mouseleave", function() {
@@ -2552,7 +2518,7 @@ $(document).ready(function(){
     }
     else {
       $(this).addClass("activeTitle").children("p").empty().append("Remove Title");
-      $("#display").append('<div id="labelBox0" class="labelBox"><textarea id="textarea0" class="textarea" name="label0" cols="30" rows="3"></textarea></div><div id="labelOptions0" class="labelOptions"><div id="labelFontSize0" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity0" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div><div class="labelHitbox labelControl"><p>Add hitbox text</p></div></div>');
+      $("#display").append('<div id="labelBox0" class="labelBox"><textarea id="textarea0" class="textarea" name="label0" cols="30" rows="3"></textarea></div><div id="labelOptions0" class="labelOptions"><div id="labelFontSize0" class="labelFontSize"><div class="labelFontIcon"></div><div class="labelFontChange"><div class="labelFontUp labelControl"><p>+</p></div><div class="labelFontDown labelControl"><p>-</p></div></div></div><div id="labelOpacity0" class="labelOpacity"><div class="labelOpacityIcon"></div><div class="labelOpacityChange"><div class="labelOpacityUp labelControl"><p>+</p></div><div class="labelOpacityDown labelControl"><p>-</p></div></div></div></div>');
       labelBoxClick(0);
       labelBoxDrag(0);
       labelBoxResize(0);
@@ -2594,15 +2560,30 @@ $(document).ready(function(){
 
 
   $("#percentNumberEdit").on("keyup blur", function() {
-    var temp = deleteNonNumbers($(this).val(),false,false);
+    var temp = deleteNonNumbers($(this).val(),false,false,false);
     temp = Math.abs(temp);
     $(this).val(temp);
-    t["t"+aT].percent = temp;
+    $("#percentPreciseWhole").empty().append(temp);
+    if ($("#percentPreciseIcon").hasClass("percentPreciseIconCollapse")){
+      t["t"+aT].percent = parseFloat(temp+"."+t["t"+aT].fractional);
+    }
+    else {
+      t["t"+aT].percent = temp;
+    }
+    drawTrajectory();
+  });
+
+  $("#percentPreciseEdit").on("keyup blur", function() {
+    var temp = deleteNonNumbers($(this).val(),false,false,true);
+    //temp = Math.abs(temp);
+    $(this).val(temp);
+    t["t"+aT].fractional = temp;
+    t["t"+aT].percent = parseFloat(Math.floor(t["t"+aT].percent)+"."+t["t"+aT].fractional);
     drawTrajectory();
   });
 
   $("#chargingNumberEdit").on("keyup blur", function() {
-    var temp = deleteNonNumbers($(this).val(),false,false);
+    var temp = deleteNonNumbers($(this).val(),false,false,false);
     if (temp > 59){
       temp = 59;
     }
@@ -2618,7 +2599,7 @@ $(document).ready(function(){
   });
 
   $("#mPosX").on("keyup blur", function() {
-    var temp = deleteNonNumbers($(this).val(),true,true);
+    var temp = deleteNonNumbers($(this).val(),true,true,false);
     if (temp >= 1000){
       temp = 999.9;
     }
@@ -2633,7 +2614,7 @@ $(document).ready(function(){
   });
 
   $("#mPosY").on("keyup blur", function() {
-    var temp = deleteNonNumbers($(this).val(),true,true);
+    var temp = deleteNonNumbers($(this).val(),true,true,false);
     if (temp >= 1000){
       temp = 999.9;
     }
@@ -2665,6 +2646,29 @@ $(document).ready(function(){
     }
     aT = savedaT;
 
+  });
+
+  $("#percentPreciseToggle").hover(function(){
+    $(this).toggleClass("percentPreciseToggleHighlight");
+  });
+
+  $("#percentPreciseToggle").click(function(){
+    if ($("#percentPreciseIcon").hasClass("percentPreciseIconExpand")){
+      $("#percentPrecise").show();
+      $("#percentPreciseIcon").removeClass("percentPreciseIconExpand").addClass("percentPreciseIconCollapse");
+      $(this).children("p").empty().append("Close Fractionals");
+      t["t"+aT].percent = parseFloat($("#percentNumberEdit").val()+"."+t["t"+aT].fractional);
+      t["t"+aT].useFractionals = true;
+    }
+    else {
+      $("#percentPrecise").hide();
+      $("#percentPreciseIcon").removeClass("percentPreciseIconCollapse").addClass("percentPreciseIconExpand");
+      $(this).children("p").empty().append("Open Fractionals");
+      t["t"+aT].percent = parseInt($("#percentNumberEdit").val());
+      t["t"+aT].useFractionals = false;
+    }
+    drawTrajectory();
+    diOffset = $("#"+activeDI+"diSelector").offset();
   });
 
   $("#rcontrolsOptions").perfectScrollbar();

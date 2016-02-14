@@ -303,7 +303,7 @@ textarea
 
 .labelOptions {
   width:90px;
-  height:90px;
+  height:60px;
   position:absolute;
   background-color:#212121;
   z-index:28;
@@ -1036,6 +1036,7 @@ textarea
   font-size:43px;
   border:none;
   resize: none;
+  padding:0;
 }
 
 #percentButtonContainer {
@@ -1060,6 +1061,78 @@ textarea
 
 .percentButtonHighlight {
   background-color:#343434;
+}
+
+#percentPrecise {
+  display:none;
+  width:140px;
+  height:35px;
+  background-color:#323232;
+}
+
+#pPp1 {
+  margin:6px 0px 0px 10px;
+  display:inline-block;
+  vertical-align: top;
+  font-size:18px;
+}
+
+#pPp2 {
+  margin:6px 0px 0px 0px;
+  display:inline-block;
+  vertical-align: top;
+  font-size:18px;
+}
+
+#percentPreciseEdit {
+  width:65px;
+  height:30px;
+  display:inline-block;
+  background-color:#323232;
+  color:white;
+  font-size:20px;
+  border:none;
+  resize:none;
+  margin-top:5px;
+  padding:0;
+}
+
+#percentPreciseToggle {
+  width:140px;
+  height:15px;
+  display:inline-block;
+  cursor:pointer;
+}
+
+.percentPreciseToggleDefault {
+  background-color:#525050;
+}
+
+.percentPreciseToggleHighlight {
+  background-color:#616161;
+}
+
+#percentPreciseToggle p {
+  margin:1px 0px 1px 6px;
+  font-size:11px;
+  display: inline-block;
+  vertical-align:top;
+}
+
+#percentPreciseIcon {
+  display: inline-block;
+  width:15px;
+  height:15px;
+  vertical-align:top;
+  float:right;
+}
+
+.percentPreciseIconExpand {
+  background-image:url(assets/trajectory/expandsmall.png);
+}
+
+.percentPreciseIconCollapse {
+  background-image:url(assets/trajectory/collapsesmall.png);
 }
 
 #diSwitchContainer {
