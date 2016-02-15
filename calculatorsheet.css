@@ -91,7 +91,7 @@ textarea {
 
 #pagetitle h1 {
   display:inline-block;
-  margin:5px 0px 0px 30px;
+  margin:5px 0px 0px 10px;
   vertical-align:top;
 }
 
@@ -100,21 +100,118 @@ textarea {
   font-style:italic;
   margin:20px 0 0 10px;
   vertical-align:top;
+  font-size:13px;
+}
+
+#titlebarButtons {
+  width:auto;
+  height:45px;
+  float:right;
+  display:inline-block;
+}
+
+#tutorialbutton {
+  height:35px;
+  width:125px;
+  color:white;
+  display:inline-block;
+  border-radius:5px;
+  margin-top:5px;
+  margin-left:15px;
+  vertical-align:top;
+  position:relative;
+  cursor:pointer;
+}
+
+#tutorialbutton p {
+  font-size:20px;
+  margin:5px 5px;
+  text-align:center;
+  display:inline-block;
+  vertical-align:top;
+}
+
+.tutorialbuttondefault {
+  background-color:#5092d7;
+}
+
+.tutorialbuttonhighlight {
+  background-color:#78c7ee;
+}
+
+#tutorialicon {
+  display:inline-block;
+  height:22px;
+  width:18px;
+  background-image:url(assets/trajectory/tuticon.png);
+  border-radius:5px;
+  margin:6px 0px 6px 5px;
+}
+
+#donatebutton {
+  height:35px;
+  width:110px;
+  color:white;
+  display:inline-block;
+  border-radius:5px;
+  margin-top:5px;
+  margin-right:20px;
+  vertical-align:top;
+  position:relative;
+  cursor:pointer;
+}
+
+#donatebutton p {
+  font-size:20px;
+  margin:5px 0px;
+  text-align:center;
+  display:inline-block;
+}
+
+.donatebuttondefault {
+  background-color:#52d750;
+}
+
+.donatebuttonhighlight {
+  background-color:#7aee78;
+}
+
+#dollarbox {
+  width:27px;
+  height:27px;
+  border-radius:15px;
+  background-color:#17a837;
+  display:inline-block;
+  margin:4px 5px 4px 5px;
+}
+
+#dollarbox p {
+  text-align:center;
+  margin:2px 0px 0px 8px;
+  font-weight:bold;
+}
+
+#versionButtonContainer {
+  width:200px;
+  height:45px;
+  display:inline-block;
+  background-color:#FFCA8F;
+  padding-right:30px;
 }
 
 .verButton {
   width:70px;
   height:30px;
-  background-color:#ffffff;
+  background-color:#Df9440;
   cursor:pointer;
   display:inline-block;
-  color:#D48B39;
+  color:#FFFFFF;
   opacity:0.4;
   border-radius:5px;
   text-align:center;
-  float:right;
   margin-top:7px;
-  margin-right:30px;
+
+  margin-left:30px;
 }
 
 .verButton p {
@@ -805,7 +902,8 @@ textarea
   color:white;
   resize:none;
   padding:0;
-  margin:15px 0px 15px 10px
+  margin:15px 0px 15px 10px;
+  text-align:right;
 }
 
 #middlecontrols {
@@ -1037,6 +1135,7 @@ textarea
   border:none;
   resize: none;
   padding:0;
+  text-align:right;
 }
 
 #percentButtonContainer {
@@ -1870,46 +1969,89 @@ textarea
   margin:14px 0px;
 }
 
+#topSideButtons {
+  width:140px;
+  height:100px;
+  display:inline-block;
+  vertical-align: top;
+}
+
+#blastzoneContainer {
+  width:140px;
+  height:50px;
+  display:inline-block;
+  background-color:#2f2f2f;
+  color:white;
+  vertical-align:top;
+}
+
+#blastzoneContainer p {
+  margin:0;
+  text-align:center;
+  font-size:14px;
+}
+
+#blastzoneMain {
+  width:140px;
+  height:20px;
+  display:inline-block;
+}
+
+#blastzoneMain p {
+  margin:0;
+  text-align:center;
+  font-size:10px;
+}
+
+#blastzoneMain p span {
+  color:#ffa8a8;
+  font-weight:bold;
+}
+
+
 #snapToSurfaceContainer {
   width:140px;
-  height:60px;
+  height:50px;
   display:inline-block;
   position:relative;
   text-align:center;
   vertical-align:top;
-  top:40px;
 }
 
 #stsRealButton {
   width:140px;
-  height:60px;
+  height:50px;
   position:absolute;
   cursor:pointer;
 }
 
 #stsVisual {
   width:140px;
-  height:60px;
+  height:50px;
   position:absolute;
 }
 
 #stsText {
   width:80px;
-  height:60px;
+  height:50px;
   background-color:#737373;
   display:inline-block;
   vertical-align:top;
 }
 
+#stsText p {
+  margin:8px 0px;
+}
+
 #stsSwitch {
   width:60px;
-  height:60px;
+  height:50px;
   display:inline-block;
   vertical-align:top;
 }
 
 #stsSwitch p {
-  margin:20px;
+  margin:15px 20px;
 }
 
 #fadeInContainer {
@@ -1937,7 +2079,7 @@ textarea
 #fiText {
   width:80px;
   height:45px;
-  background-color:#494949;
+  background-color:#3b3b3b;
   display:inline-block;
   vertical-align:top;
 }
@@ -1978,7 +2120,7 @@ textarea
 #djText {
   width:80px;
   height:45px;
-  background-color:#494949;
+  background-color:#3b3b3b;
   display:inline-block;
   vertical-align:top;
   font-size:13px;
@@ -1998,13 +2140,14 @@ textarea
 #ooHitstunTitle {
   height:20px;
   width:140px;
-  background-color:#494949;
+  background-color:#3b3b3b;
   text-align:center;
   vertical-align:top;
 }
 
 #ooHitstunTitle p {
-  margin: 2px 0px;
+  margin: 0px;
+  vertical-align:top;
 }
 
 .switchOn {
@@ -2280,7 +2423,7 @@ textarea
   width:100%;
   display:block;
   position:absolute;
-  z-index:21;
+  z-index:31;
 }
 
 #popoutOverlay {
@@ -2289,7 +2432,7 @@ textarea
   display:block;
   background-color:rgba(0, 0, 0, 0.5);
   position:absolute;
-  z-index:20;
+  z-index:30;
 }
 
 #popoutShare {
@@ -2313,6 +2456,30 @@ textarea
 
 #ppSTitle p {
   margin:25px 30px 10px 30px;
+}
+
+#ppSVid {
+  width:550px;
+  height:413px;
+  background-color:#1a1a1a;
+  display:inline-block;
+  margin:20px 0px 20px 20px;
+  border:5px solid #606060;
+  padding:10px 0px 10px 10px;
+}
+
+#ppSVidClose {
+  width:50px;
+  height:50px;
+  display:inline-block;
+  vertical-align:top;
+  cursor:pointer;
+  margin-top:20px;
+}
+
+#ppSVidClose p {
+  margin:0px 14px;
+  font-size:40px;
 }
 
 #ppSUrl {
