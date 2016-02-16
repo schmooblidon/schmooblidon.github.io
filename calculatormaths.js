@@ -1,4 +1,4 @@
-function Hit(percent, damage, growth, base, setKnockback, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt, tdiX, tdiY, fadeIn, doubleJump, sdix, sdiy, adix, adiy, meteorCancel, vcancel) {
+function Hit(percent, damage, growth, base, setKnockback, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt, tdiX, tdiY, fadeIn, doubleJump, sdix, sdiy, adix, adiy, meteorCancel, vcancel, grounded) {
 
     /******* Internal functions start *******/
 
@@ -143,9 +143,10 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
     }
 
     var meteorCancelled = false;
+    var stayGrounded = false;
 
     //Calculate position for every frame of hitstun
-    function knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump, sdiVector, asdiVector, trajectory, meteorCancel) {
+    function knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump, sdiVector, asdiVector, trajectory, meteorCancel, grounded) {
         var positions = [];
         var hPos = xPos;
         var vPos = yPos;
@@ -206,6 +207,10 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
             if (i == 0){
               hPos += sdiVector[0] + asdiVector[0];
               vPos += sdiVector[1] + asdiVector[1];
+              if (grounded && (verVelChar + verVelKB + asdiVector[1] < 0) && (trajectory <= 180 || trajectory == 361)){
+                stayGrounded = true;
+                break;
+              }
             }
             positions.push([hPos, vPos, horVelKB, verVelKB, horVelChar, verVelChar]);
         }
@@ -213,7 +218,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
         var hasDoubleJumped = false;
         var e = 0;
 
-        while (Math.abs(horVelKB) > 0.001 || Math.abs(verVelKB) > 0.001 || (meteorCancelled && extendedDisplay < 25)){
+        while ((Math.abs(horVelKB) > 0.001 || Math.abs(verVelKB) > 0.001 || (meteorCancelled && extendedDisplay < 25)) && !stayGrounded){
 
           i++;
 
@@ -355,7 +360,8 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
         return Math.floor(knockback * .4);
     }
 
-    function calculateSDI(x,y,type){
+    function calculateSDI(x,y,type,grounded){
+      //prompt(grounded);
       if (x < 0.2875 && x > -0.2875){
         x = 0;
       }
@@ -367,6 +373,9 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
       if (type == "a"){
         xDistance *= 0.5;
         yDistance *= 0.5;
+      }
+      else if (grounded && yDistance < 0){
+        yDistance = 0;
       }
       return [xDistance, yDistance];
     }
@@ -445,15 +454,19 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
 
     var verticalDecay = getVerticalDecay(angle);
 
-    var sdiVector = calculateSDI(sdix,sdiy,"s");
+    var sdiVector = calculateSDI(sdix,sdiy,"s",grounded);
 
-    var asdiVector = calculateSDI(adix,adiy,"a");
+    var asdiVector = calculateSDI(adix,adiy,"a",grounded);
 
-    this.positions = knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump, sdiVector, asdiVector, trajectory, meteorCancel);
+    this.positions = knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump, sdiVector, asdiVector, trajectory, meteorCancel, grounded);
 
     this.hitstun = hitstun;
 
+    this.knockback = knockback;
+
     this.meteorCancelled = meteorCancelled;
+
+    this.stayGrounded = stayGrounded;
 
     //Position on the last frame of hitstun. Not used yet, but potentially useful.
     //var endPosition = this.positions[this.positions.length - 1];

@@ -63,6 +63,7 @@ function trajectoryObject(){
   this.palette = 0;
   this.useFractionals = false;
   this.fractional = "00000";
+  this.grounded = true;
 }
 
 t = {};
@@ -254,7 +255,9 @@ function trajectoryHover(){
     t["t"+aT].mouseYMelee = (Math.round(((mouseY/heightRatio)-(bzTop*10+50))*-10))/100;
     $("#mPosX").val(t["t"+aT].mouseXMelee);
     $("#mPosY").val(t["t"+aT].mouseYMelee);
+
     if (t["t"+aT].trajFrozen == false){
+      t["t"+aT].grounded = false;
       if (snapping){
         //will have to do some more maths for slanted surfaces like yoshis
         for (i=0;i<surfaces[activeStage].length;i++){
@@ -300,6 +303,7 @@ function trajectoryHover(){
               else {
                 t["t"+aT].mouseYMelee = surfaces[activeStage][i][0][1];
               }
+              t["t"+aT].grounded = true;
             }
           }
         }
@@ -1805,7 +1809,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     yPos = t["t"+aT].mouseYMelee;
   }
 
-	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee,t["t"+aT].meteorCancel,t["t"+aT].vcancel);
+	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee,t["t"+aT].meteorCancel,t["t"+aT].vcancel,t["t"+aT].grounded);
 
 	t["t"+aT].curPositions = hit.positions;
   t["t"+aT].hitstun = hit.hitstun;
@@ -1830,6 +1834,24 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   //$("#trajGroup"+aT+" .framePos").css("fill","#25d041");
   var isKilled = false;
   var i = 0;
+
+  if (hit.stayGrounded && t["t"+aT].grounded){
+    if (hit.knockback >= 80){
+      //amsah tech
+
+      $(SVG("text")).attr("id","at"+aT).attr("class","at").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","black").prependTo("#trajGroup"+aT);
+      $("#at"+aT).append("AT");
+      $(SVG("circle")).attr("id","atCircle"+aT).attr("class","atCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+aT].palette][0]).attr("stroke",palettes[t["t"+aT].palette][0]).prependTo("#trajGroup"+aT);
+      $(SVG("circle")).attr("id","atCircle-t"+aT).attr("class","atCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+aT);
+    }
+    else {
+      //crouch cancel
+      $(SVG("text")).attr("id","cc"+aT).attr("class","cc").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","black").prependTo("#trajGroup"+aT);
+      $("#cc"+aT).append("CC");
+      $(SVG("circle")).attr("id","ccCircle"+aT).attr("class","ccCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+aT].palette][0]).attr("stroke",palettes[t["t"+aT].palette][0]).prependTo("#trajGroup"+aT);
+      $(SVG("circle")).attr("id","ccCircle-t"+aT).attr("class","ccCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+aT);
+    }
+  }
 
   while (!isKilled && i < hit.positions.length){
   	var x = hit.positions[i][0];
