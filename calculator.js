@@ -112,6 +112,78 @@ surfaces.fo = [[[-63.34755,0.00288],[63.34755,0.00288]],[[-14.25,42.75],[14.25,4
 snapping = true;
 centreOffset = [-bzLeft*10+50,bzTop*10+50];
 
+function changeHitboxVersions(newver){
+  //missing kirby, and sheik dthrow
+  if (newver == "PAL"){
+    chars.CF.fair.late.id0 = new hitbox(3,361,80,0,30,'Normal');
+    chars.CF.fair.late.id1 = new hitbox(3,361,80,0,30,'Normal');
+    chars.Fc.dair.late.id0 = new hitbox(9,361,100,0,20,'Normal');
+    chars.Fc.dair.late.id1 = new hitbox(9,361,100,0,20,'Normal');
+    chars.Fx.dsmash.id0 = new hitbox(13,30,65,0,20,'Normal');
+    chars.Fx.dsmash.id1 = new hitbox(13,30,65,0,20,'Normal');
+    chars.Fx.usmash.clean.id0 = new hitbox(17,80,108,0,26,'Normal');
+    chars.Fx.usmash.clean.id1 = new hitbox(17,80,108,0,26,'Normal');
+    chars.Fx.upSpecial.launch.id0 = new hitbox(12,80,60,0,60,'Flame');
+    chars.Gn.dair.id0 = new hitbox(21,270,100,0,40,'Electric');
+    chars.Gn.dair.id1 = new hitbox(21,270,100,0,40,'Electric');
+    chars.Gn.dair.id2 = new hitbox(21,270,100,0,40,'Electric');
+    chars.Gn.fair.id0 = new hitbox(17,361,80,0,40,'Normal');
+    chars.Gn.fair.id1 = new hitbox(17,361,80,0,40,'Normal');
+    chars.Gn.fair.id2 = new hitbox(17,361,80,0,40,'Normal');
+    chars.Lk.upSpecial.ground_late.id0 = new hitbox(5,361,100,0,55,'Slash');
+    chars.Lk.upSpecial.ground_late.id1 = new hitbox(5,361,100,0,55,'Slash');
+    chars.Lk.upSpecial.ground_late.id2 = new hitbox(5,361,100,0,55,'Slash');
+    chars.Ms.dair.id0 = new hitbox(13,270,70,0,40,'Slash');
+    chars.Sh.usmash.hit1.id0 = new hitbox(16,90,102,0,50,'Slash');
+    chars.Sh.usmash.hit1.id1 = new hitbox(16,90,102,0,50,'Slash');
+    chars.Sh.uair.clean.id0 = new hitbox(10,80,110,0,15,'Normal');
+    chars.Sh.uair.clean.id1 = new hitbox(10,80,110,0,15,'Normal');
+    chars.Sh.uair.late.id0 = new hitbox(8,70,110,0,10,'Normal');
+    chars.Sh.uair.late.id1 = new hitbox(8,70,110,0,10,'Normal');
+    chars.Ys.fsmash.id0 = new hitbox(17,361,98,0,32,'Normal');
+    chars.Ys.fsmash.id1 = new hitbox(17,361,98,0,32,'Normal');
+    chars.Ys.fsmash.id2 = new hitbox(17,361,98,0,32,'Normal');
+    chars.Ys.usmash.id0 = new hitbox(15,75,108,0,30,'Normal');
+    chars.Ys.usmash.id1 = new hitbox(15,75,108,0,30,'Normal');
+    chars.Ys.dair.id0 = new hitbox(3,270,90,0,5,'Normal');
+    chars.Ys.dair.id1 = new hitbox(3,270,90,0,5,'Normal');
+  }
+  else {
+    chars.CF.fair.late.id0 = new hitbox(6,361,80,0,35,'Normal');
+    chars.CF.fair.late.id1 = new hitbox(6,361,80,0,35,'Normal');
+    chars.Fc.dair.late.id0 = new hitbox(9,290,100,0,20,'Normal');
+    chars.Fc.dair.late.id1 = new hitbox(9,290,100,0,20,'Normal');
+    chars.Fx.dsmash.id0 = new hitbox(15,25,65,0,20,'Normal');
+    chars.Fx.dsmash.id1 = new hitbox(15,25,65,0,20,'Normal');
+    chars.Fx.usmash.clean.id0 = new hitbox(18,80,112,0,30,'Normal');
+    chars.Fx.usmash.clean.id1 = new hitbox(18,80,112,0,30,'Normal');
+    chars.Fx.upSpecial.launch.id0 = new hitbox(14,80,60,0,60,'Flame');
+    chars.Gn.dair.id0 = new hitbox(22,270,100,0,50,'Electric');
+    chars.Gn.dair.id1 = new hitbox(22,270,100,0,50,'Electric');
+    chars.Gn.dair.id2 = new hitbox(22,270,100,0,50,'Electric');
+    chars.Gn.fair.id0 = new hitbox(17,361,80,0,60,'Normal');
+    chars.Gn.fair.id1 = new hitbox(17,361,80,0,60,'Normal');
+    chars.Gn.fair.id2 = new hitbox(17,361,80,0,60,'Normal');
+    chars.Lk.upSpecial.ground_late.id0 = new hitbox(5,0,100,0,60,'Slash');
+    chars.Lk.upSpecial.ground_late.id1 = new hitbox(5,0,100,0,60,'Slash');
+    chars.Lk.upSpecial.ground_late.id2 = new hitbox(5,0,100,0,60,'Slash');
+    chars.Ms.dair.id0 = new hitbox(13,290,70,0,40,'Slash');
+    chars.Sh.usmash.hit1.id0 = new hitbox(17,90,105,0,50,'Slash');
+    chars.Sh.usmash.hit1.id1 = new hitbox(17,90,105,0,50,'Slash');
+    chars.Sh.uair.clean.id0 = new hitbox(12,80,120,0,15,'Normal');
+    chars.Sh.uair.clean.id1 = new hitbox(12,80,120,0,15,'Normal');
+    chars.Sh.uair.late.id0 = new hitbox(9,70,120,0,10,'Normal');
+    chars.Sh.uair.late.id1 = new hitbox(9,70,120,0,10,'Normal');
+    chars.Ys.fsmash.id0 = new hitbox(16,361,94,0,32,'Normal');
+    chars.Ys.fsmash.id1 = new hitbox(16,361,94,0,32,'Normal');
+    chars.Ys.fsmash.id2 = new hitbox(16,361,94,0,32,'Normal');
+    chars.Ys.usmash.id0 = new hitbox(14,75,108,0,26,'Normal');
+    chars.Ys.usmash.id1 = new hitbox(14,75,108,0,26,'Normal');
+    chars.Ys.dair.id0 = new hitbox(4,270,90,0,5,'Normal');
+    chars.Ys.dair.id1 = new hitbox(4,270,90,0,5,'Normal');
+  }
+}
+
 
 function deleteNonNumbers(text,allowNegative,allowPoint,allowZeros){
   var newtext = "";
@@ -830,6 +902,13 @@ function readQueryString(){
         }
 
         aT = p;
+        changeHitboxVersions(t["t"+aT].version);
+        if (t["t"+aT].cHName[2]){
+          t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[2]][t["t"+aT].cHName[3]];
+        }
+        else {
+                t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[3]];
+        }
         drawTrajectory();
         $("#trajAdd").before('<div id="trajBox'+p+'" class="trajBox"><div id="trajNum'+p+'" class="trajNum"><div class="trajFreeze freezeOn"></div><p>'+p+'</p></div><div id="trajColour'+p+'" class="trajColour"><div id="t'+p+'minicolour1" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][0]+'"></div><div id="t'+p+'minicolour2" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][1]+'"></div><div id="t'+p+'minicolour3" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][2]+'"></div></div><div id="trajLabel'+p+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+p+'" class="trajDelete"><p>x</p></div></div>');
         if (t["t"+p].hasLabel){
@@ -1399,6 +1478,8 @@ function swapOptions(){
       $("#NTSCButton").addClass("verButtonOn");
     }
 
+    changeHitboxVersions(t["t"+aT].version);
+
     $(".staleQbutton").removeClass("staleQon");
     for(n=0;n<t["t"+aT].staleQueue.length;n++){
       if (t["t"+aT].staleQueue[n]){
@@ -1708,8 +1789,9 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   }
   damage *= totalstale;
   if (charging){
-    damage *= 1 + (t["t"+aT].chargeF * (0.4/59));
+    damage *= 1 + (t["t"+aT].chargeF * (0.3671/60));
   }
+  $("#newDamageEdit").empty().append(damage.toPrecision(5));
   var xPos = 0;
   var yPos = 0;
   if (t["t"+aT].trajFrozen){
@@ -2224,11 +2306,11 @@ $(document).ready(function(){
   $(".chargingButton").mousedown(function() {
     var id = $(this).attr("id");
     chargingHold = setInterval(function() {
-      var curNum = parseInt($("#chargingNumberEdit").text());
+      var curNum = parseInt($("#chargingNumberEdit").val());
       if (id == "chargingPlus"){
         var newnum = curNum + 1;
-        if (newnum > 59){
-          newnum = 59;
+        if (newnum > 60){
+          newnum = 60;
         }
         t["t"+aT].chargeF = newnum;
       }
@@ -2239,7 +2321,7 @@ $(document).ready(function(){
         }
         t["t"+aT].chargeF = newnum;
       }
-      $("#chargingNumberEdit").empty().append(newnum);
+      $("#chargingNumberEdit").val(newnum);
       drawTrajectory();
     }, 50);
   }).bind("mouseup mouseleave", function() {
@@ -2387,6 +2469,14 @@ $(document).ready(function(){
       t["t"+aT].version = "NTSC";
     }
     $(this).addClass("verButtonOn");
+    swapOptions();
+    if (t["t"+aT].cHName[2]){
+      t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[2]][t["t"+aT].cHName[3]];
+    }
+    else {
+            t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[3]];
+    }
+
     drawTrajectory();
   });
 
@@ -2610,8 +2700,8 @@ $(document).ready(function(){
 
   $("#chargingNumberEdit").on("keyup blur", function() {
     var temp = deleteNonNumbers($(this).val(),false,false,false);
-    if (temp > 59){
-      temp = 59;
+    if (temp > 60){
+      temp = 60;
     }
     temp = Math.abs(temp);
     $(this).val(temp);

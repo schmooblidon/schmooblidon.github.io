@@ -906,6 +906,18 @@ textarea
   text-align:right;
 }
 
+#newDamage {
+  height:20px;
+  width:150px;
+  display:inline-block;
+}
+
+#newDamage p {
+  font-size:13px;
+  margin:0;
+  text-align:center;
+}
+
 #middlecontrols {
   width:4580px;
   height:3388px;

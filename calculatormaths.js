@@ -198,7 +198,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
                 verVelChar -= characters[character]["gravity"];
             }
             else if (i === gravityFrames) {
-                verVelChar -= (lastGravityFrame * characters[character]["gravity"]);
+                verVelChar -= (lastGravityFrame);
             }
 
             hPos = hPos + horVelChar + horVelKB;
@@ -250,7 +250,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
               verVelChar -= characters[character]["gravity"];
           }
           else if (i == gravityFrames) {
-              verVelChar -= (lastGravityFrame * characters[character]["gravity"]);
+              verVelChar -= (lastGravityFrame);
           }
 
           if (meteorCancelled){
