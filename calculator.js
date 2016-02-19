@@ -64,6 +64,9 @@ function trajectoryObject(){
   this.useFractionals = false;
   this.fractional = "00000";
   this.grounded = true;
+  this.knockback = 0;
+  this.yDisplacement = 0;
+  this.newDamage = 3;
 }
 
 t = {};
@@ -307,6 +310,12 @@ function trajectoryHover(){
             }
           }
         }
+      }
+      if (t["t"+aT].grounded){
+        $("#groundedBox").show();
+      }
+      else {
+        $("#groundedBox").hide();
       }
       drawTrajectory(true);
     }
@@ -631,6 +640,7 @@ function changeUserStick(x,y,type,di){
     }
     $("#"+type+"diDiAngle").empty().append(Math.round(diAngle));
     $("#"+type+"diUser").show().css({
+        "-webkit-transform":"rotate("+(diAngle * -1)+"deg)",
         "-moz-transform":"rotate("+(diAngle * -1)+"deg)",
         "-ms-transform":"rotate("+(diAngle * -1)+"deg)",
         "-o-transform":"rotate("+(diAngle * -1)+"deg)",
@@ -809,6 +819,7 @@ function readQueryString(){
               t["t"+p].doubleJump = Boolean(parseInt(temp[6]));
               t["t"+p].vcancel = Boolean(parseInt(temp[7]));
               t["t"+p].useFractionals = Boolean(parseInt(temp[8]));
+              t["t"+p].grounded = Boolean(parseInt(temp[9]));
               break;
             case "j":
               t["t"+p].chargeF = parseInt(temp);
@@ -1026,7 +1037,8 @@ function writeQueryString(){
             var temp7 = ~~t["t"+i].doubleJump;
             var temp8 = ~~t["t"+i].vcancel;
             var temp9 = ~~t["t"+i].useFractionals;
-            temp = temp1+temp2+temp3+temp4+temp5+temp6+temp7+temp8+temp9;
+            var temp10 = ~~t["t"+i].grounded;
+            temp = temp1+temp2+temp3+temp4+temp5+temp6+temp7+temp8+temp9+temp10;
             break;
           case 9:
             temp = t["t"+i].chargeF;
@@ -1152,6 +1164,7 @@ function drawAngle(){
       }
   }
   $("#tdiLAngle").css({
+    "-webkit-transform":"rotate("+(ang * -1)+"deg)",
     "-moz-transform":"rotate("+(ang * -1)+"deg)",
     "-ms-transform":"rotate("+(ang * -1)+"deg)",
     "-o-transform":"rotate("+(ang * -1)+"deg)",
@@ -1159,6 +1172,7 @@ function drawAngle(){
   });
 
   $("#tdiPAngle").css({
+    "-webkit-transform":"rotate("+(ang * -1)+"deg)",
     "-moz-transform":"rotate("+(ang * -1)+"deg)",
     "-ms-transform":"rotate("+(ang * -1)+"deg)",
     "-o-transform":"rotate("+(ang * -1)+"deg)",
@@ -1474,6 +1488,12 @@ function trajBoxClick(){
 }
 
 function swapOptions(){
+    if (t["t"+aT].grounded){
+      $("#groundedBox").show();
+    }
+    else {
+      $("#groundedBox").hide();
+    }
     $(".verButton").removeClass("verButtonOn");
     if (t["t"+aT].version == "PAL"){
       $("#PALButton").addClass("verButtonOn");
@@ -1795,6 +1815,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   if (charging){
     damage *= 1 + (t["t"+aT].chargeF * (0.3671/60));
   }
+  t["t"+aT].newDamage = damage;
   $("#newDamageEdit").empty().append(damage.toPrecision(5));
   var xPos = 0;
   var yPos = 0;
@@ -1813,6 +1834,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
 
 	t["t"+aT].curPositions = hit.positions;
   t["t"+aT].hitstun = hit.hitstun;
+  t["t"+aT].knockback = hit.knockback;
   if (hit.meteorCancelled){
     t["t"+aT].hitstun = 8;
   }
@@ -1836,6 +1858,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   var i = 0;
 
   if (hit.stayGrounded && t["t"+aT].grounded){
+    t["t"+aT].yDisplacement = hit.yDisplacement;
     if (hit.knockback >= 80){
       //amsah tech
 
@@ -1931,8 +1954,22 @@ function trajPosInfo(){
 
   $(".start-t").hover(function(){
     var id = parseInt($(this).attr("id").substr(7,8));
+    var kb = t["t"+id].knockback.toPrecision(4);
+    if (t["t"+id].knockback < 80){
+      kb += " (No Tumble)";
+    }
+    else {
+      kb += " (Tumble)";
+    }
+    var hitlag = Math.floor(t["t"+aT].newDamage * (1/3) + 3);
+    if (t["t"+aT].curHitbox.effect == "Electric"){
+      hitlag = Math.floor(hitlag * 1.5);
+    }
+    if (t["t"+aT].crouching){
+      hitlag = Math.floor(hitlag * (2/3));
+    }
     $("#start"+id).css("stroke-width",20);
-    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:40px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'</div>');
+    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+aT].hitstun+'<br>KB: '+kb+'</div>');
     var frameposy = mouseY;
     var frameposx = mouseX;
     if (mouseY + trajOffset.top > windheight){
@@ -1966,6 +2003,52 @@ function trajPosInfo(){
 
   }, function(){
     $(".kill").css("stroke-width",0);
+    $(".framePosInfoBox").remove();
+  });
+
+  $(".ccCircle-t").hover(function(){
+    var id = parseInt($(this).attr("id").substr(10,11));
+    var yD = t["t"+id].yDisplacement.toPrecision(6);
+    if (yD.length > 7){
+      yD = yD.substr(0,8);
+    }
+    $("#ccCircle"+id).css("stroke-width",20);
+    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:45px"><span style="font-size:13px">Crouch Cancelled</span><br>Knockback: '+t["t"+id].knockback.toPrecision(7)+'<br>Y-Displacement:'+yD+'</div>');
+    var frameposy = mouseY;
+    var frameposx = mouseX;
+    if (mouseY + trajOffset.top > windheight){
+      frameposy = windheight;
+    }
+    if (mouseX + trajOffset.left + 160 > windwidth){
+      frameposx = windwidth - trajOffset.left - 160;
+    }
+    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+
+  }, function(){
+    $(".ccCircle").css("stroke-width",0);
+    $(".framePosInfoBox").remove();
+  });
+
+  $(".atCircle-t").hover(function(){
+    var id = parseInt($(this).attr("id").substr(10,11));
+    var yD = t["t"+id].yDisplacement.toPrecision(6);
+    if (yD.length > 7){
+      yD = yD.substr(0,8);
+    }
+    $("#atCircle"+id).css("stroke-width",20);
+    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:45px"><span style="font-size:13px">Amsah Techable</span><br>Knockback: '+t["t"+id].knockback.toPrecision(7)+'<br>Y-Displacement:'+yD+'</div>');
+    var frameposy = mouseY;
+    var frameposx = mouseX;
+    if (mouseY + trajOffset.top > windheight){
+      frameposy = windheight;
+    }
+    if (mouseX + trajOffset.left + 160 > windwidth){
+      frameposx = windwidth - trajOffset.left - 160;
+    }
+    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+
+  }, function(){
+    $(".atCircle").css("stroke-width",0);
     $(".framePosInfoBox").remove();
   });
 }
