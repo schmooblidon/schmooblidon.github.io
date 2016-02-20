@@ -29,6 +29,66 @@ textarea {
   border:none;
 }
 
+.effect-Normal {
+  color:#b8af99;
+  font-weight:bold;
+}
+
+.effect-Electric {
+  color:#98f5d3;
+  font-weight:bold;
+}
+
+.effect-Slash {
+  color:#c8c8c8;
+  font-weight:bold;
+}
+
+.effect-Darkness {
+  color:#9e81b3;
+  font-weight:bold;
+}
+
+.effect-Flame {
+  color:#f6a881;
+  font-weight:bold;
+}
+
+.effect-Sleep {
+  color:#ffa8fe;
+  font-weight:bold;
+}
+
+.effect-Freezing {
+  color:#88c9ff;
+  font-weight:bold;
+}
+
+.effect-Stun {
+  color:#f6ff8b;
+  font-weight:bold;
+}
+
+.effect-Inert {
+  color:#ffffff;
+  font-weight:bold;
+}
+
+.effect-Grab {
+  color:#f091ff;
+  font-weight:bold;
+}
+
+#miniAngle {
+  display:inline-block;
+  width:15px;
+  height:15px;
+  background-image:url(assets/trajectory/miniangle.png);
+  position:absolute;
+  top:18px;
+  left:75px;
+}
+
 .colourselectbox {
   width:120px;
   height:180px;
@@ -840,6 +900,7 @@ textarea
 	display:inline-block;
 	background-color:#000000;
 	font-size:12px;
+  position:relative;
 }
 
 .idstats p {
@@ -1355,7 +1416,7 @@ textarea
   width:130px;
   margin-top:64px;
   position:absolute;
-
+  -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
   -ms-transform: rotate(0deg);
   -o-transform: rotate(0deg);
@@ -1403,7 +1464,7 @@ textarea
   width:130px;
   margin-top:64px;
   position:absolute;
-
+  -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
   -ms-transform: rotate(0deg);
   -o-transform: rotate(0deg);
@@ -1617,7 +1678,7 @@ textarea
   width:130px;
   margin-top:64px;
   position:absolute;
-
+  -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
   -ms-transform: rotate(0deg);
   -o-transform: rotate(0deg);
@@ -1754,7 +1815,7 @@ textarea
   width:130px;
   margin-top:64px;
   position:absolute;
-
+  -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
   -ms-transform: rotate(0deg);
   -o-transform: rotate(0deg);
@@ -2586,6 +2647,7 @@ textarea
 }
 
 .controlarrowrotate {
+  -webkit-transform: rotate(180deg);
   -moz-transform: rotate(180deg);
   -ms-transform: rotate(180deg);
   -o-transform: rotate(180deg);

@@ -1370,6 +1370,14 @@ function attackClick(){
     else {
       for (k=0;k<keys2.length;k++){
         $(this).after('<div id="'+keys2[k]+'" class="subattack '+id2+' '+id+'"><div class="expandsubattack expandfalse"></div><p>'+keys2[k]+'</p></div>');
+        if (keys2[k].length > 10){
+          if (keys2[k].length > 15){
+            $("#"+keys2[k]).children("p").css("font-size","9px");
+          }
+          else {
+            $("#"+keys2[k]).children("p").css("font-size","12px");
+          }
+        }
       }
       $(".subattack").hover(function(){
         $(this).toggleClass("subattackhighlight");
@@ -1422,7 +1430,21 @@ function idClick(){
       t["t"+aT].cHName[2] = id3;
       t["t"+aT].cHName[3] = id4;
       var hb = chars[id][id2][id3][id4];
-      $(this).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+      $(this).after('<div id="'+id4+'stats" class="idstats"><div id="miniAngle"></div><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<span id="angleText" style="font-size:8px"></span><br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: <span class="effect-'+hb.effect+'">'+hb.effect+'</span></p></div>');
+      if (hb.angle == 361){
+        $("#angleText").append(" (Sakurai)");
+        $("#miniAngle").css({"background-image":"url(assets/trajectory/sakurai.png)",
+        "left":"120px"});
+      }
+      else {
+        $("#miniAngle").css({
+            "-webkit-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-moz-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-ms-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-o-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "transform":"rotate("+(hb.angle * -1)+"deg)"
+        });
+      }
       t["t"+aT].curHitbox = hb;
       if (id2.substr(1,id2.length) == "smash"){
         charging = true;
@@ -1454,7 +1476,21 @@ function idClick2(){
       t["t"+aT].cHName[2] = false;
       t["t"+aT].cHName[3] = id4;
       var hb = chars[id][id2][id4];
-      $(this).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+      $(this).after('<div id="'+id4+'stats" class="idstats"><div id="miniAngle"></div><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<span id="angleText" style="font-size:8px"></span><br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: <span class="effect-'+hb.effect+'">'+hb.effect+'</span></p></div>');
+      if (hb.angle == 361){
+        $("#angleText").append(" (Sakurai)");
+        $("#miniAngle").css({"background-image":"url(assets/trajectory/sakurai.png)",
+        "left":"120px"});
+      }
+      else {
+        $("#miniAngle").css({
+            "-webkit-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-moz-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-ms-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-o-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "transform":"rotate("+(hb.angle * -1)+"deg)"
+        });
+      }
       t["t"+aT].curHitbox = hb;
       if (id2.substr(1,id2.length) == "smash"){
         charging = true;
@@ -1635,7 +1671,21 @@ function swapOptions(){
       id4 = t["t"+aT].cHName[3];
       $("#"+id4).addClass("idcurrent");
       hb = t["t"+aT].curHitbox;
-      $("#"+id4).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+      $("#"+id4).after('<div id="'+id4+'stats" class="idstats"><div id="miniAngle"></div><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<span id="angleText" style="font-size:8px"></span><br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: <span class="effect-'+hb.effect+'">'+hb.effect+'</span></p></div>');
+      if (hb.angle == 361){
+        $("#angleText").append(" (Sakurai)");
+        $("#miniAngle").css({"background-image":"url(assets/trajectory/sakurai.png)",
+        "left":"120px"});
+      }
+      else {
+        $("#miniAngle").css({
+            "-webkit-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-moz-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-ms-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-o-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "transform":"rotate("+(hb.angle * -1)+"deg)"
+        });
+      }
       if (id2.substr(1,id2.length) == "smash"){
         charging = true;
         $("#disableCharge").hide();
@@ -1649,6 +1699,14 @@ function swapOptions(){
     else {
       for (k=0;k<keys2.length;k++){
         $("#"+id2).after('<div id="'+keys2[k]+'" class="subattack '+id2+' '+id+'"><div class="expandsubattack expandfalse"></div><p>'+keys2[k]+'</p></div>').children(".expandattack").removeClass("expandfalse").addClass("expandtrue");
+        if (keys2[k].length > 10){
+          if (keys2[k].length > 15){
+            $("#"+keys2[k]).children("p").css("font-size","9px");
+          }
+          else {
+            $("#"+keys2[k]).children("p").css("font-size","12px");
+          }
+        }
       }
       $(".subattack").hover(function(){
         $(this).toggleClass("subattackhighlight");
@@ -1666,7 +1724,21 @@ function swapOptions(){
       id4 = t["t"+aT].cHName[3];
       $("#"+id4).addClass("idcurrent");
       hb = t["t"+aT].curHitbox;
-      $("#"+id4).after('<div id="'+id4+'stats" class="idstats"><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: '+hb.effect+'</p></div>');
+      $("#"+id4).after('<div id="'+id4+'stats" class="idstats"><div id="miniAngle"></div><p>Damage: '+hb.dmg+'<br>Angle: '+hb.angle+'<span id="angleText" style="font-size:8px"></span><br>KB Growth: '+hb.kg+'<br>Set Knockback: '+hb.wbk+'<br>Base Knockback: '+hb.bk+'<br>Effect: <span class="effect-'+hb.effect+'">'+hb.effect+'</span></p></div>');
+      if (hb.angle == 361){
+        $("#angleText").append(" (Sakurai)");
+        $("#miniAngle").css({"background-image":"url(assets/trajectory/sakurai.png)",
+        "left":"120px"});
+      }
+      else {
+        $("#miniAngle").css({
+            "-webkit-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-moz-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-ms-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "-o-transform":"rotate("+(hb.angle * -1)+"deg)",
+            "transform":"rotate("+(hb.angle * -1)+"deg)"
+        });
+      }
       t["t"+aT].curHitbox = hb;
       if (id2.substr(1,id2.length) == "smash"){
         charging = true;
