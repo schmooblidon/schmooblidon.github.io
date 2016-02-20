@@ -1883,6 +1883,42 @@ textarea
   background-image:url(assets/trajectory/clock.png);
 }
 
+#attemptCCcontainer {
+  width:140px;
+  height:40px;
+  display:inline-block;
+  position:relative;
+  cursor:pointer;
+}
+
+#attemptCCDisable {
+  width:140px;
+  height:40px;
+  background-color:rgba(0, 0, 0, 0.7);
+  position:absolute;
+  display:none;
+}
+
+.attemptButton {
+  width:140px;
+  height:40px;
+  display:inline-block;
+  background-color:#2f2f2f;
+  color:white;
+  cursor:pointer;
+}
+
+.attemptButton p {
+  text-align: center;
+  margin:2px 0px;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.attemptButton:hover{
+  background-color:#525252;
+}
+
 #crouchingContainer {
   width:140px;
   height:45px;

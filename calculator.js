@@ -313,9 +313,11 @@ function trajectoryHover(){
       }
       if (t["t"+aT].grounded){
         $("#groundedBox").show();
+        $("#attemptCCDisable").hide();
       }
       else {
         $("#groundedBox").hide();
+        $("#attemptCCDisable").show();
       }
       drawTrajectory(true);
     }
@@ -581,6 +583,7 @@ function getStickAngle(x,y){
 
 function changeUserStick(x,y,type,di){
   diAngle = di || getStickAngle(x,y);
+
   if (diAngle == "deadzone"){
     $("#"+type+"diUser").hide();
     $("#"+type+"diUserCentre").show();
@@ -979,7 +982,7 @@ function readQueryString(){
 
 function writeQueryString(){
   var qstring = "?";
-  qstring += "stage="+activeStage+"&";
+  qstring += "version=100&stage="+activeStage+"&";
   if ($("#trajTitle").hasClass("activeTitle")){
     var tt = makeTextCompatible(0);
     var to = $("#labelBox0").css("opacity");
@@ -1526,9 +1529,11 @@ function trajBoxClick(){
 function swapOptions(){
     if (t["t"+aT].grounded){
       $("#groundedBox").show();
+      $("#attemptCCDisable").hide();
     }
     else {
       $("#groundedBox").hide();
+      $("#attemptCCDisable").show();
     }
     $(".verButton").removeClass("verButtonOn");
     if (t["t"+aT].version == "PAL"){
@@ -2961,6 +2966,57 @@ $(document).ready(function(){
     drawTrajectory();
     diOffset = $("#"+activeDI+"diSelector").offset();
   });
+
+  $("#attemptCC").click(function(){
+    $("#cSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+    t["t"+aT].crouch = true;
+    t["t"+aT].tdiMouseXMelee = 0;
+    t["t"+aT].tdiMouseYMelee = -1;
+    changeUserStick(0,-1,"t");
+    //prompt(t["t"+aT].tdiMouseXReal);
+    $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
+    $("#tdiXInput").empty().append("0.0000");
+    $("#tdiYInput").empty().append("-1.0000");
+    diPointerFrozen.t = true;
+    $("#tdiSelector").children(".diFreeze").removeClass("freezeOff").addClass("freezeOn");
+
+    t["t"+aT].adiMouseXMelee = 0;
+    t["t"+aT].adiMouseYMelee = -1;
+    changeUserStick(0,-1,"a");
+    $("#adiSvgPointer").attr("cx",t["t"+aT].adiMouseXReal/(130/161)).attr("cy",t["t"+aT].adiMouseYReal/(130/161));
+    $("#adiXInput").empty().append("0.0000");
+    $("#adiYInput").empty().append("-1.0000");
+    diPointerFrozen.a = true;
+    $("#adiSelector").children(".diFreeze").removeClass("freezeOff").addClass("freezeOn");
+
+    drawTrajectory();
+  });
+
+  /*$("#attemptAT").click(function(){
+    $("#cSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+    t["t"+aT].crouch = false;
+    if ((t["t"+aT].curHitbox.angle > 0 && t["t"+aT].curHitbox.angle < 180) || t["t"+aT].curHitbox.angle == 361){
+
+    t["t"+aT].tdiMouseXMelee = 0;
+    t["t"+aT].tdiMouseYMelee = -1;
+    changeUserStick(0,-1,"t");
+    //prompt(t["t"+aT].tdiMouseXReal);
+    $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
+    $("#tdiXInput").empty().append("0.0000");
+    $("#tdiYInput").empty().append("-1.0000");
+    diPointerFrozen.t = true;
+    $("#tdiSelector").children(".diFreeze").removeClass("freezeOff").addClass("freezeOn");
+
+
+    t["t"+aT].adiMouseXMelee = 0;
+    t["t"+aT].adiMouseYMelee = -1;
+    changeUserStick(0,-1,"a");
+    $("#adiSvgPointer").attr("cx",t["t"+aT].adiMouseXReal/(130/161)).attr("cy",t["t"+aT].adiMouseYReal/(130/161));
+    $("#adiXInput").empty().append("0.0000");
+    $("#adiYInput").empty().append("-1.0000");
+    diPointerFrozen.a = true;
+    $("#adiSelector").children(".diFreeze").removeClass("freezeOff").addClass("freezeOn");
+  });*/
 
   $("#rcontrolsOptions").perfectScrollbar();
   $("#attackscroll").perfectScrollbar();
