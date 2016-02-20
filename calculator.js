@@ -1539,6 +1539,12 @@ function swapOptions(){
     }
 
     changeHitboxVersions(t["t"+aT].version);
+    if (t["t"+aT].cHName[2]){
+      t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[2]][t["t"+aT].cHName[3]];
+    }
+    else {
+            t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[3]];
+    }
 
     $(".staleQbutton").removeClass("staleQon");
     for(n=0;n<t["t"+aT].staleQueue.length;n++){
@@ -2647,13 +2653,6 @@ $(document).ready(function(){
     }
     $(this).addClass("verButtonOn");
     swapOptions();
-    if (t["t"+aT].cHName[2]){
-      t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[2]][t["t"+aT].cHName[3]];
-    }
-    else {
-            t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[3]];
-    }
-
     drawTrajectory();
   });
 
