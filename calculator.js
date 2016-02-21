@@ -1558,7 +1558,7 @@ function swapOptions(){
       }
     }
 
-    $("#chargingNumberEdit").empty().append(t["t"+aT].chargeF);
+    $("#chargingNumberEdit").val(t["t"+aT].chargeF);
 
     $(".posButton").removeClass("posButtonSelected");
     if (t["t"+aT].reverse){
@@ -1584,37 +1584,51 @@ function swapOptions(){
       $(this).children("p").empty().append("Open Fractionals");
     }
     diOffset = $("#"+activeDI+"diSelector").offset();
+    var type;
+    for (b=0;b<3;b++){
+      if (b == 0){
+        type = "t";
+      }
+      else if (b == 1){
+        type = "s";
+      }
+      else if (b == 2){
+        type = "a";
+      }
 
-    $("#tdiSvgPointer").attr("cx",t["t"+aT].tdiMouseXReal/(130/161)).attr("cy",t["t"+aT].tdiMouseYReal/(130/161));
+      $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
 
-    var x = t["t"+aT].tdiMouseXMelee;
-    if (x >= 1 || x <= -1){
-      x = x.toPrecision(5);
+      var x = t["t"+aT][type+"diMouseXMelee"];
+      if (x >= 1 || x <= -1){
+        x = x.toPrecision(5);
+      }
+      else if (x >= 0.099 || x <= -0.099){
+        x = x.toPrecision(4);
+      }
+      else if (x == 0){
+        x = "0.0000";
+      }
+      else {
+        x = x.toPrecision(3);
+      }
+      $("#"+type+"diXInput").empty().append(x);
+      var y = t["t"+aT][type+"diMouseYMelee"];
+      if (y >= 1 || y <= -1){
+        y = y.toPrecision(5);
+      }
+      else if (y >= 0.099 || y <= -0.099){
+        y = y.toPrecision(4);
+      }
+      else if (y == 0){
+        y = "0.0000";
+      }
+      else {
+         y = y.toPrecision(3);
+      }
+      $("#"+type+"diYInput").empty().append(y);
     }
-    else if (x >= 0.099 || x <= -0.099){
-      x = x.toPrecision(4);
-    }
-    else if (x == 0){
-      x = "0.0000";
-    }
-    else {
-      x = x.toPrecision(3);
-    }
-    $("#tdiXInput").empty().append(x);
-    var y = t["t"+aT].tdiMouseYMelee;
-    if (y >= 1 || y <= -1){
-      y = y.toPrecision(5);
-    }
-    else if (y >= 0.099 || y <= -0.099){
-      y = y.toPrecision(4);
-    }
-    else if (y == 0){
-      y = "0.0000";
-    }
-    else {
-       y = y.toPrecision(3);
-    }
-    $("#tdiYInput").empty().append(y);
+
+
 
     if (t["t"+aT].crouch){
       $("#cSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
