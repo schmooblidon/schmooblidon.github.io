@@ -1626,7 +1626,11 @@ function swapOptions(){
          y = y.toPrecision(3);
       }
       $("#"+type+"diYInput").empty().append(y);
+
+      changeUserStick(t["t"+aT][type+"diMouseXMelee"], t["t"+aT][type+"diMouseYMelee"], type);
     }
+
+
 
 
 
