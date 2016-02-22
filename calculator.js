@@ -2794,7 +2794,7 @@ $(document).ready(function(){
   });
 
   $("#tutorialbutton").click(function(){
-    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="ppSVid"><iframe class="vid1" width="550" height="413" src="https://www.youtube.com/embed/TtiDd5cQWJc" frameborder="0" allowfullscreen></iframe></div><div id="ppSVidClose" class="ppSClose"><p>x</p></div></div></div>');
+    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="ppSVid"><iframe width="420" height="315" src="https://www.youtube.com/embed/3NFhZRdIDtc" frameborder="0" allowfullscreen></iframe></div><div id="ppSVidClose" class="ppSClose"><p>x</p></div></div></div>');
     $("#ppSVidClose").unbind("mouseover click");
     $("#ppSVidClose").hover(function(){
       $(this).toggleClass("ppSCloseHighlight");
