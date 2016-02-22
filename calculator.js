@@ -2062,15 +2062,15 @@ function trajPosInfo(){
     else {
       kb += " (Tumble)";
     }
-    var hitlag = Math.floor(t["t"+aT].newDamage * (1/3) + 3);
-    if (t["t"+aT].curHitbox.effect == "Electric"){
+    var hitlag = Math.floor(t["t"+id].newDamage * (1/3) + 3);
+    if (t["t"+id].curHitbox.effect == "Electric"){
       hitlag = Math.floor(hitlag * 1.5);
     }
-    if (t["t"+aT].crouching){
+    if (t["t"+id].crouching){
       hitlag = Math.floor(hitlag * (2/3));
     }
     $("#start"+id).css("stroke-width",20);
-    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+aT].hitstun+'<br>KB: '+kb+'</div>');
+    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'</div>');
     var frameposy = mouseY;
     var frameposx = mouseX;
     if (mouseY + trajOffset.top > windheight){
