@@ -71,7 +71,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
         }
 
         if (trajectory == 361) {
-            if (knockback < 32) {
+            if (knockback < 32.1) {
               if (reverse){
                 trajectory = 180;
               }
@@ -80,7 +80,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
               }
               sakurai = 0;
             }
-            else if (knockback > 32.1) {
+            else if (knockback >= 32.1) {
               if (reverse){
                 trajectory = 136;
               }
