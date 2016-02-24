@@ -255,7 +255,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
                 verVelChar -= characters[character]["gravity"];
             }
             else if (i === gravityFrames) {
-                verVelChar -= (lastGravityFrame);
+                verVelChar -= lastGravityFrame;
             }
           }
 
@@ -282,7 +282,6 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
 
         while ((Math.abs(horVelKB) > 0.001 || Math.abs(verVelKB) > 0.001 || (meteorCancelled && extendedDisplay < 25)) && !stayGrounded){
 
-          i++;
           if (reduceByTraction){
             if (horVelKB != 0){
               if (horVelKB > 0){
@@ -334,7 +333,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
               verVelChar -= characters[character]["gravity"];
           }
           else if (i == gravityFrames) {
-              verVelChar -= (lastGravityFrame);
+              verVelChar -= lastGravityFrame;
           }
 
           if (meteorCancelled){
@@ -411,6 +410,7 @@ function Hit(percent, damage, growth, base, setKnockback, trajectory, character,
             }
           }
         }
+          i++;
 
           hPos = hPos + horVelChar + horVelKB;
           vPos = vPos + verVelChar + verVelKB;
