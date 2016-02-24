@@ -151,6 +151,8 @@ function changeHitboxVersions(newver){
     chars.Ys.usmash.id1 = new hitbox(15,75,108,0,30,'Normal');
     chars.Ys.dair.id0 = new hitbox(3,270,90,0,5,'Normal');
     chars.Ys.dair.id1 = new hitbox(3,270,90,0,5,'Normal');
+    chars.Kb.dash.clean.id0 = new hitbox(9,105,50,0,70,'Flame');
+    chars.Kb.dash.late.id0 = new hitbox(5,105,50,0,50,'Flame');
   }
   else {
     chars.CF.fair.late.id0 = new hitbox(6,361,80,0,35,'Normal');
@@ -185,6 +187,8 @@ function changeHitboxVersions(newver){
     chars.Ys.usmash.id1 = new hitbox(14,75,108,0,26,'Normal');
     chars.Ys.dair.id0 = new hitbox(4,270,90,0,5,'Normal');
     chars.Ys.dair.id1 = new hitbox(4,270,90,0,5,'Normal');
+    chars.Kb.dash.clean.id0 = new hitbox(8,105,66,0,70,'Flame');
+    chars.Kb.dash.late.id0 = new hitbox(5,105,66,0,50,'Flame');
   }
 }
 
