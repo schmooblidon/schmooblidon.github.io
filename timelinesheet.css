@@ -113,6 +113,29 @@
 	z-index:5;
 }
 
+#sounddropdown {
+	width:150px;
+	height:345px;
+	position:absolute;
+	background-color:#262626;
+	left:100px;
+	top:-55px;
+	z-index:5;
+}
+
+.soundselect {
+	height:15px;
+	width:200px;
+	display:inline-block;
+	background-color:#262626;
+}
+
+.soundselect p {
+	display:inline-block;
+	margin:0;
+	font-size:13px;
+}
+
 #timelinetitle {
 	line-height:0px;
 	vertical-align: top;
@@ -126,6 +149,10 @@
 }
 
 .buttonselecthighlight {
+	background-color:#4a4a4a;
+}
+
+.soundselecthighlight {
 	background-color:#4a4a4a;
 }
 
@@ -248,6 +275,16 @@
 	vertical-align: top;
 }
 
+.tkeycontainer {
+	display:inline-block;
+	height:70px;
+	width:100px;
+	background-color:#4a4a4a;
+	border:1px solid black;
+	cursor:pointer;
+	position: relative;
+}
+
 .tkey {
 	display:inline-block;
 	height:70px;
@@ -255,6 +292,33 @@
 	background-color:#4a4a4a;
 	border:1px solid black;
 	cursor:pointer;
+}
+
+.tsound {
+	display:inline-block;
+	position:absolute;
+	bottom:0px;
+	background-color:rgba(255, 255, 255, 0.2);
+	height:15px;
+	width:100px;
+}
+
+.soundtext {
+	display:inline-block;
+	margin:0;
+	font-size:8px;
+}
+
+.tsoundicon {
+	height:11px;
+	width:12px;
+	display:inline-block;
+	margin:2px;
+	background-image:url(assets/soundicon.png);
+}
+
+.tsoundhighlight {
+	background-color:rgba(255, 255, 255, 0.5);
 }
 
 .tkeyhighlight {

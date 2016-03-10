@@ -28,6 +28,34 @@ inuse[10] = ["du", 0];
 inuse[11] = ["dr", 0];
 inuse[12] = ["dd", 0];
 inuse[13] = ["dl", 0];
+sounds = [23,23,23,23,23,23,23,23,23,23,23,23,23,23];
+
+timelinesounds = [];
+
+soundfiles = [];
+soundfiles[0] = "land";
+soundfiles[1] = "tech";
+soundfiles[2] = "roll";
+soundfiles[3] = "clank";
+soundfiles[4] = "powershield";
+soundfiles[5] = "laser";
+soundfiles[6] = "fireball";
+soundfiles[7] = "foxshine";
+soundfiles[8] = "foxshinereflect";
+soundfiles[9] = "falcoshine";
+soundfiles[10] = "falcoshinereflect";
+soundfiles[11] = "sheiktu";
+soundfiles[12] = "marthgrabledge";
+soundfiles[13] = "peachjump";
+soundfiles[14] = "peachturnippull";
+soundfiles[15] = "falcondodge";
+soundfiles[16] = "falconraptor";
+soundfiles[17] = "doctornado";
+soundfiles[18] = "docpillbounce";
+soundfiles[19] = "docjump";
+soundfiles[20] = "yoshiegg";
+soundfiles[21] = "dkcharge";
+soundfiles[22] = "mrgandwmove";
 
 framescript = "1003sd1222222122bb1222220122xy0000122222";
 
@@ -127,6 +155,9 @@ var updatetimeline = function(ug,uc,un,unb,unf){
           $("#tl"+(noofbuttons+i)).append('<div class="tframe type0" id="b'+(noofbuttons+i)+'f'+j+'"></div>');
           timelines["tl"+(noofbuttons+i)] = [];
           timelines["tl"+(noofbuttons+i)][j-1] = 0;
+
+          timelinesounds[noofbuttons+i-1] = [];
+          timelinesounds[noofbuttons+i-1][j-1] = new Audio("assets/sounds/"+soundfiles[sounds[noofbuttons+i-1]-1]+".wav");
         }
       }
     }
@@ -167,6 +198,7 @@ var updatetimeline = function(ug,uc,un,unb,unf){
           else {
             timelines["tl"+i][(noofframes+j)-1] = 0;
           }
+          timelinesounds[i-1][(noofframes+j)-1] = new Audio("assets/sounds/"+soundfiles[sounds[i-1]]+".wav");
         }
         $("#playline").append('<div class="tnum" id="num'+(noofframes+j)+'"><p>'+(noofframes+j)+'</p></div>');
       }
@@ -208,15 +240,17 @@ var createnewtimeline = function(ngame,nchar,nname,nnoofbuttons,nnoofframes){
   for (i=1;i<=noofbuttons;i++){
     timelines["tl"+i] = [];
     buttons[i-1] = "0";
+    timelinesounds[i-1] = [];
     for (j=1;j<=noofframes;j++){
       timelines["tl"+i][j-1] = 0;
+      timelinesounds[i-1][j-1] = new Audio("assets/sounds/mrgandwmove.wav");
     }
   }
 
   $("#timelinebigcontainer").width(110+(72*noofframes)).append('<div id="controllerdisplay">'+controllertext+'</div><div id="scrollbox"><div id="tline" style="height:'+(72*(noofbuttons+1))+'px"></div><div id="timelinescontainer"></div></div>');
 
   for (i=1;i<=noofbuttons;i++){
-    $("#timelinescontainer").append('<div class="timeline" id="tl'+i+'"><div class="tkey"></div></div>');
+    $("#timelinescontainer").append('<div class="timeline" id="tl'+i+'"><div class="tkeycontainer"><div class="tkey"></div><div class="tsound"><div class="tsoundicon"></div><p class="soundtext"></p></div></div></div>');
 
     for (j=1;j<=noofframes;j++){
       $("#tl"+i).append('<div class="tframe type0" id="b'+i+'f'+j+'"></div>');
@@ -257,7 +291,7 @@ var editbutton = function(type){
     createnewtimeline(ngame,nchar,nname,nnoofbuttons,nnoofframes);
   }
   else if (allgood && type === "update"){
-    updatetimeline(ngame,nchar,nname,nnoofbuttons,nnoofframes);
+    //updatetimeline(ngame,nchar,nname,nnoofbuttons,nnoofframes);
   }
   else {
     for (i=1;i<5;i++){
@@ -303,7 +337,7 @@ var playtimeline = function(){
   if (playing){
     $tl.animate({left : 103+(noofframes * 72)},16*noofframes*speed, "linear",function() {
         if (loop){
-          playtimeline();
+          setTimeout(function(){playtimeline();},1000);
         }
         else {
           $tl.css("left","103px");
@@ -322,6 +356,8 @@ var playtimeline = function(){
           }
           else if (timelines["tl"+i][noofframes-j]){
             $("#i-"+buttons[i-1]).fadeTo(1,1);
+            $("#debug").empty().append(noofframes-j);
+            timelinesounds[i-1][noofframes-j].play();
             if (buttons[i-1] === "ll"){
               $("#i-lb").css("top","123px");
             }
@@ -442,6 +478,19 @@ $(document).ready(function(){
     }
   });
 
+  $("#timelinebigcontainer").on('click','.tsound',function() {
+    if ($(this).hasClass("dropdowned")){
+      $(this).removeClass("dropdowned");
+      $("#sounddropdown").remove();
+    }
+    else {
+      $(".tsound").removeClass("dropdowned");
+      $("#sounddropdown").remove();
+      $(this).append('<div id="sounddropdown"><div class="soundselect" id="s1"><p style="line-height:1">Land</p></div><div class="soundselect" id="s2" style="line-height:1"><p>Tech</p></div><div class="soundselect" id="s3" style="line-height:1"><p>Roll</p></div><div class="soundselect" id="s4" style="line-height:1"><p>Clank</p></div><div class="soundselect" id="s5" style="line-height:1"><p>Powershield</p></div><div class="soundselect" id="s6" style="line-height:1"><p>Laser</p></div><div class="soundselect" id="s7" style="line-height:1"><p>Fireball</p></div><div class="soundselect" id="s8" style="line-height:1"><p>Fox Shine</p></div><div class="soundselect" id="s9" style="line-height:1"><p>Fox Shine Reflect</p></div><div class="soundselect" id="s10" style="line-height:1"><p>Falco Shine</p></div><div class="soundselect" id="s11" style="line-height:1"><p>Falco Shine Reflect</p></div><div class="soundselect" id="s12" style="line-height:1"><p>Sheik Tu</p></div><div class="soundselect" id="s13" style="line-height:1"><p>Marth Grab Ledge</p></div><div class="soundselect" id="s14" style="line-height:1"><p>Peach Jump</p></div><div class="soundselect" id="s15" style="line-height:1"><p>Peach Turnip Pull</p></div><div class="soundselect" id="s16" style="line-height:1"><p>Falcon Dodge</p></div><div class="soundselect" id="s17" style="line-height:1"><p>Falcon Raptor</p></div><div class="soundselect" id="s18" style="line-height:1"><p>Doc Tornado</p></div><div class="soundselect" id="s19" style="line-height:1"><p>Doc Pill Bounce</p></div><div class="soundselect" id="s20" style="line-height:1"><p>Doc Jump</p></div><div class="soundselect" id="s21" style="line-height:1"><p>Yoshi Egg</p></div><div class="soundselect" id="s22" style="line-height:1"><p>DK Charge</p></div><div class="soundselect" id="s23" style="line-height:1"><p>Mr GandW Move</p></div></div>');
+      $(this).addClass("dropdowned");
+    }
+  });
+
   $("#timelinebigcontainer").on({
     mouseenter: function () {
       if (!($(this).hasClass("greyedout"))){
@@ -457,12 +506,30 @@ $(document).ready(function(){
 
   $("#timelinebigcontainer").on({
     mouseenter: function () {
+      $(this).addClass("soundselecthighlight");
+    },
+    mouseleave: function () {
+      $(this).removeClass("soundselecthighlight");
+    }
+  }, ".soundselect");
+
+  $("#timelinebigcontainer").on({
+    mouseenter: function () {
         $(this).addClass("tkeyhighlight");
     },
     mouseleave: function () {
         $(this).removeClass("tkeyhighlight");
     }
   }, ".tkey");
+
+  $("#timelinebigcontainer").on({
+    mouseenter: function () {
+        $(this).addClass("tsoundhighlight");
+    },
+    mouseleave: function () {
+        $(this).removeClass("tsoundhighlight");
+    }
+  }, ".tsound");
 
   $("#timelinebigcontainer").on({
     mouseenter: function () {
@@ -559,6 +626,29 @@ $(document).ready(function(){
       }
     }
     $(".tkey").removeClass("tkeyhighlight");
+
+  });
+
+  $("#timelinebigcontainer").on('click','.soundselect',function() {
+    var id = $(this).attr("id");
+    id = parseInt(id.substr(1,id.length));
+    var idtext = $(this).children("p").text();
+    var idtextfix = "";
+    for (i=0;i<idtext.length;i++){
+      if (idtext[i] != " "){
+        idtextfix += idtext[i];
+      }
+    }
+    idtextfix = idtextfix.toLowerCase();
+    $(this).closest(".tsound").children(".soundtext").empty().append(idtext);
+    var buttonid = $(this).closest(".timeline").attr("id");
+    buttonid = parseInt(buttonid.substr(2,buttonid.length));
+
+    sounds[buttonid-1] = id;
+    for(j=0;j<noofframes;j++){
+      timelinesounds[buttonid-1][j] = new Audio("assets/sounds/"+idtextfix+".wav");
+    }
+
 
   });
 
