@@ -250,7 +250,7 @@ var createnewtimeline = function(ngame,nchar,nname,nnoofbuttons,nnoofframes){
   $("#timelinebigcontainer").width(110+(72*noofframes)).append('<div id="controllerdisplay">'+controllertext+'</div><div id="scrollbox"><div id="tline" style="height:'+(72*(noofbuttons+1))+'px"></div><div id="timelinescontainer"></div></div>');
 
   for (i=1;i<=noofbuttons;i++){
-    $("#timelinescontainer").append('<div class="timeline" id="tl'+i+'"><div class="tkeycontainer"><div class="tkey"></div><div class="tsound"><div class="tsoundicon"></div><p class="soundtext"></p></div></div></div>');
+    $("#timelinescontainer").append('<div class="timeline" id="tl'+i+'"><div class="tkeycontainer"><div class="tkey"></div><div class="tsound"><div class="tsoundicon"></div><p class="soundtext">MrGandW Move</p></div></div></div>');
 
     for (j=1;j<=noofframes;j++){
       $("#tl"+i).append('<div class="tframe type0" id="b'+i+'f'+j+'"></div>');
