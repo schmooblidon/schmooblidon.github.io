@@ -337,6 +337,7 @@ var play = function() {
 
 
 $(document).ready(function(){
+	$("#pagetitle").append('<img id="heatmapinfo" src="assets/question.png" style="height:22px; width:22px; border-radius:15px;"/><div id="heatmapinfobox"><p>Heatmaps display the speed of all the character\'s attacks from a certain position. The coloured shapes represent the possible hitboxes of each attack, where the colour represents the frame that it comes out. All smash games run at 60 frames per second. Red and yellow hitboxes are very fast, but green and blue are slower.<br><br>You can toggle each attack, or each frame (colour) individually, to allow you to see only the options you want. You can also play an animation of your selected hitboxes in real game speed (60fps) to get a feel for how fast each option is.<br><br>Using the hurtbox controls, you can move around a custom opponent hurtbox to greater visualise hitbox range.<br><br>Hovering over the buttons will highlight (darkens them) the button\'s respective hitboxes.</p></div>');
 	$("#fc0").addClass("fchighlight");
 	var noofattacks = 0;
 	for(i=1;i<11;i++){
