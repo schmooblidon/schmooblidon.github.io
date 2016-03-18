@@ -37,25 +37,30 @@ var resizing = function() {
 			$("#main").removeClass("smalltext");
 		}
 		if (windwidth < 1200){
-			$(".button").css({"font-size":"12px","width":70,"bottom":0});
-			$(".longbutton").css({"width":102,"top":0});
-			$("#titlelogo").css({"width":280,"height":60,"margin-top":10});
+			$(".button").css({"font-size":"12px","width":70}).children("p").css("margin","23px 0px");
+			$(".longbutton").css("width",90);
+      $(".doublebutton").css("width",80).children("p").css("margin","16px 0px");
+			$("#titlelogo").css({"width":280,"height":60,"margin-top":0});
 		}
 		else {
-			$(".button").css({"font-size":"16px","width":90,"bottom":0});
-			$(".longbutton").css({"width":135,"top":0});
-			$("#titlelogo").css({"width":280,"height":60,"margin-top":10});
+			$(".button").css({"font-size":"16px","width":80}).children("p").css("margin","21px 0px");
+			$(".longbutton").css("width",100);
+      $(".doublebutton").css("width",85).children("p").css("margin","12px 0px");
+			$("#titlelogo").css({"width":280,"height":60,"margin-top":0});
 		}
 		if (windwidth < 1050){
-			$(".button").css({"font-size":"12px","width":60,"bottom":14});
-			$(".longbutton").css({"width":70,"bottom":0,"top":0});
-			$("#titlelogo").css({"width":200,"height":43,"margin-top":20});
+			$(".button").css({"font-size":"12px","width":65}).children("p").css("margin","23px 0px");
+			$(".longbutton").css("width",75);
+      $(".doublebutton").css("width",70).children("p").css("margin","16px 0px");;
+			$("#titlelogo").css({"width":200,"height":43,"margin-top":10});
 		}
-		if (windwidth < 870){
-			$(".button").css({"font-size":"10px","width":50,"bottom":11});
-			$(".longbutton").css({"width":60,"top":0});
-			$("#titlelogo").css({"width":150,"height":32,"margin-top":25});
+		if (windwidth < 905){
+			$(".button").css({"font-size":"10px","width":50}).children("p").css("margin","25px 0px");
+			$(".longbutton").css("width",60);
+      $(".doublebutton").css("width",55).children("p").css("margin","19px 0px");;
+			$("#titlelogo").css({"width":150,"height":32,"margin-top":16});
 		}
+    $("#main").css("min-height",windheight-105+"px");
     resizingtype();
 	};
 var widthresize = function(){

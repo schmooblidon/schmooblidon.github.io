@@ -436,6 +436,9 @@ var play = function() {
 
 
 $(document).ready(function(){
+
+	$("#pagetitle").append('<img id="heatmapinfo" src="assets/question.png" style="height:22px; width:22px; border-radius:15px;"/><a href="heatmaps/oos/foxold.html"><div id="oldbutton">Not working? Try the old build</div></a><div id="heatmapinfobox"><p>Heatmaps display the speed of all the character\'s attacks from a certain position. The coloured shapes represent the possible hitboxes of each attack, where the colour represents the frame that it comes out. All smash games run at 60 frames per second. Red and yellow hitboxes are very fast, but green and blue are slower.<br><br>You can toggle each attack, or each frame (colour) individually, to allow you to see only the options you want. You can also play an animation of your selected hitboxes in real game speed (60fps) to get a feel for how fast each option is.</p><p>Using the hurtbox controls, you can move around a custom opponent hurtbox to greater visualise hitbox range. Tap just above the arrows on mobile to show controls.<br><br>Hovering over the buttons will highlight (outlines them) the button\'s respective hitboxes, and hovering over (tapping on mobile) each hitbox will display info.</p></div>');
+
 	$("#fc0").addClass("fchighlight");
 	var currentchar = $("#characterbutton").children("p").text().toLowerCase();
 	var noofattacks = 0;
