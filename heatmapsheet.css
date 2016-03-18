@@ -20,6 +20,16 @@
 .hurtboxchar p {
 	padding:0px 5px 0px 5px;
 }
+
+#pagetitle p {
+	display:inline-block;
+}
+
+#heatmapinfo {
+	display:inline-block;
+	margin:0px 15px;
+}
+
 #heatmapinfobox {
 	display:none;
 	position:absolute;
