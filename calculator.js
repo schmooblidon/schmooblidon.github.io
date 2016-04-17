@@ -1905,6 +1905,110 @@ function SVG(tag)
    return document.createElementNS('http://www.w3.org/2000/svg', tag);
 }
 
+sources = 0;
+
+function sourcePopup(){
+  $("#tutorial").fadeOut();
+  if($("#popout").length > 0){
+    //$("#popoutOverlay, #popout").remove();
+  }
+  else {
+    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutSource"><div id="ppSourceTitle"><p>Paste source in format (frame1x,frame1y),(frame2x,frame2y)... <span style="font-size:10px">i.e. (1.2,3.4),(1.32,3.4),(1.35,3.51)...</span></p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppSourceText"><textarea id="sourceText"></textarea></div><div id="ppSourceOffset"><p>Offset</p><div id="ppSourceOffsetX"><textarea placeholder="X" id="sourceOffsetX"></textarea></div><div id="ppSourceOffsetY"><textarea placeholder="Y" id="sourceOffsetY"></textarea></div></div><div id="ppSourceColour"><p>Colour</p><div id="ppSourceColourText"><span id="sourceColourHash">#</span><textarea maxlength="6" id="sourceColourText"></textarea></div><div id="ppSourceColourTest"></div></div><div id="ppSourceDraw"><p>Draw</p></div></div></div>');
+    $("#ppSClose").unbind("mouseover click");
+    $("#ppSClose").hover(function(){
+      $(this).toggleClass("ppSCloseHighlight");
+    });
+    $("#ppSClose").click(function(){
+      $("#popoutOverlay, #popout").remove();
+    });
+    var offset = [0,0];
+
+    $("#sourceOffsetX").on("keyup blur", function() {
+      var temp = deleteNonNumbers($(this).val(),true,true,false);
+      if (temp >= 1000){
+        temp = 999.9;
+      }
+      //temp = Math.abs(temp);
+      $(this).val(temp);
+      var newFloat = parseFloat(temp);
+      if (!(newFloat > 0 || newFloat < 0)){
+        newFloat = 0;
+      }
+      offset[0] = newFloat;
+    });
+
+    $("#sourceOffsetY").on("keyup blur", function() {
+      var temp = deleteNonNumbers($(this).val(),true,true,false);
+      if (temp >= 1000){
+        temp = 999.9;
+      }
+      //temp = Math.abs(temp);
+      $(this).val(temp);
+      var newFloat = parseFloat(temp);
+      if (!(newFloat > 0 || newFloat < 0)){
+        newFloat = 0;
+      }
+      offset[1] = newFloat;
+    });
+
+    $("#sourceColourText").on("keyup blur", function() {
+      $("#ppSourceColourTest").css("background-color","#"+$(this).val());
+    });
+
+    $("#ppSourceDraw").click(function(){
+      drawTrajectoryFromSource($("#sourceText").val(),offset,$("#ppSourceColourTest").css("background-color"));
+      $("#popoutOverlay, #popout").remove();
+    });
+  }
+}
+
+function drawTrajectoryFromSource(source,offset,colour){
+
+  // (frame1x,frame1y),(frame2x,frame2y),(frame3x,frame3y)
+  positionsArray = source.split(",(");
+  for(i=0;i<positionsArray.length;i++){
+    if (i == 0){
+      var pos = positionsArray[i].substr(1,positionsArray[i].length - 2);
+    }
+    else {
+      var pos = positionsArray[i].substr(0,positionsArray[i].length - 1);
+    }
+    positionsArray[i] = pos.split(",");
+    positionsArray[i][0] = parseFloat(positionsArray[i][0]) + offset[0];
+    positionsArray[i][1] = parseFloat(positionsArray[i][1]) + offset[1];
+  }
+  sources++;
+
+  var temX = ((positionsArray[0][0]*10)+centreOffset[0]);
+  var temY = ((-positionsArray[0][1]*10)+centreOffset[1]);
+
+  var lineText = "M"+temX+" "+temY+" ";
+
+  $(SVG("g")).attr("id","sourceGroup"+sources).appendTo("#trajectory");
+  $(SVG("path")).attr("id","startS"+sources).attr("class","startS").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",colour).attr("stroke",colour).prependTo("#sourceGroup"+sources);
+
+  for(i=1;i<positionsArray.length;i++){
+    var x = positionsArray[i][0];
+    var y = positionsArray[i][1];
+    var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
+    lineText += tempText;
+  	if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
+
+        $(SVG("circle")).attr("id","s"+sources+"f"+(i+1)).attr("class","sfP"+aT+" sframePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).attr("fill",colour).attr("stroke",colour).prependTo("#sourceGroup"+sources);
+
+  	}
+  }
+  $(SVG("path")).attr("id","strajLine"+sources).attr("class","strajLine "+sources).attr("d",lineText).attr("stroke",colour).attr("fill","transparent").prependTo("#sourceGroup"+sources);
+
+}
+
+function undoSource(){
+  $("#sourceGroup"+sources).remove();
+  if (sources > 0){
+    sources--;
+  }
+}
+
 function drawTrajectory(onlyDrawWhenUnfrozen){
   //tried changing positions instead of redrawing, but didnt help firefox and created many other issues that'd have to be resolved in more code
   onlyDrawWhenUnfrozen = onlyDrawWhenUnfrozen || false;
@@ -3044,6 +3148,21 @@ $(document).ready(function(){
   $("#attackscroll").perfectScrollbar();
   $("#trajBoxContainer").perfectScrollbar();
   $("#stageSelectContainer").perfectScrollbar();
+
+
+  document.onkeydown = function(evt) {
+    evt = evt || window.event;
+    switch (evt.keyCode) {
+      case 83:
+        sourcePopup();
+        break;
+      case 85:
+        undoSource();
+        break;
+      default:
+        break;
+    }
+  };
 
   readQueryString();
 
