@@ -379,6 +379,12 @@ textarea {
 	fill:none;
 }
 
+.strajLine {
+
+	stroke-width:10px;
+	fill:none;
+}
+
 .start {
   stroke-width:0;
 }
@@ -2574,6 +2580,25 @@ textarea
 
 }
 
+#popoutSource {
+  width:700px;
+  height:300px;
+  background-color:#4b4b4b;
+  vertical-align:middle;
+  top:50%;
+  left:50%;
+  position:absolute;
+  margin-top:-150px;
+  margin-left:-350px;
+
+}
+
+#ppSourceTitle {
+  width:650px;
+  height:50px;
+  display:inline-block;
+}
+
 #ppSTitle {
   width:350px;
   height:50px;
@@ -2582,6 +2607,10 @@ textarea
 
 #ppSTitle p {
   margin:25px 30px 10px 30px;
+}
+
+#ppSourceTitle p {
+  margin:25px 60px 10px 30px;
 }
 
 #ppSVid {
@@ -2621,9 +2650,143 @@ textarea
   overflow-y:scroll;
 }
 
+#ppSourceText {
+  width:630px;
+  height:70px;
+  background-color:#1a1a1a;
+  display:inline-block;
+  margin:20px;
+  border:5px solid #606060;
+  padding:10px;
+}
+
+#sourceText {
+  width:630px;
+  height:70px;
+  display:inline-block;
+  background-color:#1a1a1a;
+  color:white;
+  font-size:43px;
+  border:none;
+  resize: none;
+  padding:0;
+  text-align:left;
+}
+
 #ppSUrl p {
   margin:0;
 
+}
+
+#ppSourceOffset {
+  width:200px;
+  height:90px;
+  display:inline-block;
+  margin-left:30px;
+  vertical-align:top;
+}
+
+#ppSourceOffset p{
+  font-size:22px;
+  text-align:center;
+  margin:0;
+}
+
+#ppSourceOffsetX, #ppSourceOffsetY {
+  width:60px;
+  height:20px;
+  background-color:#1a1a1a;
+  display:inline-block;
+  margin:10px;
+  border:3px solid #606060;
+  padding:7px;
+}
+
+#sourceOffsetX, #sourceOffsetY {
+  width:60px;
+  height:20px;
+  display:inline-block;
+  background-color:#1a1a1a;
+  color:white;
+  font-size:15px;
+  border:none;
+  resize: none;
+  padding:0;
+  text-align:left;
+}
+
+#ppSourceColour {
+  width:250px;
+  height:90px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#ppSourceColourText {
+  width:130px;
+  height:20px;
+  background-color:#1a1a1a;
+  display:inline-block;
+  margin:10px 0px 10px 30px;
+  border:3px solid #606060;
+  padding:7px;
+  vertical-align:top;
+}
+
+
+
+#sourceColourText {
+  width:110px;
+  height:20px;
+  display:inline-block;
+  background-color:#1a1a1a;
+  color:white;
+  font-size:15px;
+  border:none;
+  resize: none;
+  padding:0;
+  text-align:left;
+  vertical-align:top;
+}
+
+#ppSourceColourTest {
+  width:20px;
+  height:20px;
+  background-color:#ffffff;
+  display:inline-block;
+  margin:10px 10px 10px 0px;
+  border:3px solid #606060;
+  padding:7px;
+}
+
+#ppSourceColour p {
+  font-size:22px;
+  text-align:center;
+  margin:0;
+  vertical-align:top;
+}
+
+#sourceColourHash {
+  margin:0px 3px 2px 0px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#ppSourceDraw {
+  width:150px;
+  height:65px;
+  display:inline-block;
+  margin:0px 10px 10px 0px;
+  border:3px solid #606060;
+  padding:0px 7px 7px 7px;
+  background-color:#36a673;
+  cursor:pointer;
+}
+
+#ppSourceDraw p {
+  font-size:33px;
+  text-align:center;
+  margin:14px 0px 0px 0px;
 }
 
 #ppSClose {
