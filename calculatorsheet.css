@@ -2593,8 +2593,26 @@ textarea
 
 }
 
+#popoutOutput {
+  width:600px;
+  height:600px;
+  background-color:#4b4b4b;
+  vertical-align:middle;
+  top:50%;
+  left:50%;
+  position:absolute;
+  margin-top:-350px;
+  margin-left:-300px;
+}
+
 #ppSourceTitle {
   width:650px;
+  height:50px;
+  display:inline-block;
+}
+
+#ppOutputTitle {
+  width:550px;
   height:50px;
   display:inline-block;
 }
@@ -2606,6 +2624,9 @@ textarea
 }
 
 #ppSTitle p {
+  margin:25px 30px 10px 30px;
+}
+#ppOutputTitle p {
   margin:25px 30px 10px 30px;
 }
 
@@ -2660,9 +2681,33 @@ textarea
   padding:10px;
 }
 
+#ppOutputText {
+  width:530px;
+  height:480px;
+  background-color:#1a1a1a;
+  display:inline-block;
+  margin:20px;
+  border:5px solid #606060;
+  padding:10px;
+  overflow-y:scroll;
+}
+
 #sourceText {
   width:630px;
   height:70px;
+  display:inline-block;
+  background-color:#1a1a1a;
+  color:white;
+  font-size:43px;
+  border:none;
+  resize: none;
+  padding:0;
+  text-align:left;
+}
+
+#outputText {
+  width:530px;
+  height:400px;
   display:inline-block;
   background-color:#1a1a1a;
   color:white;

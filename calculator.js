@@ -32,14 +32,18 @@ function trajectoryObject(){
   this.tdiMouseYMelee = 0;
   this.tdiMouseXReal = 65.4;
   this.tdiMouseYReal = 65.4;
+  this.tdiStrength = 0;
+  this.tdiAngle = 0;
   this.sdiMouseXMelee = 0;
   this.sdiMouseYMelee = 0;
   this.sdiMouseXReal = 65.4;
   this.sdiMouseYReal = 65.4;
+  this.sdiAngle = 0;
   this.adiMouseXMelee = 0;
   this.adiMouseYMelee = 0;
   this.adiMouseXReal = 65.4;
   this.adiMouseYReal = 65.4;
+  this.adiAngle = 0;
   this.curHitbox = chars.Fx.neutralSpecial.id0;
   this.cHName = ["Fx","neutralSpecial",false,"id0"];
   this.character = "Fox";
@@ -67,6 +71,7 @@ function trajectoryObject(){
   this.knockback = 0;
   this.yDisplacement = 0;
   this.newDamage = 3;
+  this.stayGrounded = false;
 }
 
 t = {};
@@ -574,7 +579,7 @@ function getStickAngle(x,y){
     diAngle = "deadzone";
   }
   else {
-    diAngle = Math.atan(y/x) * (180 / Math.PI) * 1;
+    diAngle = Math.atan(y/x) * (180 / Math.PI) * 1;""
     if (x < 0){
       diAngle += 180;
     }
@@ -641,11 +646,12 @@ function changeUserStick(x,y,type,di){
       angleOffset = Math.abs(angleOffset);
       //$("#tdiDebug").empty().append(angleOffset);
       //$("#tdirAngle").empty().append(rAngle);
-
+      t["t"+aT].tdiStrength = Math.round(angleOffset/18*100);
       $("#tdiOffsetPercent").empty().append(Math.round(angleOffset/18*100));
       calculateStickColor(angleOffset, type);
     }
     $("#"+type+"diDiAngle").empty().append(Math.round(diAngle));
+    t["t"+aT][type+"diAngle"] = Math.round(diAngle);
     $("#"+type+"diUser").show().css({
         "-webkit-transform":"rotate("+(diAngle * -1)+"deg)",
         "-moz-transform":"rotate("+(diAngle * -1)+"deg)",
@@ -1905,14 +1911,119 @@ function SVG(tag)
    return document.createElementNS('http://www.w3.org/2000/svg', tag);
 }
 
+function outputPopup(){
+  $("#tutorial").fadeOut();
+  if(!($("#popout").length > 0)){
+    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutOutput"><div id="ppOutputTitle"><p>Trajectory Outputs</p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppOutputText"></div></div></div>');
+    //<textarea id="outputText"></textarea>
+    $("#ppSClose").unbind("mouseover click");
+    $("#ppSClose").hover(function(){
+      $(this).toggleClass("ppSCloseHighlight");
+    });
+    $("#ppSClose").click(function(){
+      $("#popoutOverlay, #popout").remove();
+    });
+
+    for(i=1;i<=storedTrajs;i++){
+      var atk = convertCharName(t["t"+i].cHName[0])+" "+t["t"+i].cHName[1]+" ";
+      if (t["t"+i].cHName[2]){
+        atk += t["t"+i].cHName[2]+" ";
+      }
+      atk += t["t"+i].cHName[3];
+      var sq = "";
+      for(j=0;j<9;j++){
+        if (t["t"+i].staleQueue[j]){
+          sq += (j+1)+" ";
+        }
+      }
+      if (sq.length == 0){
+        sq = "-";
+      }
+      var hd = "Right";
+      if (t["t"+i].reverse){
+        hd = "Left";
+      }
+      var variables = "";
+      if (t["t"+i].crouching){
+        variables += "Crouching, ";
+      }
+      if (t["t"+i].chargeInterrupt){
+        variables += "Smash Charge Interruption, ";
+      }
+      if (t["t"+i].vcancel){
+        variables += "V-Cancel, ";
+      }
+      if (t["t"+i].meteorCancel){
+        variables += "Meteor Cancel, ";
+      }
+      if (t["t"+i].fadeIn){
+        variables += "Fade In, ";
+      }
+      if (t["t"+i].doubleJump){
+        variables += "DoubleJump, ";
+      }
+      variables = variables.substr(0,variables.length-2);
+
+      if (t["t"+i].knockback >= 80){
+        var kbtext = " (Tumble)";
+      }
+      else {
+        var kbtext = " (No Tumble)";
+      }
+
+      var hitlag = Math.floor(t["t"+i].newDamage * (1/3) + 3);
+      if (t["t"+i].curHitbox.effect == "Electric"){
+        hitlag = Math.floor(hitlag * 1.5);
+      }
+      if (t["t"+i].crouching){
+        hitlag = Math.floor(hitlag * (2/3));
+      }
+      $("#ppOutputText").append('-------------<br>TRAJECTORY '+i+'<br>-------------<br>ATTACKER<br>Attack: '+atk+'<br>Stale Queue: '+sq+'<br>Smash Charge: '+t["t"+i].chargeF+' frames<br>Damage: '+t["t"+i].newDamage.toFixed(5)+'<br>VICTIM<br>Character: '+t["t"+i].character+'<br>Percent: '+t["t"+i].percent+'<br>Hit Direction: '+hd+'<br>Trajectory DI:<br> -Inputs: X:'+t["t"+i].tdiMouseXMelee+' Y:'+t["t"+i].tdiMouseYMelee+'<br> -Strength: '+t["t"+i].tdiStrength+'<br> -Angle: '+t["t"+i].tdiAngle+'<br>SDI: <br> -Inputs: X:'+t["t"+i].sdiMouseXMelee+' Y:'+t["t"+i].sdiMouseYMelee+'<br> -Angle: '+t["t"+i].sdiAngle+'<br>ASDI: <br> -Inputs: X:'+t["t"+i].adiMouseXMelee+' Y:'+t["t"+i].adiMouseYMelee+'<br> -Angle: '+t["t"+i].adiAngle+'<br>Variables: '+variables+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+i].hitstun+'<br>Knockback: '+t["t"+i].knockback.toFixed(5)+kbtext+'<br>Y-Displacement: '+t["t"+i].yDisplacement.toFixed(5)+'<br>POSITIONS:<br>Position Hit: X: '+t["t"+i].mouseXMeleeF.toFixed(5)+' Y: '+t["t"+i].mouseYMeleeF.toFixed(5));
+
+      if (t["t"+i].grounded){
+        $("#ppOutputText").append(" Grounded");
+      }
+
+
+      if (t["t"+i].stayGrounded && t["t"+i].grounded){
+        if (t["t"+i].knockback >= 80){
+          $("#ppOutputText").append("<br>AMSAH TECHABLE");
+        }
+        else {
+          $("#ppOutputText").append("<br>CROUCH CANCELLED");
+        }
+      }
+      else {
+        var p = 0;
+        var isKilled = false;
+        while (!isKilled && p < t["t"+i].curPositions.length){
+          var x = t["t"+i].curPositions[p][0];
+          var y = t["t"+i].curPositions[p][1];
+          if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
+            //within the blastzone
+            $("#ppOutputText").append("<br>Frame "+(p+1)+":<br> -Positions: X: "+x.toFixed(5)+" Y: "+y.toFixed(5)+"<br> -KBVel: X: "+t["t"+i].curPositions[p][2].toFixed(5)+" Y: "+t["t"+i].curPositions[p][3].toFixed(5)+"<br> -CharVel: X: "+t["t"+i].curPositions[p][4].toFixed(5)+" Y:"+t["t"+i].curPositions[p][5].toFixed(5));
+          }
+          else {
+            $("#ppOutputText").append("<br>Frame "+(p+1)+":<br> -Positions: X: "+x.toFixed(5)+" Y: "+y.toFixed(5)+"<br> -KBVel: X: "+t["t"+i].curPositions[p][2].toFixed(5)+" Y: "+t["t"+i].curPositions[p][3].toFixed(5)+"<br> -CharVel: X: "+t["t"+i].curPositions[p][4].toFixed(5)+" Y:"+t["t"+i].curPositions[p][5].toFixed(5));
+            if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && t["t"+i].curPositions[i][3] >= 2.4)){
+              isKilled = true;
+              $("#ppOutputText").append(" KILLED!");
+            }
+          }
+          p++;
+        }
+      }
+      $("#ppOutputText").append(" <br>");
+    }
+
+  }
+}
+
 sources = 0;
 
 function sourcePopup(){
   $("#tutorial").fadeOut();
-  if($("#popout").length > 0){
-    //$("#popoutOverlay, #popout").remove();
-  }
-  else {
+  if(!($("#popout").length > 0)){
     $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutSource"><div id="ppSourceTitle"><p>Paste source in format (frame1x,frame1y),(frame2x,frame2y)... <span style="font-size:10px">i.e. (1.2,3.4),(1.32,3.4),(1.35,3.51)...</span></p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppSourceText"><textarea id="sourceText"></textarea></div><div id="ppSourceOffset"><p>Offset</p><div id="ppSourceOffsetX"><textarea placeholder="X" id="sourceOffsetX"></textarea></div><div id="ppSourceOffsetY"><textarea placeholder="Y" id="sourceOffsetY"></textarea></div></div><div id="ppSourceColour"><p>Colour</p><div id="ppSourceColourText"><span id="sourceColourHash">#</span><textarea maxlength="6" id="sourceColourText"></textarea></div><div id="ppSourceColourTest"></div></div><div id="ppSourceDraw"><p>Draw</p></div></div></div>');
     $("#ppSClose").unbind("mouseover click");
     $("#ppSClose").hover(function(){
@@ -2065,6 +2176,8 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   //$("#trajGroup"+aT+" .framePos").css("fill","#25d041");
   var isKilled = false;
   var i = 0;
+
+  t["t"+aT].stayGrounded = hit.stayGrounded;
 
   if (hit.stayGrounded && t["t"+aT].grounded){
     t["t"+aT].yDisplacement = hit.yDisplacement;
@@ -3153,6 +3266,9 @@ $(document).ready(function(){
   document.onkeydown = function(evt) {
     evt = evt || window.event;
     switch (evt.keyCode) {
+      case 79:
+        outputPopup();
+        break;
       case 83:
         sourcePopup();
         break;
