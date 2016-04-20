@@ -1978,7 +1978,7 @@ function outputPopup(){
       if (t["t"+i].crouching){
         hitlag = Math.floor(hitlag * (2/3));
       }
-      $("#ppOutputText").append('-------------<br>TRAJECTORY '+i+'<br>-------------<br>ATTACKER<br>Attack: '+atk+'<br>Stale Queue: '+sq+'<br>Smash Charge: '+t["t"+i].chargeF+' frames<br>Damage: '+t["t"+i].newDamage.toFixed(5)+'<br>VICTIM<br>Character: '+t["t"+i].character+'<br>Percent: '+t["t"+i].percent+'<br>Hit Direction: '+hd+'<br>Trajectory DI:<br> -Inputs: X:'+t["t"+i].tdiMouseXMelee+' Y:'+t["t"+i].tdiMouseYMelee+'<br> -Strength: '+t["t"+i].tdiStrength+'<br> -Angle: '+t["t"+i].tdiAngle+'<br>SDI: <br> -Inputs: X:'+t["t"+i].sdiMouseXMelee+' Y:'+t["t"+i].sdiMouseYMelee+'<br> -Angle: '+t["t"+i].sdiAngle+'<br>ASDI: <br> -Inputs: X:'+t["t"+i].adiMouseXMelee+' Y:'+t["t"+i].adiMouseYMelee+'<br> -Angle: '+t["t"+i].adiAngle+'<br>Variables: '+variables+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+i].hitstun+'<br>Knockback: '+t["t"+i].knockback.toFixed(5)+kbtext+'<br>Y-Displacement: '+t["t"+i].yDisplacement.toFixed(5)+'<br>POSITIONS:<br>Position Hit: X: '+t["t"+i].mouseXMeleeF.toFixed(5)+' Y: '+t["t"+i].mouseYMeleeF.toFixed(5));
+      $("#ppOutputText").append('-------------<br>TRAJECTORY '+i+'<br>-------------<br>ATTACKER<br>Attack: '+atk+'<br> -Damage: '+t["t"+i].curHitbox.dmg+'%<br> -Angle: '+t["t"+i].curHitbox.angle+'°<br> -Knockback Growth: '+t["t"+i].curHitbox.kg+'<br> -Set Knockback: '+t["t"+i].curHitbox.wbk+'<br> -Base Knockback: '+t["t"+i].curHitbox.bk+'<br> -Effect: '+t["t"+i].curHitbox.effect+'<br>Stale Queue: '+sq+'<br>Smash Charge: '+t["t"+i].chargeF+' frames<br>Damage: '+t["t"+i].newDamage.toFixed(5)+'%<br>VICTIM<br>Character: '+t["t"+i].character+'<br>Percent: '+t["t"+i].percent+'%<br>Hit Direction: '+hd+'<br>Trajectory DI:<br> -Inputs: X:'+t["t"+i].tdiMouseXMelee+' Y:'+t["t"+i].tdiMouseYMelee+'<br> -Strength: '+t["t"+i].tdiStrength+'%<br> -Angle: '+t["t"+i].tdiAngle+'°<br>SDI: <br> -Inputs: X:'+t["t"+i].sdiMouseXMelee+' Y:'+t["t"+i].sdiMouseYMelee+'<br> -Angle: '+t["t"+i].sdiAngle+'°<br>ASDI: <br> -Inputs: X:'+t["t"+i].adiMouseXMelee+' Y:'+t["t"+i].adiMouseYMelee+'<br> -Angle: '+t["t"+i].adiAngle+'°<br>Variables: '+variables+'<br>Hitlag: '+hitlag+' frames<br>Hitstun: '+t["t"+i].hitstun+' frames<br>Knockback: '+t["t"+i].knockback.toFixed(5)+kbtext+'<br>Y-Displacement: '+t["t"+i].yDisplacement.toFixed(5)+'<br>POSITIONS:<br>Position Hit: X: '+t["t"+i].mouseXMeleeF.toFixed(5)+' Y: '+t["t"+i].mouseYMeleeF.toFixed(5));
 
       if (t["t"+i].grounded){
         $("#ppOutputText").append(" Grounded");
@@ -2007,7 +2007,7 @@ function outputPopup(){
             $("#ppOutputText").append("<br>Frame "+(p+1)+":<br> -Positions: X: "+x.toFixed(5)+" Y: "+y.toFixed(5)+"<br> -KBVel: X: "+t["t"+i].curPositions[p][2].toFixed(5)+" Y: "+t["t"+i].curPositions[p][3].toFixed(5)+"<br> -CharVel: X: "+t["t"+i].curPositions[p][4].toFixed(5)+" Y:"+t["t"+i].curPositions[p][5].toFixed(5));
             if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && t["t"+i].curPositions[i][3] >= 2.4)){
               isKilled = true;
-              $("#ppOutputText").append(" KILLED!");
+              $("#ppOutputText").append("<br>KILLED!");
             }
           }
           p++;
