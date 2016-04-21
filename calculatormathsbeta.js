@@ -5,18 +5,33 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     var groundDownHitType;
     //Calculates base knockback from hit
     //Formula taken from http://www.ssbwiki.com/Knockback#Formula
-    function getReleasePoint(xPos,yPos,character,throwChar,throwType,reverse){
+    function getReleasePoint(xPos,yPos,character,throwChar,throwType,reverse,version){
       //Release Point = ThrowN + TransN + CharOffset
       var rpX = 0;
       var rpY = 0;
 
-      if (typeof throwAnim[throwChar][throwType+"throw"].throwN !== "undefined"){
-        rpX += throwAnim[throwChar][throwType+"throw"].throwN[0];
-        rpY += throwAnim[throwChar][throwType+"throw"].throwN[1];
+      var release = throwFrames[throwChar][throwType+"throw"].release;
+      var firstActionable = throwFrames[throwChar][throwType+"throw"].firstA;
+
+      // if weight dependent
+      if (throwFrames[throwChar].weight[throwType]){
+        release *= Math.round((100/characters[character][version+"weight"]));
+        firstActionable *= characters[character][version+"weight"];
       }
-      if (typeof throwAnim[throwChar][throwType+"throw"].transN !== "undefined"){
-        rpX += throwAnim[throwChar][throwType+"throw"].transN[0];
-        rpY += throwAnim[throwChar][throwType+"throw"].transN[1];
+
+      //prompt(release);
+      //release += throwFrames[throwChar][throwType+"throw"].hLag;
+      firstActionable += throwFrames[throwChar][throwType+"throw"].hLag;
+
+      // if throwN exists
+      if (typeof throwAnim[throwChar][throwType+"throw"]["f"+release].throwN !== "undefined"){
+        rpX += throwAnim[throwChar][throwType+"throw"]["f"+release].throwN[0];
+        rpY += throwAnim[throwChar][throwType+"throw"]["f"+release].throwN[1];
+      }
+      // if transN exists
+      if (typeof throwAnim[throwChar][throwType+"throw"]["f"+release].transN !== "undefined"){
+        rpX += throwAnim[throwChar][throwType+"throw"]["f"+release].transN[0];
+        rpY += throwAnim[throwChar][throwType+"throw"]["f"+release].transN[1];
       }
       rpX += throwOffsets[character][0];
       rpY += throwOffsets[character][1];
@@ -599,7 +614,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     var gravity = characters[character]["gravity"];
 
     if (isThrow){
-      var releasePoint = getReleasePoint(xPos,yPos,character,throwChar,throwType,reverse);
+      var releasePoint = getReleasePoint(xPos,yPos,character,throwChar,throwType,reverse,version);
     }
     else {
       var releasePoint = [xPos,yPos];
