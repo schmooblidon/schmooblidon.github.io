@@ -10,13 +10,13 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       var rpX = 0;
       var rpY = 0;
 
-      if (typeof throwAnimations[throwChar][throwType+"throw"].throwN !== "undefined"){
-        rpX += throwAnimations[throwChar][throwType+"throw"].throwN[0];
-        rpY += throwAnimations[throwChar][throwType+"throw"].throwN[1];
+      if (typeof throwAnim[throwChar][throwType+"throw"].throwN !== "undefined"){
+        rpX += throwAnim[throwChar][throwType+"throw"].throwN[0];
+        rpY += throwAnim[throwChar][throwType+"throw"].throwN[1];
       }
-      if (typeof throwAnimations[throwChar][throwType+"throw"].transN !== "undefined"){
-        rpX += throwAnimations[throwChar][throwType+"throw"].transN[0];
-        rpY += throwAnimations[throwChar][throwType+"throw"].transN[1];
+      if (typeof throwAnim[throwChar][throwType+"throw"].transN !== "undefined"){
+        rpX += throwAnim[throwChar][throwType+"throw"].transN[0];
+        rpY += throwAnim[throwChar][throwType+"throw"].transN[1];
       }
       rpX += throwOffsets[character][0];
       rpY += throwOffsets[character][1];
