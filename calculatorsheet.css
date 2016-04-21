@@ -399,6 +399,10 @@ textarea {
   fill:transparent;
 }
 
+.lastHitstun-t {
+  fill:transparent;
+}
+
 /*.tLineK1 {
 	stroke:#990000;
 }
@@ -2013,6 +2017,48 @@ textarea
   margin:14px 0px;
 }
 
+#icgContainer {
+  width:140px;
+  height:45px;
+  display:inline-block;
+  position:relative;
+  text-align:center;
+  vertical-align:top;
+}
+
+#icgRealButton {
+  width:140px;
+  height:45px;
+  position:absolute;
+  cursor:pointer;
+}
+
+#icgVisual {
+  width:140px;
+  height:45px;
+  position:absolute;
+}
+
+#icgText {
+  width:80px;
+  height:45px;
+  background-color:#444444;
+  display:inline-block;
+  vertical-align:top;
+  font-size:10px;
+}
+
+#icgSwitch {
+  width:60px;
+  height:45px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#icgSwitch p {
+  margin:14px 0px;
+}
+
 #vCancelContainer {
   width:140px;
   height:45px;
@@ -2052,6 +2098,94 @@ textarea
 }
 
 #vcSwitch p {
+  margin:14px 0px;
+}
+
+#metalContainer {
+  width:140px;
+  height:45px;
+  display:inline-block;
+  position:relative;
+  text-align:center;
+  vertical-align:top;
+}
+
+#mtRealButton {
+  width:140px;
+  height:45px;
+  position:absolute;
+  cursor:pointer;
+}
+
+#mtVisual {
+  width:140px;
+  height:45px;
+  position:absolute;
+}
+
+#mtText {
+  width:80px;
+  height:45px;
+  background-color:#444444;
+  display:inline-block;
+  vertical-align:top;
+  font-size:14px;
+}
+
+#mtSwitch {
+  width:60px;
+  height:45px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#mtSwitch p {
+  margin:14px 0px;
+}
+
+#damageIceContainer {
+  width:140px;
+  height:45px;
+  display:inline-block;
+  position:relative;
+  text-align:center;
+  vertical-align:top;
+}
+
+#dicRealButton {
+  width:140px;
+  height:45px;
+  position:absolute;
+  cursor:pointer;
+}
+
+#dicVisual {
+  width:140px;
+  height:45px;
+  position:absolute;
+}
+
+#dicText {
+  width:80px;
+  height:45px;
+  background-color:#444444;
+  display:inline-block;
+  vertical-align:top;
+  font-size:14px;
+}
+
+#dicText p {
+  margin:5px 0px;
+}
+
+#dicSwitch {
+  width:60px;
+  height:45px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#dicSwitch p {
   margin:14px 0px;
 }
 
