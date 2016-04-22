@@ -34,8 +34,8 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
           var diffXtransN = throwAnim[throwChar][throwType+"throw"]["f"+Math.ceil(animRelFrame)].transN[0] - throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].transN[0];
           var diffYtransN = throwAnim[throwChar][throwType+"throw"]["f"+Math.ceil(animRelFrame)].transN[1] - throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].transN[1];
 
-          var intertransNX = diffXtransN * interpolation;
-          var intertransNY = diffYtransN * interpolation;
+          var interTransNx = diffXtransN * interpolation;
+          var interTransNy = diffYtransN * interpolation;
 
           rpX += interTransNx + throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].transN[0];
           rpY += interTransNy + throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].transN[1];
