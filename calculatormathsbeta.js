@@ -15,24 +15,62 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
 
       // if weight dependent
       if (throwFrames[throwChar].weight[throwType]){
-        release *= Math.round((100/characters[character][version+"weight"]));
-        firstActionable *= characters[character][version+"weight"];
+        //animation frame per game frame
+        var animPerGame = 1/(characters[character][version+"weight"]/100);
+        var animRelFrame = release + animPerGame - (release % animPerGame);
+        //use mod 1, so interpolations above 1.00 will be calculated properly
+        var interpolation = (animRelFrame - release) % 1;
+
+        var diffXthrowN = throwAnim[throwChar][throwType+"throw"]["f"+Math.ceil(animRelFrame)].throwN[0] - throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].throwN[0];
+        var diffYthrowN = throwAnim[throwChar][throwType+"throw"]["f"+Math.ceil(animRelFrame)].throwN[1] - throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].throwN[1];
+
+        var interThrowNx = diffXthrowN * interpolation;
+        var interThrowNy = diffYthrowN * interpolation;
+
+        rpX += interThrowNx + throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].throwN[0];
+        rpY += interThrowNy + throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].throwN[1];
+
+        if (typeof throwAnim[throwChar][throwType+"throw"]["f"+release].transN !== "undefined"){
+          var diffXtransN = throwAnim[throwChar][throwType+"throw"]["f"+Math.ceil(animRelFrame)].transN[0] - throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].transN[0];
+          var diffYtransN = throwAnim[throwChar][throwType+"throw"]["f"+Math.ceil(animRelFrame)].transN[1] - throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].transN[1];
+
+          var intertransNX = diffXtransN * interpolation;
+          var intertransNY = diffYtransN * interpolation;
+
+          rpX += interTransNx + throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].transN[0];
+          rpY += interTransNy + throwAnim[throwChar][throwType+"throw"]["f"+Math.floor(animRelFrame)].transN[1];
+        }
+        /*trig
+        release = 8.6528;
+        frame1 = Math.floor(release);
+        frame2 = Math.ceil(release);
+        interMulti = release - frame1;
+        adj = throwAnim[throwChar][throwType+"throw"]["f"+frame2].throwN[0] - throwAnim[throwChar][throwType+"throw"]["f"+frame1].throwN[0];
+        opp = throwAnim[throwChar][throwType+"throw"]["f"+frame2].throwN[1] - throwAnim[throwChar][throwType+"throw"]["f"+frame1].throwN[1];
+        hyp = Math.sqrt((adj*adj)+(opp*opp));
+        theta = Math.atan(opp/adj);
+        interHyp = hyp * interMulti;
+        interX = Math.cos(theta) * interHyp;
+        interY = Math.sin(theta) * interHyp;
+        rpX += interX;
+        rpY += interY;*/
+      }
+      else {
+        //if throwN exists
+        if (typeof throwAnim[throwChar][throwType+"throw"]["f"+release].throwN !== "undefined"){
+          rpX += throwAnim[throwChar][throwType+"throw"]["f"+release].throwN[0];
+          rpY += throwAnim[throwChar][throwType+"throw"]["f"+release].throwN[1];
+        }
+        // if transN exists
+        if (typeof throwAnim[throwChar][throwType+"throw"]["f"+release].transN !== "undefined"){
+          rpX += throwAnim[throwChar][throwType+"throw"]["f"+release].transN[0];
+          rpY += throwAnim[throwChar][throwType+"throw"]["f"+release].transN[1];
+        }
       }
 
-      //prompt(release);
-      //release += throwFrames[throwChar][throwType+"throw"].hLag;
+      firstActionable *= characters[character][version+"weight"];
       firstActionable += throwFrames[throwChar][throwType+"throw"].hLag;
 
-      // if throwN exists
-      if (typeof throwAnim[throwChar][throwType+"throw"]["f"+release].throwN !== "undefined"){
-        rpX += throwAnim[throwChar][throwType+"throw"]["f"+release].throwN[0];
-        rpY += throwAnim[throwChar][throwType+"throw"]["f"+release].throwN[1];
-      }
-      // if transN exists
-      if (typeof throwAnim[throwChar][throwType+"throw"]["f"+release].transN !== "undefined"){
-        rpX += throwAnim[throwChar][throwType+"throw"]["f"+release].transN[0];
-        rpY += throwAnim[throwChar][throwType+"throw"]["f"+release].transN[1];
-      }
       rpX += throwOffsets[character][0];
       rpY += throwOffsets[character][1];
 
@@ -246,7 +284,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
         //Since gravity generally doesn't divide into max fallspeed evenly, we have a < gravity frame
         var lastGravityFrame = characters[character]["terminalVelocity"] % characters[character]["gravity"];
 
-        if (trajectory >= 260 && trajectory <= 280 && meteorCancel){
+        if (trajectory >= 260 && trajectory <= 280 && meteorCancel && !icg){
           hitstun = 8;
           meteorCancelled = true;
         }

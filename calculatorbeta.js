@@ -2160,7 +2160,15 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
   if (~t["t"+aT].cHName[1].indexOf("throw")){
     var isThrow = true;
     var throwChar = t["t"+aT].cHName[0];
-    var throwType = t["t"+aT].cHName[1][0];
+    if (t["t"+aT].cHName[1][0] == "c"){
+      var throwType = "c"+t["t"+aT].cHName[1][6];
+    }
+    else if (t["t"+aT].cHName[1][0] == "k"){
+      var throwType = "k"+t["t"+aT].cHName[1][5];
+    }
+    else {
+      var throwType = t["t"+aT].cHName[1][0];
+    }
   }
   else {
     var isThrow = false;
