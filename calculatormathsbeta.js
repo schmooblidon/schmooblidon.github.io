@@ -708,6 +708,8 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     var verticalVelocity;
 
     if (combo > 0 && comboFrame > 10){
+      trajectory = getAngle(trajectory,knockback, false, 0, 0);
+      console.log("trajectory = "+trajectory);
       horizontalVelocity = getHorizontalVelocity(knockback, trajectory, gravity);
       verticalVelocity = getVerticalVelocity(knockback, trajectory, gravity, grounded);
       console.log("horVel = "+horizontalVelocity);
@@ -715,8 +717,8 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       var newVector = transformComboVelocity(horizontalVelocity,verticalVelocity,combo,comboFrame);
       horizontalVelocity = newVector[0];
       verticalVelocity = newVector[1];
-      console.log("horVel = "+horizontalVelocity);
-      console.log("verVel = "+verticalVelocity);
+      console.log("newhorVel = "+horizontalVelocity);
+      console.log("newverVel = "+verticalVelocity);
       trajectory = getNewAngle(horizontalVelocity,verticalVelocity);
       console.log("newTrajectory = "+trajectory);
       //var angle = getAngle(newAngle, knockback, reverse, tdiX, tdiY);
