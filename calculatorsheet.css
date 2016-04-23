@@ -389,6 +389,22 @@ textarea {
   stroke-width:0;
 }
 
+.comboStartOuter {
+  stroke-width:10;
+}
+
+.comboStartInner {
+  stroke-width:0;
+}
+
+.comboStartOuter-t {
+  fill:transparent;
+}
+
+.comboStartInner-t {
+  fill:transparent;
+}
+
 /*#start1 {
   fill:#FF0000;
   stroke:#FF0000;
@@ -401,6 +417,11 @@ textarea {
 
 .lastHitstun-t {
   fill:transparent;
+}
+
+.invis {
+  fill:transparent;
+  stroke:none;
 }
 
 /*.tLineK1 {

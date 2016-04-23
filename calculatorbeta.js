@@ -75,6 +75,9 @@ function trajectoryObject(){
   this.metal = false;
   this.ice = false;
   this.icg = false;
+  this.comboSnap = 0;
+  this.cSnapFrame = 0;
+  this.hasCombo = 0;
 }
 
 t = {};
@@ -122,6 +125,7 @@ surfaces.fo = [[[-63.34755,0.00288],[63.34755,0.00288]],[[-14.25,42.75],[14.25,4
 
 
 snapping = true;
+comboSnapping = true;
 centreOffset = [-bzLeft*10+50,bzTop*10+50];
 
 function changeHitboxVersions(newver){
@@ -275,7 +279,70 @@ function trajectoryHover(){
 
     if (t["t"+aT].trajFrozen == false){
       t["t"+aT].grounded = false;
-      if (snapping){
+      var closestTraj = [];
+
+      if (comboSnapping){
+        // for each possible trajectory
+        var closest = 11;
+        var howClose;
+        for (i=0;i<9;i++){
+          var hasComboSnap = false;
+          var isSnappedOnYou = false;
+          // check if has combo snapped already
+          for (l=0;l<9;l++){
+            if (t["t"+(l+1)].comboSnap == (i+1)){
+              // skip active traj
+              if (l != aT-1){
+                hasComboSnap = true;
+              }
+            }
+          }
+          if (t["t"+aT].hasCombo == (i+1)){
+            isSnappedOnYou = true;
+          }
+          //excluding current active trajectory, ones with combos already and ones that are snapped onto the trajectory itself (causes infinite drawing otherwise)
+          if (i != aT-1 && !hasComboSnap && !isSnappedOnYou){
+            // for each trajectory frame
+            for(j=0;j<t["t"+(i+1)].curPositions.length;j++){
+              // if mouse is within 5 Mm radius of trajectory frame
+              if (t["t"+aT].mouseXMelee <= t["t"+(i+1)].curPositions[j][0] + 10 && t["t"+aT].mouseXMelee >= t["t"+(i+1)].curPositions[j][0] - 10 && t["t"+aT].mouseYMelee <= t["t"+(i+1)].curPositions[j][1] + 10 && t["t"+aT].mouseYMelee >= t["t"+(i+1)].curPositions[j][1] - 10){
+                // might need to use trig
+                howClose = Math.abs(t["t"+aT].mouseXMelee - t["t"+(i+1)].curPositions[j][0]) + Math.abs(t["t"+aT].mouseYMelee - t["t"+(i+1)].curPositions[j][1]);
+                if (howClose < closest){
+                  closest = howClose;
+                  closestTraj = [i,j];
+                }
+              }
+            }
+          }
+        }
+        if (closestTraj.length > 0){
+          t["t"+aT].mouseXMelee = t["t"+(closestTraj[0]+1)].curPositions[closestTraj[1]][0];
+          t["t"+aT].mouseYMelee = t["t"+(closestTraj[0]+1)].curPositions[closestTraj[1]][1];
+          t["t"+aT].comboSnap = (closestTraj[0]+1);
+          t["t"+aT].cSnapFrame = closestTraj[1];
+          t["t"+(t["t"+aT].comboSnap)].hasCombo = aT;
+          //prompt(t["t1"].hasCombo);
+          // making frames past the combo point of the stationary trajectory invisible
+          // fuck it, easier to just redraw
+          var oldAT = aT;
+          aT = closestTraj[0]+1;
+          drawTrajectory();
+          aT = oldAT;
+        }
+        else {
+          // if was previously combo snapped, redraw stationary trajectory
+          if (t["t"+aT].comboSnap > 0){
+            var oldAT = aT;
+            aT = t["t"+aT].comboSnap;
+            t["t"+oldAT].comboSnap = 0;
+            t["t"+aT].hasCombo = 0;
+            drawTrajectory();
+            aT = oldAT;
+          }
+        }
+      }
+      if ((snapping && !comboSnapping) || (snapping & comboSnapping && closestTraj.length == 0)){
         //will have to do some more maths for slanted surfaces like yoshis
         for (i=0;i<surfaces[activeStage].length;i++){
           //if X position is in line with surface or within 10Mm on either side
@@ -2125,9 +2192,11 @@ function undoSource(){
   }
 }
 
-function drawTrajectory(onlyDrawWhenUnfrozen){
+function drawTrajectory(onlyDrawWhenUnfrozen, waitTillFinish){
   //tried changing positions instead of redrawing, but didnt help firefox and created many other issues that'd have to be resolved in more code
   onlyDrawWhenUnfrozen = onlyDrawWhenUnfrozen || false;
+
+  waitTillFinish = waitTillFinish || false;
 
   var totalstale = 1.00;
   var damageunstaled = t["t"+aT].curHitbox.dmg;
@@ -2176,13 +2245,21 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     var throwType = false;
   }
 
-	var hit = new Hit(t["t"+aT].percent,damagestaled,damageunstaled,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee,t["t"+aT].meteorCancel,t["t"+aT].vcancel,t["t"+aT].grounded,t["t"+aT].metal,t["t"+aT].ice,t["t"+aT].icg,isThrow,throwChar,throwType);
+	var hit = new Hit(t["t"+aT].percent,damagestaled,damageunstaled,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee,t["t"+aT].meteorCancel,t["t"+aT].vcancel,t["t"+aT].grounded,t["t"+aT].metal,t["t"+aT].ice,t["t"+aT].icg,isThrow,throwChar,throwType,t["t"+aT].comboSnap,t["t"+aT].cSnapFrame);
 
 	t["t"+aT].curPositions = hit.positions;
   t["t"+aT].hitstun = hit.hitstun;
   t["t"+aT].knockback = hit.knockback;
   if (hit.meteorCancelled){
     t["t"+aT].hitstun = 8;
+  }
+
+  var comboCutOff = hit.positions.length;
+  for (j=0;j<9;j++){
+    if (t["t"+(j+1)].comboSnap == aT){
+      comboCutOff = t["t"+(j+1)].cSnapFrame + 1;
+      break;
+    }
   }
 	var cla = "tLineS";
   var temX = ((xPos*10)+centreOffset[0]);
@@ -2196,8 +2273,21 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     $("#trajGroup"+aT+", #trajGroup-t"+aT).remove();
     $(SVG("g")).attr("id","trajGroup"+aT).appendTo("#trajectory");
     $(SVG("g")).attr("id","trajGroup-t"+aT).appendTo("#trajectory-t");
-    $(SVG("path")).attr("id","start"+aT).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",palettes[t["t"+aT].palette][1]).attr("stroke",palettes[t["t"+aT].palette][1]).prependTo("#trajGroup"+aT);
-    $(SVG("path")).attr("id","start-t"+aT).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+aT);
+    if (t["t"+aT].comboSnap > 0){
+      $(SVG("g")).attr("id","comboStart"+aT).attr("class","comboStart").prependTo("#trajGroup"+aT);
+      $(SVG("g")).attr("id","comboStart-t"+aT).attr("class","comboStart-t").prependTo("#trajGroup-t"+aT);
+
+      $(SVG("circle")).attr("id","comboStartOuter"+aT).attr("class","comboStartOuter").attr("cx",temX).attr("cy",temY).attr("r",35).attr("fill","transparent").attr("stroke",palettes[t["t"+aT].palette][1]).prependTo("#comboStart"+aT);
+      $(SVG("circle")).attr("id","comboStartInner"+aT).attr("class","comboStartInner").attr("cx",temX).attr("cy",temY).attr("r",15).attr("fill",palettes[t["t"+aT].palette][1]).attr("stroke",palettes[t["t"+aT].palette][1]).prependTo("#comboStart"+aT);
+
+      $(SVG("circle")).attr("id","comboStartOuter-t"+aT).attr("class","comboStartOuter-t").attr("cx",temX).attr("cy",temY).attr("r",25).attr("fill","transparent").prependTo("#comboStart-t"+aT);
+      $(SVG("circle")).attr("id","comboStartInner-t"+aT).attr("class","comboStartInner-t").attr("cx",temX).attr("cy",temY).attr("r",5).attr("fill","transparent").prependTo("#comboStart-t"+aT);
+
+    }
+    else{
+      $(SVG("path")).attr("id","start"+aT).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",palettes[t["t"+aT].palette][1]).attr("stroke",palettes[t["t"+aT].palette][1]).prependTo("#trajGroup"+aT);
+      $(SVG("path")).attr("id","start-t"+aT).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+aT);
+    }
   //}
   //$("#trajGroup"+aT+" .framePos").css("fill","#25d041");
   var isKilled = false;
@@ -2224,7 +2314,7 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     }
   }
 
-  while (!isKilled && i < hit.positions.length){
+  while (!isKilled && i < comboCutOff){
   	var x = hit.positions[i][0];
   	var y = hit.positions[i][1];
     var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
@@ -2270,11 +2360,29 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     $("#trajLine"+aT).attr("stroke",palettes[t["t"+aT].palette][0]);
   }
 
+  if (t["t"+aT].hasCombo > 0){
+    //prompt(t["t"+aT].hasCombo);
+
+    var oldAT = aT;
+    aT = t["t"+aT].hasCombo;
+    t["t"+aT].mouseXMeleeF = hit.positions[t["t"+aT].cSnapFrame][0];
+    t["t"+aT].mouseYMeleeF = hit.positions[t["t"+aT].cSnapFrame][1];
+    // I force it to wait till drawTrajectory is finished to continue
+    if (drawTrajectory(false,true)){
+      aT = oldAT;
+    }
+    //prompt(t["t"+aT].hasCombo);
+  }
+
   if (!onlyDrawWhenUnfrozen){
     trajPosInfo();
   }
   if (t["t"+aT].curHitbox.angle == 361){
     drawAngle();
+  }
+
+  if (waitTillFinish){
+    return true;
   }
 }
 
@@ -2324,7 +2432,7 @@ function trajPosInfo(){
       hitlag = Math.floor(hitlag * (2/3));
     }
     $("#start"+id).css("stroke-width",20);
-    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'</div>');
+    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:90px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>hasCombo: '+t["t"+id].hasCombo+'<br>comboSnap: '+t["t"+id].comboSnap+'</div>');
     var frameposy = mouseY;
     var frameposx = mouseX;
     if (mouseY + trajOffset.top > windheight){
@@ -2337,6 +2445,41 @@ function trajPosInfo(){
 
   }, function(){
     $(".start").css("stroke-width",0);
+    $(".framePosInfoBox").remove();
+  });
+
+  $(".comboStartOuter-t").hover(function(){
+    var id = parseInt($(this).attr("id").substr(17,18));
+    var kb = t["t"+id].knockback.toPrecision(4);
+    if (t["t"+id].knockback < 80){
+      kb += " (No Tumble)";
+    }
+    else {
+      kb += " (Tumble)";
+    }
+    var hitlag = Math.floor(t["t"+id].newDamage * (1/3) + 3);
+    if (t["t"+id].curHitbox.effect == "Electric"){
+      hitlag = Math.floor(hitlag * 1.5);
+    }
+    if (t["t"+id].crouching){
+      hitlag = Math.floor(hitlag * (2/3));
+    }
+    $("#comboStartOuter"+id).css("stroke-width",20);
+    $("#comboStartInner"+id).css("stroke-width",5);
+    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Combo Hit</span><br>(trajectory '+t["t"+id].comboSnap+', frame '+(t["t"+id].cSnapFrame+1)+')<br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>hasCombo: '+t["t"+id].hasCombo+'<br>comboSnap: '+t["t"+id].comboSnap+'</div>');
+    var frameposy = mouseY;
+    var frameposx = mouseX;
+    if (mouseY + trajOffset.top > windheight){
+      frameposy = windheight;
+    }
+    if (mouseX + trajOffset.left + 160 > windwidth){
+      frameposx = windwidth - trajOffset.left - 160;
+    }
+    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+
+  }, function(){
+    $(".comboStartOuter").css("stroke-width",10);
+    $(".comboStartInner").css("stroke-width",0);
     $(".framePosInfoBox").remove();
   });
 
@@ -3071,6 +3214,9 @@ $(document).ready(function(){
       $.extend(true,t["t"+newTraj],t["t"+aT]);
 
       t["t"+newTraj].hasLabel = false;
+      t["t"+newTraj].hasCombo = 0;
+      t["t"+newTraj].comboSnap = 0;
+      t["t"+newTraj].cSnapFrame = 0;
       t["t"+newTraj].palette = savedPalettes[newTraj-1];
       aT = newTraj;
 
