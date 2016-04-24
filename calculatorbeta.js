@@ -286,31 +286,34 @@ function trajectoryHover(){
         var closest = 11;
         var howClose;
         for (i=0;i<9;i++){
-          var hasComboSnap = false;
-          var isSnappedOnYou = false;
-          // check if has combo snapped already
-          for (l=0;l<9;l++){
-            if (t["t"+(l+1)].comboSnap == (i+1)){
-              // skip active traj
-              if (l != aT-1){
-                hasComboSnap = true;
+          // if exists and not deleted
+          if (currentTrajs[i]){
+            var hasComboSnap = false;
+            var isSnappedOnYou = false;
+            // check if has combo snapped already
+            for (l=0;l<9;l++){
+              if (t["t"+(l+1)].comboSnap == (i+1)){
+                // skip active traj
+                if (l != aT-1){
+                  hasComboSnap = true;
+                }
               }
             }
-          }
-          if (t["t"+aT].hasCombo == (i+1)){
-            isSnappedOnYou = true;
-          }
-          //excluding current active trajectory, ones with combos already and ones that are snapped onto the trajectory itself (causes infinite drawing otherwise)
-          if (i != aT-1 && !hasComboSnap && !isSnappedOnYou){
-            // for each trajectory frame
-            for(j=0;j<t["t"+(i+1)].curPositions.length;j++){
-              // if mouse is within 5 Mm radius of trajectory frame
-              if (t["t"+aT].mouseXMelee <= t["t"+(i+1)].curPositions[j][0] + 10 && t["t"+aT].mouseXMelee >= t["t"+(i+1)].curPositions[j][0] - 10 && t["t"+aT].mouseYMelee <= t["t"+(i+1)].curPositions[j][1] + 10 && t["t"+aT].mouseYMelee >= t["t"+(i+1)].curPositions[j][1] - 10){
-                // might need to use trig
-                howClose = Math.abs(t["t"+aT].mouseXMelee - t["t"+(i+1)].curPositions[j][0]) + Math.abs(t["t"+aT].mouseYMelee - t["t"+(i+1)].curPositions[j][1]);
-                if (howClose < closest){
-                  closest = howClose;
-                  closestTraj = [i,j];
+            if (t["t"+aT].hasCombo == (i+1)){
+              isSnappedOnYou = true;
+            }
+            //excluding current active trajectory, ones with combos already and ones that are snapped onto the trajectory itself (causes infinite drawing otherwise)
+            if (i != aT-1 && !hasComboSnap && !isSnappedOnYou){
+              // for each trajectory frame
+              for(j=0;j<t["t"+(i+1)].curPositions.length;j++){
+                // if mouse is within 5 Mm radius of trajectory frame
+                if (t["t"+aT].mouseXMelee <= t["t"+(i+1)].curPositions[j][0] + 10 && t["t"+aT].mouseXMelee >= t["t"+(i+1)].curPositions[j][0] - 10 && t["t"+aT].mouseYMelee <= t["t"+(i+1)].curPositions[j][1] + 10 && t["t"+aT].mouseYMelee >= t["t"+(i+1)].curPositions[j][1] - 10){
+                  // might need to use trig
+                  howClose = Math.abs(t["t"+aT].mouseXMelee - t["t"+(i+1)].curPositions[j][0]) + Math.abs(t["t"+aT].mouseYMelee - t["t"+(i+1)].curPositions[j][1]);
+                  if (howClose < closest){
+                    closest = howClose;
+                    closestTraj = [i,j];
+                  }
                 }
               }
             }
@@ -325,20 +328,15 @@ function trajectoryHover(){
           //prompt(t["t1"].hasCombo);
           // making frames past the combo point of the stationary trajectory invisible
           // fuck it, easier to just redraw
-          var oldAT = aT;
-          aT = closestTraj[0]+1;
-          drawTrajectory();
-          aT = oldAT;
+          drawTrajectory(closestTraj[0]+1);
         }
         else {
           // if was previously combo snapped, redraw stationary trajectory
           if (t["t"+aT].comboSnap > 0){
-            var oldAT = aT;
-            aT = t["t"+aT].comboSnap;
-            t["t"+oldAT].comboSnap = 0;
-            t["t"+aT].hasCombo = 0;
-            drawTrajectory();
-            aT = oldAT;
+            cT = t["t"+aT].comboSnap;
+            t["t"+aT].comboSnap = 0;
+            t["t"+cT].hasCombo = 0;
+            drawTrajectory(cT);
           }
         }
       }
@@ -400,7 +398,7 @@ function trajectoryHover(){
         $("#groundedBox").hide();
         $("#attemptCCDisable").show();
       }
-      drawTrajectory(true);
+      drawTrajectory(aT,true);
     }
   });
 }
@@ -1009,7 +1007,7 @@ function readQueryString(){
         else {
                 t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[3]];
         }
-        drawTrajectory();
+        drawTrajectory(aT);
         $("#trajAdd").before('<div id="trajBox'+p+'" class="trajBox"><div id="trajNum'+p+'" class="trajNum"><div class="trajFreeze freezeOn"></div><p>'+p+'</p></div><div id="trajColour'+p+'" class="trajColour"><div id="t'+p+'minicolour1" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][0]+'"></div><div id="t'+p+'minicolour2" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][1]+'"></div><div id="t'+p+'minicolour3" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][2]+'"></div></div><div id="trajLabel'+p+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+p+'" class="trajDelete"><p>x</p></div></div>');
         if (t["t"+p].hasLabel){
           var id = p;
@@ -1539,7 +1537,7 @@ function idClick(){
         charging = false;
         $("#disableCharge").show();
       }
-      drawTrajectory();
+      drawTrajectory(aT);
       drawAngle();
     }
   });
@@ -1585,7 +1583,7 @@ function idClick2(){
         charging = false;
         $("#disableCharge").show();
       }
-      drawTrajectory();
+      drawTrajectory(aT);
       drawAngle();
     }
   });
@@ -1805,7 +1803,7 @@ function swapOptions(){
         charging = false;
         $("#disableCharge").show();
       }
-      drawTrajectory();
+      drawTrajectory(aT);
     }
     else {
       for (k=0;k<keys2.length;k++){
@@ -1859,7 +1857,7 @@ function swapOptions(){
         charging = false;
         $("#disableCharge").show();
       }
-      drawTrajectory();
+      drawTrajectory(aT);
 
     }
     drawAngle();
@@ -1932,7 +1930,7 @@ var colourChange = function(id){
     t["t"+aT].palette = newp;
     savedPalettes[id-1] = newp;
     $("#labelBox"+id).css("border-color",palettes[newp][0]);
-    drawTrajectory();
+    drawTrajectory(aT);
     $(".colourselectbox").remove();
   });
   $(".colourselectReal").hover(function(){
@@ -1952,6 +1950,20 @@ function trajDeleteClick(){
   $(".trajDelete").click(function(){
     var id = parseInt($(this).attr("id").substr(10,11));
     $("#trajBox"+id+", #trajGroup"+id+", #trajGroup-t"+id+", #labelBox"+id+", #labelOptions"+id+", #trajBoxInfo"+id).remove();
+    if (t["t"+id].comboSnap > 0){
+      var m = t["t"+id].comboSnap;
+      t["t"+m].hasCombo = 0;
+      t["t"+id].comboSnap = 0;
+      t["t"+id].cSnapFrame = 0;
+      drawTrajectory(m);
+
+    }
+    if (t["t"+id].hasCombo > 0){
+      var m = t["t"+id].hasCombo;
+      t["t"+m].comboSnap = 0;
+      t["t"+id].hasCombo = 0;
+      drawTrajectory(m);
+    }
     currentTrajs[id-1] = false;
     if (id == aT){
       for (i=0;i<9;i++){
@@ -2192,51 +2204,52 @@ function undoSource(){
   }
 }
 
-function drawTrajectory(onlyDrawWhenUnfrozen, waitTillFinish){
+function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
+  // n = trajectory number, using aT gets complicated with comboing
   //tried changing positions instead of redrawing, but didnt help firefox and created many other issues that'd have to be resolved in more code
   onlyDrawWhenUnfrozen = onlyDrawWhenUnfrozen || false;
 
   waitTillFinish = waitTillFinish || false;
 
   var totalstale = 1.00;
-  var damageunstaled = t["t"+aT].curHitbox.dmg;
+  var damageunstaled = t["t"+n].curHitbox.dmg;
   if (charging){
-    damageunstaled *= 1 + (t["t"+aT].chargeF * (0.3671/60));
+    damageunstaled *= 1 + (t["t"+n].chargeF * (0.3671/60));
   }
   for(i=0;i<9;i++){
-    if(t["t"+aT].staleQueue[i]){
+    if(t["t"+n].staleQueue[i]){
       totalstale -= (10-(i+1))/100;
     }
   }
 
   var damagestaled = damageunstaled * totalstale;
 
-  t["t"+aT].newDamage = damagestaled;
+  t["t"+n].newDamage = damagestaled;
   $("#newDamageEdit").empty().append(damagestaled.toPrecision(5));
   var xPos = 0;
   var yPos = 0;
-  if (t["t"+aT].trajFrozen){
+  if (t["t"+n].trajFrozen){
     if (!onlyDrawWhenUnfrozen){
-      xPos = t["t"+aT].mouseXMeleeF;
-      yPos = t["t"+aT].mouseYMeleeF;
+      xPos = t["t"+n].mouseXMeleeF;
+      yPos = t["t"+n].mouseYMeleeF;
     }
   }
   else {
-    xPos = t["t"+aT].mouseXMelee;
-    yPos = t["t"+aT].mouseYMelee;
+    xPos = t["t"+n].mouseXMelee;
+    yPos = t["t"+n].mouseYMelee;
   }
 
-  if (~t["t"+aT].cHName[1].indexOf("throw")){
+  if (~t["t"+n].cHName[1].indexOf("throw")){
     var isThrow = true;
-    var throwChar = t["t"+aT].cHName[0];
-    if (t["t"+aT].cHName[1][0] == "c"){
-      var throwType = "c"+t["t"+aT].cHName[1][6];
+    var throwChar = t["t"+n].cHName[0];
+    if (t["t"+n].cHName[1][0] == "c"){
+      var throwType = "c"+t["t"+n].cHName[1][6];
     }
-    else if (t["t"+aT].cHName[1][0] == "k"){
-      var throwType = "k"+t["t"+aT].cHName[1][5];
+    else if (t["t"+n].cHName[1][0] == "k"){
+      var throwType = "k"+t["t"+n].cHName[1][5];
     }
     else {
-      var throwType = t["t"+aT].cHName[1][0];
+      var throwType = t["t"+n].cHName[1][0];
     }
   }
   else {
@@ -2245,18 +2258,18 @@ function drawTrajectory(onlyDrawWhenUnfrozen, waitTillFinish){
     var throwType = false;
   }
 
-	var hit = new Hit(t["t"+aT].percent,damagestaled,damageunstaled,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee,t["t"+aT].meteorCancel,t["t"+aT].vcancel,t["t"+aT].grounded,t["t"+aT].metal,t["t"+aT].ice,t["t"+aT].icg,isThrow,throwChar,throwType,t["t"+aT].comboSnap,t["t"+aT].cSnapFrame);
+	var hit = new Hit(t["t"+n].percent,damagestaled,damageunstaled,t["t"+n].curHitbox.kg,t["t"+n].curHitbox.bk,t["t"+n].curHitbox.wbk,t["t"+n].curHitbox.angle,t["t"+n].character,t["t"+n].version,xPos,yPos,t["t"+n].crouch,t["t"+n].reverse,t["t"+n].chargeInterrupt,t["t"+n].tdiMouseXMelee,t["t"+n].tdiMouseYMelee,t["t"+n].fadeIn,t["t"+n].doubleJump,t["t"+n].sdiMouseXMelee,t["t"+n].sdiMouseYMelee,t["t"+n].adiMouseXMelee,t["t"+n].adiMouseYMelee,t["t"+n].meteorCancel,t["t"+n].vcancel,t["t"+n].grounded,t["t"+n].metal,t["t"+n].ice,t["t"+n].icg,isThrow,throwChar,throwType,t["t"+n].comboSnap,t["t"+n].cSnapFrame);
 
-	t["t"+aT].curPositions = hit.positions;
-  t["t"+aT].hitstun = hit.hitstun;
-  t["t"+aT].knockback = hit.knockback;
+	t["t"+n].curPositions = hit.positions;
+  t["t"+n].hitstun = hit.hitstun;
+  t["t"+n].knockback = hit.knockback;
   if (hit.meteorCancelled){
-    t["t"+aT].hitstun = 8;
+    t["t"+n].hitstun = 8;
   }
 
   var comboCutOff = hit.positions.length;
   for (j=0;j<9;j++){
-    if (t["t"+(j+1)].comboSnap == aT){
+    if (t["t"+(j+1)].comboSnap == n){
       comboCutOff = t["t"+(j+1)].cSnapFrame + 1;
       break;
     }
@@ -2270,47 +2283,47 @@ function drawTrajectory(onlyDrawWhenUnfrozen, waitTillFinish){
     $("#start-t"+aT).attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z");
   }
   else {*/
-    $("#trajGroup"+aT+", #trajGroup-t"+aT).remove();
-    $(SVG("g")).attr("id","trajGroup"+aT).appendTo("#trajectory");
-    $(SVG("g")).attr("id","trajGroup-t"+aT).appendTo("#trajectory-t");
-    if (t["t"+aT].comboSnap > 0){
-      $(SVG("g")).attr("id","comboStart"+aT).attr("class","comboStart").prependTo("#trajGroup"+aT);
-      $(SVG("g")).attr("id","comboStart-t"+aT).attr("class","comboStart-t").prependTo("#trajGroup-t"+aT);
+    $("#trajGroup"+n+", #trajGroup-t"+n).remove();
+    $(SVG("g")).attr("id","trajGroup"+n).appendTo("#trajectory");
+    $(SVG("g")).attr("id","trajGroup-t"+n).appendTo("#trajectory-t");
+    if (t["t"+n].comboSnap > 0){
+      $(SVG("g")).attr("id","comboStart"+n).attr("class","comboStart").prependTo("#trajGroup"+n);
+      $(SVG("g")).attr("id","comboStart-t"+n).attr("class","comboStart-t").prependTo("#trajGroup-t"+n);
 
-      $(SVG("circle")).attr("id","comboStartOuter"+aT).attr("class","comboStartOuter").attr("cx",temX).attr("cy",temY).attr("r",35).attr("fill","transparent").attr("stroke",palettes[t["t"+aT].palette][1]).prependTo("#comboStart"+aT);
-      $(SVG("circle")).attr("id","comboStartInner"+aT).attr("class","comboStartInner").attr("cx",temX).attr("cy",temY).attr("r",15).attr("fill",palettes[t["t"+aT].palette][1]).attr("stroke",palettes[t["t"+aT].palette][1]).prependTo("#comboStart"+aT);
+      $(SVG("circle")).attr("id","comboStartOuter"+n).attr("class","comboStartOuter").attr("cx",temX).attr("cy",temY).attr("r",35).attr("fill","transparent").attr("stroke",palettes[t["t"+n].palette][1]).prependTo("#comboStart"+n);
+      $(SVG("circle")).attr("id","comboStartInner"+n).attr("class","comboStartInner").attr("cx",temX).attr("cy",temY).attr("r",15).attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]).prependTo("#comboStart"+n);
 
-      $(SVG("circle")).attr("id","comboStartOuter-t"+aT).attr("class","comboStartOuter-t").attr("cx",temX).attr("cy",temY).attr("r",25).attr("fill","transparent").prependTo("#comboStart-t"+aT);
-      $(SVG("circle")).attr("id","comboStartInner-t"+aT).attr("class","comboStartInner-t").attr("cx",temX).attr("cy",temY).attr("r",5).attr("fill","transparent").prependTo("#comboStart-t"+aT);
+      $(SVG("circle")).attr("id","comboStartOuter-t"+n).attr("class","comboStartOuter-t").attr("cx",temX).attr("cy",temY).attr("r",25).attr("fill","transparent").prependTo("#comboStart-t"+n);
+      $(SVG("circle")).attr("id","comboStartInner-t"+n).attr("class","comboStartInner-t").attr("cx",temX).attr("cy",temY).attr("r",5).attr("fill","transparent").prependTo("#comboStart-t"+n);
 
     }
     else{
-      $(SVG("path")).attr("id","start"+aT).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",palettes[t["t"+aT].palette][1]).attr("stroke",palettes[t["t"+aT].palette][1]).prependTo("#trajGroup"+aT);
-      $(SVG("path")).attr("id","start-t"+aT).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+aT);
+      $(SVG("path")).attr("id","start"+n).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]).prependTo("#trajGroup"+n);
+      $(SVG("path")).attr("id","start-t"+n).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+n);
     }
   //}
-  //$("#trajGroup"+aT+" .framePos").css("fill","#25d041");
+  //$("#trajGroup"+n+" .framePos").css("fill","#25d041");
   var isKilled = false;
   var i = 0;
 
-  t["t"+aT].stayGrounded = hit.stayGrounded;
+  t["t"+n].stayGrounded = hit.stayGrounded;
 
-  if (hit.stayGrounded && t["t"+aT].grounded){
-    t["t"+aT].yDisplacement = hit.yDisplacement;
+  if (hit.stayGrounded && t["t"+n].grounded){
+    t["t"+n].yDisplacement = hit.yDisplacement;
     if (hit.knockback >= 80){
       //amsah tech
 
-      $(SVG("text")).attr("id","at"+aT).attr("class","at").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","black").prependTo("#trajGroup"+aT);
-      $("#at"+aT).append("AT");
-      $(SVG("circle")).attr("id","atCircle"+aT).attr("class","atCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+aT].palette][0]).attr("stroke",palettes[t["t"+aT].palette][0]).prependTo("#trajGroup"+aT);
-      $(SVG("circle")).attr("id","atCircle-t"+aT).attr("class","atCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+aT);
+      $(SVG("text")).attr("id","at"+n).attr("class","at").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","black").prependTo("#trajGroup"+n);
+      $("#at"+n).append("AT");
+      $(SVG("circle")).attr("id","atCircle"+n).attr("class","atCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
+      $(SVG("circle")).attr("id","atCircle-t"+n).attr("class","atCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+n);
     }
     else {
       //crouch cancel
-      $(SVG("text")).attr("id","cc"+aT).attr("class","cc").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","black").prependTo("#trajGroup"+aT);
-      $("#cc"+aT).append("CC");
-      $(SVG("circle")).attr("id","ccCircle"+aT).attr("class","ccCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+aT].palette][0]).attr("stroke",palettes[t["t"+aT].palette][0]).prependTo("#trajGroup"+aT);
-      $(SVG("circle")).attr("id","ccCircle-t"+aT).attr("class","ccCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+aT);
+      $(SVG("text")).attr("id","cc"+n).attr("class","cc").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","black").prependTo("#trajGroup"+n);
+      $("#cc"+n).append("CC");
+      $(SVG("circle")).attr("id","ccCircle"+n).attr("class","ccCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
+      $(SVG("circle")).attr("id","ccCircle-t"+n).attr("class","ccCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+n);
     }
   }
 
@@ -2320,17 +2333,17 @@ function drawTrajectory(onlyDrawWhenUnfrozen, waitTillFinish){
     var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
     lineText += tempText;
   	if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
-      if (i+1 == t["t"+aT].hitstun){
+      if (i+1 == t["t"+n].hitstun){
         var temX = ((x*10)+centreOffset[0]);
         var temY = ((-y*10)+centreOffset[1]);
-        $(SVG("path")).attr("id","lastHitstun"+aT).attr("class","lastHitstun").attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").attr("fill",palettes[t["t"+aT].palette][0]).attr("stroke",palettes[t["t"+aT].palette][0]).prependTo("#trajGroup"+aT);
-        $(SVG("path")).attr("id","lastHitstun-t"+aT).attr("class","lastHitstun-t pos"+i).attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").prependTo("#trajGroup-t"+aT);
+        $(SVG("path")).attr("id","lastHitstun"+n).attr("class","lastHitstun").attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
+        $(SVG("path")).attr("id","lastHitstun-t"+n).attr("class","lastHitstun-t pos"+i).attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").prependTo("#trajGroup-t"+n);
       }
       else {
-        $(SVG("circle")).attr("id",aT+"f"+(i+1)).attr("class","fP"+aT+" framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).attr("fill",palettes[t["t"+aT].palette][0]).attr("stroke",palettes[t["t"+aT].palette][0]).prependTo("#trajGroup"+aT);
-        $(SVG("circle")).attr("id",aT+"f"+(i+1)+"-t").attr("class","fP-t"+aT+" framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+aT);
-        if (i+1 > t["t"+aT].hitstun){
-          $("#"+aT+"f"+(i+1)).attr("class","fPnH"+aT+" framePos").attr("fill",palettes[t["t"+aT].palette][1]).attr("stroke",palettes[t["t"+aT].palette][1]);
+        $(SVG("circle")).attr("id",n+"f"+(i+1)).attr("class","fP"+n+" framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
+        $(SVG("circle")).attr("id",n+"f"+(i+1)+"-t").attr("class","fP-t"+n+" framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+n);
+        if (i+1 > t["t"+n].hitstun){
+          $("#"+n+"f"+(i+1)).attr("class","fPnH"+n+" framePos").attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]);
         }
       }
   	}
@@ -2339,54 +2352,50 @@ function drawTrajectory(onlyDrawWhenUnfrozen, waitTillFinish){
       if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && hit.positions[i][3] >= 2.4)){
         temX = ((x*10)+centreOffset[0]);
         temY = ((-y*10)+centreOffset[1]);
-        $(SVG("path")).attr("id","kill"+aT).attr("class","kill").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").attr("fill",palettes[t["t"+aT].palette][2]).attr("stroke",palettes[t["t"+aT].palette][2]).appendTo("#trajGroup"+aT);
-        $(SVG("path")).attr("id","kill-t"+aT).attr("class","kill-t pos"+i).attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup-t"+aT);
+        $(SVG("path")).attr("id","kill"+n).attr("class","kill").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").attr("fill",palettes[t["t"+n].palette][2]).attr("stroke",palettes[t["t"+n].palette][2]).appendTo("#trajGroup"+n);
+        $(SVG("path")).attr("id","kill-t"+n).attr("class","kill-t pos"+i).attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup-t"+n);
         cla = "tLineK";
         isKilled = true;
         if (i <= hit.hitstun){
-          $("#trajGroup"+aT+" .framePos").attr("class","fPK"+aT+" framePos").attr("fill",palettes[t["t"+aT].palette][2]).attr("stroke",palettes[t["t"+aT].palette][2]);;
+          $("#trajGroup"+n+" .framePos").attr("class","fPK"+n+" framePos").attr("fill",palettes[t["t"+n].palette][2]).attr("stroke",palettes[t["t"+n].palette][2]);;
         }
       }
     }
 
     i++;
   }
-  //$("#trajLine"+aT).remove();
-  $(SVG("path")).attr("id","trajLine"+aT).attr("class","trajLine "+cla+aT).attr("d",lineText).prependTo("#trajGroup"+aT);
+  //$("#trajLine"+n).remove();
+  $(SVG("path")).attr("id","trajLine"+n).attr("class","trajLine "+cla+n).attr("d",lineText).prependTo("#trajGroup"+n);
   if (cla == "tLineS"){
-    $("#trajLine"+aT).attr("stroke",palettes[t["t"+aT].palette][1]);
+    $("#trajLine"+n).attr("stroke",palettes[t["t"+n].palette][1]);
   }
   else {
-    $("#trajLine"+aT).attr("stroke",palettes[t["t"+aT].palette][0]);
+    $("#trajLine"+n).attr("stroke",palettes[t["t"+n].palette][0]);
   }
 
-  if (t["t"+aT].hasCombo > 0){
-    //prompt(t["t"+aT].hasCombo);
-
-    var oldAT = aT;
-    aT = t["t"+aT].hasCombo;
-    t["t"+aT].mouseXMeleeF = hit.positions[t["t"+aT].cSnapFrame][0];
-    t["t"+aT].mouseYMeleeF = hit.positions[t["t"+aT].cSnapFrame][1];
-    // I force it to wait till drawTrajectory is finished to continue
-    if (drawTrajectory(false,true)){
-      aT = oldAT;
-    }
-    //prompt(t["t"+aT].hasCombo);
+  if (t["t"+n].hasCombo > 0){
+    var cT = t["t"+n].hasCombo;
+    t["t"+cT].mouseXMeleeF = hit.positions[t["t"+cT].cSnapFrame][0];
+    t["t"+cT].mouseYMeleeF = hit.positions[t["t"+cT].cSnapFrame][1];
+    drawTrajectory(cT,false);
   }
 
   if (!onlyDrawWhenUnfrozen){
     trajPosInfo();
   }
-  if (t["t"+aT].curHitbox.angle == 361){
+  if (t["t"+n].curHitbox.angle == 361){
     drawAngle();
   }
 
+  // when drawTrajectory didnt take a trajectory number argument and always used aT, I needed this when temporarily changing aT, but I shouldn't need it anymore
   if (waitTillFinish){
     return true;
   }
 }
 
 function trajPosInfo(){
+  $(".framePos-t, .start-t, .comboStartOuter-t, .lastHitstun-t, .kill-t, .ccCircle-t, .atCircle-t").unbind("mouseenter").unbind("mouseleave");
+  $(".framePosInfoBox").remove();
   $(".framePos-t").hover(function(){
     var id = $(this).attr("id");
     var fid = parseInt(id.substr(2,(id.length - 3)));
@@ -2618,7 +2627,7 @@ $(document).ready(function(){
       $("#"+type+"diXInput").empty().append(xy[2]);
       $("#"+type+"diYInput").empty().append(xy[3]);
       $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
-      drawTrajectory();
+      drawTrajectory(aT);
     }
   });
 
@@ -2726,7 +2735,7 @@ $(document).ready(function(){
 
     changeUserStick(t["t"+aT][type+"diMouseXMelee"],t["t"+aT][type+"diMouseYMelee"],type);
     $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".diTurn").hover(function(){
@@ -2772,7 +2781,7 @@ $(document).ready(function(){
     $("#"+type+"diXInput").empty().append(xy[2]);
     $("#"+type+"diYInput").empty().append(xy[3]);
     $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".diCentre").hover(function(){
@@ -2793,7 +2802,7 @@ $(document).ready(function(){
     $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
     $("#"+type+"diUser").hide();
     $("#"+type+"diUserCentre").show();
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#diSwitchButton").hover(function(){
@@ -2844,7 +2853,7 @@ $(document).ready(function(){
 
   trajectoryClick();
 
-	drawTrajectory();
+	drawTrajectory(aT);
 
 	$("#victim-char").hover(function(){
     $(this).toggleClass("victimCharHighlight");
@@ -2881,7 +2890,7 @@ $(document).ready(function(){
 		var newchar = $(this).children("p").text();
 		$("#victimcharname").empty().append(newchar);
 		t["t"+aT].character = newchar;
-    drawTrajectory();
+    drawTrajectory(aT);
 	});
 
   $(".percentButton").hover(function(){
@@ -2915,7 +2924,7 @@ $(document).ready(function(){
 
 			$("#percentNumberEdit").val(newnum);
       $("#percentPreciseWhole").empty().append(newnum);
-      drawTrajectory();
+      drawTrajectory(aT);
 		}, 50);
 	}).bind("mouseup mouseleave", function() {
     clearInterval(percentHold);
@@ -2946,7 +2955,7 @@ $(document).ready(function(){
         t["t"+aT].chargeF = newnum;
       }
       $("#chargingNumberEdit").val(newnum);
-      drawTrajectory();
+      drawTrajectory(aT);
     }, 50);
   }).bind("mouseup mouseleave", function() {
     clearInterval(chargingHold);
@@ -2967,7 +2976,7 @@ $(document).ready(function(){
       t["t"+aT].staleQueue[id-1] = true;
       $(this).addClass("staleQon");
     }
-    drawTrajectory();
+    drawTrajectory(aT);
 
   });
 
@@ -2986,7 +2995,7 @@ $(document).ready(function(){
       t["t"+aT].reverse = false;
     }
     drawAngle();
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".realButton").hover(function(){
@@ -3013,7 +3022,7 @@ $(document).ready(function(){
       $("#hwcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].chargeInterrupt = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#cRealButton").click(function(){
@@ -3025,7 +3034,7 @@ $(document).ready(function(){
       $("#cSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].crouch = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#vcRealButton").click(function(){
@@ -3037,7 +3046,7 @@ $(document).ready(function(){
       $("#vcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].vcancel = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#mcRealButton").click(function(){
@@ -3051,7 +3060,7 @@ $(document).ready(function(){
       $("#djSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].doubleJump = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#icgRealButton").click(function(){
@@ -3063,7 +3072,7 @@ $(document).ready(function(){
       $("#icgSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].icg = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#mtRealButton").click(function(){
@@ -3075,7 +3084,7 @@ $(document).ready(function(){
       $("#mtSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].metal = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#dicRealButton").click(function(){
@@ -3087,7 +3096,7 @@ $(document).ready(function(){
       $("#dicSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].ice = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#fiRealButton").click(function(){
@@ -3099,7 +3108,7 @@ $(document).ready(function(){
       $("#fiSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].fadeIn = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
   $("#djRealButton").click(function(){
     if (t["t"+aT].doubleJump){
@@ -3112,7 +3121,7 @@ $(document).ready(function(){
       $("#djSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].doubleJump = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".verButton").hover(function(){
@@ -3130,7 +3139,7 @@ $(document).ready(function(){
     }
     $(this).addClass("verButtonOn");
     swapOptions();
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".stageselect").hover(function(){
@@ -3227,7 +3236,7 @@ $(document).ready(function(){
         $("#trajBoxContainer").prepend('<div id="trajBox1" class="trajBox trajBoxSelected"><div id="trajNum1" class="trajNum"><div class="trajFreeze freezeOn"></div><p>1</p></div><div id="trajColour1" class="trajColour"><div id="t1minicolour1" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][0]+'"></div><div id="t1minicolour2" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][1]+'"></div><div id="t1minicolour3" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][2]+'"></div></div><div id="trajLabel1" class="trajLabel"><p>Add label</p></div><div id="trajDelete1" class="trajDelete"><p>x</p></div></div>');
       }
 
-      drawTrajectory();
+      drawTrajectory(aT);
 
       trajBoxHover();
       trajBoxClick();
@@ -3315,14 +3324,14 @@ $(document).ready(function(){
       if (container3.val() == ""){
         container3.val("0");
         t["t"+aT].percent = 0;
-        drawTrajectory();
+        drawTrajectory(aT);
       }
     }
     if (!container4.is(e.target)){
       if(container4.val() == ""){
         container4.val("0");
         t["t"+aT].chargeF = 0;
-        drawTrajectory();
+        drawTrajectory(aT);
       }
     }
     if (!container5.is(e.target) && !container6.is(e.target) && !container7.is(e.target) && !container8.is(e.target) && !container9.is(e.target)){
@@ -3342,7 +3351,7 @@ $(document).ready(function(){
     else {
       t["t"+aT].percent = temp;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#percentPreciseEdit").on("keyup blur", function() {
@@ -3351,7 +3360,7 @@ $(document).ready(function(){
     $(this).val(temp);
     t["t"+aT].fractional = temp;
     t["t"+aT].percent = parseFloat(Math.floor(t["t"+aT].percent)+"."+t["t"+aT].fractional);
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#chargingNumberEdit").on("keyup blur", function() {
@@ -3362,7 +3371,7 @@ $(document).ready(function(){
     temp = Math.abs(temp);
     $(this).val(temp);
     t["t"+aT].chargeF = temp;
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#mousePosition").hover(function(){
@@ -3382,7 +3391,7 @@ $(document).ready(function(){
       newFloat = 0;
     }
     t["t"+aT].mouseXMeleeF = newFloat;
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#mPosY").on("keyup blur", function() {
@@ -3397,7 +3406,7 @@ $(document).ready(function(){
       newFloat = 0;
     }
     t["t"+aT].mouseYMeleeF = newFloat;
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".stageselect").click(function(){
@@ -3407,15 +3416,15 @@ $(document).ready(function(){
     id = id.substr(0,2);
     activeStage = id;
     changeStage(id);
-    var savedaT = aT;
+    //var savedaT = aT;
 
     for(x=0;x<9;x++){
       if(currentTrajs[x]){
-        aT = x+1;
-        drawTrajectory();
+        //aT = x+1;
+        drawTrajectory(x+1);
       }
     }
-    aT = savedaT;
+    //aT = savedaT;
 
   });
 
@@ -3438,7 +3447,7 @@ $(document).ready(function(){
       t["t"+aT].percent = parseInt($("#percentNumberEdit").val());
       t["t"+aT].useFractionals = false;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
     diOffset = $("#"+activeDI+"diSelector").offset();
   });
 
@@ -3464,7 +3473,7 @@ $(document).ready(function(){
     diPointerFrozen.a = true;
     $("#adiSelector").children(".diFreeze").removeClass("freezeOff").addClass("freezeOn");
 
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   /*$("#attemptAT").click(function(){
