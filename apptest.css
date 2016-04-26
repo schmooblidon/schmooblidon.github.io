@@ -1,0 +1,304 @@
+* {
+	color:white;
+	font-family:'Share Tech Mono', 'Ubuntu Mono', Consolas, "Courier New" ;
+	margin:0;
+}
+
+body {
+	background-color:rgb(0, 0, 0);
+}
+
+#main {
+	height: 800px;
+	width:500px;
+	position:absolute;
+	left:50%;
+	margin-left:-250px;
+	background-color:#393939;
+	font-size:20px;
+	vertical-align: top;
+}
+
+.main {
+	height: 800px;
+	width:500px;
+	background-color:#393939;
+	vertical-align: top;
+	position:absolute;
+}
+
+.title {
+	height:60px;
+	width:500px;
+	text-align:center;
+	color:white;
+	vertical-align: top;
+	display:inline-block;
+	margin-bottom:20px;
+
+}
+
+.title p {
+	font-size:25px;
+	margin:15px;
+	vertical-align: top;
+}
+
+#taskTitle {
+	background-color:#cb4242;
+}
+
+.taskButton {
+	height:80px;
+	width:400px;
+	background-color:#424242;
+	margin:0px 50px 30px 50px;
+	cursor:pointer;
+	vertical-align: top;
+	display:inline-block;
+	font-size:17px;
+}
+
+.taskButton p {
+	margin:28px;
+	vertical-align: middle;
+}
+
+.taskButton:hover {
+	background-color:#4f4f4f;
+}
+
+#attackMain {
+	height: 800px;
+	width:500px;
+	background-color:#393939;
+	vertical-align: top;
+
+}
+
+#attackTitle {
+	margin-bottom:0px;
+	background-color:#4264cb;
+}
+
+#characterContainer {
+	height:740px;
+	width:500px;
+	display:block;
+	/*overflow-y:scroll;*/
+	overflow-x:hidden;
+  vertical-align:top;
+  position:relative;
+}
+
+.character {
+	height:60px;
+	width:500px;
+	background-color:#424242;
+	cursor:pointer;
+}
+
+.character:hover {
+	background-color:#4f4f4f;
+}
+
+.character p {
+	display:inline-block;
+	margin:20px 10px;
+}
+
+.attack {
+	height:40px;
+	width:500px;
+	background-color:#5b5b5b;
+	cursor:pointer;
+	font-size:15px;
+}
+
+.attack:hover {
+		background-color:#787878;
+}
+
+.attack p {
+	display:inline-block;
+	margin:10px 30px;
+}
+
+
+.expandcharacter {
+  height:40px;
+  width:40px;
+  display:inline-block;
+  background-image:url(assets/trajectory/expandbig.png);
+  margin-top:10px;
+  vertical-align: top;
+}
+
+.expandattack, .expandsubattack, .expandid {
+  height:20px;
+  width:20px;
+  display:inline-block;
+  background-image:url(assets/trajectory/expand.png);
+  margin-top:2px;
+  vertical-align: top;
+}
+
+.expandsubattack {
+  margin-left:10px;
+}
+
+.expandid {
+  margin-left:20px;
+}
+
+.expandfalse {
+  opacity:0.05;
+}
+
+.expandtrue {
+  opacity:0.9;
+}
+
+#victimContainer {
+	height:740px;
+	width:500px;
+	display:block;
+	/*overflow-y:scroll;*/
+	overflow-x:hidden;
+  vertical-align:top;
+  position:relative;
+}
+
+#victimTitle {
+	margin-bottom:0px;
+	background-color:#25b05d;
+}
+
+.victim {
+	height:60px;
+	width:500px;
+	background-color:#424242;
+	cursor:pointer;
+}
+
+.victim:hover {
+	background-color:#4f4f4f;
+}
+
+.victim p {
+	display:inline-block;
+	margin:20px 10px;
+}
+
+#resultsContainer {
+	height:740px;
+	width:500px;
+	display:block;
+	/*overflow-y:scroll;*/
+	overflow-x:hidden;
+  vertical-align:top;
+  position:relative;
+}
+
+#resultsTitle {
+	background-color:#8050c6;
+	margin-bottom:0px;
+}
+
+#allHitboxes {
+	width:500px;
+	height:90px;
+	margin-bottom:20px;
+}
+
+#allHitboxesTitle {
+	text-align:center;
+	width:500px;
+	height:55px;
+	font-size:45px;
+}
+
+#allHitboxesPercent {
+	width:500px;
+	text-align:center;
+	font-size:35px;
+}
+
+.subattackHitboxes {
+	width:403px;
+	height:250px;
+	background-color:#585858;
+	margin:20px 50px;
+}
+
+.subattackTitle {
+	width:403px;
+	height:50px;
+	text-align:center;
+	font-size:30px;
+	vertical-align: top;
+}
+
+.subattackTitle p {
+	padding:7px;
+	vertical-align: top;
+}
+
+.idContainer {
+	width:100px;
+	height:200px;
+	display:inline-block;
+	background-color:#4a4a4a;
+	vertical-align: top;
+}
+
+.idTitle {
+	width:100px;
+	height:30px;
+	text-align:center;
+	background-color:#717171;
+}
+
+.idTitle p {
+	padding:5px;
+}
+
+
+.idPercent {
+	width:100px;
+	height:40px;
+	text-align:center;
+	font-size:25px;
+	background-color:#373737;
+}
+
+.idPercent p {
+	padding:5px 0px;
+}
+
+.idDetails {
+	width:100px;
+	height:130px;
+	background-color:#1b1b1b;
+	font-size:14px;
+}
+
+.idDetails p {
+	padding:18px 10px;
+}
+
+.effectText {
+	font-size:10px;
+}
+
+.idSeperator {
+	display:inline-block;
+	background-color:white;
+	width:1px;
+	height:200px;
+	vertical-align: top;
+}
+
+#attackMain, #victimMain, #resultsMain {
+	display:none;
+}

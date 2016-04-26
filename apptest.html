@@ -1,0 +1,119 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+<base href="">
+<link rel="stylesheet" href="perfect-scrollbar.min.css"/>
+<link href='http://fonts.googleapis.com/css?family=Share+Tech+Mono' rel='stylesheet' type='text/css'>
+<link href="apptest.css" rel="stylesheet" type="text/css">
+<script src="jquery-1.11.3.min.js" type="text/javascript"></script>
+<script src="perfect-scrollbar.jquery.min.js"></script>
+<script type="text/javascript" src="hitboxDBJSON.js"></script>
+<script type="text/javascript" src="hitboxStruct.js"></script>
+<script type="text/javascript" src="charAttributes.js"></script>
+<script type="text/javascript" src="throwData.js"></script>
+<script src="apptest.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="main">
+<div id="taskMain" class="main">
+  <div id="taskTitle" class="title"><p>Select Task</p></div>
+  <div id="crouchCancelTask" class="taskButton"><p>How long can I crouch cancel .... ?</p></div>
+  <div id="killTask" class="taskButton"><p>When will .... kill ?</p></div>
+  <div id="shieldstunTask" class="taskButton"><p>How much shield stun does .... have ?</p></div>
+</div>
+<div id="attackMain" class="main">
+  <div id="attackTitle" class="title"><p>Select Attack</p></div>
+  <div id="characterContainer">
+    <div id="Fx" class="character"><div class="expandcharacter expandfalse"></div><p>Fox</p></div>
+  	<div id="Fc" class="character"><div class="expandcharacter expandfalse"></div><p>Falco</p></div>
+  	<div id="Ms" class="character"><div class="expandcharacter expandfalse"></div><p>Marth</p></div>
+  	<div id="Sh" class="character"><div class="expandcharacter expandfalse"></div><p>Sheik</p></div>
+  	<div id="Jp" class="character"><div class="expandcharacter expandfalse"></div><p>Puff</p></div>
+  	<div id="Pc" class="character"><div class="expandcharacter expandfalse"></div><p>Peach</p></div>
+  	<div id="Po" class="character"><div class="expandcharacter expandfalse"></div><p>ICs</p></div>
+  	<div id="CF" class="character"><div class="expandcharacter expandfalse"></div><p>Falcon</p></div>
+  	<div id="Pk" class="character"><div class="expandcharacter expandfalse"></div><p>Pika</p></div>
+  	<div id="Sm" class="character"><div class="expandcharacter expandfalse"></div><p>Samus</p></div>
+  	<div id="DM" class="character"><div class="expandcharacter expandfalse"></div><p>Doc</p></div>
+  	<div id="Ys" class="character"><div class="expandcharacter expandfalse"></div><p>Yoshi</p></div>
+  	<div id="Lg" class="character"><div class="expandcharacter expandfalse"></div><p>Luigi</p></div>
+  	<div id="Gn" class="character"><div class="expandcharacter expandfalse"></div><p>Ganon</p></div>
+  	<div id="Ma" class="character"><div class="expandcharacter expandfalse"></div><p>Mario</p></div>
+  	<div id="YL" class="character"><div class="expandcharacter expandfalse"></div><p>Y.Link</p></div>
+  	<div id="DK" class="character"><div class="expandcharacter expandfalse"></div><p>DK</p></div>
+  	<div id="Lk" class="character"><div class="expandcharacter expandfalse"></div><p>Link</p></div>
+  	<div id="GW" class="character"><div class="expandcharacter expandfalse"></div><p>MrG&W</p></div>
+  	<div id="Ry" class="character"><div class="expandcharacter expandfalse"></div><p>Roy</p></div>
+  	<div id="Mw" class="character"><div class="expandcharacter expandfalse"></div><p>Mewtwo</p></div>
+  	<div id="Zd" class="character"><div class="expandcharacter expandfalse"></div><p>Zelda</p></div>
+  	<div id="Ns" class="character"><div class="expandcharacter expandfalse"></div><p>Ness</p></div>
+  	<div id="Pi" class="character"><div class="expandcharacter expandfalse"></div><p>Pichu</p></div>
+  	<div id="Bw" class="character"><div class="expandcharacter expandfalse"></div><p>Bowser</p></div>
+  	<div id="Kb" class="character"><div class="expandcharacter expandfalse"></div><p>Kirby</p></div>
+  </div>
+</div>
+<div id="victimMain" class="main">
+  <div id="victimTitle" class="title"><p>Select Victim</p></div>
+  <div id="victimContainer">
+    <div id="Fx" class="victim"><p>Fox</p></div>
+    <div id="Fc" class="victim"><p>Falco</p></div>
+    <div id="Ms" class="victim"><p>Marth</p></div>
+    <div id="Sh" class="victim"><p>Sheik</p></div>
+    <div id="Jp" class="victim"><p>Puff</p></div>
+    <div id="Pc" class="victim"><p>Peach</p></div>
+    <div id="Po" class="victim"><p>ICs</p></div>
+    <div id="CF" class="victim"><p>Falcon</p></div>
+    <div id="Pk" class="victim"><p>Pika</p></div>
+    <div id="Sm" class="victim"><p>Samus</p></div>
+    <div id="DM" class="victim"><p>Doc</p></div>
+    <div id="Ys" class="victim"><p>Yoshi</p></div>
+    <div id="Lg" class="victim"><p>Luigi</p></div>
+    <div id="Gn" class="victim"><p>Ganon</p></div>
+    <div id="Ma" class="victim"><p>Mario</p></div>
+    <div id="YL" class="victim"><p>Y.Link</p></div>
+    <div id="DK" class="victim"><p>DK</p></div>
+    <div id="Lk" class="victim"><p>Link</p></div>
+    <div id="GW" class="victim"><p>MrG&W</p></div>
+    <div id="Ry" class="victim"><p>Roy</p></div>
+    <div id="Mw" class="victim"><p>Mewtwo</p></div>
+    <div id="Zd" class="victim"><p>Zelda</p></div>
+    <div id="Ns" class="victim"><p>Ness</p></div>
+    <div id="Pi" class="victim"><p>Pichu</p></div>
+    <div id="Bw" class="victim"><p>Bowser</p></div>
+    <div id="Kb" class="victim"><p>Kirby</p></div>
+  </div>
+</div>
+<div id="optionsMain">
+</div>
+<div id="resultsMain" class="main">
+  <div id="resultsTitle" class="title"><p>Results</p></div>
+  <div id="resultsContainer">
+  <div id="allHitboxes" class="percent">
+    <div id="allHitboxesTitle"><p>All Hitboxes</p></div>
+    <p id="allHitboxesPercent"><span id="allHitboxesPercentEdit"></span>%</p>
+  </div>
+  <div class="subattackHitboxes percent">
+    <div class="subattackTitle"><p>Clean</p></div>
+    <div class="idContainer">
+      <div class="idTitle"><p>id 0</p></div>
+      <div class="idPercent"><p><span id="subattack1id0Percent">15</span>%</p></div>
+      <div class="idDetails"><p>Dmg: 12<br>Angle: 361<br>BKB: 100<br>KBG: 75<br>SKB: 0<br>Type: <span class="effectText">Normal</span><br></p></div>
+    </div><div class="idSeperator"></div><div class="idContainer">
+      <div class="idTitle"><p>id 1</p></div>
+      <div class="idPercent"><p><span id="subattack1id1Percent">27</span>%</p></div>
+      <div class="idDetails"><p>Dmg: 12<br>Angle: 361<br>BKB: 100<br>KBG: 75<br>SKB: 0<br>Type: <span class="effectText">Normal</span><br></p></div>
+    </div><div class="idSeperator"></div><div class="idContainer">
+      <div class="idTitle"><p>id 2</p></div>
+      <div class="idPercent"><p><span id="subattack1id2Percent">46</span>%</p></div>
+      <div class="idDetails"><p>Dmg: 12<br>Angle: 361<br>BKB: 100<br>KBG: 75<br>SKB: 0<br>Type: <span class="effectText">Normal</span><br></p></div>
+    </div><div class="idSeperator"></div><div class="idContainer">
+      <div class="idTitle"><p>id 3</p></div>
+      <div class="idPercent"><p><span id="subattack1id3Percent">102</span>%</p></div>
+      <div class="idDetails"><p>Dmg: 12<br>Angle: 361<br>BKB: 100<br>KBG: 75<br>SKB: 0<br>Type: <span class="effectText">Normal</span><br></p></div>
+    </div>
+  </div>
+  </div>
+</div>
+</div>
+</body>
+</html>
