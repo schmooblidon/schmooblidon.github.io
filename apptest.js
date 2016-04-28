@@ -203,10 +203,11 @@ function crouchCancelTask(){
     for (i=0;i<keys.length;i++){
       // find percent
       ccPercents[i] = findCrouchCancelPercent(t.curHitbox[keys[i]],t.character);
-      if (ccPercents[i] < 0){
-        ccPercents[i] = 0;
-      }
-      if (ccPercents[i] != "Never" && ccPercents[i] != "Infinity"){
+
+      if (ccPercents[i] != "Never" && ccPercents[i] != "Inf"){
+        if (ccPercents[i] < 0){
+          ccPercents[i] = 0;
+        }
         ccPercents[i] = Math.floor(ccPercents[i]);
       }
       //applying seperators
@@ -220,7 +221,7 @@ function crouchCancelTask(){
         if (ccPercents[i] == "Never"){
           lowestPercent = "Never";
         }
-        else if (ccPercents[i] != "Infinity"){
+        else if (ccPercents[i] != "Inf"){
           if (ccPercents[i] < lowestPercent){
             lowestPercent = ccPercents[i];
           }
@@ -243,10 +244,11 @@ function crouchCancelTask(){
       for (j=0;j<keys2.length;j++){
         // find percent
         ccPercents[i][j] = findCrouchCancelPercent(t.curHitbox[keys[i]][keys2[j]],t.character);
-        if (ccPercents[i][j] < 0){
-          ccPercents[i][j] = 0;
-        }
-        if (ccPercents[i][j] != "Never" || ccPercents[i][j] != "Infinity"){
+
+        if (ccPercents[i][j] != "Never" && ccPercents[i][j] != "Inf"){
+          if (ccPercents[i][j] < 0){
+            ccPercents[i][j] = 0;
+          }
           ccPercents[i][j] = Math.floor(ccPercents[i][j]);
         }
         //applying seperators
@@ -260,7 +262,7 @@ function crouchCancelTask(){
           if (ccPercents[i][j] == "Never"){
             lowestPercent = "Never";
           }
-          else if (ccPercents[i][j] != "Infinity"){
+          else if (ccPercents[i][j] != "Inf"){
             if (ccPercents[i][j] < lowestPercent){
               lowestPercent = ccPercents[i][j];
             }
@@ -274,19 +276,21 @@ function crouchCancelTask(){
   }
   // if lowest percent never changed, must be infinity
   if (lowestPercent == 123456){
-    lowestPercent = "Infinity";
+    lowestPercent = "Inf";
   }
   $("#allHitboxesPercentEdit").append(lowestPercent);
 }
 
-function findCrouchCancelPercent(hitbox,victim){
+angleConversion = Math.PI / 180;
+
+function calculatePercentFromKnockback(kb,hitbox,victim){
   var base = hitbox.bk;
   var growth = hitbox.kg;
   var damageunstaled = hitbox.dmg;
   var damagestaled = hitbox.dmg;
   var setKnockback = hitbox.wbk;
   var weight = characters[victim].NTSCweight;
-  var knockback = 120;
+  var knockback = kb;
   var percent = 0;
   if (setKnockback == 0){
     if (growth > 0){
@@ -298,12 +302,139 @@ function findCrouchCancelPercent(hitbox,victim){
     }
   }
   else {
-    var kb = ((((setKnockback * 10 / 20) + 1) * 1.4 * (200/(weight + 100)) + 18) * (growth / 100)) + base;
-    if (kb >= 80){
+    var knockback = ((((setKnockback * 10 / 20) + 1) * 1.4 * (200/(weight + 100)) + 18) * (growth / 100)) + base;
+    if (knockback >= kb){
       percent = "Never";
     }
     else {
-      percent = "Infinity";
+      percent = "Inf";
+    }
+  }
+  return percent;
+}
+
+function getAngle(trajectory, knockback, reverse, x, y) {
+  //p = cos(a-arctan(x/y))*sqrt(x^2+y^2)
+    var deadzone = false;
+    if (knockback < 80 && grounded && (trajectory == 0 || trajectory == 180)){
+      deadzone = true;
+    }
+    if (x < 0.2875 && x > -0.2875){
+      x = 0;
+    }
+    if (y < 0.2875 && y > -0.2875){
+      y = 0;
+    }
+
+    if (x == 0 && y < 0){
+      diAngle = 270;
+    }
+    else if (x == 0 && y > 0){
+      diAngle = 90;
+    }
+    else if (x == 0 && y == 0){
+      deadzone = true;
+    }
+    else {
+      diAngle = Math.atan(y/x) * (180 / Math.PI) * 1;
+      if (x < 0){
+        diAngle += 180;
+      }
+      else if (y < 0) {
+        diAngle += 360;
+      }
+    }
+
+    if (trajectory == 361) {
+        if (knockback < 32.1) {
+          if (reverse){
+            trajectory = 180;
+          }
+          else {
+            trajectory = 0;
+          }
+          sakurai = 0;
+        }
+        else if (knockback >= 32.1) {
+          if (reverse){
+            trajectory = 136;
+          }
+          else {
+            trajectory = 44;
+          }
+          sakurai = 44;
+        }
+        else {
+          prompt("Why would this ever get called?");
+          trajectory = 440*(knockback-32);
+          if (reverse){
+            trajectory = 180 - trajectory;
+              if (trajectory < 0){
+                trajectory = 360 + trajectory;
+              }
+          }
+        }
+    }
+    else {
+      if (reverse){
+        trajectory = 180 - trajectory;
+          if (trajectory < 0){
+            trajectory = 360 + trajectory;
+          }
+      }
+    }
+
+    if (!deadzone){
+      var rAngle = trajectory - diAngle;
+      if (rAngle > 180){
+        rAngle -= 360;
+      }
+
+      var pDistance = Math.sin(rAngle * angleConversion) * Math.sqrt(x*x+y*y);
+
+      var angleOffset = pDistance * pDistance * 18;
+      if (angleOffset > 18){
+        angleOffset = 18;
+      }
+
+      if (rAngle < 0 && rAngle > -180){
+          angleOffset *= -1;
+      }
+
+    }
+    else {
+      var angleOffset = 0;
+    }
+    var newtraj = trajectory - angleOffset;
+    if (newtraj < 0.01){
+      newtraj = 0;
+    }
+
+    return newtraj;
+
+}
+
+
+function findLiftUpKnockback (victim,angle){
+  return ((characters[victim].gravity + 3 + (0.051 * Math.sin(angle*angleConversion))) / 0.03 ) / Math.sin(angle*angleConversion);
+}
+
+function findCrouchCancelPercent(hitbox,victim){
+  var percent;
+  var trajectory = hitbox.angle;
+  if ((trajectory == 0 || trajectory >= 180) && trajectory != 361){
+    percent = "Never";
+  }
+  else {
+    var newAngle = getAngle(trajectory, 120, false, 0, -1.0);
+    var liftUpKB = findLiftUpKnockback(victim,newAngle);
+    prompt(liftUpKB);
+    if (liftUpKB < 80){
+      percent = calculatePercentFromKnockback(liftUpKB*(3/2),hitbox,victim);
+      prompt("Tell me if this gets called");
+    }
+    else {
+      percent = calculatePercentFromKnockback(120,hitbox,victim);
     }
   }
   return percent;
