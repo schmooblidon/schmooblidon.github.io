@@ -177,10 +177,16 @@ function victimClick(){
     if (task == 1){
       crouchCancelTask();
     }
+    else if (task == 2){
+      asdiDownTask();
+    }
+    else if (task == 3){
+      amsahTechTask();
+    }
   });
 }
 
-// tasks: 0=none, 1=crouch, 2=kill, 3=shieldstun
+// tasks: 0=none, 1=crouch, 2=asdidown, 3=amsahtech, 4=kill, 5=shieldstun
 task = 0;
 
 function crouchCancelClick() {
@@ -192,38 +198,76 @@ function crouchCancelClick() {
   });
 }
 
+function asdiDownClick() {
+  $("#asdiDownTask").click(function(){
+    $("#attackMain").fadeIn();
+    $("#taskMain").fadeOut();
+    task = 2;
+    characterClick();
+  });
+}
+
+function amsahTechClick() {
+  $("#amsahTechTask").click(function(){
+    $("#attackMain").fadeIn();
+    $("#taskMain").fadeOut();
+    task = 3;
+    characterClick();
+  });
+}
+
 function crouchCancelTask(){
+  createPercents("cc");
+}
+
+function asdiDownTask(){
+  createPercents("ad");
+}
+
+function amsahTechTask(){
+  createPercents("at");
+}
+
+function createPercents(type){
   $("#resultsContainer").empty().append('<div id="allHitboxes" class="percent"><div id="allHitboxesTitle"><p>All Hitboxes</p></div><p id="allHitboxesPercent"><span id="allHitboxesPercentEdit"></span>%</p></div>');
   var keys = Object.keys(t.curHitbox);
   // if no subattacks
   if (keys[0][0] == "i" && keys[0][1] == "d"){
-    var ccPercents = [];
+    var percents = [];
     var lowestPercent = 123456;
     // for each id
     for (i=0;i<keys.length;i++){
       // find percent
-      ccPercents[i] = findCrouchCancelPercent(t.curHitbox[keys[i]],t.character);
+      if (type == "cc"){
+        percents[i] = findCrouchCancelPercent(t.curHitbox[keys[i]],t.character);
+      }
+      else if (type == "ad"){
+        percents[i] = findASDIdownPercent(t.curHitbox[keys[i]],t.character);
+      }
+      else if (type == "at"){
+        percents[i] = findAmsahTechPercent(t.curHitbox[keys[i]],t.character);
+      }
 
-      if (ccPercents[i] != "Never" && ccPercents[i] != "Inf"){
-        if (ccPercents[i] < 0){
-          ccPercents[i] = 0;
+      if (percents[i] != "Never" && percents[i] != "Inf"){
+        if (percents[i] < 0){
+          percents[i] = 0;
         }
-        ccPercents[i] = Math.floor(ccPercents[i]);
+        percents[i] = Math.floor(percents[i]);
       }
       //applying seperators
       if (i != 0){
         $("#allHitboxes").append('<div class="idSeperator"></div>');
       }
-      $("#allHitboxes").append('<div id="idContainerAI'+i+'" class="idContainer"><div class="idTitle"><p>id '+i+'</p></div><div class="idPercent"><p><span id="subattackAid'+i+'Percent">'+ccPercents[i]+'</span>%</p></div><div class="idDetails"><p>Dmg: '+t.curHitbox[keys[i]].dmg+'<br>Angle: '+t.curHitbox[keys[i]].angle+'<br>BKB: '+t.curHitbox[keys[i]].bk+'<br>KBG: '+t.curHitbox[keys[i]].kg+'<br>SKB: '+t.curHitbox[keys[i]].wbk+'<br>Type: <span class="effectText">'+t.curHitbox[keys[i]].effect+'</span><br></p></div></div>');
+      $("#allHitboxes").append('<div id="idContainerAI'+i+'" class="idContainer"><div class="idTitle"><p>id '+i+'</p></div><div class="idPercent"><p><span id="subattackAid'+i+'Percent">'+percents[i]+'</span>%</p></div><div class="idDetails"><p>Dmg: '+t.curHitbox[keys[i]].dmg+'<br>Angle: '+t.curHitbox[keys[i]].angle+'<br>BKB: '+t.curHitbox[keys[i]].bk+'<br>KBG: '+t.curHitbox[keys[i]].kg+'<br>SKB: '+t.curHitbox[keys[i]].wbk+'<br>Type: <span class="effectText">'+t.curHitbox[keys[i]].effect+'</span><br></p></div></div>');
 
       // check if lowest percent
       if (lowestPercent != "Never"){
-        if (ccPercents[i] == "Never"){
+        if (percents[i] == "Never"){
           lowestPercent = "Never";
         }
-        else if (ccPercents[i] != "Inf"){
-          if (ccPercents[i] < lowestPercent){
-            lowestPercent = ccPercents[i];
+        else if (percents[i] != "Inf"){
+          if (percents[i] < lowestPercent){
+            lowestPercent = percents[i];
           }
         }
       }
@@ -233,38 +277,39 @@ function crouchCancelTask(){
 
   }
   else {
-    var ccPercents = [];
+    var percents = [];
     var lowestPercent = 123456;
     // for each sub attack
     for (i=0;i<keys.length;i++){
       $("#resultsContainer").append('<div id="subattackHitboxes'+i+'" class="subattackHitboxes percent"><div class="subattackTitle"><p>'+keys[i]+'</p></div>');
-      ccPercents[i] = [];
+      percents[i] = [];
       var keys2 = Object.keys(t.curHitbox[keys[i]]);
       // for each id
       for (j=0;j<keys2.length;j++){
         // find percent
-        ccPercents[i][j] = findCrouchCancelPercent(t.curHitbox[keys[i]][keys2[j]],t.character);
 
-        if (ccPercents[i][j] != "Never" && ccPercents[i][j] != "Inf"){
-          if (ccPercents[i][j] < 0){
-            ccPercents[i][j] = 0;
+        percents[i][j] = findCrouchCancelPercent(t.curHitbox[keys[i]][keys2[j]],t.character);
+
+        if (percents[i][j] != "Never" && percents[i][j] != "Inf"){
+          if (percents[i][j] < 0){
+            percents[i][j] = 0;
           }
-          ccPercents[i][j] = Math.floor(ccPercents[i][j]);
+          percents[i][j] = Math.floor(percents[i][j]);
         }
         //applying seperators
         if (j != 0){
           $("#subattackHitboxes"+i).append('<div class="idSeperator"></div>');
         }
-        $("#subattackHitboxes"+i).append('<div id="idContainerS'+i+'I'+j+'" class="idContainer"><div class="idTitle"><p>id '+j+'</p></div><div class="idPercent"><p><span id="subattack'+i+'id'+j+'Percent">'+ccPercents[i][j]+'</span>%</p></div><div class="idDetails"><p>Dmg: '+t.curHitbox[keys[i]][keys2[j]].dmg+'<br>Angle: '+t.curHitbox[keys[i]][keys2[j]].angle+'<br>BKB: '+t.curHitbox[keys[i]][keys2[j]].bk+'<br>KBG: '+t.curHitbox[keys[i]][keys2[j]].kg+'<br>SKB: '+t.curHitbox[keys[i]][keys2[j]].wbk+'<br>Type: <span class="effectText">'+t.curHitbox[keys[i]][keys2[j]].effect+'</span><br></p></div></div>');
+        $("#subattackHitboxes"+i).append('<div id="idContainerS'+i+'I'+j+'" class="idContainer"><div class="idTitle"><p>id '+j+'</p></div><div class="idPercent"><p><span id="subattack'+i+'id'+j+'Percent">'+percents[i][j]+'</span>%</p></div><div class="idDetails"><p>Dmg: '+t.curHitbox[keys[i]][keys2[j]].dmg+'<br>Angle: '+t.curHitbox[keys[i]][keys2[j]].angle+'<br>BKB: '+t.curHitbox[keys[i]][keys2[j]].bk+'<br>KBG: '+t.curHitbox[keys[i]][keys2[j]].kg+'<br>SKB: '+t.curHitbox[keys[i]][keys2[j]].wbk+'<br>Type: <span class="effectText">'+t.curHitbox[keys[i]][keys2[j]].effect+'</span><br></p></div></div>');
 
         // check if lowest percent
         if (lowestPercent != "Never"){
-          if (ccPercents[i][j] == "Never"){
+          if (percents[i][j] == "Never"){
             lowestPercent = "Never";
           }
-          else if (ccPercents[i][j] != "Inf"){
-            if (ccPercents[i][j] < lowestPercent){
-              lowestPercent = ccPercents[i][j];
+          else if (percents[i][j] != "Inf"){
+            if (percents[i][j] < lowestPercent){
+              lowestPercent = percents[i][j];
             }
           }
         }
@@ -440,11 +485,41 @@ function findCrouchCancelPercent(hitbox,victim){
   return percent;
 }
 
+function findASDIdownPercent(hitbox,victim){
+  var percent;
+  var trajectory = hitbox.angle;
+  if ((trajectory == 0 || trajectory >= 180) && trajectory != 361){
+    percent = "Never";
+  }
+  else {
+    percent = calculatePercentFromKnockback(80,hitbox,victim);
+  }
+  return percent;
+}
+
+function findAmsahTechPercent(hitbox,victim){
+  var percent;
+  var trajectory = hitbox.angle;
+  if ((trajectory == 0 || trajectory >= 180) && trajectory != 361){
+    percent = "Inf";
+  }
+  else {
+    var newAngle = getAngle(trajectory, 120, false, 0, -1.0);
+    prompt(newAngle);
+    var liftUpKB = findLiftUpKnockback(victim,newAngle);
+    //prompt(liftUpKB);
+    percent = calculatePercentFromKnockback(liftUpKB,hitbox,victim);
+  }
+  return percent;
+}
+
 $(document).ready(function(){
 	$('#characterContainer').perfectScrollbar();
 	$('#victimContainer').perfectScrollbar();
   $('#resultsContainer').perfectScrollbar();
   crouchCancelClick();
+  asdiDownClick();
+  amsahTechClick();
 
 
 });
