@@ -270,7 +270,7 @@ function crouchCancelTask(){
         }
 
         // apply margin to center if not 4 ids
-        $("#idContainerS"+i+"I0").css("margin-left",((4-keys.length)*50)+"px");
+        $("#idContainerS"+i+"I0").css("margin-left",((4-keys2.length)*50)+"px");
       }
     }
   }
