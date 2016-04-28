@@ -428,7 +428,7 @@ function findCrouchCancelPercent(hitbox,victim){
   else {
     var newAngle = getAngle(trajectory, 120, false, 0, -1.0);
     var liftUpKB = findLiftUpKnockback(victim,newAngle);
-    prompt(liftUpKB);
+    //prompt(liftUpKB);
     if (liftUpKB < 80){
       percent = calculatePercentFromKnockback(liftUpKB*(3/2),hitbox,victim);
       prompt("Tell me if this gets called");
