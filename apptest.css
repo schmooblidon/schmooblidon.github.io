@@ -194,6 +194,58 @@ body {
 	height:740px;
 	width:500px;
 	display:block;
+  vertical-align:top;
+  position:relative;
+}
+
+#resultsCCoptionContainer {
+	height:60px;
+	width:500px;
+	vertical-align: top;
+}
+
+.resultsCCoptionButton {
+	height:60px;
+	width:166px;
+	display:inline-block;
+	background-color:#202020;
+	vertical-align: top;
+	cursor:pointer;
+}
+
+.resultsCCoptionButton:hover {
+	background-color:#494949;
+}
+
+.ccoptionHighlight {
+	background-color:#d0d0d0;
+	color:black;
+}
+
+.ccoptionHighlight p {
+	color:black;
+}
+
+.resultsCCoptionButton p {
+	text-align:center;
+	margin:0;
+	padding:17px 0px;
+	font-size:20px;
+}
+
+.resultsCCoptionSpace {
+	height:60px;
+	width:1px;
+	display:inline-block;
+	background-color:white;
+}
+
+
+
+#resultsPercents {
+	height:680px;
+	width:500px;
+	display:block;
 	/*overflow-y:scroll;*/
 	overflow-x:hidden;
   vertical-align:top;

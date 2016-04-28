@@ -177,47 +177,58 @@ function victimClick(){
     if (task == 1){
       crouchCancelTask();
     }
-    else if (task == 2){
-      asdiDownTask();
-    }
-    else if (task == 3){
-      amsahTechTask();
-    }
   });
 }
 
 // tasks: 0=none, 1=crouch, 2=asdidown, 3=amsahtech, 4=kill, 5=shieldstun
 task = 0;
+cctask = 0;
 
 function crouchCancelClick() {
   $("#crouchCancelTask").click(function(){
     $("#attackMain").fadeIn();
     $("#taskMain").fadeOut();
     task = 1;
+    cctask = 1;
     characterClick();
   });
 }
 
-function asdiDownClick() {
-  $("#asdiDownTask").click(function(){
-    $("#attackMain").fadeIn();
-    $("#taskMain").fadeOut();
-    task = 2;
-    characterClick();
+function asdiOptionClick() {
+  $("#ccoption2").click(function(){
+    cctask = 2;
+    createPercents("ad");
   });
 }
 
 function amsahTechClick() {
   $("#amsahTechTask").click(function(){
-    $("#attackMain").fadeIn();
-    $("#taskMain").fadeOut();
-    task = 3;
-    characterClick();
+    cctask = 3;
+    createPercents("at");
   });
 }
 
 function crouchCancelTask(){
+  $("#resultsContainer").empty().append('<div id="resultsCCoptionContainer"><div id="ccoption1" class="resultsCCoptionButton ccoptionHighlight"><p>Crouch Cancel</p></div><div class="resultsCCoptionSpace"></div><div id="ccoption2" class="resultsCCoptionButton"><p>ASDI Down</p></div><div class="resultsCCoptionSpace"></div><div id="ccoption3" class="resultsCCoptionButton"><p>Amsah Tech</p></div></div><div id="resultsCCpercents"></div>');
   createPercents("cc");
+  $(".resultsCCoptionButton").click(function(){
+    $(".resultsCCoptionButton").removeClass("ccoptionHighlight");
+    $(this).addClass("ccoptionHighlight");
+    var id = $(this).attr("id");
+    id = id.substr(8,id.length);
+    if (id == 1){
+      cctask = 1;
+      createPercents("cc");
+    }
+    else if (id == 2){
+      cctask = 2;
+      createPercents("ad");
+    }
+    else if (id == 3){
+      cctask = 3;
+      createPercents("at");
+    }
+  });
 }
 
 function asdiDownTask(){
@@ -229,7 +240,7 @@ function amsahTechTask(){
 }
 
 function createPercents(type){
-  $("#resultsContainer").empty().append('<div id="allHitboxes" class="percent"><div id="allHitboxesTitle"><p>All Hitboxes</p></div><p id="allHitboxesPercent"><span id="allHitboxesPercentEdit"></span>%</p></div>');
+  $("#resultsCCpercents").empty().append('<div id="allHitboxes" class="percent"><div id="allHitboxesTitle"><p>All Hitboxes</p></div><p id="allHitboxesPercent"><span id="allHitboxesPercentEdit"></span>%</p></div>');
   var keys = Object.keys(t.curHitbox);
   // if no subattacks
   if (keys[0][0] == "i" && keys[0][1] == "d"){
@@ -281,7 +292,7 @@ function createPercents(type){
     var lowestPercent = 123456;
     // for each sub attack
     for (i=0;i<keys.length;i++){
-      $("#resultsContainer").append('<div id="subattackHitboxes'+i+'" class="subattackHitboxes percent"><div class="subattackTitle"><p>'+keys[i]+'</p></div>');
+      $("#resultsCCpercents").append('<div id="subattackHitboxes'+i+'" class="subattackHitboxes percent"><div class="subattackTitle"><p>'+keys[i]+'</p></div>');
       percents[i] = [];
       var keys2 = Object.keys(t.curHitbox[keys[i]]);
       // for each id
@@ -497,7 +508,7 @@ function findASDIdownPercent(hitbox,victim){
   return percent;
 }
 
-function findAmsahTechPercent(hitbox,victim){
+function findAmsahTechPercent(hitbox,victim,type){
   var percent;
   var trajectory = hitbox.angle;
   if ((trajectory == 0 || trajectory >= 180) && trajectory != 361){
@@ -505,7 +516,7 @@ function findAmsahTechPercent(hitbox,victim){
   }
   else {
     var newAngle = getAngle(trajectory, 120, false, 0, -1.0);
-    prompt(newAngle);
+    //prompt(newAngle);
     var liftUpKB = findLiftUpKnockback(victim,newAngle);
     //prompt(liftUpKB);
     percent = calculatePercentFromKnockback(liftUpKB,hitbox,victim);
@@ -518,8 +529,4 @@ $(document).ready(function(){
 	$('#victimContainer').perfectScrollbar();
   $('#resultsContainer').perfectScrollbar();
   crouchCancelClick();
-  asdiDownClick();
-  amsahTechClick();
-
-
 });
