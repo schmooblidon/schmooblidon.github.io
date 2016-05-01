@@ -1,37 +1,59 @@
-t = {
-  pointerXMelee:0,
-  pointerYMelee:0,
-  tdiXMelee : 0,
-  tdiYMelee : 0,
-  sdiXMelee : 0,
-  sdiYMelee : 0,
-  adiXMelee : 0,
-  adiYMelee : 0,
-  curHitbox : chars.Fx.neutralSpecial,
-  cHname : ["Fx","neutralSpecial"],
-  character : "Fox",
-  percent : 80,
-  version : "NTSC",
-  crouch : false,
-  reverse : false,
-  chargeInterrupt : false,
-  chargeF : 0,
-  staleQueue : [false,false,false,false,false,false,false,false,false],
-  curPositions : 0,
-  fadeIn : true,
-  doubleJump : true,
-  hitstun : 0,
-  meteorCancel : 0,
-  vcancel : 0,
-  grounded : true,
-  knockback : 0,
-  yDisplacement : 0,
-  newDamage : 3,
-  stayGrounded : false,
-  metal : false,
-  ice : false,
-  icg : false
-};
+defaultversion = "NTSC";
+
+bz = {};
+bz.bf = [200,224,-108.8,-224];
+bz.fd = [188,246,-140,-246];
+bz.dl = [250,255,-123,-255];
+bz.ps = [180,230,-111,-230];
+bz.ys = [168,173.6,-91,-175.7];
+bz.fo = [202.5,198.75,-146.25,-198.75];
+
+function trajectoryObject(){
+  this.calculation = 0;
+  this.pointerXMelee = 0;
+  this.pointerYMelee = 0;
+  this.tdiXMelee = 0;
+  this.tdiYMelee = 0;
+  this.sdiXMelee = 0;
+  this.sdiYMelee = 0;
+  this.adiXMelee = 0;
+  this.adiYMelee = 0;
+  this.curHitbox = chars.Fx.neutralSpecial;
+  this.cHname = ["Fx","neutralSpecial"];
+  this.character = "Fox";
+  this.percent = 0;
+  this.version = defaultversion;
+  this.crouch = false;
+  this.reverse = false;
+  this.chargeInterrupt = false;
+  this.chargeF = 0;
+  this.staleQueue = [false,false,false,false,false,false,false,false,false];
+  this.curPositions = 0;
+  this.fadeIn = true;
+  this.doubleJump = true;
+  this.hitstun = 0;
+  this.meteorCancel = 0;
+  this.vcancel = 0;
+  this.grounded = false;
+  this.knockback = 0;
+  this.yDisplacement = 0;
+  this.newDamage = 3;
+  this.stayGrounded = false;
+  this.metal = false;
+  this.ice = false;
+  this.icg = false;
+  this.isThrow = false;
+  this.stage = "bf";
+  this.task = 0;
+  this.damagestaled = 3;
+  this.damageunstaled = 3;
+}
+
+cl = [];
+
+curCalculations = 0;
+
+c = -1;
 
 function convertCharName(name){
   var newname;
@@ -159,8 +181,8 @@ function attackClick(){
   $(".attack").unbind("click");
   $(".attack").click(function(){
     attackid = $(this).attr("id");
-    t.curHitbox = chars[charid][attackid];
-    t.cHname = Object.keys(chars[charid][attackid]);
+    cl[c].curHitbox = chars[charid][attackid];
+    cl[c].cHname = Object.keys(chars[charid][attackid]);
     $("#victimMain").fadeIn();
     $("#attackMain").fadeOut();
     victimClick();
@@ -171,39 +193,55 @@ function victimClick(){
   $(".victim").unbind("click");
   $(".victim").click(function(){
     var id = $(this).attr("id");
-    t.character = convertCharName(id);
+    cl[c].character = convertCharName(id);
     $("#resultsMain").fadeIn();
     $("#victimMain").fadeOut();
-    if (task == 1){
-      crouchCancelTask();
+    switch (cl[c].task){
+      case 1:
+        crouchCancelTask();
+        break;
+      case 2:
+        killTask();
+        break;
+      default:
+        break;
     }
   });
 }
 
-// tasks: 0=none, 1=crouch, 2=asdidown, 3=amsahtech, 4=kill, 5=shieldstun
-task = 0;
-cctask = 0;
+// tasks: 0=none, 1=crouch, 2=kill, 3=shieldstun
+//task = 0;
 
 function crouchCancelClick() {
   $("#crouchCancelTask").click(function(){
     $("#attackMain").fadeIn();
     $("#taskMain").fadeOut();
-    task = 1;
-    cctask = 1;
+    c++;
+    cl[c] = new trajectoryObject();
+    cl[c].task = 1;
+    characterClick();
+  });
+}
+
+function killClick() {
+  $("#killTask").click(function(){
+    $("#attackMain").fadeIn();
+    $("#taskMain").fadeOut();
+    c++;
+    cl[c] = new trajectoryObject();
+    cl[c].task = 2;
     characterClick();
   });
 }
 
 function asdiOptionClick() {
   $("#ccoption2").click(function(){
-    cctask = 2;
     createPercents("ad");
   });
 }
 
 function amsahTechClick() {
   $("#amsahTechTask").click(function(){
-    cctask = 3;
     createPercents("at");
   });
 }
@@ -217,31 +255,40 @@ function crouchCancelTask(){
     var id = $(this).attr("id");
     id = id.substr(8,id.length);
     if (id == 1){
-      cctask = 1;
-      createPercents("cc");
+      createPercents(c,"cc");
     }
     else if (id == 2){
-      cctask = 2;
-      createPercents("ad");
+      createPercents(c,"ad");
     }
     else if (id == 3){
-      cctask = 3;
-      createPercents("at");
+      createPercents(c,"at");
     }
   });
 }
 
-function asdiDownTask(){
-  createPercents("ad");
+function killTask(){
+  $("#resultsContainer").empty().append('<div id="resultsCCoptionContainer"><div id="ccoption1" class="resultsCCoptionButton ccoptionHighlight"><p>No DI</p></div><div class="resultsCCoptionSpace"></div><div id="ccoption2" class="resultsCCoptionButton"><p>Max DI 1</p></div><div class="resultsCCoptionSpace"></div><div id="ccoption3" class="resultsCCoptionButton"><p>Max DI 2</p></div></div><div id="resultsCCpercents"></div>');
+  createPercents(c,"kn");
+  $(".resultsCCoptionButton").click(function(){
+    $(".resultsCCoptionButton").removeClass("ccoptionHighlight");
+    $(this).addClass("ccoptionHighlight");
+    var id = $(this).attr("id");
+    id = id.substr(8,id.length);
+    if (id == 1){
+      createPercents(c,"kn");
+    }
+    else if (id == 2){
+      createPercents(c,"kp");
+    }
+    else if (id == 3){
+      createPercents(c,"kb");
+    }
+  });
 }
 
-function amsahTechTask(){
-  createPercents("at");
-}
-
-function createPercents(type){
+function createPercents(c,type){
   $("#resultsCCpercents").empty().append('<div id="allHitboxes" class="percent"><div id="allHitboxesTitle"><p>All Hitboxes</p></div><p id="allHitboxesPercent"><span id="allHitboxesPercentEdit"></span>%</p></div>');
-  var keys = Object.keys(t.curHitbox);
+  var keys = Object.keys(cl[c].curHitbox);
   // if no subattacks
   if (keys[0][0] == "i" && keys[0][1] == "d"){
     var percents = [];
@@ -249,27 +296,40 @@ function createPercents(type){
     // for each id
     for (i=0;i<keys.length;i++){
       // find percent
-      if (type == "cc"){
-        percents[i] = findCrouchCancelPercent(t.curHitbox[keys[i]],t.character);
-      }
-      else if (type == "ad"){
-        percents[i] = findASDIdownPercent(t.curHitbox[keys[i]],t.character);
-      }
-      else if (type == "at"){
-        percents[i] = findAmsahTechPercent(t.curHitbox[keys[i]],t.character);
+      switch (type){
+        case "cc":
+          percents[i] = findCrouchCancelPercent(cl[c].curHitbox[keys[i]],cl[c].character);
+          break;
+        case "ad":
+          percents[i] = findASDIdownPercent(cl[c].curHitbox[keys[i]],cl[c].character);
+          break;
+        case "at":
+          percents[i] = findAmsahTechPercent(cl[c].curHitbox[keys[i]],cl[c].character);
+          break;
+        case "kn":
+          percents[i] = findKillPercent(cl[c].curHitbox[keys[i]],c,"n");
+          break;
+        case "kp":
+          percents[i] = findKillPercent(cl[c].curHitbox[keys[i]],c,"p");
+          break;
+        case "kb":
+          percents[i] = findKillPercent(cl[c].curHitbox[keys[i]],c,"b");
+          break;
+        default:
+          break;
       }
 
       if (percents[i] != "Never" && percents[i] != "Inf"){
         if (percents[i] < 0){
           percents[i] = 0;
         }
-        percents[i] = Math.floor(percents[i]);
+        percents[i] = Math.ceil(percents[i]);
       }
       //applying seperators
       if (i != 0){
         $("#allHitboxes").append('<div class="idSeperator"></div>');
       }
-      $("#allHitboxes").append('<div id="idContainerAI'+i+'" class="idContainer"><div class="idTitle"><p>id '+i+'</p></div><div class="idPercent"><p><span id="subattackAid'+i+'Percent">'+percents[i]+'</span>%</p></div><div class="idDetails"><p>Dmg: '+t.curHitbox[keys[i]].dmg+'<br>Angle: '+t.curHitbox[keys[i]].angle+'<br>BKB: '+t.curHitbox[keys[i]].bk+'<br>KBG: '+t.curHitbox[keys[i]].kg+'<br>SKB: '+t.curHitbox[keys[i]].wbk+'<br>Type: <span class="effectText">'+t.curHitbox[keys[i]].effect+'</span><br></p></div></div>');
+      $("#allHitboxes").append('<div id="idContainerAI'+i+'" class="idContainer"><div class="idTitle"><p>id '+i+'</p></div><div class="idPercent"><p><span id="subattackAid'+i+'Percent">'+percents[i]+'</span>%</p></div><div class="idDetails"><p>Dmg: '+cl[c].curHitbox[keys[i]].dmg+'<br>Angle: '+cl[c].curHitbox[keys[i]].angle+'<br>BKB: '+cl[c].curHitbox[keys[i]].bk+'<br>KBG: '+cl[c].curHitbox[keys[i]].kg+'<br>SKB: '+cl[c].curHitbox[keys[i]].wbk+'<br>Type: <span class="effectText">'+cl[c].curHitbox[keys[i]].effect+'</span><br></p></div></div>');
 
       // check if lowest percent
       if (lowestPercent != "Never"){
@@ -294,24 +354,45 @@ function createPercents(type){
     for (i=0;i<keys.length;i++){
       $("#resultsCCpercents").append('<div id="subattackHitboxes'+i+'" class="subattackHitboxes percent"><div class="subattackTitle"><p>'+keys[i]+'</p></div>');
       percents[i] = [];
-      var keys2 = Object.keys(t.curHitbox[keys[i]]);
+      var keys2 = Object.keys(cl[c].curHitbox[keys[i]]);
       // for each id
       for (j=0;j<keys2.length;j++){
         // find percent
 
-        percents[i][j] = findCrouchCancelPercent(t.curHitbox[keys[i]][keys2[j]],t.character);
+        switch (type){
+          case "cc":
+            percents[i][j] = findCrouchCancelPercent(cl[c].curHitbox[keys[i]][keys2[j]],cl[c].character);
+            break;
+          case "ad":
+            percents[i][j] = findASDIdownPercent(cl[c].curHitbox[keys[i]][keys2[j]],cl[c].character);
+            break;
+          case "at":
+            percents[i][j] = findAmsahTechPercent(cl[c].curHitbox[keys[i]][keys2[j]],cl[c].character);
+            break;
+          case "kn":
+            percents[i][j] = findKillPercent(cl[c].curHitbox[keys[i]][keys2[j]],c,"n");
+            break;
+          case "kp":
+            percents[i][j] = findKillPercent(cl[c].curHitbox[keys[i]][keys2[j]],c,"p");
+            break;
+          case "kb":
+            percents[i][j] = findKillPercent(cl[c].curHitbox[keys[i]][keys2[j]],c,"b");
+            break;
+          default:
+            break;
+        }
 
         if (percents[i][j] != "Never" && percents[i][j] != "Inf"){
           if (percents[i][j] < 0){
             percents[i][j] = 0;
           }
-          percents[i][j] = Math.floor(percents[i][j]);
+          percents[i][j] = Math.ceil(percents[i][j]);
         }
         //applying seperators
         if (j != 0){
           $("#subattackHitboxes"+i).append('<div class="idSeperator"></div>');
         }
-        $("#subattackHitboxes"+i).append('<div id="idContainerS'+i+'I'+j+'" class="idContainer"><div class="idTitle"><p>id '+j+'</p></div><div class="idPercent"><p><span id="subattack'+i+'id'+j+'Percent">'+percents[i][j]+'</span>%</p></div><div class="idDetails"><p>Dmg: '+t.curHitbox[keys[i]][keys2[j]].dmg+'<br>Angle: '+t.curHitbox[keys[i]][keys2[j]].angle+'<br>BKB: '+t.curHitbox[keys[i]][keys2[j]].bk+'<br>KBG: '+t.curHitbox[keys[i]][keys2[j]].kg+'<br>SKB: '+t.curHitbox[keys[i]][keys2[j]].wbk+'<br>Type: <span class="effectText">'+t.curHitbox[keys[i]][keys2[j]].effect+'</span><br></p></div></div>');
+        $("#subattackHitboxes"+i).append('<div id="idContainerS'+i+'I'+j+'" class="idContainer"><div class="idTitle"><p>id '+j+'</p></div><div class="idPercent"><p><span id="subattack'+i+'id'+j+'Percent">'+percents[i][j]+'</span>%</p></div><div class="idDetails"><p>Dmg: '+cl[c].curHitbox[keys[i]][keys2[j]].dmg+'<br>Angle: '+cl[c].curHitbox[keys[i]][keys2[j]].angle+'<br>BKB: '+cl[c].curHitbox[keys[i]][keys2[j]].bk+'<br>KBG: '+cl[c].curHitbox[keys[i]][keys2[j]].kg+'<br>SKB: '+cl[c].curHitbox[keys[i]][keys2[j]].wbk+'<br>Type: <span class="effectText">'+cl[c].curHitbox[keys[i]][keys2[j]].effect+'</span><br></p></div></div>');
 
         // check if lowest percent
         if (lowestPercent != "Never"){
@@ -337,196 +418,11 @@ function createPercents(type){
   $("#allHitboxesPercentEdit").append(lowestPercent);
 }
 
-angleConversion = Math.PI / 180;
-
-function calculatePercentFromKnockback(kb,hitbox,victim){
-  var base = hitbox.bk;
-  var growth = hitbox.kg;
-  var damageunstaled = hitbox.dmg;
-  var damagestaled = hitbox.dmg;
-  var setKnockback = hitbox.wbk;
-  var weight = characters[victim].NTSCweight;
-  var knockback = kb;
-  var percent = 0;
-  if (setKnockback == 0){
-    if (growth > 0){
-      percent = ((-50*base*weight) - (5000 * base) - (7*growth*damagestaled*damageunstaled) - (14 * growth * damagestaled) - (9*growth*weight) - (900*growth) + (50*knockback*weight) + (5000 * knockback))/(7*growth*(damageunstaled + 2));
-    }
-    else {
-      prompt("Can't divide by zero! This hitbox shouldn't exist");
-      percent = 0;
-    }
-  }
-  else {
-    var knockback = ((((setKnockback * 10 / 20) + 1) * 1.4 * (200/(weight + 100)) + 18) * (growth / 100)) + base;
-    if (knockback >= kb){
-      percent = "Never";
-    }
-    else {
-      percent = "Inf";
-    }
-  }
-  return percent;
-}
-
-function getAngle(trajectory, knockback, reverse, x, y) {
-  //p = cos(a-arctan(x/y))*sqrt(x^2+y^2)
-    var deadzone = false;
-    if (knockback < 80 && grounded && (trajectory == 0 || trajectory == 180)){
-      deadzone = true;
-    }
-    if (x < 0.2875 && x > -0.2875){
-      x = 0;
-    }
-    if (y < 0.2875 && y > -0.2875){
-      y = 0;
-    }
-
-    if (x == 0 && y < 0){
-      diAngle = 270;
-    }
-    else if (x == 0 && y > 0){
-      diAngle = 90;
-    }
-    else if (x == 0 && y == 0){
-      deadzone = true;
-    }
-    else {
-      diAngle = Math.atan(y/x) * (180 / Math.PI) * 1;
-      if (x < 0){
-        diAngle += 180;
-      }
-      else if (y < 0) {
-        diAngle += 360;
-      }
-    }
-
-    if (trajectory == 361) {
-        if (knockback < 32.1) {
-          if (reverse){
-            trajectory = 180;
-          }
-          else {
-            trajectory = 0;
-          }
-          sakurai = 0;
-        }
-        else if (knockback >= 32.1) {
-          if (reverse){
-            trajectory = 136;
-          }
-          else {
-            trajectory = 44;
-          }
-          sakurai = 44;
-        }
-        else {
-          prompt("Why would this ever get called?");
-          trajectory = 440*(knockback-32);
-          if (reverse){
-            trajectory = 180 - trajectory;
-              if (trajectory < 0){
-                trajectory = 360 + trajectory;
-              }
-          }
-        }
-    }
-    else {
-      if (reverse){
-        trajectory = 180 - trajectory;
-          if (trajectory < 0){
-            trajectory = 360 + trajectory;
-          }
-      }
-    }
-
-    if (!deadzone){
-      var rAngle = trajectory - diAngle;
-      if (rAngle > 180){
-        rAngle -= 360;
-      }
-
-      var pDistance = Math.sin(rAngle * angleConversion) * Math.sqrt(x*x+y*y);
-
-      var angleOffset = pDistance * pDistance * 18;
-      if (angleOffset > 18){
-        angleOffset = 18;
-      }
-
-      if (rAngle < 0 && rAngle > -180){
-          angleOffset *= -1;
-      }
-
-    }
-    else {
-      var angleOffset = 0;
-    }
-    var newtraj = trajectory - angleOffset;
-    if (newtraj < 0.01){
-      newtraj = 0;
-    }
-
-    return newtraj;
-
-}
-
-
-function findLiftUpKnockback (victim,angle){
-  return ((characters[victim].gravity + 3 + (0.051 * Math.sin(angle*angleConversion))) / 0.03 ) / Math.sin(angle*angleConversion);
-}
-
-function findCrouchCancelPercent(hitbox,victim){
-  var percent;
-  var trajectory = hitbox.angle;
-  if ((trajectory == 0 || trajectory >= 180) && trajectory != 361){
-    percent = "Never";
-  }
-  else {
-    var newAngle = getAngle(trajectory, 120, false, 0, -1.0);
-    var liftUpKB = findLiftUpKnockback(victim,newAngle);
-    //prompt(liftUpKB);
-    if (liftUpKB < 80){
-      percent = calculatePercentFromKnockback(liftUpKB*(3/2),hitbox,victim);
-      prompt("Tell me if this gets called");
-    }
-    else {
-      percent = calculatePercentFromKnockback(120,hitbox,victim);
-    }
-  }
-  return percent;
-}
-
-function findASDIdownPercent(hitbox,victim){
-  var percent;
-  var trajectory = hitbox.angle;
-  if ((trajectory == 0 || trajectory >= 180) && trajectory != 361){
-    percent = "Never";
-  }
-  else {
-    percent = calculatePercentFromKnockback(80,hitbox,victim);
-  }
-  return percent;
-}
-
-function findAmsahTechPercent(hitbox,victim,type){
-  var percent;
-  var trajectory = hitbox.angle;
-  if ((trajectory == 0 || trajectory >= 180) && trajectory != 361){
-    percent = "Inf";
-  }
-  else {
-    var newAngle = getAngle(trajectory, 120, false, 0, -1.0);
-    //prompt(newAngle);
-    var liftUpKB = findLiftUpKnockback(victim,newAngle);
-    //prompt(liftUpKB);
-    percent = calculatePercentFromKnockback(liftUpKB,hitbox,victim);
-  }
-  return percent;
-}
 
 $(document).ready(function(){
 	$('#characterContainer').perfectScrollbar();
 	$('#victimContainer').perfectScrollbar();
   $('#resultsContainer').perfectScrollbar();
   crouchCancelClick();
+  killClick();
 });

@@ -44,6 +44,182 @@ body {
 	vertical-align: top;
 }
 
+#yCalcTitle {
+	background-color: #2d9f65;
+	margin:0;
+}
+
+#yCalcContainer {
+	height:640px;
+	width:500px;
+}
+
+#newCalc {
+	height:100px;
+	width:500px;
+	background-color:#355ec6;
+	cursor:pointer;
+}
+
+#newCalc p {
+	text-align:center;
+	font-size:35px;
+	margin: 0;
+	padding:30px 15px;
+	position:relative;
+}
+
+#newCalcPlus {
+	font-size:80px;
+	vertical-align:top;
+	position:relative;
+	bottom:25px;
+	float:bottom;
+}
+
+#newCalc:hover {
+	background-color:#5e9aff;
+}
+
+.yCalcItem {
+	height:135px;
+	width:500px;
+	background-color:#383838;
+	display:block;
+}
+
+.yCalcItemSpacer {
+	height:1px;
+	width:500px;
+	background-color: white;
+	display:block;
+}
+
+.yCitemNum {
+	width:50px;
+	height:135px;
+	display:inline-block;
+	vertical-align: top;
+}
+
+.yCitemNum p {
+	text-align:center;
+	font-size:45px;
+	padding:45px 5px;
+}
+
+#yCitemNum1 {
+	background-color:#be4141;
+}
+
+#yCitemNum2 {
+	background-color:#fa70b7;
+}
+
+#yCitemNum3 {
+	background-color:#a05ef5;
+}
+
+.yCitem1, .yCitem2, .yCitem3 {
+	height:135px;
+	display:inline-block;
+	vertical-align: top;
+	font-size:20px;
+	text-align: center;
+	margin:0;
+}
+
+.yCitem1 {
+	background-color:#333333;
+	width:100px;
+}
+
+.yCitemsub1, .yCitemsub2, .yCitemsub3 {
+	height:44px;
+	width:100px;
+	display:block;
+	vertical-align:top;
+	margin:0;
+}
+
+.yCitemsub1 p, .yCitemsub2 p, .yCitemsub3 p {
+	margin:0;
+	padding:11px;
+	vertical-align:top;
+	display:inline-block;
+}
+
+.yCitem2 {
+	background-color:#424242;
+		width:150px;
+}
+
+.yCitem3 {
+	background-color:#555555;
+	width:100px;
+}
+
+.yCitem2 p {
+	padding:10px;
+	border:1px solid white;
+	margin:10px;
+}
+
+.yCiSpacer {
+	height:1px;
+	width:80px;
+	margin:0px 10px;
+	background-color:white;
+	display:block;
+	vertical-align: top;
+}
+
+.yCresults {
+	background-color:#4faa5a;
+	height:135px;
+	width:100px;
+	display:inline-block;
+}
+
+.yCresults p {
+	font-size:110px;
+	padding:8px 20px;
+}
+
+.yCitemBottom {
+	height:50px;
+	width:166px;
+	display:inline-block;
+	text-align:center;
+}
+
+.yCitemBottom p {
+	font-size:22px;
+	padding:10px;
+}
+
+.coordinates {
+	font-size:13px;
+}
+
+.smalltext {
+	font-size:12px;
+}
+
+.yCitemDelete {
+	background-color:#cb4242;
+	width:167px;
+}
+
+.yCitemCopy {
+	background-color:#9d5cfb;
+}
+
+.yCitemShare {
+	background-color:#ddad43;
+	width:167px;
+}
+
 #taskTitle {
 	background-color:#cb4242;
 }
@@ -351,6 +527,6 @@ body {
 	vertical-align: top;
 }
 
-#attackMain, #victimMain, #resultsMain {
+#attackMain, #victimMain, #resultsMain, #yourCalcMain {
 	display:none;
 }
