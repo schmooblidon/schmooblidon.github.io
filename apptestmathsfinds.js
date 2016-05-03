@@ -98,6 +98,15 @@ function findAmsahTechPercent(hitbox,victim,type){
   charVel -= grav; max = terVel;
 }*/
 
+function reverseAngle(angle){
+  if (angle <= 180){
+    return 180 - angle;
+  }
+  else {
+    return 540 - angle;
+  }
+}
+
 function findKillPercent(hb,c,diType){
   var percent = 128;
   var iterations = 0;
@@ -109,6 +118,9 @@ function findKillPercent(hb,c,diType){
   var angle = hb.angle;
   if (angle == 361){
     angle = 44;
+  }
+  if (cl[c].reverse){
+    angle = reverseAngle(angle);
   }
   var angles = getDIAngles(angle);
   if (diType == "p"){
@@ -131,8 +143,10 @@ function findKillPercent(hb,c,diType){
   while (!foundPercent && !killNotPossible){
     isKilled = false;
     knockback = getKnockback(hb,percent,c);
+    cl[c].knockback = knockback;
     //console.log("Percent "+percent);
     hitstun = Math.floor(knockback * .4);
+    cl[c].hitstun = hitstun;
 
     gravityFrames = Math.floor(characters[cl[c].character].terminalVelocity / characters[cl[c].character].gravity);
     lastGravityFrame = characters[cl[c].character].terminalVelocity % characters[cl[c].character].gravity;
@@ -147,10 +161,12 @@ function findKillPercent(hb,c,diType){
     verVelChar = 0;
     horVelChar = 0;
 
-    hPos = 0;
-    vPos = 0;
+    hPos = cl[c].mouseXMelee;
+    vPos = cl[c].mouseYMelee;
 
     frame = 0;
+
+    positions = [];
 
 
     while (Math.abs(horVelKB) > 0.001 || Math.abs(verVelKB) > 0.001){
@@ -190,22 +206,12 @@ function findKillPercent(hb,c,diType){
       else if (frame === gravityFrames+1) {
           verVelChar -= lastGravityFrame;
       }
-      if (percent == 126){
-      console.log("frame = "+frame);
-      console.log("hVC = "+horVelChar);
-      console.log("vVC = "+verVelChar);
-      console.log("hVK = "+horVelKB);
-      console.log("vVK = "+verVelKB);
-    }
 
       hPos = hPos + horVelChar + horVelKB;
       vPos = vPos + verVelChar + verVelKB;
 
-      if (percent == 126){
+      positions.push([hPos,vPos]);
 
-      console.log("hPos = "+hPos);
-      console.log("vPos = "+vPos);
-    }
       //console.log("hPos "+hPos);
       //console.log("vPos "+vPos);
       if (hPos > bz[cl[c].stage][1] || hPos < bz[cl[c].stage][3] || vPos < bz[cl[c].stage][2] || (vPos > bz[cl[c].stage][0] && verVelKB >= 2.4)){
@@ -214,9 +220,9 @@ function findKillPercent(hb,c,diType){
       }
     }
     //foundPercent = true;
-    console.log("percent = "+percent);
-    console.log("isKilled = "+isKilled);
-    console.log("iteration = "+iterations);
+    //console.log("percent = "+percent);
+    //console.log("isKilled = "+isKilled);
+    //console.log("iteration = "+iterations);
     if (percent == 1024 && !isKilled){
       killNotPossible = true;
       break;
@@ -243,5 +249,6 @@ function findKillPercent(hb,c,diType){
     }
 
   }
+  //return [percent,positions];
   return percent;
 }

@@ -527,6 +527,240 @@ body {
 	vertical-align: top;
 }
 
-#attackMain, #victimMain, #resultsMain, #yourCalcMain {
+#positionMain {
+
+}
+
+#positionTitle {
+	background-color:#01bb56;
+	margin:0;
+}
+
+.diresultcontainer {
+	display:inline-block;
+
+	height:80px;
+	width:166px;
+}
+
+.diresultcontainer p {
+	text-align:center;
+	padding:7px;
+}
+
+.diresult {
+	height:40px;
+	width:166px;
+	background-color:#252525;
+}
+
+.diresultpercent {
+	height:40px;
+	width:166px;
+	background-color:#4b4b4b;
+}
+
+.diresultspacer {
+	display:inline-block;
+	width:1px;
+	height:80px;
+	background-color: white;
+	vertical-align: top;
+}
+
+#hitdirection {
+	width:250px;
+	height:70px;
+	background-color:black;
+	display:inline-block;
+	vertical-align: top;
+}
+
+#hitDirectionTitle {
+	text-align: center;
+	width:250px;
+	height:20px;
+}
+
+#hitDirectionTitle p {
+	font-size:15px;
+	padding:3px;
+}
+
+.hitDirectionButton {
+	width:125px;
+	height:50px;
+	display:inline-block;
+	background-image:url(assets/app/rightarrow.png);
+	opacity:0.3;
+	cursor:pointer;
+}
+
+.hitDirectionButton:hover {
+	background-color:#404040;
+	opacity:1;
+}
+
+.hitDirectionButtonOn {
+	background-color:#525252;
+	opacity:1;
+}
+
+#hitLeft {
+  -moz-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  filter: FlipH;
+  -ms-filter: "FlipH";
+}
+
+#snaptosurfacesContainer {
+	width:250px;
+	height:70px;
+	display:inline-block;
+	background-color:#1d1d1d;
+	cursor:pointer;
+}
+
+#snaptosurfacesContainer:hover {
+	background-color:#444444;
+}
+
+#ststext {
+	width:250px;
+	height:50px;
+}
+
+#ststext p {
+	text-align: center;
+	padding:10px;
+}
+
+#stsSwitchBar {
+	width:250px;
+	height:5px;
+
+}
+
+.switchBarOn {
+	background-color:#28a735;
+}
+
+.switchBarOff {
+	background-color: #ad2e2e;
+}
+
+#positionDisplay {
+	width:500px;
+	height:430px;
+	background-color: black;
+	overflow-x:scroll;
+	overflow-y:scroll;
+	position:relative;
+}
+
+#trajBackground {
+	position:absolute;
+	/*height:20px;
+	width:20px;*/
+	height:1594px;
+	width:2290px;
+}
+
+#trajCanvas {
+	width:500px;
+	height:40px;
+	position:fixed;
+	top:600px;
+}
+
+#groundedBox {
+	width:250px;
+	height:40px;
+	display:inline-block;
+}
+#groundedBox p {
+	width:87px;
+	background-color:black;
+	padding:5px;
+	margin-left:30px;
+}
+
+#mousePosition {
+	width:250px;
+	height:40px;
+	display:inline-block;
+}
+
+#mousePosition p {
+	width:220px;
+	background-color:black;
+	padding:5px;
+}
+
+#stageSelect {
+	width:500px;
+	height:80px;
+	background-color: black;
+}
+
+.stagebutton {
+	display:inline-block;
+	border-radius:10px;
+	border:3px solid #b4b4b4;
+	width:62px;
+	height:49px;
+	opacity:0.7;
+	margin:12px 9px 8px 6px;
+	cursor:pointer;
+}
+
+.stagebutton:hover {
+  opacity:1;
+  border:3px solid #fcc1c1;
+}
+
+.stageselected {
+  opacity:1;
+  border:3px solid #ff4a4a;
+}
+#bf {
+  background-image:url(assets/trajectory/stageicons2/bf.png);
+}
+#fd {
+  background-image:url(assets/trajectory/stageicons2/fd.png);
+}
+#ys {
+  background-image:url(assets/trajectory/stageicons2/ys.png);
+}
+#fo {
+  background-image:url(assets/trajectory/stageicons2/fo.png);
+}
+#dl {
+  background-image:url(assets/trajectory/stageicons2/dl.png);
+}
+#ps {
+  background-image:url(assets/trajectory/stageicons2/ps.png);
+}
+
+#fullresultsButton {
+	width:500px;
+	height:80px;
+	background-color:#417cb9;
+	cursor:pointer;
+}
+
+#fullresultsButton p {
+	text-align: center;
+	font-size:45px;
+	padding:10px;
+}
+
+#fullresultsButton:hover{
+	background-color:#66b1f6;
+}
+
+#positionMain, #attackMain, #victimMain, #resultsMain, #yourCalcMain {
 	display:none;
 }
