@@ -226,7 +226,7 @@ function victimClick(){
     $("#victimMain").fadeOut();
     switch (cl[c].task){
       case 1:
-          $("#resultsMain").fadeIn();
+        $("#resultsMain").fadeIn();
         crouchCancelTask();
         break;
       case 2:
@@ -311,7 +311,8 @@ function amsahTechClick() {
 
 function crouchCancelTask(){
   $("#resultsContainer").empty().append('<div id="resultsCCoptionContainer"><div id="ccoption1" class="resultsCCoptionButton ccoptionHighlight"><p>Crouch Cancel</p></div><div class="resultsCCoptionSpace"></div><div id="ccoption2" class="resultsCCoptionButton"><p>ASDI Down</p></div><div class="resultsCCoptionSpace"></div><div id="ccoption3" class="resultsCCoptionButton"><p>Amsah Tech</p></div></div><div id="resultsCCpercents"></div>');
-  createPercents("cc");
+  percentsA = createPercents(c,"cc");
+  writePercents(c,percentsA[0],percentsA[1]);
   $(".resultsCCoptionButton").click(function(){
     $(".resultsCCoptionButton").removeClass("ccoptionHighlight");
     $(this).addClass("ccoptionHighlight");
