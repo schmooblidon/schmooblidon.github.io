@@ -68,9 +68,6 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
         }
       }
 
-      firstActionable *= characters[character][version+"weight"];
-      firstActionable += throwFrames[throwChar][throwType+"throw"].hLag;
-
       rpX += throwOffsets[character][0];
       rpY += throwOffsets[character][1];
 
@@ -660,6 +657,14 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
 
     }
 
+    function getTotalThrowLag(throwChar,throwType,character){
+      var release = throwFrames[throwChar][throwType+"throw"].release;
+      var firstActionable = throwFrames[throwChar][throwType+"throw"].firstA;
+      var totalLag = Math.ceil(firstActionable*characters[character][version+"weight"]/100) - Math.ceil(release*characters[character][version+"weight"]/100) + throwFrames[throwChar][throwType+"throw"].hLag;
+      console.log(totalLag);
+      return totalLag;
+    }
+
 		/******* Internal functions end *******/
 
 		/******* Constants start *******/
@@ -693,46 +698,48 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
 
     if (isThrow){
       var releasePoint = getReleasePoint(xPos,yPos,character,throwChar,throwType,reverse,version);
+      var totalThrowLag = getTotalThrowLag(throwChar,throwType,character);
     }
     else {
       var releasePoint = [xPos,yPos];
+      var totalThrowLag = -1;
     }
 
     var knockback = getKnockback(percent, damagestaled, damageunstaled, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel, grounded, trajectory, metal, ice, isThrow);
 
     var hitstun = getHitstun(knockback);
 
-    console.log("Knockback = "+knockback);
+    //console.log("Knockback = "+knockback);
 
     var horizontalVelocity;
     var verticalVelocity;
 
-    if (combo > 0 && comboFrame > 10){
+    if (combo > 0 && comboFrame > -1){
       trajectory = getAngle(trajectory,knockback, false, 0, 0);
-      console.log("trajectory = "+trajectory);
+      //console.log("trajectory = "+trajectory);
       horizontalVelocity = getHorizontalVelocity(knockback, trajectory, gravity);
       verticalVelocity = getVerticalVelocity(knockback, trajectory, gravity, grounded);
-      console.log("horVel = "+horizontalVelocity);
-      console.log("verVel = "+verticalVelocity);
+      //console.log("horVel = "+horizontalVelocity);
+      //console.log("verVel = "+verticalVelocity);
       var newVector = transformComboVelocity(horizontalVelocity,verticalVelocity,combo,comboFrame);
       horizontalVelocity = newVector[0];
       verticalVelocity = newVector[1];
-      console.log("newhorVel = "+horizontalVelocity);
-      console.log("newverVel = "+verticalVelocity);
+      //console.log("newhorVel = "+horizontalVelocity);
+      //console.log("newverVel = "+verticalVelocity);
       trajectory = getNewAngle(horizontalVelocity,verticalVelocity);
-      console.log("newTrajectory = "+trajectory);
+      //console.log("newTrajectory = "+trajectory);
       //var angle = getAngle(newAngle, knockback, reverse, tdiX, tdiY);
       //prompt(angle);
       knockback = getNewKnockback(trajectory,horizontalVelocity);
-      console.log("newKnockback = "+knockback);
+      //console.log("newKnockback = "+knockback);
     }
     var angle = getAngle(trajectory, knockback, reverse, tdiX, tdiY);
-    console.log("angle = "+angle);
+    //console.log("angle = "+angle);
     horizontalVelocity = getHorizontalVelocity(knockback, angle, gravity);
     verticalVelocity = getVerticalVelocity(knockback, angle, gravity, grounded);
 
-    console.log("horVel = "+horizontalVelocity);
-    console.log("verVel = "+verticalVelocity);
+    //console.log("horVel = "+horizontalVelocity);
+    //console.log("verVel = "+verticalVelocity);
 
 
     var horizontalDecay = getHorizontalDecay(angle);
@@ -763,6 +770,8 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     this.stayGrounded = stayGrounded;
 
     this.yDisplacement = yDisplacement;
+
+    this.totalThrowLag = totalThrowLag;
 
     //Position on the last frame of hitstun. Not used yet, but potentially useful.
     //var endPosition = this.positions[this.positions.length - 1];

@@ -78,6 +78,7 @@ function trajectoryObject(){
   this.comboSnap = 0;
   this.cSnapFrame = 0;
   this.hasCombo = 0;
+  this.totalThrowLag = -1;
 }
 
 t = {};
@@ -96,6 +97,8 @@ diPointerFrozen.a = false;
 diPointerFrozen.s = false;
 mouseX = 0;
 mouseY = 0;
+mouseZoomX = 0;
+mouseZoomY = 0;
 diMouseX = {};
 diMouseY = {};
 diMouseX.t = 0;
@@ -125,7 +128,8 @@ surfaces.fo = [[[-63.34755,0.00288],[63.34755,0.00288]],[[-14.25,42.75],[14.25,4
 
 
 snapping = true;
-comboSnapping = true;
+comboSnapping = false;
+automaticStale = true;
 centreOffset = [-bzLeft*10+50,bzTop*10+50];
 
 function changeHitboxVersions(newver){
@@ -272,8 +276,8 @@ function trajectoryHover(){
   $("#trajectory-t").mousemove(function(){
     var widthRatio = disWidth/dimensions[activeStage][0];
     var heightRatio = disHeight/dimensions[activeStage][1];
-    t["t"+aT].mouseXMelee = (Math.round(((mouseX/widthRatio)-(-bzLeft*10+50))*10))/100;
-    t["t"+aT].mouseYMelee = (Math.round(((mouseY/heightRatio)-(bzTop*10+50))*-10))/100;
+    t["t"+aT].mouseXMelee = (Math.round(((mouseZoomX/widthRatio)-(-bzLeft*10+50))*10))/100;
+    t["t"+aT].mouseYMelee = (Math.round(((mouseZoomY/heightRatio)-(bzTop*10+50))*-10))/100;
     $("#mPosX").val(t["t"+aT].mouseXMelee);
     $("#mPosY").val(t["t"+aT].mouseYMelee);
 
@@ -319,25 +323,47 @@ function trajectoryHover(){
             }
           }
         }
-        if (closestTraj.length > 0){
-          t["t"+aT].mouseXMelee = t["t"+(closestTraj[0]+1)].curPositions[closestTraj[1]][0];
-          t["t"+aT].mouseYMelee = t["t"+(closestTraj[0]+1)].curPositions[closestTraj[1]][1];
-          t["t"+aT].comboSnap = (closestTraj[0]+1);
-          t["t"+aT].cSnapFrame = closestTraj[1];
-          t["t"+(t["t"+aT].comboSnap)].hasCombo = aT;
-          //prompt(t["t1"].hasCombo);
-          // making frames past the combo point of the stationary trajectory invisible
-          // fuck it, easier to just redraw
-          drawTrajectory(closestTraj[0]+1);
-        }
-        else {
-          // if was previously combo snapped, redraw stationary trajectory
-          if (t["t"+aT].comboSnap > 0){
-            cT = t["t"+aT].comboSnap;
-            t["t"+aT].comboSnap = 0;
-            t["t"+cT].hasCombo = 0;
-            drawTrajectory(cT);
+      }
+      if (closestTraj.length > 0){
+        var cT = closestTraj[0]+1;
+        t["t"+aT].mouseXMelee = t["t"+cT].curPositions[closestTraj[1]][0];
+        t["t"+aT].mouseYMelee = t["t"+cT].curPositions[closestTraj[1]][1];
+        t["t"+aT].comboSnap = cT;
+        t["t"+aT].cSnapFrame = closestTraj[1];
+        t["t"+cT].hasCombo = aT;
+        t["t"+aT].character = t["t"+cT].character;
+        t["t"+aT].percent = t["t"+cT].percent + t["t"+cT].newDamage;
+        var fract = (t["t"+aT].percent % 1).toPrecision(5);
+        t["t"+aT].fractional = fract.substr(2,fract.length);
+        if (automaticStale){
+          t["t"+aT].staleQueue[0] = false;
+          // if using same attack, not checking hitbox ids
+          if (t["t"+aT].cHName[0] == t["t"+cT].cHName[0] && t["t"+aT].cHName[1] == t["t"+cT].cHName[1]){
+            t["t"+aT].staleQueue[0] = true;
+            // check stale queue 0 - 8 (skip 9)
+            for (k=0;k<8;k++){
+              if (t["t"+cT].staleQueue[k]){
+                t["t"+aT].staleQueue[k+1] = true;
+              }
+              else {
+                t["t"+aT].staleQueue[k+1] = false;
+              }
+            }
           }
+        }
+        swapOptions();
+        //prompt(t["t1"].hasCombo);
+        // making frames past the combo point of the stationary trajectory invisible
+        // fuck it, easier to just redraw
+        drawTrajectory(closestTraj[0]+1);
+      }
+      else {
+        // if was previously combo snapped, redraw stationary trajectory
+        if (t["t"+aT].comboSnap > 0){
+          var cT = t["t"+aT].comboSnap;
+          t["t"+aT].comboSnap = 0;
+          t["t"+cT].hasCombo = 0;
+          drawTrajectory(cT);
         }
       }
       if ((snapping && !comboSnapping) || (snapping & comboSnapping && closestTraj.length == 0)){
@@ -2263,6 +2289,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
 	t["t"+n].curPositions = hit.positions;
   t["t"+n].hitstun = hit.hitstun;
   t["t"+n].knockback = hit.knockback;
+  t["t"+n].totalThrowLag = hit.totalThrowLag;
   if (hit.meteorCancelled){
     t["t"+n].hitstun = 8;
   }
@@ -2293,8 +2320,8 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
       $(SVG("circle")).attr("id","comboStartOuter"+n).attr("class","comboStartOuter").attr("cx",temX).attr("cy",temY).attr("r",35).attr("fill","transparent").attr("stroke",palettes[t["t"+n].palette][1]).prependTo("#comboStart"+n);
       $(SVG("circle")).attr("id","comboStartInner"+n).attr("class","comboStartInner").attr("cx",temX).attr("cy",temY).attr("r",15).attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]).prependTo("#comboStart"+n);
 
-      $(SVG("circle")).attr("id","comboStartOuter-t"+n).attr("class","comboStartOuter-t").attr("cx",temX).attr("cy",temY).attr("r",25).attr("fill","transparent").prependTo("#comboStart-t"+n);
-      $(SVG("circle")).attr("id","comboStartInner-t"+n).attr("class","comboStartInner-t").attr("cx",temX).attr("cy",temY).attr("r",5).attr("fill","transparent").prependTo("#comboStart-t"+n);
+      $(SVG("circle")).attr("id","comboStartOuter-t"+n).attr("class","comboStartOuter-t").attr("cx",temX).attr("cy",temY).attr("r",35).attr("fill","transparent").prependTo("#comboStart-t"+n);
+      $(SVG("circle")).attr("id","comboStartInner-t"+n).attr("class","comboStartInner-t").attr("cx",temX).attr("cy",temY).attr("r",15).attr("fill","transparent").prependTo("#comboStart-t"+n);
 
     }
     else{
@@ -2313,14 +2340,20 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
     if (hit.knockback >= 80){
       //amsah tech
 
-      $(SVG("text")).attr("id","at"+n).attr("class","at").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","black").prependTo("#trajGroup"+n);
+      $(SVG("text")).attr("id","at"+n).attr("class","at").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","white").prependTo("#trajGroup"+n);
+      if (t["t"+n].palette == 2 || t["t"+n].palette == 3){
+        $("#at"+n).attr("fill","black");
+      }
       $("#at"+n).append("AT");
       $(SVG("circle")).attr("id","atCircle"+n).attr("class","atCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
       $(SVG("circle")).attr("id","atCircle-t"+n).attr("class","atCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+n);
     }
     else {
       //crouch cancel
-      $(SVG("text")).attr("id","cc"+n).attr("class","cc").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","black").prependTo("#trajGroup"+n);
+      $(SVG("text")).attr("id","cc"+n).attr("class","cc").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","white").prependTo("#trajGroup"+n);
+      if (t["t"+n].palette == 2 || t["t"+n].palette == 3){
+        $("#cc"+n).attr("fill","black");
+      }
       $("#cc"+n).append("CC");
       $(SVG("circle")).attr("id","ccCircle"+n).attr("class","ccCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
       $(SVG("circle")).attr("id","ccCircle-t"+n).attr("class","ccCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+n);
@@ -2333,7 +2366,18 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
     var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
     lineText += tempText;
   	if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
-      if (i+1 == t["t"+n].hitstun){
+      if (i == t["t"+n].totalThrowLag){
+        var temX = ((x*10)+centreOffset[0]);
+        var temY = ((-y*10)+centreOffset[1]);
+        $(SVG("circle")).attr("id","actCircle"+n+"f"+(i+1)).attr("class","actCircle").attr("cx", temX).attr("cy",temY).attr("r", 40).attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]).appendTo("#trajGroup"+n);
+        $(SVG("circle")).attr("id","actCircle-t"+n+"f"+(i+1)).attr("class","actCircle-t").attr("cx", temX).attr("cy",temY).attr("r",30).attr("fill","transparent").appendTo("#trajGroup-t"+n);
+        $(SVG("text")).attr("id","act"+n).attr("class","act").attr("x",temX-20).attr("y",temY+22).attr("font-size","70px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill",palettes[t["t"+n].palette][0]).appendTo("#trajGroup"+n);
+        if (t["t"+n].palette == 2 || t["t"+n].palette == 3){
+          $("#act"+n).attr("fill","black");
+        }
+        $("#act"+n).append("A");
+      }
+      else if (i+1 == t["t"+n].hitstun){
         var temX = ((x*10)+centreOffset[0]);
         var temY = ((-y*10)+centreOffset[1]);
         $(SVG("path")).attr("id","lastHitstun"+n).attr("class","lastHitstun").attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
@@ -2393,8 +2437,21 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
   }
 }
 
+function setPosInfoOffset(id){
+  var frameposy = mouseZoomY;
+  var frameposx = mouseZoomX;
+  scroll = getScrollPos();
+  if (mouseY + 95 > displayheight){
+    frameposy = scroll[0] + displayheight - 95;
+  }
+  if (mouseX + 185 > midwidth){
+    frameposx = scroll[1] + midwidth - 185;
+  }
+  $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+}
+
 function trajPosInfo(){
-  $(".framePos-t, .start-t, .comboStartOuter-t, .lastHitstun-t, .kill-t, .ccCircle-t, .atCircle-t").unbind("mouseenter").unbind("mouseleave");
+  $(".framePos-t, .start-t, .comboStartOuter-t, .lastHitstun-t, .kill-t, .ccCircle-t, .atCircle-t, .actCircle-t").unbind("mouseenter").unbind("mouseleave");
   $(".framePosInfoBox").remove();
   $(".framePos-t").hover(function(){
     var id = $(this).attr("id");
@@ -2407,15 +2464,8 @@ function trajPosInfo(){
     else {
       $("#trajCanvas").after('<div class="framePosInfoBox">Frame of hitstun: '+fid+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
     }
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
-    }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
-    }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+tid].palette][0]});
+    setPosInfoOffset(tid);
+
   }, function(){
     var id = $(this).attr("id");
     var fid = parseInt(id.substr(2,(id.length - 3)));
@@ -2442,15 +2492,7 @@ function trajPosInfo(){
     }
     $("#start"+id).css("stroke-width",20);
     $("#trajCanvas").after('<div class="framePosInfoBox" style="height:90px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>hasCombo: '+t["t"+id].hasCombo+'<br>comboSnap: '+t["t"+id].comboSnap+'</div>');
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
-    }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
-    }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+    setPosInfoOffset(id);
 
   }, function(){
     $(".start").css("stroke-width",0);
@@ -2473,21 +2515,14 @@ function trajPosInfo(){
     if (t["t"+id].crouching){
       hitlag = Math.floor(hitlag * (2/3));
     }
+    $("#comboStartOuter"+id).attr("r",45);
     $("#comboStartOuter"+id).css("stroke-width",20);
     $("#comboStartInner"+id).css("stroke-width",5);
     $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Combo Hit</span><br>(trajectory '+t["t"+id].comboSnap+', frame '+(t["t"+id].cSnapFrame+1)+')<br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>hasCombo: '+t["t"+id].hasCombo+'<br>comboSnap: '+t["t"+id].comboSnap+'</div>');
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
-    }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
-    }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+    setPosInfoOffset(id);
 
   }, function(){
-    $(".comboStartOuter").css("stroke-width",10);
+    $(".comboStartOuter").css("stroke-width",10).attr("r",35);
     $(".comboStartInner").css("stroke-width",0);
     $(".framePosInfoBox").remove();
   });
@@ -2498,18 +2533,28 @@ function trajPosInfo(){
     num = parseInt(num.substr(17,num.length));
     $("#lastHitstun"+id).css("stroke-width",20);
     $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">Last Hitstun Frame ('+(num+1)+')</span><br>Pos X:'+((Math.round(t["t"+id].curPositions[num][0]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+id].curPositions[num][2]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+id].curPositions[num][4]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][5]*100))/100)+'</div>');
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
-    }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
-    }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+    setPosInfoOffset(id);
 
   }, function(){
     $(".lastHitstun").css("stroke-width",0);
+    $(".framePosInfoBox").remove();
+  });
+
+  $(".actCircle-t").hover(function(){
+    var id = $(this).attr("id");
+    var tid = parseInt(id.substr(11,1));
+    var fid = parseInt(id.substr(13,id.length-13));
+    $("#actCircle"+tid+"f"+fid).attr("r",55);
+    if (fid > t["t"+tid].hitstun){
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">Thrower Actionable</span><br>Actionable frame: '+(fid-t["t"+tid].hitstun)+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
+    }
+    else {
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">Thrower Actionable</span><br>Frame of hitstun: '+fid+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
+    }
+    setPosInfoOffset(tid);
+
+  }, function(){
+    $(".actCircle").attr("r",40);
     $(".framePosInfoBox").remove();
   });
 
@@ -2519,15 +2564,7 @@ function trajPosInfo(){
     num = parseInt(num.substr(10,num.length));
     $("#kill"+id).css("stroke-width",20);
     $("#trajCanvas").after('<div class="framePosInfoBox" style="height:45px"><span style="font-size:13px">KILLED!</span><br>Pos X:'+((Math.round(t["t"+id].curPositions[num][0]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+id].curPositions[num][2]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][3]*100))/100)+'</div>');
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
-    }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
-    }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+    setPosInfoOffset(id);
 
   }, function(){
     $(".kill").css("stroke-width",0);
@@ -2542,15 +2579,7 @@ function trajPosInfo(){
     }
     $("#ccCircle"+id).css("stroke-width",20);
     $("#trajCanvas").after('<div class="framePosInfoBox" style="height:45px"><span style="font-size:13px">Crouch Cancelled</span><br>Knockback: '+t["t"+id].knockback.toPrecision(7)+'<br>Y-Displacement:'+yD+'</div>');
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
-    }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
-    }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+    setPosInfoOffset(id);
 
   }, function(){
     $(".ccCircle").css("stroke-width",0);
@@ -2565,15 +2594,7 @@ function trajPosInfo(){
     }
     $("#atCircle"+id).css("stroke-width",20);
     $("#trajCanvas").after('<div class="framePosInfoBox" style="height:45px"><span style="font-size:13px">Amsah Techable</span><br>Knockback: '+t["t"+id].knockback.toPrecision(7)+'<br>Y-Displacement:'+yD+'</div>');
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
-    }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
-    }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+    setPosInfoOffset(id);
 
   }, function(){
     $(".atCircle").css("stroke-width",0);
@@ -2581,14 +2602,32 @@ function trajPosInfo(){
   });
 }
 
+function getScrollPos() {
+  if ($("#display").length > 0){
+    sT = $("#display").scrollTop();
+    sL = $("#display").scrollLeft();
+
+    return[sT,sL];
+  }
+  else {
+    return[0,0];
+  }
+}
+
 $(document).ready(function(){
   $("#header").hide();
   attackTable();
 	$(document).on('mousemove', function(e){
+    scroll = getScrollPos();
 		mouseX = e.pageX - trajOffset.left;
 		mouseY = e.pageY - trajOffset.top;
+    mouseZoomX = e.pageX - trajOffset.left + scroll[1];
+    mouseZoomY = e.pageY - trajOffset.top + scroll[0];
     diMouseX = e.pageX - diOffset.left;
     diMouseY = e.pageY - diOffset.top;
+    //console.log("mouseX/Y: "+mouseX+"/"+mouseY);
+    //console.log("mouseZoomX/Y: "+mouseZoomX+"/"+mouseZoomY);
+
 	});
 
   $(document).on("ps-scroll-y",function(){
@@ -3010,6 +3049,17 @@ $(document).ready(function(){
     else {
       $("#stsSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
       snapping = true;
+    }
+  });
+
+  $("#csRealButton").click(function(){
+    if (comboSnapping){
+      $("#csSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("Off");
+      comboSnapping = false;
+    }
+    else {
+      $("#csSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
+      comboSnapping = true;
     }
   });
 
@@ -3506,17 +3556,75 @@ $(document).ready(function(){
   $("#attackscroll").perfectScrollbar();
   $("#trajBoxContainer").perfectScrollbar();
   $("#stageSelectContainer").perfectScrollbar();
+  $("#display").perfectScrollbar();
+  amount = 74;
+  $("#zoomSliderPointer").draggable({axis:"y",containment:"parent",drag:function(){
+    amount = parseInt($(this).css("top"));
+    zoom = 5 - ((amount/74) * 4);
+    resizing();
+    //console.log("amount = "+amount+" , zoom = "+zoom);
+  }});
+
+  $(".zoomButton").click(function(){
+    //console.log("OLD: amount = "+amount+" , zoom = "+zoom);
+    var id = $(this).attr("id");
+    if (id[4] == "P"){
+      if (zoom < 5){
+        zoom = Math.round(zoom + 1);
+        if (zoom > 5){
+          zoom = 5;
+        }
+      }
+    }
+    else {
+      if (zoom > 1){
+        zoom = Math.round(zoom - 1);
+        if (zoom < 1){
+          zoom = 1;
+        }
+      }
+    }
+    amount = Math.round(((5 - zoom)*74)/4);
+    //console.log("NEW: amount = "+amount+" , zoom = "+zoom);
+    $("#zoomSliderPointer").css("top",amount+"px");
+    resizing();
+  });
 
 
   document.onkeydown = function(evt) {
     evt = evt || window.event;
     switch (evt.keyCode) {
+      // c
+      case 67:
+        if (comboSnapping){
+          $("#csSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("Off");
+          comboSnapping = false;
+        }
+        else {
+          $("#csSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
+          comboSnapping = true;
+        }
+        break;
+      // s
+      case 83:
+        if (snapping){
+          $("#stsSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("Off");
+          snapping = false;
+        }
+        else {
+          $("#stsSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
+          snapping = true;
+        }
+        break;
+      // o
       case 79:
         outputPopup();
         break;
-      case 83:
+      // i
+      case 73:
         sourcePopup();
         break;
+      // u
       case 85:
         undoSource();
         break;
