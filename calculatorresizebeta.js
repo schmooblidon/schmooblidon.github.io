@@ -47,15 +47,18 @@ displayheight = 0;
 
 var resizingtype = function(){
 	//width/length.   width = ratio*height.   height = width/ratio
+	mousePosBoxOffset = [220,145];
 	midwidth = windwidth-360;
 	var hbuffer = 0;
 	var vbuffer = 0;
 
 	if (collapsed.l){
 		midwidth += 150;
+		//mousePosBoxOffset[0] -= 150;
 	}
 	if (collapsed.r){
 		midwidth += 150;
+		mousePosBoxOffset[0] -= 150;
 	}
 	var midheight = windheight-45;
 	displayheight = midheight - 260 ;
@@ -64,6 +67,7 @@ var resizingtype = function(){
 	}
 	if (collapsed.b){
 		displayheight += 100;
+		mousePosBoxOffset[1] -= 100;
 	}
 
 	$("#middlecontrols, #tcontrols, #tcontrolscollapse, #bcontrols, #bcontrolscollapse").width(midwidth);
@@ -78,6 +82,7 @@ var resizingtype = function(){
 			$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").width(midwidth);
 			$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").height(midwidth/ratio);
 			$("#display").css("border-width",(vbuffer/2 + 1)+"px 0px");
+			mousePosBoxOffset[1] += vbuffer/2;
 		}
 		else {
 			vbuffer = 0;
@@ -85,6 +90,7 @@ var resizingtype = function(){
 			$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").width(ratio*displayheight);
 			$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").height(displayheight);
 			$("#display").css("border-width","0px "+(hbuffer/2 + 1)+"px");
+			mousePosBoxOffset[0] += hbuffer/2;
 		}
 	}
 	else {
@@ -102,6 +108,7 @@ var resizingtype = function(){
 				$("#display, #trajCanvas").height((midwidth/ratio)*zoom);
 			}
 			$("#display").css("border-width",(vbuffer/2 + 1)+"px 0px");
+			mousePosBoxOffset[1] += vbuffer/2;
 		}
 		else {
 			$("#display, #trajCanvas").width(ratio*displayheight);
@@ -117,13 +124,14 @@ var resizingtype = function(){
 				$("#display, #trajCanvas").width(ratio*displayheight*zoom);
 			}
 			$("#display").css("border-width","0px "+(hbuffer/2 + 1)+"px");
+			mousePosBoxOffset[0] += hbuffer/2;
 		}
 	}
 
 	$("#middlecontrols, #lcontrols, #lcontrolscollapse, #rcontrols, #rcontrolscollapse").height(midheight);
 	$("#rcontrolsOptions").height(midheight - 40);
 
-	$("#attackscroll").height($("#lcontrols").height()-275);
+	$("#attackscroll").height($("#lcontrols").height()-235);
 	disWidth = $("#trajectory").width();
 	disHeight = $("#trajectory").height();
 	disMagnification = disWidth/dimensions[activeStage][0];
@@ -133,6 +141,8 @@ var resizingtype = function(){
 	$("#labelBox0").css({"top":titleY * disMagnification,"left":titleX *disMagnification});
 	trajOffset = $("#trajCanvas").offset();
 	diOffset = $("#"+activeDI+"diSelector").offset();
+
+	$("#mousePosition").css({"right":mousePosBoxOffset[0]+"px","bottom":mousePosBoxOffset[1]+"px"});
 
 	$("#display").perfectScrollbar('update');
 

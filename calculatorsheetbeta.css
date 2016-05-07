@@ -201,11 +201,11 @@ textarea {
 }
 
 .tutorialbuttondefault {
-  background-color:#5092d7;
+  background-color:#497cff;
 }
 
 .tutorialbuttonhighlight {
-  background-color:#78c7ee;
+  background-color:#6993ff;
 }
 
 #tutorialicon {
@@ -238,11 +238,12 @@ textarea {
 }
 
 .donatebuttondefault {
-  background-color:#52d750;
+  /*background-color:#52d750;*/
+  background-color:#43c849;
 }
 
 .donatebuttonhighlight {
-  background-color:#7aee78;
+  background-color:#55df5b;
 }
 
 #dollarbox {
@@ -332,6 +333,7 @@ textarea {
   background-color:#497cff;
   text-align:center;
   display:inline-block;
+  font-weight: bold;
 }
 
 #attackertitle p {
@@ -342,10 +344,11 @@ textarea {
 #stagetitle {
   width:40px;
   height:100px;
-  background-color:#3bd941;
+  background-color:#43c849;
   display:inline-block;
   vertical-align:top;
   display:inline-block;
+  font-weight: bold;
 }
 
 #stagetitle p {
@@ -361,6 +364,7 @@ textarea {
   text-align:center;
   vertical-align:top;
   display:inline-block;
+  font-weight: bold;
 }
 
 #victimtitle p {
@@ -374,6 +378,7 @@ textarea {
   background-color:#b961ff;
   vertical-align:top;
   display:inline-block;
+  font-weight: bold;
 }
 
 #savetitle p {
@@ -657,28 +662,32 @@ textarea
   width:90px;
   height:30px;
   position:absolute;
-  bottom:0px;
-  left:10px;
+  bottom:5px;
+  left:15px;
   z-index:1;
-  opacity:0.3;
+  opacity:0.6;
+  background-color:black;
   margin:5px;
+  padding:5px;
+  border-radius: 5px;
 }
 
 #groundedBox p {
   text-align:center;
   font-size:20px;
-  margin:0;
+  margin:3px 0 0 0;
 }
 
 #mousePosition {
-  width:165px;
+  width:175px;
   height:30px;
-	position:absolute;
-	bottom:0px;
-	right:100px;
+	position:fixed;
+	bottom:145px;
+	right:220px;
   background-color:rgba(0, 0, 0, 0.5);
-  z-index:28;
+  z-index:27;
   border-radius:5px;
+  display:block;
 }
 
 #mousePosition p {
@@ -688,7 +697,7 @@ textarea
 }
 
 #mPosX, #mPosY {
-  width:60px;
+  width:65px;
   height:20px;
   background-color:rgba(0,0,0,0);
   display:inline-block;
@@ -868,7 +877,7 @@ textarea
 }
 
 .expandfalse {
-  opacity:0.05;
+  opacity:0.15;
 }
 
 .expandtrue {
@@ -2562,7 +2571,7 @@ textarea
 }
 
 .switchOn {
-  background-color:#33dd3f;
+  background-color:#43c849;
 }
 
 .switchOff {

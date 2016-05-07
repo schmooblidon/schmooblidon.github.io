@@ -79,6 +79,9 @@ function trajectoryObject(){
   this.cSnapFrame = 0;
   this.hasCombo = 0;
   this.totalThrowLag = -1;
+  this.lastDisplay = 0;
+  this.killFrame = 0;
+  this.hitlag = 0;
 }
 
 t = {};
@@ -1625,6 +1628,7 @@ function trajBoxClick(){
     //prompt(aT);
     //prompt(t["t"+aT].cHName);
     swapOptions();
+    trajectoryAnimation(aT);
     if (pT != aT){
       t["t"+pT].trajFrozen = true;
       $("#trajNum"+pT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
@@ -2183,6 +2187,91 @@ function sourcePopup(){
   }
 }
 
+function trajResetFrame(n,frame,type){
+  switch (type){
+    case 0:
+      setTimeout(function(){
+        $("#"+n+"f"+frame).attr("r",15);
+      }, 100);
+      break;
+    case 1:
+      setTimeout(function(){
+        $("#"+n+"f"+frame).css("stroke-width",0);
+      }, 100);
+      break;
+    case 2:
+      setTimeout(function(){
+        $("#"+n+"f"+frame).attr("r",40);
+      }, 100);
+      break;
+    case 3:
+      break;
+    default:
+      break;
+  }
+}
+
+function trajAnimFrame(n,frame){
+  setTimeout(function(){
+    if (frame == t["t"+n].killFrame || frame == t["t"+n].hitstun){
+      //console.log(frame);
+      $("#"+n+"f"+frame).css("stroke-width",30);
+      trajResetFrame(n,frame,1);
+    }
+    else if (frame == t["t"+n].totalThrowLag + 1){
+      $("#"+n+"f"+frame).attr("r",55);
+      trajResetFrame(n,frame,2);
+    }
+    else {
+      $("#"+n+"f"+frame).attr("r",30);
+      trajResetFrame(n,frame,0);
+    }
+    frame++;
+    if (t["t"+n].lastDisplay >= frame){
+      trajAnimFrame(n,frame);
+    }
+    else {
+      if (t["t"+n].hasCombo > 0){
+        trajectoryAnimation(t["t"+n].hasCombo);
+      }
+    }
+  }, 16.67);
+}
+
+function trajectoryAnimation(n){
+  frame = 1;
+  if (t["t"+n].comboSnap > 0){
+    $("#comboStartOuter"+n).attr("r",45).css("stroke-width",20);
+    $("#comboStartInner"+n).css("stroke-width",5);
+    setTimeout(function(){
+      $("#comboStartOuter"+n).css("stroke-width",10).attr("r",35);
+      $("#comboStartInner"+n).css("stroke-width",0);
+    }, 100);
+
+  }
+  else {
+    $("#start"+n).css("stroke-width",20);
+    setTimeout(function(){
+      $("#start"+n).css("stroke-width",0);
+    }, 100);
+  }
+  if (t["t"+n].stayGrounded){
+    setTimeout(function(){
+      $("#ccCircle"+n).css("stroke-width",20);
+      $("#atCircle"+n).css("stroke-width",20);
+      setTimeout(function(){
+        $("#ccCircle"+n).css("stroke-width",0);
+        $("#atCircle"+n).css("stroke-width",0);
+      }, 300);
+    }, 16.67);
+  }
+  else {
+    setTimeout(function(){
+      trajAnimFrame(n,frame);
+    }, 16.67*t["t"+n].hitlag);
+  }
+}
+
 function drawTrajectoryFromSource(source,offset,colour){
 
   // (frame1x,frame1y),(frame2x,frame2y),(frame3x,frame3y)
@@ -2237,6 +2326,8 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
 
   waitTillFinish = waitTillFinish || false;
 
+  t["t"+n].killFrame = -1;
+
   var totalstale = 1.00;
   var damageunstaled = t["t"+n].curHitbox.dmg;
   if (charging){
@@ -2290,6 +2381,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
   t["t"+n].hitstun = hit.hitstun;
   t["t"+n].knockback = hit.knockback;
   t["t"+n].totalThrowLag = hit.totalThrowLag;
+  t["t"+n].hitlag = Math.floor(t["t"+n].newDamage * (1/3) + 3);
   if (hit.meteorCancelled){
     t["t"+n].hitstun = 8;
   }
@@ -2369,7 +2461,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
       if (i == t["t"+n].totalThrowLag){
         var temX = ((x*10)+centreOffset[0]);
         var temY = ((-y*10)+centreOffset[1]);
-        $(SVG("circle")).attr("id","actCircle"+n+"f"+(i+1)).attr("class","actCircle").attr("cx", temX).attr("cy",temY).attr("r", 40).attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]).appendTo("#trajGroup"+n);
+        $(SVG("circle")).attr("id",n+"f"+(i+1)).attr("class","actCircle").attr("cx", temX).attr("cy",temY).attr("r", 40).attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]).appendTo("#trajGroup"+n);
         $(SVG("circle")).attr("id","actCircle-t"+n+"f"+(i+1)).attr("class","actCircle-t").attr("cx", temX).attr("cy",temY).attr("r",30).attr("fill","transparent").appendTo("#trajGroup-t"+n);
         $(SVG("text")).attr("id","act"+n).attr("class","act").attr("x",temX-20).attr("y",temY+22).attr("font-size","70px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill",palettes[t["t"+n].palette][0]).appendTo("#trajGroup"+n);
         if (t["t"+n].palette == 2 || t["t"+n].palette == 3){
@@ -2380,7 +2472,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
       else if (i+1 == t["t"+n].hitstun){
         var temX = ((x*10)+centreOffset[0]);
         var temY = ((-y*10)+centreOffset[1]);
-        $(SVG("path")).attr("id","lastHitstun"+n).attr("class","lastHitstun").attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
+        $(SVG("path")).attr("id",n+"f"+(i+1)).attr("class","lastHitstun").attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
         $(SVG("path")).attr("id","lastHitstun-t"+n).attr("class","lastHitstun-t pos"+i).attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").prependTo("#trajGroup-t"+n);
       }
       else {
@@ -2396,10 +2488,11 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
       if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && hit.positions[i][3] >= 2.4)){
         temX = ((x*10)+centreOffset[0]);
         temY = ((-y*10)+centreOffset[1]);
-        $(SVG("path")).attr("id","kill"+n).attr("class","kill").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").attr("fill",palettes[t["t"+n].palette][2]).attr("stroke",palettes[t["t"+n].palette][2]).appendTo("#trajGroup"+n);
+        $(SVG("path")).attr("id",n+"f"+(i+1)).attr("class","kill").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").attr("fill",palettes[t["t"+n].palette][2]).attr("stroke",palettes[t["t"+n].palette][2]).appendTo("#trajGroup"+n);
         $(SVG("path")).attr("id","kill-t"+n).attr("class","kill-t pos"+i).attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup-t"+n);
         cla = "tLineK";
         isKilled = true;
+        t["t"+n].killFrame = i+1;
         if (i <= hit.hitstun){
           $("#trajGroup"+n+" .framePos").attr("class","fPK"+n+" framePos").attr("fill",palettes[t["t"+n].palette][2]).attr("stroke",palettes[t["t"+n].palette][2]);;
         }
@@ -2408,6 +2501,8 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
 
     i++;
   }
+
+  t["t"+n].lastDisplay = i;
   //$("#trajLine"+n).remove();
   $(SVG("path")).attr("id","trajLine"+n).attr("class","trajLine "+cla+n).attr("d",lineText).prependTo("#trajGroup"+n);
   if (cla == "tLineS"){
