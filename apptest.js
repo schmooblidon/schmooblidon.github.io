@@ -1,5 +1,14 @@
 defaultversion = "NTSC";
 
+palettes = [["#fe3a3a","#fe7f7f","#bb2828"],
+["#fa5d36","#ffaa7a","#d04703"],
+["#fff508","#fcfc8d","#b9b91c"],
+["#08fb08","#89fe89","#299f29"],
+["#00bdf9","#77ffff","#009999"],
+["#4040ff","#8787fc","#2d2da2"],
+["#813ffc","#ac82ff","#5b2293"],
+["#fa36fa","#fa7afa","#990099"],
+["#9e9e9e","#FFFFFF","#595959"]];
 
 bz = {};
 bz.bf = [200,224,-108.8,-224];
@@ -75,6 +84,8 @@ function trajectoryObject(){
   this.task = 0;
   this.damagestaled = 3;
   this.damageunstaled = 3;
+  this.allHitboxes = [];
+  this.curPositions = [];
 }
 
 cl = [];
@@ -401,6 +412,7 @@ function createPercents(c,type){
   // if no subattacks
   if (keys[0][0] == "i" && keys[0][1] == "d"){
     var percents = [];
+    var pos;
     var lowestPercent = 123456;
     // for each id
     for (i=0;i<keys.length;i++){
@@ -439,16 +451,46 @@ function createPercents(c,type){
       if (lowestPercent != "Never"){
         if (percents[i] == "Never"){
           lowestPercent = "Never";
+          if (type == "kn"){
+            cl[c].allHitboxes[0] = cl[c].curHitbox[keys[i]];
+          }
+          else if (type == "kp"){
+            cl[c].allHitboxes[1] = cl[c].curHitbox[keys[i]];
+          }
+          else if (type == "kb"){
+            cl[c].allHitboxes[2] = cl[c].curHitbox[keys[i]];
+          }
         }
         else if (percents[i] != "Inf"){
           if (percents[i] < lowestPercent){
             lowestPercent = percents[i];
+            if (type == "kn"){
+              cl[c].allHitboxes[0] = cl[c].curHitbox[keys[i]];
+            }
+            else if (type == "kp"){
+              cl[c].allHitboxes[1] = cl[c].curHitbox[keys[i]];
+            }
+            else if (type == "kb"){
+              cl[c].allHitboxes[2] = cl[c].curHitbox[keys[i]];
+            }
           }
         }
       }
 
     }
-
+    // if lowest percent never changed, must be infinity
+    if (lowestPercent == 123456){
+      lowestPercent = "Inf";
+      if (type == "kn"){
+        cl[c].allHitboxes[0] = cl[c].curHitbox[keys[i]];
+      }
+      else if (type == "kp"){
+        cl[c].allHitboxes[1] = cl[c].curHitbox[keys[i]];
+      }
+      else if (type == "kb"){
+        cl[c].allHitboxes[2] = cl[c].curHitbox[keys[i]];
+      }
+    }
   }
   else {
     var percents = [];
@@ -496,21 +538,50 @@ function createPercents(c,type){
         if (lowestPercent != "Never"){
           if (percents[i][j] == "Never"){
             lowestPercent = "Never";
+            if (type == "kn"){
+              cl[c].allHitboxes[0] = cl[c].curHitbox[keys[i]][keys2[j]];
+            }
+            else if (type == "kp"){
+              cl[c].allHitboxes[1] = cl[c].curHitbox[keys[i]][keys2[j]];
+            }
+            else if (type == "kb"){
+              cl[c].allHitboxes[2] = cl[c].curHitbox[keys[i]][keys2[j]];
+            }
           }
           else if (percents[i][j] != "Inf"){
             if (percents[i][j] < lowestPercent){
               lowestPercent = percents[i][j];
+              if (type == "kn"){
+                cl[c].allHitboxes[0] = cl[c].curHitbox[keys[i]][keys2[j]];
+              }
+              else if (type == "kp"){
+                cl[c].allHitboxes[1] = cl[c].curHitbox[keys[i]][keys2[j]];
+              }
+              else if (type == "kb"){
+                cl[c].allHitboxes[2] = cl[c].curHitbox[keys[i]][keys2[j]];
+              }
             }
           }
         }
 
       }
     }
+    // if lowest percent never changed, must be infinity
+    if (lowestPercent == 123456){
+      lowestPercent = "Inf";
+      if (type == "kn"){
+        cl[c].allHitboxes[0] = cl[c].curHitbox[keys[i]][keys2[j]];
+      }
+      else if (type == "kp"){
+        cl[c].allHitboxes[1] = cl[c].curHitbox[keys[i]][keys2[j]];
+      }
+      else if (type == "kb"){
+        cl[c].allHitboxes[2] = cl[c].curHitbox[keys[i]][keys2[j]];
+      }
+    }
   }
-  // if lowest percent never changed, must be infinity
-  if (lowestPercent == 123456){
-    lowestPercent = "Inf";
-  }
+
+
   return [percents,lowestPercent];
 }
 
@@ -600,7 +671,15 @@ function threeDICreateAndDraw(){
   $("#nodiresultedit").empty().append(percentsA1[1]);
   $("#maxdi1resultedit").empty().append(percentsA2[1]);
   $("#maxdi2resultedit").empty().append(percentsA3[1]);
-  drawTrajectorySuperLite(c,"#f13f3f");
+  var pos1 = findKillPositions(cl[c].allHitboxes[0],c,"n");
+  var pos2 = findKillPositions(cl[c].allHitboxes[1],c,"p");
+  var pos3 = findKillPositions(cl[c].allHitboxes[2],c,"b");
+
+  //drawTrajectorySuperLite(c,"#f13f3f");
+  drawTrajectoryLite(c,"a",2,pos1);
+  drawTrajectoryLite(c,"b",3,pos2);
+  drawTrajectoryLite(c,"c",3,pos3);
+
 }
 
 function changeStage(id){
@@ -628,8 +707,10 @@ function changeStage(id){
   $("#trajectory, #trajectory-t").attr("width",disWidth).attr("height",disHeight).attr("enable-background","new 0 0 "+disWidth+" "+disHeight);
   svg.setAttribute("viewBox","0 0 "+disWidth+" "+disHeight);
   svg2.setAttribute("viewBox","0 0 "+disWidth+" "+disHeight);
+  $("#trajBackground").css({"width":disWidth+"px","height":disHeight+"px"});
 
   threeDICreateAndDraw();
+
 
   //resizing();
 }
@@ -639,79 +720,77 @@ function SVG(tag)
    return document.createElementNS('http://www.w3.org/2000/svg', tag);
 }
 
-function drawTrajectorySuperLite(n,colour){
-  xPos = cl[n].mouseXMelee;
-  yPos = cl[n].mouseYMelee;
+function drawTrajectorySuperLite(c,colour){
+  xPos = cl[c].mouseXMelee;
+  yPos = cl[c].mouseYMelee;
   var temX = ((xPos*5)+centreOffset[0]);
   var temY = ((-yPos*5)+centreOffset[1]);
   $(".start").remove();
-  $(SVG("path")).attr("id","start"+n).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",colour).attr("stroke",colour).prependTo("#trajectory");
+  $(SVG("path")).attr("id","start"+c).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",colour).attr("stroke",colour).prependTo("#trajectory");
 }
 
-function drawTrajectoryLite(n,palette,positions){
+function drawTrajectoryLite(c,n,pal,pos){
 
 	//cl[n].curPositions = positions;
 
-  hitstun = 30;
+  var hitstun = cl[c].hitstun;
+  var xPos = cl[c].mouseXMelee;
+  var yPos = cl[c].mouseYMelee;
 
 	var cla = "tLineS";
   var temX = ((xPos*5)+centreOffset[0]);
   var temY = ((-yPos*5)+centreOffset[1]);
   var lineText = "M"+temX+" "+temY+" ";
 
-  $("#trajGroup"+n+", #trajGroup-t"+n).remove();
-  $(SVG("g")).attr("id","trajGroup"+n).appendTo("#trajectory");
-  $(SVG("g")).attr("id","trajGroup-t"+n).appendTo("#trajectory-t");
-  $(SVG("path")).attr("id","start"+n).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",palette[1]).attr("stroke",palette[1]).prependTo("#trajGroup"+n);
-  $(SVG("path")).attr("id","start-t"+n).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+n);
+  $("#trajGroup"+c+n+", #trajGroup-t"+c+n).remove();
+  $(SVG("g")).attr("id","trajGroup"+c+n).appendTo("#trajectory");
+  $(SVG("g")).attr("id","trajGroup-t"+c+n).appendTo("#trajectory-t");
+  $(SVG("path")).attr("id","start"+c+n).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",palettes[pal][1]).attr("stroke",palettes[pal][1]).prependTo("#trajGroup"+c+n);
+  $(SVG("path")).attr("id","start-t"+c+n).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+c+n);
 
-  var isKilled = false;
-  var i = 0;
-
-  while (!isKilled){
-  	var x = positions[i][0];
-  	var y = positions[i][1];
+  //var isKilled = false;
+  //var i = 0;
+  //var positions = pos;
+  for (i=0;i<pos.length;i++){
+    //prompt(i);
+    //prompt(positions[0][0]);
+  	var x = pos[i][0];
+  	var y = pos[i][1];
     var tempText = "L"+((x*5)+centreOffset[0])+" "+((-y*5)+centreOffset[1])+" ";
     lineText += tempText;
-  	if ((x < bz[cl[n].stage][1] && x > bz[cl[n].stage][3]) && (y < bz[cl[n].stage][0] && y > bz[cl[n].stage][2])){
+  	if ((x < bz[cl[c].stage][1] && x > bz[cl[c].stage][3]) && (y < bz[cl[c].stage][0] && y > bz[cl[c].stage][2])){
       if (i+1 == hitstun){
         var temX = ((x*5)+centreOffset[0]);
         var temY = ((-y*5)+centreOffset[1]);
-        $(SVG("path")).attr("id","lastHitstun"+n).attr("class","lastHitstun").attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").attr("fill",palette[0]).attr("stroke",palette[0]).prependTo("#trajGroup"+n);
-        $(SVG("path")).attr("id","lastHitstun-t"+n).attr("class","lastHitstun-t pos"+i).attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").prependTo("#trajGroup-t"+n);
+        $(SVG("path")).attr("id","lastHitstun"+c+n).attr("class","lastHitstun").attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").attr("fill",palettes[pal][0]).attr("stroke",palettes[pal][0]).prependTo("#trajGroup"+c+n);
+        $(SVG("path")).attr("id","lastHitstun-t"+c+n).attr("class","lastHitstun-t pos"+i).attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").prependTo("#trajGroup-t"+c+n);
       }
       else {
-        $(SVG("circle")).attr("id",n+"f"+(i+1)).attr("class","fP"+n+" framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).attr("fill",palette[0]).attr("stroke",palette[0]).prependTo("#trajGroup"+n);
-        $(SVG("circle")).attr("id",n+"f"+(i+1)+"-t").attr("class","fP-t"+n+" framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+n);
+        $(SVG("circle")).attr("id",c+n+"f"+(i+1)).attr("class","fP"+c+n+" framePos").attr("cx", (x*5)+centreOffset[0]).attr("cy",(-y*5)+centreOffset[1]).attr("r", 15).attr("fill",palettes[pal][0]).attr("stroke",palettes[pal][0]).prependTo("#trajGroup"+c+n);
+        $(SVG("circle")).attr("id",c+n+"f"+(i+1)+"-t").attr("class","fP-t"+c+n+" framePos-t").attr("cx", (x*5)+centreOffset[0]).attr("cy",(-y*5)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+c+n);
         if (i+1 > hitstun){
-          $("#"+n+"f"+(i+1)).attr("class","fPnH"+n+" framePos").attr("fill",palette[1]).attr("stroke",palette[1]);
+          $("#"+c+n+"f"+(i+1)).attr("class","fPnH"+c+n+" framePos").attr("fill",palettes[pal][1]).attr("stroke",palettes[pal][1]);
         }
       }
   	}
   	else {
-      //checks if vertical knockback velocity is greater or equal to 2.4 when above the top blastzone
-      if (x >= bz[cl[n].stage][1] || x <= bz[cl[n].stage][3] || y <= bz[cl[n].stage][2] || (y >= bz[cl[n].stage][0] && positions[i][3] >= 2.4)){
-        temX = ((x*10)+centreOffset[0]);
-        temY = ((-y*10)+centreOffset[1]);
-        $(SVG("path")).attr("id","kill"+n).attr("class","kill").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").attr("fill",palette[2]).attr("stroke",palette[2]).appendTo("#trajGroup"+n);
-        $(SVG("path")).attr("id","kill-t"+n).attr("class","kill-t pos"+i).attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup-t"+n);
+        temX = ((x*5)+centreOffset[0]);
+        temY = ((-y*5)+centreOffset[1]);
+        $(SVG("path")).attr("id","kill"+c+n).attr("class","kill").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").attr("fill",palettes[pal][2]).attr("stroke",palettes[pal][2]).appendTo("#trajGroup"+c+n);
+        $(SVG("path")).attr("id","kill-t"+c+n).attr("class","kill-t pos"+i).attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup-t"+c+n);
         cla = "tLineK";
         isKilled = true;
-        if (i <= hitstun){
-          $("#trajGroup"+n+" .framePos").attr("class","fPK"+n+" framePos").attr("fill",palette[2]).attr("stroke",palette[2]);;
-        }
-      }
     }
 
-    i++;
+    //i++;
   }
   //$("#trajLine"+n).remove();
-  $(SVG("path")).attr("id","trajLine"+n).attr("class","trajLine "+cla+n).attr("d",lineText).prependTo("#trajGroup"+n);
+  $(SVG("path")).attr("id","trajLine"+c+n).attr("class","trajLine "+cla+c+n).attr("d",lineText).prependTo("#trajGroup"+c+n);
   if (cla == "tLineS"){
-    $("#trajLine"+n).attr("stroke",palette[1]);
+    $("#trajLine"+c+n).attr("stroke",palettes[pal][1]);
   }
   else {
-    $("#trajLine"+n).attr("stroke",palette[0]);
+    $("#trajLine"+c+n).attr("stroke",palettes[pal][0]);
   }
 }
 

@@ -8,6 +8,28 @@ body {
 	background-color:rgb(0, 0, 0);
 }
 
+.framePos-t {
+  fill:transparent;
+}
+
+
+.kill-t {
+  fill:transparent;
+}
+
+.start-t {
+	fill:transparent;
+}
+
+.lastHitstun-t {
+	fill:transparent;
+}
+
+.trajLine {
+	stroke-width:10px;
+	fill:none;
+}
+
 #main {
 	height: 800px;
 	width:500px;
