@@ -657,12 +657,20 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
 
     }
 
-    function getTotalThrowLag(throwChar,throwType,character){
+    function getThrowFrames(throwChar,throwType,character){
       var release = throwFrames[throwChar][throwType+"throw"].release;
       var firstActionable = throwFrames[throwChar][throwType+"throw"].firstA;
-      var totalLag = Math.ceil(firstActionable*characters[character][version+"weight"]/100) - Math.ceil(release*characters[character][version+"weight"]/100) + throwFrames[throwChar][throwType+"throw"].hLag;
-      console.log(totalLag);
-      return totalLag;
+      if (throwFrames[throwChar].weight[throwType]){
+        release = Math.ceil(release*characters[character][version+"weight"]/100);
+        firstActionable = Math.ceil(firstActionable*characters[character][version+"weight"]/100);
+      }
+
+      release += throwFrames[throwChar][throwType+"throw"].hLag;
+      firstActionable += throwFrames[throwChar][throwType+"throw"].hLag;
+
+      var totalLag = firstActionable - release;
+      //console.log(totalLag);
+      return [release,totalLag];
     }
 
 		/******* Internal functions end *******/
@@ -697,12 +705,13 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     var gravity = characters[character]["gravity"];
 
     if (isThrow){
+
       var releasePoint = getReleasePoint(xPos,yPos,character,throwChar,throwType,reverse,version);
-      var totalThrowLag = getTotalThrowLag(throwChar,throwType,character);
+      var tFrames = getThrowFrames(throwChar,throwType,character);
     }
     else {
       var releasePoint = [xPos,yPos];
-      var totalThrowLag = -1;
+      var tFrames = [-1,-1];
     }
 
     var knockback = getKnockback(percent, damagestaled, damageunstaled, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel, grounded, trajectory, metal, ice, isThrow);
@@ -771,7 +780,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
 
     this.yDisplacement = yDisplacement;
 
-    this.totalThrowLag = totalThrowLag;
+    this.tFrames = tFrames;
 
     //Position on the last frame of hitstun. Not used yet, but potentially useful.
     //var endPosition = this.positions[this.positions.length - 1];

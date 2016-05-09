@@ -78,10 +78,11 @@ function trajectoryObject(){
   this.comboSnap = 0;
   this.cSnapFrame = 0;
   this.hasCombo = 0;
-  this.totalThrowLag = -1;
+  this.tFrames = [-1,-1];
   this.lastDisplay = 0;
   this.killFrame = 0;
   this.hitlag = 0;
+  this.shieldstun = 0;
 }
 
 t = {};
@@ -2218,7 +2219,7 @@ function trajAnimFrame(n,frame){
       $("#"+n+"f"+frame).css("stroke-width",30);
       trajResetFrame(n,frame,1);
     }
-    else if (frame == t["t"+n].totalThrowLag + 1){
+    else if (frame == t["t"+n].tFrames[1] + 1){
       $("#"+n+"f"+frame).attr("r",55);
       trajResetFrame(n,frame,2);
     }
@@ -2266,9 +2267,24 @@ function trajectoryAnimation(n){
     }, 16.67);
   }
   else {
+    var delay;
+    if (t["t"+n].tFrames[0] > 0){
+      delay = t["t"+n].tFrames[0];
+    }
+    else {
+      delay = t["t"+n].hitlag;
+    }
     setTimeout(function(){
       trajAnimFrame(n,frame);
-    }, 16.67*t["t"+n].hitlag);
+    }, 16.67*delay);
+  }
+}
+
+function playAll(){
+  for(i=0;i<9;i++){
+    if (currentTrajs[i]){
+      trajectoryAnimation(i+1);
+    }
   }
 }
 
@@ -2342,6 +2358,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
   var damagestaled = damageunstaled * totalstale;
 
   t["t"+n].newDamage = damagestaled;
+  t["t"+n].shieldstun = Math.floor((damagestaled + 4.45) / 2.235);
   $("#newDamageEdit").empty().append(damagestaled.toPrecision(5));
   var xPos = 0;
   var yPos = 0;
@@ -2380,7 +2397,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
 	t["t"+n].curPositions = hit.positions;
   t["t"+n].hitstun = hit.hitstun;
   t["t"+n].knockback = hit.knockback;
-  t["t"+n].totalThrowLag = hit.totalThrowLag;
+  t["t"+n].tFrames = hit.tFrames;
   t["t"+n].hitlag = Math.floor(t["t"+n].newDamage * (1/3) + 3);
   if (hit.meteorCancelled){
     t["t"+n].hitstun = 8;
@@ -2458,11 +2475,11 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
     var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
     lineText += tempText;
   	if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
-      if (i == t["t"+n].totalThrowLag){
+      if (i == t["t"+n].tFrames[1]){
         var temX = ((x*10)+centreOffset[0]);
         var temY = ((-y*10)+centreOffset[1]);
         $(SVG("circle")).attr("id",n+"f"+(i+1)).attr("class","actCircle").attr("cx", temX).attr("cy",temY).attr("r", 40).attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]).appendTo("#trajGroup"+n);
-        $(SVG("circle")).attr("id","actCircle-t"+n+"f"+(i+1)).attr("class","actCircle-t").attr("cx", temX).attr("cy",temY).attr("r",30).attr("fill","transparent").appendTo("#trajGroup-t"+n);
+        $(SVG("circle")).attr("id",n+"f"+(i+1)+"-t").attr("class","actCircle-t").attr("cx", temX).attr("cy",temY).attr("r",30).attr("fill","transparent").appendTo("#trajGroup-t"+n);
         $(SVG("text")).attr("id","act"+n).attr("class","act").attr("x",temX-20).attr("y",temY+22).attr("font-size","70px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill",palettes[t["t"+n].palette][0]).appendTo("#trajGroup"+n);
         if (t["t"+n].palette == 2 || t["t"+n].palette == 3){
           $("#act"+n).attr("fill","black");
@@ -2473,7 +2490,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
         var temX = ((x*10)+centreOffset[0]);
         var temY = ((-y*10)+centreOffset[1]);
         $(SVG("path")).attr("id",n+"f"+(i+1)).attr("class","lastHitstun").attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
-        $(SVG("path")).attr("id","lastHitstun-t"+n).attr("class","lastHitstun-t pos"+i).attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").prependTo("#trajGroup-t"+n);
+        $(SVG("path")).attr("id",n+"f"+(i+1)+"-t").attr("class","lastHitstun-t pos"+i).attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").prependTo("#trajGroup-t"+n);
       }
       else {
         $(SVG("circle")).attr("id",n+"f"+(i+1)).attr("class","fP"+n+" framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
@@ -2489,7 +2506,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
         temX = ((x*10)+centreOffset[0]);
         temY = ((-y*10)+centreOffset[1]);
         $(SVG("path")).attr("id",n+"f"+(i+1)).attr("class","kill").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").attr("fill",palettes[t["t"+n].palette][2]).attr("stroke",palettes[t["t"+n].palette][2]).appendTo("#trajGroup"+n);
-        $(SVG("path")).attr("id","kill-t"+n).attr("class","kill-t pos"+i).attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup-t"+n);
+        $(SVG("path")).attr("id",n+"f"+(i+1)+"-t").attr("class","kill-t pos"+i).attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup-t"+n);
         cla = "tLineK";
         isKilled = true;
         t["t"+n].killFrame = i+1;
@@ -2586,7 +2603,12 @@ function trajPosInfo(){
       hitlag = Math.floor(hitlag * (2/3));
     }
     $("#start"+id).css("stroke-width",20);
-    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:90px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>hasCombo: '+t["t"+id].hasCombo+'<br>comboSnap: '+t["t"+id].comboSnap+'</div>');
+    if (t["t"+id].tFrames[0] > 0){
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Release: '+t["t"+id].tFrames[0]+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>Shieldstun: '+t["t"+id].shieldstun+'<br>hasCombo: '+t["t"+id].hasCombo+'<br>comboSnap: '+t["t"+id].comboSnap+'</div>');
+    }
+    else {
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>Shieldstun: '+t["t"+id].shieldstun+'<br>hasCombo: '+t["t"+id].hasCombo+'<br>comboSnap: '+t["t"+id].comboSnap+'</div>');
+    }
     setPosInfoOffset(id);
 
   }, function(){
@@ -2623,12 +2645,12 @@ function trajPosInfo(){
   });
 
   $(".lastHitstun-t").hover(function(){
-    var id = parseInt($(this).attr("id").substr(13,14));
-    var num = $(this).attr("class");
-    num = parseInt(num.substr(17,num.length));
-    $("#lastHitstun"+id).css("stroke-width",20);
-    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">Last Hitstun Frame ('+(num+1)+')</span><br>Pos X:'+((Math.round(t["t"+id].curPositions[num][0]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+id].curPositions[num][2]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+id].curPositions[num][4]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][5]*100))/100)+'</div>');
-    setPosInfoOffset(id);
+    var id = $(this).attr("id");
+    var fid = parseInt(id.substr(2,(id.length - 3)));
+    var tid = parseInt(id.substr(0,1));
+    $("#"+tid+"f"+fid).css("stroke-width",20);
+    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">Last Hitstun Frame ('+(fid)+')</span><br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
+    setPosInfoOffset(tid);
 
   }, function(){
     $(".lastHitstun").css("stroke-width",0);
@@ -2637,9 +2659,9 @@ function trajPosInfo(){
 
   $(".actCircle-t").hover(function(){
     var id = $(this).attr("id");
-    var tid = parseInt(id.substr(11,1));
-    var fid = parseInt(id.substr(13,id.length-13));
-    $("#actCircle"+tid+"f"+fid).attr("r",55);
+    var fid = parseInt(id.substr(2,(id.length - 3)));
+    var tid = parseInt(id.substr(0,1));
+    $("#"+tid+"f"+fid).attr("r",55);
     if (fid > t["t"+tid].hitstun){
       $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">Thrower Actionable</span><br>Actionable frame: '+(fid-t["t"+tid].hitstun)+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
     }
@@ -2654,12 +2676,12 @@ function trajPosInfo(){
   });
 
   $(".kill-t").hover(function(){
-    var id = parseInt($(this).attr("id").substr(6,7));
-    var num = $(this).attr("class");
-    num = parseInt(num.substr(10,num.length));
-    $("#kill"+id).css("stroke-width",20);
-    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:45px"><span style="font-size:13px">KILLED!</span><br>Pos X:'+((Math.round(t["t"+id].curPositions[num][0]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+id].curPositions[num][2]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][3]*100))/100)+'</div>');
-    setPosInfoOffset(id);
+    var id = $(this).attr("id");
+    var fid = parseInt(id.substr(2,(id.length - 3)));
+    var tid = parseInt(id.substr(0,1));
+    $("#"+tid+"f"+fid).css("stroke-width",20);
+    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:45px"><span style="font-size:13px">KILLED!</span><br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'</div>');
+    setPosInfoOffset(tid);
 
   }, function(){
     $(".kill").css("stroke-width",0);
@@ -3689,6 +3711,36 @@ $(document).ready(function(){
   document.onkeydown = function(evt) {
     evt = evt || window.event;
     switch (evt.keyCode) {
+      // 1-9
+      case 49:
+      case 50:
+      case 51:
+      case 52:
+      case 53:
+      case 54:
+      case 55:
+      case 56:
+      case 57:
+        var num = evt.keyCode-48;
+        if (currentTrajs[num-1]){
+          $(".trajBox").removeClass("trajBoxSelected");
+          $("#trajBox"+num).addClass("trajBoxSelected");
+          var pT = aT;
+          aT = num;
+          //prompt(aT);
+          //prompt(t["t"+aT].cHName);
+          swapOptions();
+          trajectoryAnimation(aT);
+          if (pT != aT){
+            t["t"+pT].trajFrozen = true;
+            $("#trajNum"+pT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
+          }
+        }
+        break;
+      // a
+      case 65:
+        playAll();
+        break;
       // c
       case 67:
         if (comboSnapping){
@@ -3722,6 +3774,10 @@ $(document).ready(function(){
       // u
       case 85:
         undoSource();
+        break;
+      // z
+      case 90:
+        trajectoryAnimation(aT);
         break;
       default:
         break;
