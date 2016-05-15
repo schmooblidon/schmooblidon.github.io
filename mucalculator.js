@@ -207,4 +207,6 @@ $(document).ready(function(){
     calculatePercents();
   });
 
+  calculatePercents();
+
 });
