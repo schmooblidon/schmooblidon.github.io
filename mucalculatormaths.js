@@ -161,7 +161,7 @@ function yRThreeZero(start,o1,o2,y1,y2){
 
 function yRThreeOne(start,o1,o2,y1,y2){
   yRThreeOnev=(start)*(1-o1)*(y1)*(o2)+(start)*(o1)*(1-o2)*(y1)+(1-start)*(y1)*(o1)*(o2);
-  return YRThreeOnev;
+  return yRThreeOnev;
 }
 
 function yRThreeTwo(start,o1,o2,y1,y2){

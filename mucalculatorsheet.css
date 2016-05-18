@@ -230,6 +230,34 @@ textarea
   text-align: center;
 }
 
+.wltop, .wlbottom {
+  height:55px;
+  width:160px;
+}
+
+.wltopleft {
+  height:55px;
+  width:50px;
+  display:inline-block;
+}
+
+.wltopleft p {
+  font-size:15px;
+  text-align: right;
+  padding-top:20px;
+}
+
+.wltopright {
+  height:55px;
+  width:110px;
+  display:inline-block;
+
+}
+
+.wltopright p{
+    text-align:left;
+}
+
 .setDetails {
   width:auto;
   height:80px;
@@ -246,4 +274,42 @@ textarea
 .set p {
   font-size:30px;
   text-align: center;
+}
+
+.settop {
+  width:100px;
+  height:30px;
+}
+
+.setmiddle {
+  width:100px;
+  height:10px;
+}
+
+.setmiddleleft, .setmiddleright {
+  width:50px;
+  height:10px;
+  display:inline-block;
+  font-size:7px;
+  text-align: center;
+}
+
+.setmiddleleft p, .setmiddleright p {
+  font-size:7px;
+  padding-top:3px;
+}
+
+.setmiddleleft p{
+  text-align:right;
+  padding-right:11px;
+}
+
+.setmiddleright p {
+  text-align: left;
+  padding-left: 5px;
+}
+
+.setbottom {
+  width:100px;
+  height:40px;
 }

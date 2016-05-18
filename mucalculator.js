@@ -36,57 +36,58 @@ function deleteNonNumbers(text,allowNegative,allowPoint,allowZeros){
 function calculatePercents(){
   starter,ocp1,ocp2,ycp1,ycp2
   // B O 3
-  $("#bo3set1").empty().append(Math.round(twoZero(starter,ocp1,ocp2,ycp1,ycp2)*100));
-  $("#bo3set2").empty().append(Math.round(twoOne(starter,ocp1,ocp2,ycp1,ycp2)*100));
-  $("#bo3set3").empty().append(Math.round(oneTwo(starter,ocp1,ocp2,ycp1,ycp2)*100));
-  $("#bo3set4").empty().append(Math.round(zeroTwo(starter,ocp1,ocp2,ycp1,ycp2)*100));
-  $("#bo3win").empty().append(Math.round(win3(starter,ocp1,ocp2,ycp1,ycp2)*100));
-  $("#bo3lose").empty().append(Math.round(lose3(starter,ocp1,ocp2,ycp1,ycp2)*100));
+  $("#bo3set1").empty().append((twoZero(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+  $("#bo3set2").empty().append((twoOne(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+  $("#bo3set3").empty().append((oneTwo(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+  $("#bo3set4").empty().append((zeroTwo(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+  $("#bo3win").empty().append((win3(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+  $("#bo3lose").empty().append((lose3(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
 
   // B O 5
-  if ((yRepick == true) && (oRepick == true) && (ycp1 >= ycp2) && (ocp1 <= ocp2)){
+  if (yRepick && oRepick && (ycp1 >= ycp2) && (ocp1 <= ocp2)){
     console.log("t1");
-    $("#bo5set1").empty().append(Math.round(rThreeZero(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set2").empty().append(Math.round(rThreeOne(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set3").empty().append(Math.round(rThreeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set4").empty().append(Math.round(rTwoThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set5").empty().append(Math.round(rOneThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set6").empty().append(Math.round(rZeroThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5win").empty().append(Math.round(rWin5(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5lose").empty().append(Math.round(rLose5(starter,ocp1,ocp2,ycp1,ycp2)*100));
+    $("#bo5set1").empty().append((rThreeZero(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set2").empty().append((rThreeOne(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set3").empty().append((rThreeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set4").empty().append((rTwoThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set5").empty().append((rOneThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set6").empty().append((rZeroThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5win").empty().append((rWin5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5lose").empty().append((rLose5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
   }
-  else if (((yRepick == true) && (oRepick == false) && (ycp1 > ycp2)) || ((yRepick == true) && (oRepick == true) && (ycp1 > ycp2) && (ocp1 > ocp2))){
+  else if ((yRepick && !oRepick && (ycp1 > ycp2)) || (yRepick && oRepick && (ycp1 > ycp2) && (ocp1 > ocp2))){
     console.log("t2");
-    $("#bo5set1").empty().append(Math.round(yRThreeZero(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set2").empty().append(Math.round(yRThreeOne(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set3").empty().append(Math.round(yRThreeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set4").empty().append(Math.round(yRTwoThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set5").empty().append(Math.round(yROneThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set6").empty().append(Math.round(yRZeroThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5win").empty().append(Math.round(yRWin5(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5lose").empty().append(Math.round(yRLose5(starter,ocp1,ocp2,ycp1,ycp2)*100));
+    $("#bo5set1").empty().append((yRThreeZero(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set2").empty().append((yRThreeOne(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set3").empty().append((yRThreeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set4").empty().append((yRTwoThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set5").empty().append((yROneThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set6").empty().append((yRZeroThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5win").empty().append((yRWin5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5lose").empty().append((yRLose5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
   }
-  else if (((oRepick == true) && (yRepick == false) && (ocp1 < ocp2)) || ((oRepick == true) && (yRepick == true) && (ocp1<ocp2) && (ycp1<ycp2))){
+  else if ((oRepick && !yRepick && (ocp1 < ocp2)) || (oRepick && yRepick && (ocp1<ocp2) && (ycp1<ycp2))){
     console.log("t3");
-    $("#bo5set1").empty().append(Math.round(eRThreeZero(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set2").empty().append(Math.round(eRThreeOne(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set3").empty().append(Math.round(eRThreeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set4").empty().append(Math.round(eRTwoThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set5").empty().append(Math.round(eROneThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set6").empty().append(Math.round(eRZeroThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5win").empty().append(Math.round(eRWin5(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5lose").empty().append(Math.round(eRLose5(starter,ocp1,ocp2,ycp1,ycp2)*100));
+    $("#bo5set1").empty().append((eRThreeZero(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set2").empty().append((eRThreeOne(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set3").empty().append((eRThreeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set4").empty().append((eRTwoThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set5").empty().append((eROneThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set6").empty().append((eRZeroThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5win").empty().append((eRWin5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5lose").empty().append((eRLose5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
   }
-  else if (((yRepick == false) && (oRepick == false)) || ((ycp1 <= ycp2) && (ocp1 >= ocp2))){
+  //else if ((!yRepick && !oRepick) || ((ycp1 <= ycp2) && (ocp1 >= ocp2))){
+  else {
     console.log("t4");
-    $("#bo5set1").empty().append(Math.round(threeZero(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set2").empty().append(Math.round(threeOne(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set3").empty().append(Math.round(threeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set4").empty().append(Math.round(twoThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set5").empty().append(Math.round(oneThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5set6").empty().append(Math.round(zeroThree(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5win").empty().append(Math.round(win5(starter,ocp1,ocp2,ycp1,ycp2)*100));
-    $("#bo5lose").empty().append(Math.round(lose5(starter,ocp1,ocp2,ycp1,ycp2)*100));
+    $("#bo5set1").empty().append((threeZero(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set2").empty().append((threeOne(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set3").empty().append((threeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set4").empty().append((twoThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set5").empty().append((oneThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5set6").empty().append((zeroThree(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5win").empty().append((win5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
+    $("#bo5lose").empty().append((lose5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
   }
 }
 
