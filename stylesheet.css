@@ -1,7 +1,7 @@
 @charset "utf-8";
 body {
 	background-color: #272727;
-	font-family:'Share Tech Mono', 'Ubuntu Mono', Consolas, "Courier New" ;
+	font-family:'Ubuntu Mono', Consolas, "Courier New" ;
 	font-weight: 400;
 	color:#FFFFFF;
 	margin:0;
@@ -76,6 +76,15 @@ body {
 .doublebutton p {
 	margin-top:12px;
 }
+
+.doublelongbutton {
+	width:100px;
+}
+
+.doublelongbutton p {
+	margin-top:12px;
+}
+
 .buttonhighlighted {
 	background-color:#6A6A6A;
 	color:#FFFFFF;
@@ -90,8 +99,22 @@ body {
 	vertical-align: top;
 	background-color:#3e3e3e;
 }
+
+#appsButton {
+	position:relative;
+}
+
+#appsDropdown {
+	position:relative;
+	height:120px;
+	width:100px;
+	bottom:1px;
+	z-index:250;
+	display:none;
+}
+
 #main {
-	font-family:Consolas, "Slabo 27px", "Courier New" ;
+	font-family:Consolas ;
 	margin:0px;
 	padding:0px 0px 0px 0px;
 	display:inline-block;
