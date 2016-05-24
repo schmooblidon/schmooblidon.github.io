@@ -78,7 +78,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       return [(xPos+rpX),(yPos+rpY)];
     }
 
-    function getKnockback(percent, damagestaled, damageunstaled, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel, grounded, trajectory, metal, ice, isThrow) {
+    function getKnockback(percent, damagestaled, damageunstaled, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel, grounded, trajectory, metal, ice, isThrow, character) {
 
       if (isThrow){
         weight = 100;
@@ -109,6 +109,12 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       }
       if (metal){
         kb -= 30;
+        if (kb < 0){
+          kb = 0;
+        }
+      }
+      if (character == "Nana"){
+        kb -= 5;
         if (kb < 0){
           kb = 0;
         }
@@ -714,7 +720,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       var tFrames = [-1,-1];
     }
 
-    var knockback = getKnockback(percent, damagestaled, damageunstaled, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel, grounded, trajectory, metal, ice, isThrow);
+    var knockback = getKnockback(percent, damagestaled, damageunstaled, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel, grounded, trajectory, metal, ice, isThrow, character);
 
     var hitstun = getHitstun(knockback);
 

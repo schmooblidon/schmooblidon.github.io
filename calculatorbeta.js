@@ -136,6 +136,23 @@ comboSnapping = false;
 automaticStale = true;
 centreOffset = [-bzLeft*10+50,bzTop*10+50];
 
+curVolume = 5;
+
+function changeVolume(plus){
+  if (plus){
+    curVolume++;
+    if (curVolume > 9){
+      curVolume = 9;
+    }
+  }
+  else {
+    curVolume--;
+    if (curVolume < 0){
+      curVolume = 0;
+    }
+  }
+}
+
 function changeHitboxVersions(newver){
   //missing kirby, and sheik dthrow
   if (newver == "PAL"){
@@ -2214,12 +2231,24 @@ function trajResetFrame(n,frame,type){
 
 function trajAnimFrame(n,frame){
   setTimeout(function(){
-    if (frame == t["t"+n].killFrame || frame == t["t"+n].hitstun){
-      //console.log(frame);
+    if (frame == t["t"+n].killFrame){
+      var snd3 = new Audio("assets/sounds/kill.wav");
+      snd3.volume = curVolume/10;
+      snd3.play();
+      $("#"+n+"f"+frame).css("stroke-width",30);
+      trajResetFrame(n,frame,1);
+    }
+    else if (frame == t["t"+n].hitstun){
+      var snd4 = new Audio("assets/sounds/falcondodge.wav");
+      snd4.volume = curVolume/10;
+      snd4.play();
       $("#"+n+"f"+frame).css("stroke-width",30);
       trajResetFrame(n,frame,1);
     }
     else if (frame == t["t"+n].tFrames[1] + 1){
+      var snd5 = new Audio("assets/sounds/tactionable.wav");
+      snd5.volume = curVolume/10;
+      snd5.play();
       $("#"+n+"f"+frame).attr("r",55);
       trajResetFrame(n,frame,2);
     }
@@ -2241,6 +2270,9 @@ function trajAnimFrame(n,frame){
 
 function trajectoryAnimation(n){
   frame = 1;
+  var snd1 = new Audio("assets/sounds/hit.wav");
+  snd1.volume = curVolume/10;
+  snd1.play();
   if (t["t"+n].comboSnap > 0){
     $("#comboStartOuter"+n).attr("r",45).css("stroke-width",20);
     $("#comboStartInner"+n).css("stroke-width",5);
@@ -2256,24 +2288,34 @@ function trajectoryAnimation(n){
       $("#start"+n).css("stroke-width",0);
     }, 100);
   }
+  var delay;
+  if (t["t"+n].tFrames[0] > 0){
+    delay = t["t"+n].tFrames[0];
+  }
+  else {
+    delay = t["t"+n].hitlag;
+  }
   if (t["t"+n].stayGrounded){
     setTimeout(function(){
+      if (t["t"+n].knockback > 80){
+        var snd2 = new Audio("assets/sounds/tech.wav");
+        snd2.volume = curVolume/10;
+        snd2.play();
+      }
+      else {
+        var snd2 = new Audio("assets/sounds/land.wav");
+        snd2.volume = curVolume/10;
+        snd2.play();
+      }
       $("#ccCircle"+n).css("stroke-width",20);
       $("#atCircle"+n).css("stroke-width",20);
       setTimeout(function(){
         $("#ccCircle"+n).css("stroke-width",0);
         $("#atCircle"+n).css("stroke-width",0);
       }, 300);
-    }, 16.67);
+    }, 16.67*delay);
   }
   else {
-    var delay;
-    if (t["t"+n].tFrames[0] > 0){
-      delay = t["t"+n].tFrames[0];
-    }
-    else {
-      delay = t["t"+n].hitlag;
-    }
     setTimeout(function(){
       trajAnimFrame(n,frame);
     }, 16.67*delay);
@@ -2283,7 +2325,9 @@ function trajectoryAnimation(n){
 function playAll(){
   for(i=0;i<9;i++){
     if (currentTrajs[i]){
-      trajectoryAnimation(i+1);
+      if (t["t"+(i+1)].comboSnap == 0){
+        trajectoryAnimation(i+1);
+      }
     }
   }
 }
@@ -3707,83 +3751,96 @@ $(document).ready(function(){
     resizing();
   });
 
+  $(".volumeButton").click(function(){
+    if ($(this).hasClass("volumeUp")){
+      changeVolume(true);
+    }
+    else {
+      changeVolume(false);
+    }
+    $("#volumeLevel p").empty().append(curVolume);
+  });
+
 
   document.onkeydown = function(evt) {
     evt = evt || window.event;
-    switch (evt.keyCode) {
-      // 1-9
-      case 49:
-      case 50:
-      case 51:
-      case 52:
-      case 53:
-      case 54:
-      case 55:
-      case 56:
-      case 57:
-        var num = evt.keyCode-48;
-        if (currentTrajs[num-1]){
-          $(".trajBox").removeClass("trajBoxSelected");
-          $("#trajBox"+num).addClass("trajBoxSelected");
-          var pT = aT;
-          aT = num;
-          //prompt(aT);
-          //prompt(t["t"+aT].cHName);
-          swapOptions();
-          trajectoryAnimation(aT);
-          if (pT != aT){
-            t["t"+pT].trajFrozen = true;
-            $("#trajNum"+pT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
+    if (!($("textarea").is(':focus'))){
+      switch (evt.keyCode) {
+        // 1-9
+        case 49:
+        case 50:
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
+        case 56:
+        case 57:
+          var num = evt.keyCode-48;
+          if (currentTrajs[num-1]){
+            $(".trajBox").removeClass("trajBoxSelected");
+            $("#trajBox"+num).addClass("trajBoxSelected");
+            var pT = aT;
+            aT = num;
+            //prompt(aT);
+            //prompt(t["t"+aT].cHName);
+            swapOptions();
+            trajectoryAnimation(aT);
+            if (pT != aT){
+              t["t"+pT].trajFrozen = true;
+              $("#trajNum"+pT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
+            }
           }
-        }
-        break;
-      // a
-      case 65:
-        playAll();
-        break;
-      // c
-      case 67:
-        if (comboSnapping){
-          $("#csSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("Off");
-          comboSnapping = false;
-        }
-        else {
-          $("#csSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
-          comboSnapping = true;
-        }
-        break;
-      // s
-      case 83:
-        if (snapping){
-          $("#stsSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("Off");
-          snapping = false;
-        }
-        else {
-          $("#stsSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
-          snapping = true;
-        }
-        break;
-      // o
-      case 79:
-        outputPopup();
-        break;
-      // i
-      case 73:
-        sourcePopup();
-        break;
-      // u
-      case 85:
-        undoSource();
-        break;
-      // z
-      case 90:
-        trajectoryAnimation(aT);
-        break;
-      default:
-        break;
+          break;
+        // a
+        case 65:
+          playAll();
+          break;
+        // c
+        case 67:
+          if (comboSnapping){
+            $("#csSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("Off");
+            comboSnapping = false;
+          }
+          else {
+            $("#csSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
+            comboSnapping = true;
+          }
+          break;
+        // s
+        case 83:
+          if (snapping){
+            $("#stsSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("Off");
+            snapping = false;
+          }
+          else {
+            $("#stsSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
+            snapping = true;
+          }
+          break;
+        // o
+        case 79:
+          outputPopup();
+          break;
+        // i
+        case 73:
+          sourcePopup();
+          break;
+        // u
+        case 85:
+          undoSource();
+          break;
+        // z
+        case 90:
+          trajectoryAnimation(aT);
+          break;
+        default:
+          break;
+      }
     }
   };
 
   readQueryString();
+
 
 });

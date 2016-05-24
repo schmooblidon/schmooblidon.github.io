@@ -158,18 +158,35 @@ textarea {
   opacity:1;
 }
 
+#mctitle {
+  display:inline-block;
+  height:45px;
+  width:300px;
+  position:relative;
+}
+
+#mctitletop {
+  height:45px;
+  position:absolute;
+}
+
+#mctitlebottom {
+  height:45px;
+  position:absolute;
+}
+
 #pagetitle h1 {
   display:inline-block;
-  margin:5px 0px 0px 10px;
+  margin:1px 0px 0px 10px;
   vertical-align:top;
 }
 
 #credits {
   display:inline-block;
   font-style:italic;
-  margin:20px 0 0 10px;
+  margin:32px 0 0 10px;
   vertical-align:top;
-  font-size:13px;
+  font-size:10px;
 }
 
 #titlebarButtons {
@@ -215,6 +232,65 @@ textarea {
   background-image:url(assets/trajectory/tuticon.png);
   border-radius:5px;
   margin:6px 0px 6px 5px;
+}
+
+#volumeContainer {
+  display:inline-block;
+  height:45px;
+  width:82px;
+  background-color: #de643d;
+  vertical-align: top;
+}
+
+#soundicon {
+  display:inline-block;
+  height:45px;
+  width:35px;
+  background-image: url(assets/trajectory/soundiconbig.png);
+  vertical-align: top;
+}
+
+#volumeLevel {
+  display:inline-block;
+  height:45px;
+  width:22px;
+  vertical-align: top;
+  position:relative;
+}
+
+#volumeLevel p {
+  text-align:left;
+  font-size:30px;
+  padding:7px 5px 5px 2px;
+  margin:0;
+}
+
+#volumeButtonContainer {
+  display:inline-block;
+  width:25px;
+  height:45px;
+  vertical-align: top;
+  background-color:#d97b5d;
+  position: relative;
+}
+
+.volumeButton {
+  height:22px;
+  width:25px;
+  cursor:pointer;
+}
+
+.volumeButton p {
+  font-size:25px;
+  padding:5px;
+  text-align: center;
+  margin:0;
+  position:relative;
+  bottom:8px;
+}
+
+.volumeButton:hover {
+  background-color:rgba(255, 255, 255, 0.18);
 }
 
 #donatebutton {
