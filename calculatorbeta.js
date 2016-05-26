@@ -20,6 +20,22 @@ palettes = [["#fe3a3a","#fe7f7f","#bb2828"],
 ["#fa36fa","#fa7afa","#990099"],
 ["#9e9e9e","#FFFFFF","#595959"]];
 
+sounds = {
+  hit : new Audio("assets/sounds/hit.wav"),
+  at : new Audio("assets/sounds/tech.wav"),
+  cc : new Audio("assets/sounds/land.wav"),
+  lasthitstun : new Audio("assets/sounds/falcondodge.wav"),
+  tactionable : new Audio("assets/sounds/tactionable.wav"),
+  kill : new Audio("assets/sounds/kill.wav")
+};
+
+sounds.hit.load();
+sounds.at.load();
+sounds.cc.load();
+sounds.lasthitstun.load();
+sounds.tactionable.load();
+sounds.kill.load();
+
 //trajectoryObject(trajFrozen,mouseXMelee,mouseYMelee,mouseXMeleeF,mouseYMeleeF,curHitbox,version,character,percent,crouch,reverse,chargeInterrupt,charging,chargeF,staleQueue,curPositions)
 
 function trajectoryObject(){
