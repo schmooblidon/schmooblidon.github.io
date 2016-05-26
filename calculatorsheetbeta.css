@@ -234,11 +234,112 @@ textarea {
   margin:6px 0px 6px 5px;
 }
 
+#hotkeyContainer {
+  height:45px;
+  width:100px;
+  display:inline-block;
+  background-color: #ed5c48;
+  position:relative;
+  vertical-align: top;
+  cursor:pointer;
+}
+
+#hotkeyContainerp {
+  text-align:center;
+  margin:0;
+  padding:12px 7px;
+  font-size:21px;
+}
+
+#hotkeys {
+  position:absolute;
+  top:45px;
+  left:-165px;
+  height:220px;
+  width:430px;
+  background-color:#ed5c48;
+  z-index:250;
+  border-radius:5px;
+  display:none;
+}
+
+.hkrow {
+  width:400px;
+  height:40px;
+  margin-left:10px;
+}
+
+#hk1strow {
+  margin-top:8px;
+}
+
+#hk2ndrow {
+  margin-left:20px;
+}
+
+#hk3rdrow {
+  margin-left:30px;
+}
+
+#hk4throw {
+  margin-left:42px;
+}
+
+.hotkey {
+  display:inline-block;
+  width:32px;
+  height:32px;
+  border:2px solid white;
+  border-radius:5px;
+  margin:2px;
+}
+
+.hotkey p {
+  margin:0;
+  padding:6px;
+  text-align:center;
+  font-size:19px;
+}
+
+.disabledhk {
+  background-color:rgba(0, 0, 0, 0.5);
+  opacity:0.25;
+}
+
+.activehk:hover {
+  background-color:white;
+  color:#ed5c48;
+}
+
+#hotkeyDescription {
+  width:280px;
+  height:40px;
+  margin-left:10px;
+}
+
+#hotkeyDescriptionEdit {
+  text-align: center;
+  font-size:13px;
+}
+
+#arrowkeys {
+  position:absolute;
+  bottom:0px;
+  right:0px;
+  width:128px;
+  height:85px;
+}
+
+#hk-up {
+  margin:0px 42px 2px 42px;
+  padding:
+}
+
 #volumeContainer {
   display:inline-block;
   height:45px;
   width:82px;
-  background-color: #de643d;
+  background-color:#ff627a;
   vertical-align: top;
 }
 
@@ -270,7 +371,7 @@ textarea {
   width:25px;
   height:45px;
   vertical-align: top;
-  background-color:#d97b5d;
+  background-color:#f7829b;
   position: relative;
 }
 
@@ -338,30 +439,26 @@ textarea {
 }
 
 #versionButtonContainer {
-  width:200px;
+  width:140px;
   height:45px;
   display:inline-block;
-  background-color:#FFCA8F;
-  padding-right:30px;
+  background-color:#d89aeb;
 }
 
 .verButton {
   width:70px;
-  height:30px;
-  background-color:#Df9440;
+  height:45px;
+  background-color:#c151fc;
   cursor:pointer;
   display:inline-block;
   color:#FFFFFF;
-  opacity:0.4;
-  border-radius:5px;
+  opacity:0.3;
   text-align:center;
-  margin-top:7px;
-
-  margin-left:30px;
 }
 
 .verButton p {
-  margin:4px 0;
+  margin:0;
+  padding:12px 0px;
   font-size:23px;
 }
 

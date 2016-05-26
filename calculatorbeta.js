@@ -3800,6 +3800,59 @@ $(document).ready(function(){
     $("#volumeLevel p").empty().append(curVolume);
   });
 
+  $("#hotkeyContainer").hover(function(){
+    $("#hotkeys").toggle();
+  });
+
+  $(".activehk").hover(function(){
+    var id = $(this).attr("id");
+    id = id.substr(3,id.length-3);
+    var text;
+    switch (id){
+      case "1":
+      case "2":
+      case "3":
+      case "4":
+      case "5":
+      case "6":
+      case "7":
+      case "8":
+      case "9":
+        text = "Plays animation for and selects, trajectory "+id;
+        break;
+      case "u":
+        text = "Removes last created trajectory from input";
+        break;
+      case "i":
+        text = "Opens trajectory input window";
+        break;
+      case "o":
+        text = "Opens output info dump for all trajectories";
+        break;
+      case "a":
+        text = "Plays animation for all trajectories";
+        break;
+      case "s":
+        text = "Toggles snap to surfaces";
+        break;
+      case "z":
+        text = "Plays animation for active trajectory";
+        break;
+      case "c":
+        text = "Toggles combo snapping";
+        break;
+      case "up":
+      case "left":
+      case "down":
+      case "right":
+        text = "Moves viewpoint "+id+" (when zoomed in)";
+        break;
+    }
+
+    $("#hotkeyDescriptionEdit").empty().append(text);
+  },function(){
+    $("#hotkeyDescriptionEdit").empty().append("Hover over a key");
+  });
 
   document.onkeydown = function(evt) {
     evt = evt || window.event;
