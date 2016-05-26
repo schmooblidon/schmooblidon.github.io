@@ -2791,6 +2791,27 @@ function getScrollPos() {
   }
 }
 
+function zoomToTrajectory(){
+  var disW = $("#display").width();
+  var disH = $("#display").height();
+  var zoomW = $("#trajBackground").width();
+  var zoomH = $("#trajBackground").height();
+  var widthRatio = zoomW/dimensions[activeStage][0];
+  var heightRatio = zoomH/dimensions[activeStage][1];
+  var tPosX = ((t["t"+aT].mouseXMeleeF*10)+(-bzLeft*10+50))*widthRatio;
+  var tPosY = ((t["t"+aT].mouseYMeleeF*-10)+(bzTop*10+50))*heightRatio;
+  var moveX = tPosX-(disW/2);
+  if (moveX < 0){
+    moveX = 0;
+  }
+  var moveY = tPosY-(disH/2);
+  if (moveY < 0){
+    moveY = 0;
+  }
+  $("#display").scrollTop(moveY);
+  $("#display").scrollLeft(moveX);
+}
+
 $(document).ready(function(){
   $("#header").hide();
   attackTable();
@@ -3739,6 +3760,7 @@ $(document).ready(function(){
     amount = parseInt($(this).css("top"));
     zoom = 5 - ((amount/74) * 4);
     resizing();
+    zoomToTrajectory();
     //console.log("amount = "+amount+" , zoom = "+zoom);
   }});
 
@@ -3765,6 +3787,7 @@ $(document).ready(function(){
     //console.log("NEW: amount = "+amount+" , zoom = "+zoom);
     $("#zoomSliderPointer").css("top",amount+"px");
     resizing();
+    zoomToTrajectory();
   });
 
   $(".volumeButton").click(function(){
