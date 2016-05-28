@@ -27,7 +27,7 @@ textarea
 }
 
 #main-content {
-  background-color: rgba(0, 0, 0, 0.73);
+  background-color: rgba(0, 0, 0, 0.3);
   width:1200px;
   height:700px;
   height:100%;
@@ -85,12 +85,12 @@ textarea
 
 .mode:hover {
   opacity:0.8;
-  background-color:rgba(0, 155, 204, 0.5);
+  background-color:rgba(161, 54, 219, 0.54);
 }
 
 .activemode {
   opacity:1;
-  background-color:rgba(0, 155, 204, 0.8);
+  background-color:#a136db;
 }
 
 #mode0 p, #mode1 p {
@@ -109,7 +109,7 @@ textarea
 }
 
 .stageContainer {
-  width:200px;
+  width:160px;
   height:150px;
   display:inline-block;
   background-color: rgba(0, 0, 0, 0.4);
@@ -117,12 +117,12 @@ textarea
 }
 
 .stageTitle {
-  width:200px;
+  width:160px;
   height:30px;
 }
 
 .stageTitle p {
-  font-size:18px;
+  font-size:15px;
   text-align:center;
   font-weight:800;
   padding:5px;
@@ -133,11 +133,11 @@ textarea
   width:62px;
   border-radius:7px;
   border:2px solid #b4b4b4;
-  margin:0px 69px;
+  margin:0px 49px;
 }
 
 .stagePercent {
-  width:125px;
+  width:85px;
   height:60px;
   display: inline-block;
 }
@@ -185,6 +185,9 @@ textarea
   resize:none;
 }
 
+.sPercent {
+  width:85px;
+}
 
 .percentIcon {
   width:30px;
@@ -296,7 +299,7 @@ textarea
 }
 
 #bo5Container {
-  width:60%;
+  width:59.9%;
   height:300px;
   background-color: rgba(0, 0, 0, 0.4);
   display:inline-block;

@@ -5,8 +5,9 @@ fd=50;
 dl=50;
 ys=50;
 fod=50;
+ps=50;
 
-stages = [bf,fd,dl,ys,fod];
+stages = [bf,fd,dl,ys,fod,ps];
 
 function deleteNonNumbers(text,allowNegative,allowPoint,allowZeros){
   var newtext = "";
@@ -59,16 +60,20 @@ function calculateStagePercent(num,value){
     case 5:
       fod = value;
       break;
+    case 6:
+      ps = value;
     default:
       break;
   }
   stages = [bf,fd,dl,ys,fod];
   stages.sort(function(a, b){return a-b});
   starter=stages[2]/100;
+  stages.push(ps);
+  stages.sort(function(a, b){return a-b});
   ocp1=stages[0]/100;
   ocp2=stages[1]/100;
-  ycp1=stages[4]/100;
-  ycp2=stages[3]/100;
+  ycp1=stages[5]/100;
+  ycp2=stages[4]/100;
 }
 
 function calculatePercents(){
@@ -275,12 +280,14 @@ $(document).ready(function(){
       $("#inputs").hide();
       $("#stages").show().css("display","inline-block");
       stages = [bf,fd,dl,ys,fod];
-      stages.sort()
+      stages.sort(function(a, b){return a-b});
       starter=stages[2]/100;
+      stages.push(ps);
+      stages.sort(function(a, b){return a-b});
       ocp1=stages[0]/100;
       ocp2=stages[1]/100;
-      ycp1=stages[4]/100;
-      ycp2=stages[3]/100;
+      ycp1=stages[5]/100;
+      ycp2=stages[4]/100;
       calculatePercents();
     }
   });
