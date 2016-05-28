@@ -1,3 +1,12 @@
+mode = 0;
+
+bf=50;
+fd=50;
+dl=50;
+ys=50;
+fod=50;
+
+stages = [bf,fd,dl,ys,fod];
 
 function deleteNonNumbers(text,allowNegative,allowPoint,allowZeros){
   var newtext = "";
@@ -32,9 +41,38 @@ function deleteNonNumbers(text,allowNegative,allowPoint,allowZeros){
   return newtext;
 }
 
+function calculateStagePercent(num,value){
+  num = parseInt(num);
+  switch (num){
+    case 1:
+      bf = value;
+      break;
+    case 2:
+      fd = value;
+      break;
+    case 3:
+      ys = value;
+      break;
+    case 4:
+      dl = value;
+      break;
+    case 5:
+      fod = value;
+      break;
+    default:
+      break;
+  }
+  stages = [bf,fd,dl,ys,fod];
+  stages.sort(function(a, b){return a-b});
+  starter=stages[2]/100;
+  ocp1=stages[0]/100;
+  ocp2=stages[1]/100;
+  ycp1=stages[4]/100;
+  ycp2=stages[3]/100;
+}
 
 function calculatePercents(){
-  starter,ocp1,ocp2,ycp1,ycp2
+  //starter,ocp1,ocp2,ycp1,ycp2
   // B O 3
   $("#bo3set1").empty().append((twoZero(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
   $("#bo3set2").empty().append((twoOne(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
@@ -45,7 +83,6 @@ function calculatePercents(){
 
   // B O 5
   if (yRepick && oRepick && (ycp1 >= ycp2) && (ocp1 <= ocp2)){
-    console.log("t1");
     $("#bo5set1").empty().append((rThreeZero(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
     $("#bo5set2").empty().append((rThreeOne(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
     $("#bo5set3").empty().append((rThreeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
@@ -56,7 +93,6 @@ function calculatePercents(){
     $("#bo5lose").empty().append((rLose5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
   }
   else if ((yRepick && !oRepick && (ycp1 > ycp2)) || (yRepick && oRepick && (ycp1 > ycp2) && (ocp1 > ocp2))){
-    console.log("t2");
     $("#bo5set1").empty().append((yRThreeZero(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
     $("#bo5set2").empty().append((yRThreeOne(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
     $("#bo5set3").empty().append((yRThreeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
@@ -67,7 +103,6 @@ function calculatePercents(){
     $("#bo5lose").empty().append((yRLose5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
   }
   else if ((oRepick && !yRepick && (ocp1 < ocp2)) || (oRepick && yRepick && (ocp1<ocp2) && (ycp1<ycp2))){
-    console.log("t3");
     $("#bo5set1").empty().append((eRThreeZero(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
     $("#bo5set2").empty().append((eRThreeOne(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
     $("#bo5set3").empty().append((eRThreeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
@@ -77,9 +112,7 @@ function calculatePercents(){
     $("#bo5win").empty().append((eRWin5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
     $("#bo5lose").empty().append((eRLose5(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
   }
-  //else if ((!yRepick && !oRepick) || ((ycp1 <= ycp2) && (ocp1 >= ocp2))){
   else {
-    console.log("t4");
     $("#bo5set1").empty().append((threeZero(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
     $("#bo5set2").empty().append((threeOne(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
     $("#bo5set3").empty().append((threeTwo(starter,ocp1,ocp2,ycp1,ycp2)*100).toPrecision(3));
@@ -94,7 +127,12 @@ function calculatePercents(){
 function changePercent(t){
   var id = $(t).attr("id");
   id = id.substr(5,1);
-  var value = parseInt($("#percent"+id).val());
+  if (mode){
+    var value = parseInt($("#percent"+id).val());
+  }
+  else {
+    var value = parseInt($("#stagePercent"+id).val());
+  }
   if ($(t).hasClass("plus")){
     value++;
     if (value > 100){
@@ -107,39 +145,39 @@ function changePercent(t){
       value = 0;
     }
   }
-  $("#percent"+id).val(value);
-  id = parseInt(id);
-  switch (id){
-    case 1:
-      starter = value/100;
-      console.log(value);
-      break;
-    case 2:
-      ycp1 = value/100;
-      break;
-    case 3:
-      ycp2 = value/100;
-      break;
-    case 4:
-      ocp1 = value/100;
-      break;
-    case 5:
-      ocp2 = value/100;
-      break;
-    default:
-      break;
+  if (mode){
+    $("#percent"+id).val(value);
+    id = parseInt(id);
+    switch (id){
+      case 1:
+        starter = value/100;
+        break;
+      case 2:
+        ycp1 = value/100;
+        break;
+      case 3:
+        ycp2 = value/100;
+        break;
+      case 4:
+        ocp1 = value/100;
+        break;
+      case 5:
+        ocp2 = value/100;
+        break;
+      default:
+        break;
+    }
   }
-  //console.log(starter);
+  else {
+    $("#stagePercent"+id).val(value);
+    calculateStagePercent(id,value);
+  }
   calculatePercents();
 }
 
 $(document).ready(function(){
-
-  /*$(".percentButton").click(function(){
-
-    changePercent(this);
-  });*/
-
+  $("#inputs").hide();
+  $("#pagetitle").append('<p id="credits">calculations by Yrale</p>');
   $(".repickReal").click(function(){
     var id = $(this).attr("id");
     id = id.substr(0,1);
@@ -171,7 +209,6 @@ $(document).ready(function(){
   $(".percentButton").mousedown(function() {
     t = this;
     percentHold = setInterval(function() {
-      //prompt(this);
       changePercent(t);
     }, 50);
   }).bind("mouseup mouseleave", function() {
@@ -184,29 +221,68 @@ $(document).ready(function(){
       value = 100;
     }
     var id = $(this).attr("id");
-    id = parseInt(id.substr(7,1));
-    value = Math.abs(value);
-    $(this).val(value);
-    switch (id){
-      case 1:
-        starter = value/100;
-        break;
-      case 2:
-        ycp1 = value/100;
-        break;
-      case 3:
-        ycp2 = value/100;
-        break;
-      case 4:
-        ocp1 = value/100;
-        break;
-      case 5:
-        ocp2 = value/100;
-        break;
-      default:
-        break;
+    if (mode){
+      id = parseInt(id.substr(7,1));
+      value = Math.abs(value);
+      $(this).val(value);
+      switch (id){
+        case 1:
+          starter = value/100;
+          break;
+        case 2:
+          ycp1 = value/100;
+          break;
+        case 3:
+          ycp2 = value/100;
+          break;
+        case 4:
+          ocp1 = value/100;
+          break;
+        case 5:
+          ocp2 = value/100;
+          break;
+        default:
+          break;
+      }
+    }
+    else {
+      id = parseInt(id.substr(12,1));
+      value = Math.abs(value);
+      $(this).val(value);
+      calculateStagePercent(id,value);
     }
     calculatePercents();
+  });
+
+  $(".mode").click(function(){
+    $(".mode").removeClass("activemode");
+    $(this).addClass("activemode");
+    var id = $(this).attr("id");
+    id = parseInt(id.substr(4,1));
+    if (id){
+      mode = 1;
+      $("#stages").hide();
+      $("#inputs").show().css("display","inline-block");
+      starter = parseInt($("#percent1").val())/100;
+      ycp1 = parseInt($("#percent2").val())/100;
+      ycp2 = parseInt($("#percent3").val())/100;
+      ocp1 = parseInt($("#percent4").val())/100;
+      ocp2 = parseInt($("#percent5").val())/100;
+      calculatePercents();
+    }
+    else {
+      mode = 0;
+      $("#inputs").hide();
+      $("#stages").show().css("display","inline-block");
+      stages = [bf,fd,dl,ys,fod];
+      stages.sort()
+      starter=stages[2]/100;
+      ocp1=stages[0]/100;
+      ocp2=stages[1]/100;
+      ycp1=stages[4]/100;
+      ycp2=stages[3]/100;
+      calculatePercents();
+    }
   });
 
   calculatePercents();

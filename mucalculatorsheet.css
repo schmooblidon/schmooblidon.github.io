@@ -16,10 +16,21 @@ textarea
     -webkit-appearance:none;
 }
 
+#ptitle {
+  display:inline-block;
+}
+
+#credits {
+  font-size:12px;
+  display:inline-block;
+  margin:23px 0px 0px 10px;
+}
+
 #main-content {
   background-color: rgba(0, 0, 0, 0.73);
   width:1200px;
   height:700px;
+  height:100%;
 }
 
 #winpercentTitle, #resultsTitle {
@@ -32,12 +43,103 @@ textarea
   font-size:40px;
   font-weight:bold;
   padding:7px;
+
+}
+
+#modeContainer {
+  height:60px;
+  width:192px;
+  display:inline-block;
+  left:0px;
+  position:absolute;
+}
+
+#modeTitle {
+  height:60px;
+  width:50px;
+  display:inline-block;
+}
+
+#modeTitle p {
+  padding:20px 5px;
+  font-size:15px;
+}
+
+#modes {
+  height:60px;
+  width:142px;
+  display:inline-block;
+}
+
+.mode {
+  display:inline-block;
+  height:46px;
+  width:62px;
+  background-color:rgba(0, 155, 204, 0.0);
+  opacity:0.2;
+  cursor:pointer;
+  border:2px solid white;
+  border-radius:5px;
+  margin:6px 5px 0px 0px;
+}
+
+.mode:hover {
+  opacity:0.8;
+  background-color:rgba(0, 155, 204, 0.5);
+}
+
+.activemode {
+  opacity:1;
+  background-color:rgba(0, 155, 204, 0.8);
+}
+
+#mode0 p, #mode1 p {
+  font-size:16px;
+  padding:4px;
 }
 
 #inputSelectors {
   width:1000px;
   height:160px;
   background-color: rgba(0, 0, 0, 0.13);
+}
+
+#stages, #inputs {
+  display:inline-block;
+}
+
+.stageContainer {
+  width:200px;
+  height:150px;
+  display:inline-block;
+  background-color: rgba(0, 0, 0, 0.4);
+  margin:10px;
+}
+
+.stageTitle {
+  width:200px;
+  height:30px;
+}
+
+.stageTitle p {
+  font-size:18px;
+  text-align:center;
+  font-weight:800;
+  padding:5px;
+}
+
+.stagePic {
+  height:49px;
+  width:62px;
+  border-radius:7px;
+  border:2px solid #b4b4b4;
+  margin:0px 69px;
+}
+
+.stagePercent {
+  width:125px;
+  height:60px;
+  display: inline-block;
 }
 
 .inputContainer {
@@ -131,6 +233,7 @@ textarea
   display:inline-block;
   background-color: rgba(0, 0, 0, 0.4);
   float:right;
+  vertical-align: top;
 }
 
 .repickButtonContainer {
