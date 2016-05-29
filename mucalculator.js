@@ -182,7 +182,7 @@ function changePercent(t){
 
 $(document).ready(function(){
   $("#inputs").hide();
-  $("#pagetitle").append('<p id="credits">calculations by Yrale</p>');
+  $("#pagetitle").append('<p id="credits">calculations by Jib</p>');
   $(".repickReal").click(function(){
     var id = $(this).attr("id");
     id = id.substr(0,1);
