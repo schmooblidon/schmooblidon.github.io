@@ -3835,11 +3835,17 @@ $(document).ready(function(){
       case "s":
         text = "Toggles snap to surfaces";
         break;
-      case "z":
+      case "q":
         text = "Plays animation for active trajectory";
         break;
       case "c":
         text = "Toggles combo snapping";
+        break;
+      case "z":
+        text = "Zoom in";
+        break;
+      case "x":
+        text = "Zoom out";
         break;
       case "up":
       case "left":
@@ -3922,9 +3928,35 @@ $(document).ready(function(){
         case 85:
           undoSource();
           break;
+        // q
+        case 81:
+          trajectoryAnimation(aT);
+          break;
         // z
         case 90:
-          trajectoryAnimation(aT);
+          if (zoom < 5){
+            zoom = Math.round(zoom + 1);
+            if (zoom > 5){
+              zoom = 5;
+            }
+          }
+          amount = Math.round(((5 - zoom)*74)/4);
+          $("#zoomSliderPointer").css("top",amount+"px");
+          resizing();
+          zoomToTrajectory();
+          break;
+        // x
+        case 88:
+          if (zoom > 1){
+            zoom = Math.round(zoom - 1);
+            if (zoom < 1){
+              zoom = 1;
+            }
+          }
+          amount = Math.round(((5 - zoom)*74)/4);
+          $("#zoomSliderPointer").css("top",amount+"px");
+          resizing();
+          zoomToTrajectory();
           break;
         default:
           break;

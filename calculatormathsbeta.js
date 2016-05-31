@@ -5,7 +5,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     var groundDownHitType;
     //Calculates base knockback from hit
     //Formula taken from http://www.ssbwiki.com/Knockback#Formula
-    function getReleasePoint(xPos,yPos,character,throwChar,throwType,reverse,version){
+    function getReleasePoint(xPos,yPos,character,throwChar,throwType,reverse,version,grounded){
       //Release Point = ThrowN + TransN + CharOffset
       var rpX = 0;
       var rpY = 0;
@@ -18,6 +18,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
         //animation frame per game frame
         var animPerGame = 1/(characters[character][version+"weight"]/100);
         var animRelFrame = release + animPerGame - (release % animPerGame);
+
         //use mod 1, so interpolations above 1.00 will be calculated properly
         var interpolation = (animRelFrame - release) % 1;
 
@@ -73,6 +74,10 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
 
       if (reverse){
         rpX *= -1;
+      }
+
+      if (grounded && rpY < 0){
+        rpY = 0;
       }
 
       return [(xPos+rpX),(yPos+rpY)];
@@ -656,7 +661,9 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       return horizontalVelocity;*/
 
       var horAngle = Math.cos(angle*angleConversion);
-      var initVel = Math.abs(horVel)/horAngle;
+      var initVel = Math.abs(horVel/horAngle);
+      console.log(horAngle);
+      console.log(initVel);
       //totalVel = Math.abs(horVel)+Math.abs(verVel);
 
       return initVel/0.03;
@@ -711,8 +718,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     var gravity = characters[character]["gravity"];
 
     if (isThrow){
-
-      var releasePoint = getReleasePoint(xPos,yPos,character,throwChar,throwType,reverse,version);
+      var releasePoint = getReleasePoint(xPos,yPos,character,throwChar,throwType,reverse,version,grounded);
       var tFrames = getThrowFrames(throwChar,throwType,character);
     }
     else {
@@ -721,6 +727,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     }
 
     var knockback = getKnockback(percent, damagestaled, damageunstaled, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel, grounded, trajectory, metal, ice, isThrow, character);
+    var oldknockback = knockback;
 
     var hitstun = getHitstun(knockback);
 
@@ -729,8 +736,8 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     var horizontalVelocity;
     var verticalVelocity;
 
-    if (combo > 0 && comboFrame > -1){
-      trajectory = getAngle(trajectory,knockback, false, 0, 0);
+    if (combo > 0 && comboFrame > 8){
+      trajectory = getAngle(trajectory,knockback,reverse, 0, 0);
       //console.log("trajectory = "+trajectory);
       horizontalVelocity = getHorizontalVelocity(knockback, trajectory, gravity);
       verticalVelocity = getVerticalVelocity(knockback, trajectory, gravity, grounded);
@@ -744,9 +751,9 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       trajectory = getNewAngle(horizontalVelocity,verticalVelocity);
       //console.log("newTrajectory = "+trajectory);
       //var angle = getAngle(newAngle, knockback, reverse, tdiX, tdiY);
-      //prompt(angle);
       knockback = getNewKnockback(trajectory,horizontalVelocity);
       //console.log("newKnockback = "+knockback);
+      reverse = false;
     }
     var angle = getAngle(trajectory, knockback, reverse, tdiX, tdiY);
     //console.log("angle = "+angle);
@@ -777,8 +784,12 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     //prompt("test");
 
     this.hitstun = hitstun;
-
-    this.knockback = knockback;
+    if (combo > 0 && comboFrame > -1){
+      this.knockback = oldknockback;
+    }
+    else {
+      this.knockback = knockback;
+    }
 
     this.meteorCancelled = meteorCancelled;
 
