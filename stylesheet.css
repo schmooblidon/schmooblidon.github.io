@@ -114,7 +114,7 @@ body {
 }
 
 #main {
-	font-family:Consolas ;
+	font-family: Consolas,"lucida console","Courier New" ;
 	margin:0px;
 	padding:0px 0px 0px 0px;
 	display:inline-block;

@@ -22,7 +22,7 @@
 
 body {
   overflow:hidden;
-  font-family:'Ubuntu Mono', Consolas, "Courier New" ;
+  font-family:Consolas,"lucida console","Courier New" ;
 }
 
 #display {
@@ -36,6 +36,7 @@ body {
 
 textarea {
   border:none;
+  font-family:Consolas,"lucida console","Courier New" ;
 }
 
 .effect-Normal {

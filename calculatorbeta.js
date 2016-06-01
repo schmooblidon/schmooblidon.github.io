@@ -20,6 +20,8 @@ palettes = [["#fe3a3a","#fe7f7f","#bb2828"],
 ["#fa36fa","#fa7afa","#990099"],
 ["#9e9e9e","#FFFFFF","#595959"]];
 
+
+//temp solution to loading sfx early
 sounds = {
   hit : new Audio("assets/sounds/hit.wav"),
   at : new Audio("assets/sounds/tech.wav"),
@@ -29,12 +31,18 @@ sounds = {
   kill : new Audio("assets/sounds/kill.wav")
 };
 
-sounds.hit.load();
-sounds.at.load();
-sounds.cc.load();
-sounds.lasthitstun.load();
-sounds.tactionable.load();
-sounds.kill.load();
+sounds.hit.volume = 0;
+sounds.hit.play();
+sounds.at.volume = 0;
+sounds.at.play();
+sounds.cc.volume = 0;
+sounds.cc.play();
+sounds.lasthitstun.volume = 0;
+sounds.lasthitstun.play();
+sounds.tactionable.volume = 0;
+sounds.tactionable.play();
+sounds.kill.volume = 0;
+sounds.kill.play();
 
 //trajectoryObject(trajFrozen,mouseXMelee,mouseYMelee,mouseXMeleeF,mouseYMeleeF,curHitbox,version,character,percent,crouch,reverse,chargeInterrupt,charging,chargeF,staleQueue,curPositions)
 
@@ -247,6 +255,71 @@ function changeHitboxVersions(newver){
   }
 }
 
+function createAutomaticStale(){
+  //t["t"+aT].staleQueue[0] = false;
+  //console.log("test "+aT);
+  var comboSearching = true;
+  var nT = aT;
+  var sT = 0;
+  // sT = startingTrajectory
+  //console.log("------------------------");
+  var depth = 0;
+  var realDepth = 0;
+  while (comboSearching){
+    if (t["t"+nT].comboSnap > 0){
+      //console.log("nT = "+nT);
+      //console.log("t['t'+nT].comboSnap = "+(t["t"+nT].comboSnap));
+      //console.log("aT = "+aT);
+      depth++;
+      if (t["t"+aT].cHName[0] == t["t"+(t["t"+nT].comboSnap)].cHName[0] && t["t"+(t["t"+nT].comboSnap)].cHName[1] == t["t"+aT].cHName[1]){
+        sT = t["t"+nT].comboSnap;
+        realDepth = depth;
+      }
+      nT = t["t"+nT].comboSnap;
+    }
+    else {
+      comboSearching = false;
+    }
+  }
+  //console.log("realDepth"+realDepth);
+  if (sT > 0){
+    var sQ = [];
+    for (j=0;j<9;j++){
+      sQ[j] = t["t"+sT].staleQueue[j];
+    }
+    //console.log("sT = "+sT);
+    nT = sT;
+    //console.log("nT = "+nT)
+    for (i=0;i<realDepth;i++){
+      var tempSQ = [];
+      for (j=0;j<9;j++){
+        tempSQ[j] = sQ[j];
+      }
+      for (k=0;k<8;k++){
+        if (tempSQ[k]){
+          sQ[k+1] = true;
+        }
+        else {
+          sQ[k+1] = false;
+        }
+      }
+      //console.log(nT);
+      if (t["t"+aT].cHName[0] == t["t"+nT].cHName[0] && t["t"+aT].cHName[1] == t["t"+nT].cHName[1]){
+        sQ[0] = true;
+      }
+      else {
+        sQ[0] = false;
+      }
+      nT = t["t"+nT].hasCombo;
+    }
+    for (j=0;j<9;j++){
+      t["t"+aT].staleQueue[j] = sQ[j];
+    }
+  }
+  else {
+    t["t"+aT].staleQueue = [false,false,false,false,false,false,false,false,false];
+  }
+}
 
 function deleteNonNumbers(text,allowNegative,allowPoint,allowZeros){
   var newtext = "";
@@ -373,8 +446,11 @@ function trajectoryHover(){
         var fract = (t["t"+aT].percent % 1).toPrecision(5);
         t["t"+aT].fractional = fract.substr(2,fract.length);
         if (automaticStale){
-          t["t"+aT].staleQueue[0] = false;
+          createAutomaticStale();
+
+
           // if using same attack, not checking hitbox ids
+          /*
           if (t["t"+aT].cHName[0] == t["t"+cT].cHName[0] && t["t"+aT].cHName[1] == t["t"+cT].cHName[1]){
             t["t"+aT].staleQueue[0] = true;
             // check stale queue 0 - 8 (skip 9)
@@ -386,7 +462,7 @@ function trajectoryHover(){
                 t["t"+aT].staleQueue[k+1] = false;
               }
             }
-          }
+          }*/
         }
         swapOptions();
         //prompt(t["t1"].hasCombo);
@@ -496,7 +572,12 @@ function translateText(temp){
       translated += " ";
     }
     else if (temp[v] == "%"){
-      translated += String.fromCharCode(parseInt(temp[v+1]+temp[v+2], 16));
+      if (temp[v+1]+temp[v+2] == "ag"){
+        translated += "\r\n";
+      }
+      else {
+        translated += String.fromCharCode(parseInt(temp[v+1]+temp[v+2], 16));
+      }
       v+=2;
     }
     else {
@@ -543,6 +624,9 @@ function makeTextCompatible(i){
         else {
           temp2 += "%";
           temp2 += temp1[v].charCodeAt(0).toString(16);
+          if (temp1[v].charCodeAt(0).toString(16) == "a"){
+            temp2 += "g";
+          }
         }
         break;
     }
@@ -2126,7 +2210,19 @@ function outputPopup(){
       if (t["t"+i].crouching){
         hitlag = Math.floor(hitlag * (2/3));
       }
-      $("#ppOutputText").append('-------------<br>TRAJECTORY '+i+'<br>-------------<br>ATTACKER<br>Attack: '+atk+'<br> -Damage: '+t["t"+i].curHitbox.dmg+'%<br> -Angle: '+t["t"+i].curHitbox.angle+'°<br> -Knockback Growth: '+t["t"+i].curHitbox.kg+'<br> -Set Knockback: '+t["t"+i].curHitbox.wbk+'<br> -Base Knockback: '+t["t"+i].curHitbox.bk+'<br> -Effect: '+t["t"+i].curHitbox.effect+'<br>Stale Queue: '+sq+'<br>Smash Charge: '+t["t"+i].chargeF+' frames<br>Damage: '+t["t"+i].newDamage.toFixed(5)+'%<br>VICTIM<br>Character: '+t["t"+i].character+'<br>Percent: '+t["t"+i].percent+'%<br>Hit Direction: '+hd+'<br>Trajectory DI:<br> -Inputs: X:'+t["t"+i].tdiMouseXMelee+' Y:'+t["t"+i].tdiMouseYMelee+'<br> -Strength: '+t["t"+i].tdiStrength+'%<br> -Angle: '+t["t"+i].tdiAngle+'°<br>SDI: <br> -Inputs: X:'+t["t"+i].sdiMouseXMelee+' Y:'+t["t"+i].sdiMouseYMelee+'<br> -Angle: '+t["t"+i].sdiAngle+'°<br>ASDI: <br> -Inputs: X:'+t["t"+i].adiMouseXMelee+' Y:'+t["t"+i].adiMouseYMelee+'<br> -Angle: '+t["t"+i].adiAngle+'°<br>Variables: '+variables+'<br>Hitlag: '+hitlag+' frames<br>Hitstun: '+t["t"+i].hitstun+' frames<br>Knockback: '+t["t"+i].knockback.toFixed(5)+kbtext+'<br>Y-Displacement: '+t["t"+i].yDisplacement.toFixed(5)+'<br>POSITIONS:<br>Position Hit: X: '+t["t"+i].mouseXMeleeF.toFixed(5)+' Y: '+t["t"+i].mouseYMeleeF.toFixed(5));
+      if (t["t"+i].tFrames[0] > 0){
+        var details = 'Throw Release: '+t["t"+i].tFrames[0]+'th frame of animation<br>Thrower Actionable: '+(t["t"+i].tFrames[1] + 1)+'th frame of hitstun';
+      }
+      else {
+        var details = 'Hitlag: '+hitlag+' frames<br>Shieldstun: '+t["t"+i].shieldstun+' frames';
+      }
+      if (t["t"+i].comboSnap > 0){
+        var combo = '<br>Combo Hit from Trajectory '+t["t"+i].comboSnap+', frame '+(t["t"+i].cSnapFrame+1);
+      }
+      else {
+        var combo = '';
+      }
+      $("#ppOutputText").append('-------------<br>TRAJECTORY '+i+'<br>-------------'+combo+'<br>ATTACKER<br>Attack: '+atk+'<br> -Damage: '+t["t"+i].curHitbox.dmg+'%<br> -Angle: '+t["t"+i].curHitbox.angle+'°<br> -Knockback Growth: '+t["t"+i].curHitbox.kg+'<br> -Set Knockback: '+t["t"+i].curHitbox.wbk+'<br> -Base Knockback: '+t["t"+i].curHitbox.bk+'<br> -Effect: '+t["t"+i].curHitbox.effect+'<br>Stale Queue: '+sq+'<br>Smash Charge: '+t["t"+i].chargeF+' frames<br>Damage: '+t["t"+i].newDamage.toFixed(5)+'%<br>VICTIM<br>Character: '+t["t"+i].character+'<br>Percent: '+t["t"+i].percent+'%<br>Hit Direction: '+hd+'<br>Trajectory DI:<br> -Inputs: X:'+t["t"+i].tdiMouseXMelee+' Y:'+t["t"+i].tdiMouseYMelee+'<br> -Strength: '+t["t"+i].tdiStrength+'%<br> -Angle: '+t["t"+i].tdiAngle+'°<br>SDI: <br> -Inputs: X:'+t["t"+i].sdiMouseXMelee+' Y:'+t["t"+i].sdiMouseYMelee+'<br> -Angle: '+t["t"+i].sdiAngle+'°<br>ASDI: <br> -Inputs: X:'+t["t"+i].adiMouseXMelee+' Y:'+t["t"+i].adiMouseYMelee+'<br> -Angle: '+t["t"+i].adiAngle+'°<br>Variables: '+variables+'<br>'+details+'<br>Hitstun: '+t["t"+i].hitstun+' frames<br>Knockback: '+t["t"+i].knockback.toFixed(5)+kbtext+'<br>Y-Displacement: '+t["t"+i].yDisplacement.toFixed(5)+'<br>POSITIONS:<br>Position Hit: X: '+t["t"+i].mouseXMeleeF.toFixed(5)+' Y: '+t["t"+i].mouseYMeleeF.toFixed(5));
 
       if (t["t"+i].grounded){
         $("#ppOutputText").append(" Grounded");
@@ -2147,12 +2243,20 @@ function outputPopup(){
         while (!isKilled && p < t["t"+i].curPositions.length){
           var x = t["t"+i].curPositions[p][0];
           var y = t["t"+i].curPositions[p][1];
-          if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
-            //within the blastzone
-            $("#ppOutputText").append("<br>Frame "+(p+1)+":<br> -Positions: X: "+x.toFixed(5)+" Y: "+y.toFixed(5)+"<br> -KBVel: X: "+t["t"+i].curPositions[p][2].toFixed(5)+" Y: "+t["t"+i].curPositions[p][3].toFixed(5)+"<br> -CharVel: X: "+t["t"+i].curPositions[p][4].toFixed(5)+" Y:"+t["t"+i].curPositions[p][5].toFixed(5));
+          if (p+1 == t["t"+i].hitstun){
+            $("#ppOutputText").append("<br>Last Frame of Hitstun:");
           }
-          else {
-            $("#ppOutputText").append("<br>Frame "+(p+1)+":<br> -Positions: X: "+x.toFixed(5)+" Y: "+y.toFixed(5)+"<br> -KBVel: X: "+t["t"+i].curPositions[p][2].toFixed(5)+" Y: "+t["t"+i].curPositions[p][3].toFixed(5)+"<br> -CharVel: X: "+t["t"+i].curPositions[p][4].toFixed(5)+" Y:"+t["t"+i].curPositions[p][5].toFixed(5));
+          if (p == t["t"+i].tFrames[1]){
+            $("#ppOutputText").append("<br>Thrower is actionable:");
+          }
+          if (t["t"+i].hasCombo){
+            if (p == t["t"+(t["t"+i].hasCombo)].cSnapFrame){
+              $("#ppOutputText").append('<br>Combo Hit (Trajectory '+t["t"+i].hasCombo+'):');
+            }
+          }
+          $("#ppOutputText").append("<br>Frame "+(p+1)+":<br> -Positions: X: "+x.toFixed(5)+" Y: "+y.toFixed(5)+"<br> -KBVel: X: "+t["t"+i].curPositions[p][2].toFixed(5)+" Y: "+t["t"+i].curPositions[p][3].toFixed(5)+"<br> -CharVel: X: "+t["t"+i].curPositions[p][4].toFixed(5)+" Y:"+t["t"+i].curPositions[p][5].toFixed(5));
+          if (!(x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
+            //within the blastzone
             if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && t["t"+i].curPositions[i][3] >= 2.4)){
               isKilled = true;
               $("#ppOutputText").append("<br>KILLED!");
@@ -2419,7 +2523,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
 
   t["t"+n].newDamage = damagestaled;
   t["t"+n].shieldstun = Math.floor((damagestaled + 4.45) / 2.235);
-  $("#newDamageEdit").empty().append(damagestaled.toPrecision(5));
+
   var xPos = 0;
   var yPos = 0;
   if (t["t"+n].trajFrozen){
@@ -2603,6 +2707,8 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
     drawAngle();
   }
 
+  $("#newDamageEdit").empty().append(damagestaled.toPrecision(5));
+
   // when drawTrajectory didnt take a trajectory number argument and always used aT, I needed this when temporarily changing aT, but I shouldn't need it anymore
   if (waitTillFinish){
     return true;
@@ -2664,10 +2770,10 @@ function trajPosInfo(){
     }
     $("#start"+id).css("stroke-width",20);
     if (t["t"+id].tFrames[0] > 0){
-      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Release: '+t["t"+id].tFrames[0]+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>Shieldstun: '+t["t"+id].shieldstun+'<br>hasCombo: '+t["t"+id].hasCombo+'<br>comboSnap: '+t["t"+id].comboSnap+'</div>');
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Release: '+t["t"+id].tFrames[0]+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>Shieldstun: '+t["t"+id].shieldstun+'</div>');
     }
     else {
-      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>Shieldstun: '+t["t"+id].shieldstun+'<br>hasCombo: '+t["t"+id].hasCombo+'<br>comboSnap: '+t["t"+id].comboSnap+'</div>');
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>Shieldstun: '+t["t"+id].shieldstun+'</div>');
     }
     setPosInfoOffset(id);
 
@@ -2695,7 +2801,7 @@ function trajPosInfo(){
     $("#comboStartOuter"+id).attr("r",45);
     $("#comboStartOuter"+id).css("stroke-width",20);
     $("#comboStartInner"+id).css("stroke-width",5);
-    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Combo Hit</span><br>(trajectory '+t["t"+id].comboSnap+', frame '+(t["t"+id].cSnapFrame+1)+')<br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>hasCombo: '+t["t"+id].hasCombo+'<br>comboSnap: '+t["t"+id].comboSnap+'</div>');
+    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Combo Hit</span><br>(trajectory '+t["t"+id].comboSnap+', frame '+(t["t"+id].cSnapFrame+1)+')<br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'</div>');
     setPosInfoOffset(id);
 
   }, function(){
@@ -2740,7 +2846,12 @@ function trajPosInfo(){
     var fid = parseInt(id.substr(2,(id.length - 3)));
     var tid = parseInt(id.substr(0,1));
     $("#"+tid+"f"+fid).css("stroke-width",20);
-    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:45px"><span style="font-size:13px">KILLED!</span><br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'</div>');
+    if (fid > t["t"+tid].hitstun){
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">KILLED!</span><br>Actionable frame: '+(fid-t["t"+tid].hitstun)+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
+    }
+    else {
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">KILLED!</span><br>Frame of hitstun: '+fid+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
+    }
     setPosInfoOffset(tid);
 
   }, function(){
