@@ -1746,7 +1746,7 @@ function trajBoxClick(){
     //prompt(aT);
     //prompt(t["t"+aT].cHName);
     swapOptions();
-    trajectoryAnimation(aT);
+    //trajectoryAnimation(aT);
     if (pT != aT){
       t["t"+pT].trajFrozen = true;
       $("#trajNum"+pT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
@@ -2349,26 +2349,32 @@ function trajResetFrame(n,frame,type){
   }
 }
 
-function trajAnimFrame(n,frame){
+function trajAnimFrame(n,frame,dupes){
   setTimeout(function(){
     if (frame == t["t"+n].killFrame){
-      var snd3 = new Audio("assets/sounds/kill.wav");
-      snd3.volume = curVolume/10;
-      snd3.play();
+      if (!isDupe(n,dupes[5])){
+        var snd3 = new Audio("assets/sounds/kill.wav");
+        snd3.volume = curVolume/10;
+        snd3.play();
+      }
       $("#"+n+"f"+frame).css("stroke-width",30);
       trajResetFrame(n,frame,1);
     }
     else if (frame == t["t"+n].hitstun){
-      var snd4 = new Audio("assets/sounds/falcondodge.wav");
-      snd4.volume = curVolume/10;
-      snd4.play();
+      if (!isDupe(n,dupes[4])){
+        var snd4 = new Audio("assets/sounds/falcondodge.wav");
+        snd4.volume = curVolume/10;
+        snd4.play();
+      }
       $("#"+n+"f"+frame).css("stroke-width",30);
       trajResetFrame(n,frame,1);
     }
     else if (frame == t["t"+n].tFrames[1] + 1){
-      var snd5 = new Audio("assets/sounds/tactionable.wav");
-      snd5.volume = curVolume/10;
-      snd5.play();
+      if (!isDupe(n,dupes[3])){
+        var snd5 = new Audio("assets/sounds/tactionable.wav");
+        snd5.volume = curVolume/10;
+        snd5.play();
+      }
       $("#"+n+"f"+frame).attr("r",55);
       trajResetFrame(n,frame,2);
     }
@@ -2378,21 +2384,34 @@ function trajAnimFrame(n,frame){
     }
     frame++;
     if (t["t"+n].lastDisplay >= frame){
-      trajAnimFrame(n,frame);
+      trajAnimFrame(n,frame,dupes);
     }
     else {
       if (t["t"+n].hasCombo > 0){
-        trajectoryAnimation(t["t"+n].hasCombo);
+        trajectoryAnimation(t["t"+n].hasCombo,dupes);
       }
     }
   }, 16.67);
 }
 
-function trajectoryAnimation(n){
+function isDupe(n,dupes){
+  var isD = false;
+  for(var i=0;i<dupes.length;i++){
+    if (n == dupes[i]){
+      isD = true;
+      break;
+    }
+  }
+  return isD;
+}
+
+function trajectoryAnimation(n,dupes){
   frame = 1;
-  var snd1 = new Audio("assets/sounds/hit.wav");
-  snd1.volume = curVolume/10;
-  snd1.play();
+  if (!isDupe(n,dupes[0])){
+    var snd1 = new Audio("assets/sounds/hit.wav");
+    snd1.volume = curVolume/10;
+    snd1.play();
+  }
   if (t["t"+n].comboSnap > 0){
     $("#comboStartOuter"+n).attr("r",45).css("stroke-width",20);
     $("#comboStartInner"+n).css("stroke-width",5);
@@ -2418,14 +2437,18 @@ function trajectoryAnimation(n){
   if (t["t"+n].stayGrounded){
     setTimeout(function(){
       if (t["t"+n].knockback > 80){
-        var snd2 = new Audio("assets/sounds/tech.wav");
-        snd2.volume = curVolume/10;
-        snd2.play();
+        if (!isDupe(n,dupes[2])){
+          var snd2 = new Audio("assets/sounds/tech.wav");
+          snd2.volume = curVolume/10;
+          snd2.play();
+        }
       }
       else {
-        var snd2 = new Audio("assets/sounds/land.wav");
-        snd2.volume = curVolume/10;
-        snd2.play();
+        if (!isDupe(n,dupes[1])){
+          var snd2 = new Audio("assets/sounds/land.wav");
+          snd2.volume = curVolume/10;
+          snd2.play();
+        }
       }
       $("#ccCircle"+n).css("stroke-width",20);
       $("#atCircle"+n).css("stroke-width",20);
@@ -2437,16 +2460,169 @@ function trajectoryAnimation(n){
   }
   else {
     setTimeout(function(){
-      trajAnimFrame(n,frame);
+      trajAnimFrame(n,frame,dupes);
     }, 16.67*delay);
   }
 }
 
 function playAll(){
-  for(i=0;i<9;i++){
+
+  // finding duplicates
+  var d = {
+    hit : [],
+    land : [],
+    tech : [],
+    tactionable : [],
+    lasthitstun : [],
+    kill : []
+  };
+
+  for(j=1;j<10;j++){
+    if (currentTrajs[j-1]){
+      if (t["t"+j].comboSnap == 0){
+        d.hit.push(0);
+        if (t["t"+j].stayGrounded){
+          if (t["t"+j].knockback < 80){
+            d.land.push(t["t"+j].hitlag);
+            d.tech.push(-1);
+          }
+          else {
+            d.tech.push(t["t"+j].hitlag);
+            d.land.push(-1);
+          }
+        }
+        else {
+          d.land.push(-1);
+          d.tech.push(-1);
+        }
+        if (t["t"+j].tFrames[0] > 0){
+          d.tactionable.push(t["t"+j].tFrames[0] + t["t"+j].tFrames[1]);
+          if (t["t"+j].lastDisplay > t["t"+j].hitstun){
+            d.lasthitstun.push(t["t"+j].tFrames[0] + t["t"+j].hitstun);
+          }
+          else {
+            d.lasthitstun.push(-1);
+          }
+          if (t["t"+j].killFrame > 0){
+            d.kill.push(t["t"+j].tFrames[0] + t["t"+j].killFrame);
+          }
+          else {
+            d.kill.push(-1);
+          }
+        }
+        else {
+          d.tactionable.push(-1);
+          if (t["t"+j].lastDisplay > t["t"+j].hitstun){
+            d.lasthitstun.push(t["t"+j].hitlag + t["t"+j].hitstun);
+          }
+          else {
+            d.lasthitstun.push(-1);
+          }
+          if (t["t"+j].killFrame > 0){
+            d.kill.push(t["t"+j].hitlag + t["t"+j].killFrame);
+          }
+          else {
+            d.kill.push(-1);
+          }
+        }
+
+      }
+      else {
+        var firstHitReached = false;
+        var offset = 0;
+        var n = t["t"+j].comboSnap;
+        var m = j;
+        while (!firstHitReached){
+          if (t["t"+n].tFrames[0] > 0){
+            offset += t["t"+n].tFrames[0] + t["t"+m].cSnapFrame;
+          }
+          else {
+            offset += t["t"+n].hitlag + t["t"+m].cSnapFrame + 1;
+          }
+          if (t["t"+n].comboSnap > 0){
+            m = n;
+            n = t["t"+n].comboSnap;
+          }
+          else {
+            firstHitReached = true;
+          }
+        }
+
+        d.hit.push(offset);
+        if (t["t"+j].tFrames[0] > 0){
+          d.tactionable.push(offset+t["t"+j].tFrames[0]+t["t"+j].tFrames[1]);
+          if (t["t"+j].lastDisplay > t["t"+j].hitstun){
+            d.lasthitstun.push(offset+t["t"+j].tFrames[0] + t["t"+j].hitstun);
+          }
+          else {
+            d.lasthitstun.push(-1);
+          }
+          if (t["t"+j].killFrame > 0){
+            d.kill.push(offset+t["t"+j].tFrames[0] + t["t"+j].killFrame);
+          }
+          else {
+            d.kill.push(-1);
+          }
+        }
+        else {
+          d.tactionable.push(-1);
+          if (t["t"+j].lastDisplay > t["t"+j].hitstun){
+            d.lasthitstun.push(offset+t["t"+j].hitlag + t["t"+j].hitstun);
+          }
+          else {
+            d.lasthitstun.push(-1);
+          }
+          if (t["t"+j].killFrame > 0){
+            d.kill.push(offset+t["t"+j].hitlag + t["t"+j].killFrame);
+          }
+          else {
+            d.kill.push(-1);
+          }
+        }
+        d.land.push(-1);
+        d.tech.push(-1);
+      }
+    }
+    else {
+      d.hit.push(-1);
+      d.land.push(-1);
+      d.tech.push(-1);
+      d.tactionable.push(-1);
+      d.lasthitstun.push(-1);
+      d.kill.push(-1);
+    }
+  }
+
+  var keys = Object.keys(d);
+  var dupes = [];
+  for (k=0;k<keys.length;k++){
+    var dup = [];
+    for (l=0;l<9;l++){
+      if (d[keys[k]][l] > -1){
+        for(m=0;m<l;m++){
+          if(d[keys[k]][l] == d[keys[k]][m]){
+            dup.push(l+1);
+            break;
+          }
+        }
+      }
+    }
+    dupes.push(dup);
+  }
+
+  /*console.log(d.hit);
+  console.log(d.land);
+  console.log(d.tech);
+  console.log(d.tactionable);
+  console.log(d.lasthitstun);
+  console.log(d.kill);
+
+  console.log(dupes);*/
+
+  for(var i=0;i<9;i++){
     if (currentTrajs[i]){
       if (t["t"+(i+1)].comboSnap == 0){
-        trajectoryAnimation(i+1);
+        trajectoryAnimation(i+1,dupes);
       }
     }
   }
@@ -3929,7 +4105,7 @@ $(document).ready(function(){
       case "7":
       case "8":
       case "9":
-        text = "Plays animation for and selects, trajectory "+id;
+        text = "Selects trajectory "+id;
         break;
       case "u":
         text = "Removes last created trajectory from input";
@@ -3994,7 +4170,7 @@ $(document).ready(function(){
             //prompt(aT);
             //prompt(t["t"+aT].cHName);
             swapOptions();
-            trajectoryAnimation(aT);
+            //trajectoryAnimation(aT);
             if (pT != aT){
               t["t"+pT].trajFrozen = true;
               $("#trajNum"+pT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
@@ -4041,7 +4217,8 @@ $(document).ready(function(){
           break;
         // q
         case 81:
-          trajectoryAnimation(aT);
+          var dupes = [[],[],[],[],[],[]];
+          trajectoryAnimation(aT,dupes);
           break;
         // z
         case 90:
