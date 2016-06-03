@@ -1901,26 +1901,27 @@ textarea
   margin:0;
   font-size:13px;
 }
-#sdiBox {
+#sdiBox,#zdiBox {
   width:140px;
   height:255px;
   display:inline-block;
   background-color:#363636;
 }
 
-#sdiTitle {
+#sdiTitle,#zdiTitle {
   width:150px;
   height:40px;
   display:inline-block;
   vertical-align:top;
 }
 
-#sdiTitle p {
+#sdiTitle p,#zdiTitle p {
   font-size:30px;
   margin:0px 0px 0px 15px;
+  display:inline-block;
 }
 
-#sdiSelector {
+#sdiSelector, #zdiSelector {
   width:130px;
   height:130px;
   display:inline-block;
@@ -1930,7 +1931,7 @@ textarea
   margin:5px;
 }
 
-#sdiCircle {
+#sdiCircle, #zdiCircle {
   width:130px;
   height:130px;
   background-color:#acacac;
@@ -1938,7 +1939,7 @@ textarea
   border-radius:65px;
 }
 
-#sdiXDeadzone {
+#sdiXDeadzone, #zdiXDeadzone {
   width:36.3px;
   height:130px;
   background-color:rgba(0, 0, 0, 0.2);
@@ -1946,7 +1947,7 @@ textarea
   margin-left:46.85px;
 }
 
-#sdiYDeadzone {
+#sdiYDeadzone, #zdiYDeadzone {
   height:36.3px;
   width:130px;
   background-color:rgba(0, 0, 0, 0.2);
@@ -1955,7 +1956,7 @@ textarea
 }
 
 
-#sdiUserCentre {
+#sdiUserCentre, #zdiUserCentre {
   height:10px;
   width:10px;
   margin-top:61px;
@@ -1965,7 +1966,7 @@ textarea
   background-color:#ff0000;
 }
 
-#sdiUser {
+#sdiUser, #zdiUser {
   height:3px;
   width:130px;
   margin-top:64px;
@@ -1977,14 +1978,14 @@ textarea
   transform: rotate(0deg);
 }
 
-#sdiUTrans {
+#sdiUTrans, #zdiUTrans {
   height:3px;
   width:65px;
   display:inline-block;
   vertical-align:top;
 }
 
-#sdiUSolid {
+#sdiUSolid, #zdiUSolid {
   height:3px;
   width:65px;
   display:inline-block;
@@ -1992,7 +1993,7 @@ textarea
   vertical-align:top;
 }
 
-#sdiVertical {
+#sdiVertical, #zdiVertical {
   width:20px;
   height:130px;
   /*display:inline-block;*/
@@ -2002,7 +2003,7 @@ textarea
 
 }
 
-#sdiButtons {
+#sdiButtons, #zdiButtons {
   width:140px;
   height:20px;
   display:inline-block;
@@ -2010,7 +2011,7 @@ textarea
   vertical-align:top;
 }
 
-#sdiButtonsP {
+#sdiButtonsP, #zdiButtonsP {
   width:140px;
   height:20px;
   display:none;
@@ -2018,24 +2019,43 @@ textarea
   vertical-align:top;
 }
 
-#sdiValues {
+#sdiValues, #zdiValues {
   width:150px;
   height:20px;
   display:inline-block;
   vertical-align:top;
 }
 
-#sdiValues p {
+#sdiValues p, #zdiValues p {
   margin:0;
   font-size:13px;
 }
 
-#sdiAnti {
+#sdiAnti, #zdiAnti {
   background-image:url(assets/trajectory/anti.png);
 }
 
-#sdiClock {
+#sdiClock, #zdiClock {
   background-image:url(assets/trajectory/clock.png);
+}
+
+.sdiNum {
+  display:inline-block;
+  color:black;
+  background-color:white;
+  width:25px;
+  height:25px;
+  border-radius:13px;
+  margin:6px;
+  vertical-align: top;
+}
+
+#sdiNum1 p, #sdiNum2 p {
+  text-align: center;
+  margin:0;
+  font-size:20px;
+  font-weight:bold;
+  padding:1px 6px;
 }
 
 #adiBox {

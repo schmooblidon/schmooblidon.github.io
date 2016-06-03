@@ -22,27 +22,7 @@ palettes = [["#fe3a3a","#fe7f7f","#bb2828"],
 
 
 //temp solution to loading sfx early
-sounds = {
-  hit : new Audio("assets/sounds/hit.wav"),
-  at : new Audio("assets/sounds/tech.wav"),
-  cc : new Audio("assets/sounds/land.wav"),
-  lasthitstun : new Audio("assets/sounds/falcondodge.wav"),
-  tactionable : new Audio("assets/sounds/tactionable.wav"),
-  kill : new Audio("assets/sounds/kill.wav")
-};
-
-sounds.hit.volume = 0;
-sounds.hit.play();
-sounds.at.volume = 0;
-sounds.at.play();
-sounds.cc.volume = 0;
-sounds.cc.play();
-sounds.lasthitstun.volume = 0;
-sounds.lasthitstun.play();
-sounds.tactionable.volume = 0;
-sounds.tactionable.play();
-sounds.kill.volume = 0;
-sounds.kill.play();
+sounds = [new Audio("assets/sounds/hit.wav"),new Audio("assets/sounds/tech.wav"),new Audio("assets/sounds/land.wav"),new Audio("assets/sounds/falcondodge.wav"),new Audio("assets/sounds/tactionable.wav"),new Audio("assets/sounds/kill.wav")];
 
 //trajectoryObject(trajFrozen,mouseXMelee,mouseYMelee,mouseXMeleeF,mouseYMeleeF,curHitbox,version,character,percent,crouch,reverse,chargeInterrupt,charging,chargeF,staleQueue,curPositions)
 
@@ -68,6 +48,11 @@ function trajectoryObject(){
   this.adiMouseXReal = 65.4;
   this.adiMouseYReal = 65.4;
   this.adiAngle = 0;
+  this.zdiMouseXMelee = 0;
+  this.zdiMouseYMelee = 0;
+  this.zdiMouseXReal = 65.4;
+  this.zdiMouseYReal = 65.4;
+  this.zdiAngle = 0;
   this.curHitbox = chars.Fx.neutralSpecial.id0;
   this.cHName = ["Fx","neutralSpecial",false,"id0"];
   this.character = "Fox";
@@ -123,6 +108,7 @@ diPointerFrozen = {};
 diPointerFrozen.t = false;
 diPointerFrozen.a = false;
 diPointerFrozen.s = false;
+diPointerFrozen.z = false;
 mouseX = 0;
 mouseY = 0;
 mouseZoomX = 0;
@@ -135,10 +121,13 @@ diMouseX.s = 0;
 diMouseY.s = 0;
 diMouseX.a = 0;
 diMouseY.a = 0;
+diMouseY.z = 0;
+diMouseX.z = 0;
 
 diSwitch = {};
 diSwitch.t = 0;
 diSwitch.s = 0;
+diSwitch.z = 0;
 diSwitch.a = 0;
 
 titleX = 0;
@@ -958,6 +947,11 @@ function readQueryString(){
     }
   }
   if (queryExist){
+    var version = GetQueryStringParams("version");
+    var loop = 25;
+    if (version == "200"){
+      loop = 26;
+    }
     $("#tutorial").remove();
     storedTrajs = 0;
     $("#trajBox1").remove();
@@ -984,7 +978,7 @@ function readQueryString(){
       if (exists){
         currentTrajs[p-1] = true;
         t["t"+p].trajFrozen = true;
-        for (j=0;j<25;j++){
+        for (j=0;j<loop;j++){
           var ja = String.fromCharCode(97 + j);
           var temp = GetQueryStringParams(p+ja);
 
@@ -1007,6 +1001,12 @@ function readQueryString(){
               }
               if (diSwitch["a"]){
                 $("#adiSwitch").children("p").empty().append("Precise");
+              }
+              if (version == "200"){
+                diSwitch["z"] = parseInt(temp[3]);
+                if (diSwitch["z"]){
+                  $("#zdiSwitch").children("p").empty().append("Precise");
+                }
               }
               break;
             case "d":
@@ -1050,6 +1050,11 @@ function readQueryString(){
               t["t"+p].vcancel = Boolean(parseInt(temp[7]));
               t["t"+p].useFractionals = Boolean(parseInt(temp[8]));
               t["t"+p].grounded = Boolean(parseInt(temp[9]));
+              if (version == "200"){
+                t["t"+p].icg = Boolean(parseInt(temp[10]));
+                t["t"+p].ice = Boolean(parseInt(temp[11]));
+                t["t"+p].metal = Boolean(parseInt(temp[12]));
+              }
               break;
             case "j":
               t["t"+p].chargeF = parseInt(temp);
@@ -1118,13 +1123,30 @@ function readQueryString(){
               // label y
               break;
             case "u":
-              t["t"+p].sdiMouseXReal = parseFloat(temp);
+              if (version == "200"){
+                temp = temp.split(",");
+                t["t"+p].sdiMouseXReal = parseFloat(temp[0]);
+                t["t"+p].zdiMouseXReal = parseFloat(temp[1]);
+              }
+              else {
+                t["t"+p].sdiMouseXReal = parseFloat(temp);
+              }
               break;
             case "v":
-              t["t"+p].sdiMouseYReal = parseFloat(temp);
-              var xy = convertPixelsToStick(t["t"+p].sdiMouseXReal,t["t"+p].sdiMouseYReal);
-              t["t"+p].sdiMouseXMelee = xy[0];
-              t["t"+p].sdiMouseYMelee = xy[1];
+              if (version == "200"){
+                temp = temp.split(",");
+                t["t"+p].sdiMouseYReal = parseFloat(temp[0]);
+                t["t"+p].zdiMouseYReal = parseFloat(temp[1]);
+                var xy2 = convertPixelsToStick(t["t"+p].zdiMouseXReal,t["t"+p].zdiMouseYReal);
+                t["t"+p].zdiMouseXMelee = xy2[0];
+                t["t"+p].zdiMouseYMelee = xy2[1];
+              }
+              else {
+                t["t"+p].sdiMouseYReal = parseFloat(temp);
+              }
+              var xy1 = convertPixelsToStick(t["t"+p].sdiMouseXReal,t["t"+p].sdiMouseYReal);
+              t["t"+p].sdiMouseXMelee = xy1[0];
+              t["t"+p].sdiMouseYMelee = xy1[1];
               break;
             case "w":
               t["t"+p].adiMouseXReal = parseFloat(temp);
@@ -1141,6 +1163,12 @@ function readQueryString(){
                 t["t"+p].percent = parseFloat(t["t"+p].percent+"."+t["t"+p].fractional);
               }
               break;
+            case "z":
+              temp = temp.split(",");
+              t["t"+p].hasCombo = parseInt(temp[0]);
+              t["t"+p].comboSnap = parseInt(temp[1]);
+              t["t"+p].cSnapFrame = parseInt(temp[2]);
+              break;
             default:
               break;
           }
@@ -1154,7 +1182,7 @@ function readQueryString(){
         else {
                 t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[3]];
         }
-        drawTrajectory(aT);
+        //drawTrajectory(aT);
         $("#trajAdd").before('<div id="trajBox'+p+'" class="trajBox"><div id="trajNum'+p+'" class="trajNum"><div class="trajFreeze freezeOn"></div><p>'+p+'</p></div><div id="trajColour'+p+'" class="trajColour"><div id="t'+p+'minicolour1" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][0]+'"></div><div id="t'+p+'minicolour2" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][1]+'"></div><div id="t'+p+'minicolour3" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][2]+'"></div></div><div id="trajLabel'+p+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+p+'" class="trajDelete"><p>x</p></div></div>');
         if (t["t"+p].hasLabel){
           var id = p;
@@ -1167,6 +1195,11 @@ function readQueryString(){
       }
       else {
         currentTrajs[p-1] = false;
+      }
+    }
+    for (var b=1;b<10;b++){
+      if (t["t"+b].comboSnap == 0){
+        drawTrajectory(b);
       }
     }
     for (l=0;l<9;l++){
@@ -1209,7 +1242,7 @@ function readQueryString(){
 
 function writeQueryString(){
   var qstring = "?";
-  qstring += "version=100&stage="+activeStage+"&";
+  qstring += "version=200&stage="+activeStage+"&";
   if ($("#trajTitle").hasClass("activeTitle")){
     var tt = makeTextCompatible(0);
     var to = $("#labelBox0").css("opacity");
@@ -1221,7 +1254,7 @@ function writeQueryString(){
   }
   for (i=1;i<10;i++){
     if (currentTrajs[i-1]){
-      for (j=0;j<25;j++){
+      for (j=0;j<26;j++){
         var temp = "";
         switch (j){
           case 0:
@@ -1235,6 +1268,7 @@ function writeQueryString(){
             temp += diSwitch["t"];
             temp += diSwitch["s"];
             temp += diSwitch["a"];
+            temp += diSwitch["z"];
             break;
           case 3:
             temp = t["t"+i].tdiMouseXReal;
@@ -1268,7 +1302,10 @@ function writeQueryString(){
             var temp8 = ~~t["t"+i].vcancel;
             var temp9 = ~~t["t"+i].useFractionals;
             var temp10 = ~~t["t"+i].grounded;
-            temp = temp1+temp2+temp3+temp4+temp5+temp6+temp7+temp8+temp9+temp10;
+            var temp11 = ~~t["t"+i].icg;
+            var temp12 = ~~t["t"+i].ice;
+            var temp13 = ~~t["t"+i].metal;
+            temp = temp1+temp2+temp3+temp4+temp5+temp6+temp7+temp8+temp9+temp10+temp11+temp12+temp13;
             break;
           case 9:
             temp = t["t"+i].chargeF;
@@ -1353,10 +1390,10 @@ function writeQueryString(){
             }
             break;
           case 20:
-            temp = t["t"+i].sdiMouseXReal;
+            temp = ""+t["t"+i].sdiMouseXReal+","+t["t"+i].zdiMouseXReal;
             break;
           case 21:
-            temp = t["t"+i].sdiMouseYReal;
+            temp = ""+t["t"+i].sdiMouseYReal+","+t["t"+i].zdiMouseYReal;
             break;
           case 22:
             temp = t["t"+i].adiMouseXReal;
@@ -1366,6 +1403,9 @@ function writeQueryString(){
             break;
           case 24:
             temp = t["t"+i].fractional;
+            break;
+          case 25:
+            temp = ""+t["t"+i].hasCombo+","+t["t"+i].comboSnap+","+t["t"+i].cSnapFrame;
             break;
           default:
             break;
@@ -1813,7 +1853,7 @@ function swapOptions(){
     }
     diOffset = $("#"+activeDI+"diSelector").offset();
     var type;
-    for (b=0;b<3;b++){
+    for (b=0;b<4;b++){
       if (b == 0){
         type = "t";
       }
@@ -1822,6 +1862,9 @@ function swapOptions(){
       }
       else if (b == 2){
         type = "a";
+      }
+      else if (b == 3){
+        type = "z";
       }
 
       $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
@@ -2222,7 +2265,7 @@ function outputPopup(){
       else {
         var combo = '';
       }
-      $("#ppOutputText").append('-------------<br>TRAJECTORY '+i+'<br>-------------'+combo+'<br>ATTACKER<br>Attack: '+atk+'<br> -Damage: '+t["t"+i].curHitbox.dmg+'%<br> -Angle: '+t["t"+i].curHitbox.angle+'°<br> -Knockback Growth: '+t["t"+i].curHitbox.kg+'<br> -Set Knockback: '+t["t"+i].curHitbox.wbk+'<br> -Base Knockback: '+t["t"+i].curHitbox.bk+'<br> -Effect: '+t["t"+i].curHitbox.effect+'<br>Stale Queue: '+sq+'<br>Smash Charge: '+t["t"+i].chargeF+' frames<br>Damage: '+t["t"+i].newDamage.toFixed(5)+'%<br>VICTIM<br>Character: '+t["t"+i].character+'<br>Percent: '+t["t"+i].percent+'%<br>Hit Direction: '+hd+'<br>Trajectory DI:<br> -Inputs: X:'+t["t"+i].tdiMouseXMelee+' Y:'+t["t"+i].tdiMouseYMelee+'<br> -Strength: '+t["t"+i].tdiStrength+'%<br> -Angle: '+t["t"+i].tdiAngle+'°<br>SDI: <br> -Inputs: X:'+t["t"+i].sdiMouseXMelee+' Y:'+t["t"+i].sdiMouseYMelee+'<br> -Angle: '+t["t"+i].sdiAngle+'°<br>ASDI: <br> -Inputs: X:'+t["t"+i].adiMouseXMelee+' Y:'+t["t"+i].adiMouseYMelee+'<br> -Angle: '+t["t"+i].adiAngle+'°<br>Variables: '+variables+'<br>'+details+'<br>Hitstun: '+t["t"+i].hitstun+' frames<br>Knockback: '+t["t"+i].knockback.toFixed(5)+kbtext+'<br>Y-Displacement: '+t["t"+i].yDisplacement.toFixed(5)+'<br>POSITIONS:<br>Position Hit: X: '+t["t"+i].mouseXMeleeF.toFixed(5)+' Y: '+t["t"+i].mouseYMeleeF.toFixed(5));
+      $("#ppOutputText").append('-------------<br>TRAJECTORY '+i+'<br>-------------'+combo+'<br>ATTACKER<br>Attack: '+atk+'<br> -Damage: '+t["t"+i].curHitbox.dmg+'%<br> -Angle: '+t["t"+i].curHitbox.angle+'°<br> -Knockback Growth: '+t["t"+i].curHitbox.kg+'<br> -Set Knockback: '+t["t"+i].curHitbox.wbk+'<br> -Base Knockback: '+t["t"+i].curHitbox.bk+'<br> -Effect: '+t["t"+i].curHitbox.effect+'<br>Stale Queue: '+sq+'<br>Smash Charge: '+t["t"+i].chargeF+' frames<br>Damage: '+t["t"+i].newDamage.toFixed(5)+'%<br>VICTIM<br>Character: '+t["t"+i].character+'<br>Percent: '+t["t"+i].percent+'%<br>Hit Direction: '+hd+'<br>Trajectory DI:<br> -Inputs: X:'+t["t"+i].tdiMouseXMelee+' Y:'+t["t"+i].tdiMouseYMelee+'<br> -Strength: '+t["t"+i].tdiStrength+'%<br> -Angle: '+t["t"+i].tdiAngle+'°<br>SDI (1): <br> -Inputs: X:'+t["t"+i].sdiMouseXMelee+' Y:'+t["t"+i].sdiMouseYMelee+'<br> -Angle: '+t["t"+i].sdiAngle+'°<br>SDI (2): <br> -Inputs: X:'+t["t"+i].zdiMouseXMelee+' Y:'+t["t"+i].zdiMouseYMelee+'<br> -Angle: '+t["t"+i].zdiAngle+'°<br>ASDI: <br> -Inputs: X:'+t["t"+i].adiMouseXMelee+' Y:'+t["t"+i].adiMouseYMelee+'<br> -Angle: '+t["t"+i].adiAngle+'°<br>Variables: '+variables+'<br>'+details+'<br>Hitstun: '+t["t"+i].hitstun+' frames<br>Knockback: '+t["t"+i].knockback.toFixed(5)+kbtext+'<br>Y-Displacement: '+t["t"+i].yDisplacement.toFixed(5)+'<br>POSITIONS:<br>Position Hit: X: '+t["t"+i].mouseXMeleeF.toFixed(5)+' Y: '+t["t"+i].mouseYMeleeF.toFixed(5));
 
       if (t["t"+i].grounded){
         $("#ppOutputText").append(" Grounded");
@@ -2732,7 +2775,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
     var throwType = false;
   }
 
-	var hit = new Hit(t["t"+n].percent,damagestaled,damageunstaled,t["t"+n].curHitbox.kg,t["t"+n].curHitbox.bk,t["t"+n].curHitbox.wbk,t["t"+n].curHitbox.angle,t["t"+n].character,t["t"+n].version,xPos,yPos,t["t"+n].crouch,t["t"+n].reverse,t["t"+n].chargeInterrupt,t["t"+n].tdiMouseXMelee,t["t"+n].tdiMouseYMelee,t["t"+n].fadeIn,t["t"+n].doubleJump,t["t"+n].sdiMouseXMelee,t["t"+n].sdiMouseYMelee,t["t"+n].adiMouseXMelee,t["t"+n].adiMouseYMelee,t["t"+n].meteorCancel,t["t"+n].vcancel,t["t"+n].grounded,t["t"+n].metal,t["t"+n].ice,t["t"+n].icg,isThrow,throwChar,throwType,t["t"+n].comboSnap,t["t"+n].cSnapFrame);
+	var hit = new Hit(t["t"+n].percent,damagestaled,damageunstaled,t["t"+n].curHitbox.kg,t["t"+n].curHitbox.bk,t["t"+n].curHitbox.wbk,t["t"+n].curHitbox.angle,t["t"+n].character,t["t"+n].version,xPos,yPos,t["t"+n].crouch,t["t"+n].reverse,t["t"+n].chargeInterrupt,t["t"+n].tdiMouseXMelee,t["t"+n].tdiMouseYMelee,t["t"+n].fadeIn,t["t"+n].doubleJump,t["t"+n].sdiMouseXMelee,t["t"+n].sdiMouseYMelee,t["t"+n].zdiMouseXMelee,t["t"+n].zdiMouseYMelee,t["t"+n].adiMouseXMelee,t["t"+n].adiMouseYMelee,t["t"+n].meteorCancel,t["t"+n].vcancel,t["t"+n].grounded,t["t"+n].metal,t["t"+n].ice,t["t"+n].icg,isThrow,throwChar,throwType,t["t"+n].comboSnap,t["t"+n].cSnapFrame);
 
 	t["t"+n].curPositions = hit.positions;
   t["t"+n].hitstun = hit.hitstun;
@@ -2895,12 +2938,17 @@ function setPosInfoOffset(id){
   var frameposy = mouseZoomY;
   var frameposx = mouseZoomX;
   scroll = getScrollPos();
-  if (mouseY + 95 > displayheight){
-    frameposy = scroll[0] + displayheight - 95;
+  var borders = $("#display").css("border-width");
+  borders = borders.split(" ");
+  borders[1] = parseInt(borders[1].substr(0,borders[1].length-2));
+  borders[0] = parseInt(borders[0].substr(0,borders[0].length-2));
+  if (mouseY + 95 > displayheight - (2*borders[0])){
+    frameposy = scroll[0] + displayheight - 95 - (2*borders[0]);
   }
-  if (mouseX + 185 > midwidth){
-    frameposx = scroll[1] + midwidth - 185;
+  if (mouseX + 165 > midwidth - (2*borders[1])){
+    frameposx = scroll[1] + midwidth - 165 - (2*borders[1]);
   }
+
   $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
 }
 
@@ -3100,6 +3148,10 @@ function zoomToTrajectory(){
 }
 
 $(document).ready(function(){
+  for (var i=0;i<6;i++){
+    sounds[i].volume = 0;
+    sounds[i].play();
+  }
   $("#header").hide();
   attackTable();
 	$(document).on('mousemove', function(e){
@@ -3121,8 +3173,10 @@ $(document).ready(function(){
 
   $("#tdiUser").hide();
   $("#sdiUser").hide();
+  $("#zdiUser").hide();
   $("#adiUser").hide();
   $("#sdiBox").hide();
+  $("#zdiBox").hide();
   $("#adiBox").hide();
 
   $("#tutorialbutton").hover(function(){
@@ -3362,6 +3416,11 @@ $(document).ready(function(){
     }
     else if (activeDI == "s"){
       $("#sdiBox").hide();
+      $("#zdiBox").show();
+      activeDI = "z";
+    }
+    else if (activeDI == "z"){
+      $("#zdiBox").hide();
       $("#adiBox").show();
       activeDI = "a";
     }
@@ -3808,7 +3867,7 @@ $(document).ready(function(){
 
   $("#trajShare").click(function(){
     var qstring = writeQueryString();
-    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutShare"><div id="ppSTitle"><p>Share this URL <span style="font-size:10px">(triple click to select all)</span></p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppSUrl"><p id="shareUrlEdit">http://ikneedata.com/calculator'+qstring+'</p></div></div></div>');
+    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutShare"><div id="ppSTitle"><p>Share this URL <span style="font-size:10px">(triple click to select all)</span></p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppSUrl"><p id="shareUrlEdit">http://ikneedata.com/calculatorsecretbeta'+qstring+'</p></div></div></div>');
     $("#ppSClose").unbind("mouseover click");
     $("#ppSClose").hover(function(){
       $(this).toggleClass("ppSCloseHighlight");
