@@ -1,4 +1,4 @@
-trajOffset = $("#trajectory").offset();
+trajOffset = $("#trajCanvas").offset();
 //diOffset = {};
 diOffset = $("#tdiSelector").offset();
 //diOffset.s = $("#sdiSelector").offset();
@@ -40,66 +40,110 @@ collapsed.b = false;
 
 activeDI = "t";
 
+zoom = 1;
+
+midwidth = 0;
+displayheight = 0;
+
 var resizingtype = function(){
 	//width/length.   width = ratio*height.   height = width/ratio
-	var midwidth = windwidth-360;
+	mousePosBoxOffset = [220,145];
+	midwidth = windwidth-360;
 	var hbuffer = 0;
 	var vbuffer = 0;
 
 	if (collapsed.l){
 		midwidth += 150;
+		//mousePosBoxOffset[0] -= 150;
 	}
 	if (collapsed.r){
 		midwidth += 150;
+		mousePosBoxOffset[0] -= 150;
 	}
 	var midheight = windheight-45;
-	var displayheight = midheight - 260 ;
+	displayheight = midheight - 260 ;
 	if (collapsed.t){
 		displayheight  += 100;
 	}
 	if (collapsed.b){
 		displayheight += 100;
+		mousePosBoxOffset[1] -= 100;
 	}
 
 	$("#middlecontrols, #tcontrols, #tcontrolscollapse, #bcontrols, #bcontrolscollapse").width(midwidth);
 	$("#trajBoxContainer").width(midwidth-140);
-	$("#stageSelectContainer").width(midwidth-180);
+	$("#stageSelectContainer").width(midwidth-270);
 
 	//find blastzone buffer
-
-	if (midwidth/ratio <= displayheight){
-		vbuffer = displayheight - (midwidth/ratio);
-		hbuffer = 0;
-		$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").width(midwidth);
-		$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").height(midwidth/ratio);
-
-		$("#display").css("border-width",(vbuffer/2 + 1)+"px 0px");
+	if (zoom == 1){
+		if (midwidth/ratio <= displayheight){
+			vbuffer = displayheight - (midwidth/ratio);
+			hbuffer = 0;
+			$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").width(midwidth);
+			$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").height(midwidth/ratio);
+			$("#display").css("border-width",(vbuffer/2 + 1)+"px 0px");
+			mousePosBoxOffset[1] += vbuffer/2;
+		}
+		else {
+			vbuffer = 0;
+			hbuffer = midwidth - (ratio*displayheight);
+			$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").width(ratio*displayheight);
+			$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").height(displayheight);
+			$("#display").css("border-width","0px "+(hbuffer/2 + 1)+"px");
+			mousePosBoxOffset[0] += hbuffer/2;
+		}
 	}
 	else {
-		vbuffer = 0;
-		hbuffer = midwidth - (ratio*displayheight);
-
-		$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").width(ratio*displayheight);
-		$("#display, #trajectory, #trajectory-t, #trajBackground, #trajCanvas").height(displayheight);
-
-		$("#display").css("border-width","0px "+(hbuffer/2 + 1)+"px");
+		if (midwidth/ratio <= displayheight){
+			$("#display, #trajCanvas").width(midwidth);
+			$("#display, #trajCanvas").height(midwidth/ratio);
+			$("#trajectory, #trajectory-t, #trajBackground").width(midwidth*zoom);
+			$("#trajectory, #trajectory-t, #trajBackground").height((midwidth/ratio)*zoom);
+			vbuffer = displayheight - (midwidth/ratio)*zoom;
+			if (vbuffer < 0){
+				vbuffer = 0;
+				$("#display, #trajCanvas").height(displayheight);
+			}
+			else {
+				$("#display, #trajCanvas").height((midwidth/ratio)*zoom);
+			}
+			$("#display").css("border-width",(vbuffer/2 + 1)+"px 0px");
+			mousePosBoxOffset[1] += vbuffer/2;
+		}
+		else {
+			$("#display, #trajCanvas").width(ratio*displayheight);
+			$("#display, #trajCanvas").height(displayheight);
+			$("#trajectory, #trajectory-t, #trajBackground").width(ratio*displayheight*zoom);
+			$("#trajectory, #trajectory-t, #trajBackground").height(displayheight*zoom);
+			hbuffer = midwidth - (ratio*displayheight*zoom);
+			if (hbuffer < 0){
+				hbuffer = 0;
+				$("#display, #trajCanvas").width(midwidth);
+			}
+			else {
+				$("#display, #trajCanvas").width(ratio*displayheight*zoom);
+			}
+			$("#display").css("border-width","0px "+(hbuffer/2 + 1)+"px");
+			mousePosBoxOffset[0] += hbuffer/2;
+		}
 	}
-
-
 
 	$("#middlecontrols, #lcontrols, #lcontrolscollapse, #rcontrols, #rcontrolscollapse").height(midheight);
 	$("#rcontrolsOptions").height(midheight - 40);
 
-	$("#attackscroll").height($("#lcontrols").height()-275);
-	disWidth = $("#display").width();
-	disHeight = $("#display").height();
+	$("#attackscroll").height($("#lcontrols").height()-235);
+	disWidth = $("#trajectory").width();
+	disHeight = $("#trajectory").height();
 	disMagnification = disWidth/dimensions[activeStage][0];
 	for(i=1;i<=9;i++){
 		$("#labelBox"+i).css({"top":t["t"+i].labelY * disMagnification,"left":t["t"+i].labelX *disMagnification});
 	}
 	$("#labelBox0").css({"top":titleY * disMagnification,"left":titleX *disMagnification});
-	trajOffset = $("#trajectory").offset();
+	trajOffset = $("#trajCanvas").offset();
 	diOffset = $("#"+activeDI+"diSelector").offset();
-	//diOffset.s = $("#sdiSelector").offset();
-	//diOffset.a = $("#adiSelector").offset();
+
+	$("#mousePosition").css({"right":mousePosBoxOffset[0]+"px","bottom":mousePosBoxOffset[1]+"px"});
+
+	$("#display").perfectScrollbar('update');
+
 }

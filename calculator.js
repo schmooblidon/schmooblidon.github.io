@@ -20,6 +20,10 @@ palettes = [["#fe3a3a","#fe7f7f","#bb2828"],
 ["#fa36fa","#fa7afa","#990099"],
 ["#9e9e9e","#FFFFFF","#595959"]];
 
+
+//temp solution to loading sfx early
+sounds = [new Audio("assets/sounds/hit.wav"),new Audio("assets/sounds/tech.wav"),new Audio("assets/sounds/land.wav"),new Audio("assets/sounds/falcondodge.wav"),new Audio("assets/sounds/tactionable.wav"),new Audio("assets/sounds/kill.wav")];
+
 //trajectoryObject(trajFrozen,mouseXMelee,mouseYMelee,mouseXMeleeF,mouseYMeleeF,curHitbox,version,character,percent,crouch,reverse,chargeInterrupt,charging,chargeF,staleQueue,curPositions)
 
 function trajectoryObject(){
@@ -44,6 +48,11 @@ function trajectoryObject(){
   this.adiMouseXReal = 65.4;
   this.adiMouseYReal = 65.4;
   this.adiAngle = 0;
+  this.zdiMouseXMelee = 0;
+  this.zdiMouseYMelee = 0;
+  this.zdiMouseXReal = 65.4;
+  this.zdiMouseYReal = 65.4;
+  this.zdiAngle = 0;
   this.curHitbox = chars.Fx.neutralSpecial.id0;
   this.cHName = ["Fx","neutralSpecial",false,"id0"];
   this.character = "Fox";
@@ -72,6 +81,17 @@ function trajectoryObject(){
   this.yDisplacement = 0;
   this.newDamage = 3;
   this.stayGrounded = false;
+  this.metal = false;
+  this.ice = false;
+  this.icg = false;
+  this.comboSnap = 0;
+  this.cSnapFrame = 0;
+  this.hasCombo = 0;
+  this.tFrames = [-1,-1];
+  this.lastDisplay = 0;
+  this.killFrame = 0;
+  this.hitlag = 0;
+  this.shieldstun = 0;
 }
 
 t = {};
@@ -88,8 +108,11 @@ diPointerFrozen = {};
 diPointerFrozen.t = false;
 diPointerFrozen.a = false;
 diPointerFrozen.s = false;
+diPointerFrozen.z = false;
 mouseX = 0;
 mouseY = 0;
+mouseZoomX = 0;
+mouseZoomY = 0;
 diMouseX = {};
 diMouseY = {};
 diMouseX.t = 0;
@@ -98,10 +121,13 @@ diMouseX.s = 0;
 diMouseY.s = 0;
 diMouseX.a = 0;
 diMouseY.a = 0;
+diMouseY.z = 0;
+diMouseX.z = 0;
 
 diSwitch = {};
 diSwitch.t = 0;
 diSwitch.s = 0;
+diSwitch.z = 0;
 diSwitch.a = 0;
 
 titleX = 0;
@@ -119,7 +145,26 @@ surfaces.fo = [[[-63.34755,0.00288],[63.34755,0.00288]],[[-14.25,42.75],[14.25,4
 
 
 snapping = true;
+comboSnapping = false;
+automaticStale = true;
 centreOffset = [-bzLeft*10+50,bzTop*10+50];
+
+curVolume = 5;
+
+function changeVolume(plus){
+  if (plus){
+    curVolume++;
+    if (curVolume > 9){
+      curVolume = 9;
+    }
+  }
+  else {
+    curVolume--;
+    if (curVolume < 0){
+      curVolume = 0;
+    }
+  }
+}
 
 function changeHitboxVersions(newver){
   //missing kirby, and sheik dthrow
@@ -149,6 +194,7 @@ function changeHitboxVersions(newver){
     chars.Sh.uair.clean.id1 = new hitbox(10,80,110,0,15,'Normal');
     chars.Sh.uair.late.id0 = new hitbox(8,70,110,0,10,'Normal');
     chars.Sh.uair.late.id1 = new hitbox(8,70,110,0,10,'Normal');
+    chars.Sh.dthrow.id0 = new hitbox(3,60,50,0,70,'Normal');
     chars.Ys.fsmash.id0 = new hitbox(17,361,98,0,32,'Normal');
     chars.Ys.fsmash.id1 = new hitbox(17,361,98,0,32,'Normal');
     chars.Ys.fsmash.id2 = new hitbox(17,361,98,0,32,'Normal');
@@ -185,6 +231,7 @@ function changeHitboxVersions(newver){
     chars.Sh.uair.clean.id1 = new hitbox(12,80,120,0,15,'Normal');
     chars.Sh.uair.late.id0 = new hitbox(9,70,120,0,10,'Normal');
     chars.Sh.uair.late.id1 = new hitbox(9,70,120,0,10,'Normal');
+    chars.Sh.dthrow.id0 = new hitbox(3,80,50,0,70,'Normal');
     chars.Ys.fsmash.id0 = new hitbox(16,361,94,0,32,'Normal');
     chars.Ys.fsmash.id1 = new hitbox(16,361,94,0,32,'Normal');
     chars.Ys.fsmash.id2 = new hitbox(16,361,94,0,32,'Normal');
@@ -197,6 +244,71 @@ function changeHitboxVersions(newver){
   }
 }
 
+function createAutomaticStale(){
+  //t["t"+aT].staleQueue[0] = false;
+  //console.log("test "+aT);
+  var comboSearching = true;
+  var nT = aT;
+  var sT = 0;
+  // sT = startingTrajectory
+  //console.log("------------------------");
+  var depth = 0;
+  var realDepth = 0;
+  while (comboSearching){
+    if (t["t"+nT].comboSnap > 0){
+      //console.log("nT = "+nT);
+      //console.log("t['t'+nT].comboSnap = "+(t["t"+nT].comboSnap));
+      //console.log("aT = "+aT);
+      depth++;
+      if (t["t"+aT].cHName[0] == t["t"+(t["t"+nT].comboSnap)].cHName[0] && t["t"+(t["t"+nT].comboSnap)].cHName[1] == t["t"+aT].cHName[1]){
+        sT = t["t"+nT].comboSnap;
+        realDepth = depth;
+      }
+      nT = t["t"+nT].comboSnap;
+    }
+    else {
+      comboSearching = false;
+    }
+  }
+  //console.log("realDepth"+realDepth);
+  if (sT > 0){
+    var sQ = [];
+    for (j=0;j<9;j++){
+      sQ[j] = t["t"+sT].staleQueue[j];
+    }
+    //console.log("sT = "+sT);
+    nT = sT;
+    //console.log("nT = "+nT)
+    for (i=0;i<realDepth;i++){
+      var tempSQ = [];
+      for (j=0;j<9;j++){
+        tempSQ[j] = sQ[j];
+      }
+      for (k=0;k<8;k++){
+        if (tempSQ[k]){
+          sQ[k+1] = true;
+        }
+        else {
+          sQ[k+1] = false;
+        }
+      }
+      //console.log(nT);
+      if (t["t"+aT].cHName[0] == t["t"+nT].cHName[0] && t["t"+aT].cHName[1] == t["t"+nT].cHName[1]){
+        sQ[0] = true;
+      }
+      else {
+        sQ[0] = false;
+      }
+      nT = t["t"+nT].hasCombo;
+    }
+    for (j=0;j<9;j++){
+      t["t"+aT].staleQueue[j] = sQ[j];
+    }
+  }
+  else {
+    t["t"+aT].staleQueue = [false,false,false,false,false,false,false,false,false];
+  }
+}
 
 function deleteNonNumbers(text,allowNegative,allowPoint,allowZeros){
   var newtext = "";
@@ -263,14 +375,100 @@ function trajectoryHover(){
   $("#trajectory-t").mousemove(function(){
     var widthRatio = disWidth/dimensions[activeStage][0];
     var heightRatio = disHeight/dimensions[activeStage][1];
-    t["t"+aT].mouseXMelee = (Math.round(((mouseX/widthRatio)-(-bzLeft*10+50))*10))/100;
-    t["t"+aT].mouseYMelee = (Math.round(((mouseY/heightRatio)-(bzTop*10+50))*-10))/100;
+    t["t"+aT].mouseXMelee = (Math.round(((mouseZoomX/widthRatio)-(-bzLeft*10+50))*10))/100;
+    t["t"+aT].mouseYMelee = (Math.round(((mouseZoomY/heightRatio)-(bzTop*10+50))*-10))/100;
     $("#mPosX").val(t["t"+aT].mouseXMelee);
     $("#mPosY").val(t["t"+aT].mouseYMelee);
 
     if (t["t"+aT].trajFrozen == false){
       t["t"+aT].grounded = false;
-      if (snapping){
+      var closestTraj = [];
+
+      if (comboSnapping){
+        // for each possible trajectory
+        var closest = 11;
+        var howClose;
+        for (i=0;i<9;i++){
+          // if exists and not deleted
+          if (currentTrajs[i]){
+            var hasComboSnap = false;
+            var isSnappedOnYou = false;
+            // check if has combo snapped already
+            for (l=0;l<9;l++){
+              if (t["t"+(l+1)].comboSnap == (i+1)){
+                // skip active traj
+                if (l != aT-1){
+                  hasComboSnap = true;
+                }
+              }
+            }
+            if (t["t"+aT].hasCombo == (i+1)){
+              isSnappedOnYou = true;
+            }
+            //excluding current active trajectory, ones with combos already and ones that are snapped onto the trajectory itself (causes infinite drawing otherwise)
+            if (i != aT-1 && !hasComboSnap && !isSnappedOnYou){
+              // for each trajectory frame
+              for(j=0;j<t["t"+(i+1)].curPositions.length;j++){
+                // if mouse is within 5 Mm radius of trajectory frame
+                if (t["t"+aT].mouseXMelee <= t["t"+(i+1)].curPositions[j][0] + 10 && t["t"+aT].mouseXMelee >= t["t"+(i+1)].curPositions[j][0] - 10 && t["t"+aT].mouseYMelee <= t["t"+(i+1)].curPositions[j][1] + 10 && t["t"+aT].mouseYMelee >= t["t"+(i+1)].curPositions[j][1] - 10){
+                  // might need to use trig
+                  howClose = Math.abs(t["t"+aT].mouseXMelee - t["t"+(i+1)].curPositions[j][0]) + Math.abs(t["t"+aT].mouseYMelee - t["t"+(i+1)].curPositions[j][1]);
+                  if (howClose < closest){
+                    closest = howClose;
+                    closestTraj = [i,j];
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      if (closestTraj.length > 0){
+        var cT = closestTraj[0]+1;
+        t["t"+aT].mouseXMelee = t["t"+cT].curPositions[closestTraj[1]][0];
+        t["t"+aT].mouseYMelee = t["t"+cT].curPositions[closestTraj[1]][1];
+        t["t"+aT].comboSnap = cT;
+        t["t"+aT].cSnapFrame = closestTraj[1];
+        t["t"+cT].hasCombo = aT;
+        t["t"+aT].character = t["t"+cT].character;
+        t["t"+aT].percent = t["t"+cT].percent + t["t"+cT].newDamage;
+        var fract = (t["t"+aT].percent % 1).toPrecision(5);
+        t["t"+aT].fractional = fract.substr(2,fract.length);
+        if (automaticStale){
+          createAutomaticStale();
+
+
+          // if using same attack, not checking hitbox ids
+          /*
+          if (t["t"+aT].cHName[0] == t["t"+cT].cHName[0] && t["t"+aT].cHName[1] == t["t"+cT].cHName[1]){
+            t["t"+aT].staleQueue[0] = true;
+            // check stale queue 0 - 8 (skip 9)
+            for (k=0;k<8;k++){
+              if (t["t"+cT].staleQueue[k]){
+                t["t"+aT].staleQueue[k+1] = true;
+              }
+              else {
+                t["t"+aT].staleQueue[k+1] = false;
+              }
+            }
+          }*/
+        }
+        swapOptions();
+        //prompt(t["t1"].hasCombo);
+        // making frames past the combo point of the stationary trajectory invisible
+        // fuck it, easier to just redraw
+        drawTrajectory(closestTraj[0]+1);
+      }
+      else {
+        // if was previously combo snapped, redraw stationary trajectory
+        if (t["t"+aT].comboSnap > 0){
+          var cT = t["t"+aT].comboSnap;
+          t["t"+aT].comboSnap = 0;
+          t["t"+cT].hasCombo = 0;
+          drawTrajectory(cT);
+        }
+      }
+      if ((snapping && !comboSnapping) || (snapping & comboSnapping && closestTraj.length == 0)){
         //will have to do some more maths for slanted surfaces like yoshis
         for (i=0;i<surfaces[activeStage].length;i++){
           //if X position is in line with surface or within 10Mm on either side
@@ -328,7 +526,7 @@ function trajectoryHover(){
         $("#groundedBox").hide();
         $("#attemptCCDisable").show();
       }
-      drawTrajectory(true);
+      drawTrajectory(aT,true);
     }
   });
 }
@@ -363,7 +561,12 @@ function translateText(temp){
       translated += " ";
     }
     else if (temp[v] == "%"){
-      translated += String.fromCharCode(parseInt(temp[v+1]+temp[v+2], 16));
+      if (temp[v+1]+temp[v+2] == "ag"){
+        translated += "\r\n";
+      }
+      else {
+        translated += String.fromCharCode(parseInt(temp[v+1]+temp[v+2], 16));
+      }
       v+=2;
     }
     else {
@@ -410,6 +613,9 @@ function makeTextCompatible(i){
         else {
           temp2 += "%";
           temp2 += temp1[v].charCodeAt(0).toString(16);
+          if (temp1[v].charCodeAt(0).toString(16) == "a"){
+            temp2 += "g";
+          }
         }
         break;
     }
@@ -741,6 +947,11 @@ function readQueryString(){
     }
   }
   if (queryExist){
+    var version = GetQueryStringParams("version");
+    var loop = 25;
+    if (version == "200"){
+      loop = 26;
+    }
     $("#tutorial").remove();
     storedTrajs = 0;
     $("#trajBox1").remove();
@@ -767,7 +978,7 @@ function readQueryString(){
       if (exists){
         currentTrajs[p-1] = true;
         t["t"+p].trajFrozen = true;
-        for (j=0;j<25;j++){
+        for (j=0;j<loop;j++){
           var ja = String.fromCharCode(97 + j);
           var temp = GetQueryStringParams(p+ja);
 
@@ -790,6 +1001,12 @@ function readQueryString(){
               }
               if (diSwitch["a"]){
                 $("#adiSwitch").children("p").empty().append("Precise");
+              }
+              if (version == "200"){
+                diSwitch["z"] = parseInt(temp[3]);
+                if (diSwitch["z"]){
+                  $("#zdiSwitch").children("p").empty().append("Precise");
+                }
               }
               break;
             case "d":
@@ -833,6 +1050,11 @@ function readQueryString(){
               t["t"+p].vcancel = Boolean(parseInt(temp[7]));
               t["t"+p].useFractionals = Boolean(parseInt(temp[8]));
               t["t"+p].grounded = Boolean(parseInt(temp[9]));
+              if (version == "200"){
+                t["t"+p].icg = Boolean(parseInt(temp[10]));
+                t["t"+p].ice = Boolean(parseInt(temp[11]));
+                t["t"+p].metal = Boolean(parseInt(temp[12]));
+              }
               break;
             case "j":
               t["t"+p].chargeF = parseInt(temp);
@@ -901,13 +1123,30 @@ function readQueryString(){
               // label y
               break;
             case "u":
-              t["t"+p].sdiMouseXReal = parseFloat(temp);
+              if (version == "200"){
+                temp = temp.split(",");
+                t["t"+p].sdiMouseXReal = parseFloat(temp[0]);
+                t["t"+p].zdiMouseXReal = parseFloat(temp[1]);
+              }
+              else {
+                t["t"+p].sdiMouseXReal = parseFloat(temp);
+              }
               break;
             case "v":
-              t["t"+p].sdiMouseYReal = parseFloat(temp);
-              var xy = convertPixelsToStick(t["t"+p].sdiMouseXReal,t["t"+p].sdiMouseYReal);
-              t["t"+p].sdiMouseXMelee = xy[0];
-              t["t"+p].sdiMouseYMelee = xy[1];
+              if (version == "200"){
+                temp = temp.split(",");
+                t["t"+p].sdiMouseYReal = parseFloat(temp[0]);
+                t["t"+p].zdiMouseYReal = parseFloat(temp[1]);
+                var xy2 = convertPixelsToStick(t["t"+p].zdiMouseXReal,t["t"+p].zdiMouseYReal);
+                t["t"+p].zdiMouseXMelee = xy2[0];
+                t["t"+p].zdiMouseYMelee = xy2[1];
+              }
+              else {
+                t["t"+p].sdiMouseYReal = parseFloat(temp);
+              }
+              var xy1 = convertPixelsToStick(t["t"+p].sdiMouseXReal,t["t"+p].sdiMouseYReal);
+              t["t"+p].sdiMouseXMelee = xy1[0];
+              t["t"+p].sdiMouseYMelee = xy1[1];
               break;
             case "w":
               t["t"+p].adiMouseXReal = parseFloat(temp);
@@ -924,6 +1163,12 @@ function readQueryString(){
                 t["t"+p].percent = parseFloat(t["t"+p].percent+"."+t["t"+p].fractional);
               }
               break;
+            case "z":
+              temp = temp.split(",");
+              t["t"+p].hasCombo = parseInt(temp[0]);
+              t["t"+p].comboSnap = parseInt(temp[1]);
+              t["t"+p].cSnapFrame = parseInt(temp[2]);
+              break;
             default:
               break;
           }
@@ -937,7 +1182,7 @@ function readQueryString(){
         else {
                 t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[3]];
         }
-        drawTrajectory();
+        //drawTrajectory(aT);
         $("#trajAdd").before('<div id="trajBox'+p+'" class="trajBox"><div id="trajNum'+p+'" class="trajNum"><div class="trajFreeze freezeOn"></div><p>'+p+'</p></div><div id="trajColour'+p+'" class="trajColour"><div id="t'+p+'minicolour1" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][0]+'"></div><div id="t'+p+'minicolour2" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][1]+'"></div><div id="t'+p+'minicolour3" class="tminicolour" style="background-color:'+palettes[t["t"+p].palette][2]+'"></div></div><div id="trajLabel'+p+'" class="trajLabel"><p>Add label</p></div><div id="trajDelete'+p+'" class="trajDelete"><p>x</p></div></div>');
         if (t["t"+p].hasLabel){
           var id = p;
@@ -950,6 +1195,11 @@ function readQueryString(){
       }
       else {
         currentTrajs[p-1] = false;
+      }
+    }
+    for (var b=1;b<10;b++){
+      if (t["t"+b].comboSnap == 0 && currentTrajs[b-1]){
+        drawTrajectory(b);
       }
     }
     for (l=0;l<9;l++){
@@ -977,22 +1227,9 @@ function readQueryString(){
   }
 }
 
-/*
-0-mouseXMeleeF
-1-mouseFMeleeF
-2-tdiMouseXReal
-3-tdiMouseYReal
-4-curHitbox
-5-character
-6-percent
-7-version,crouch,reverse,chargeInterrupt
-8-chargeF
-9-staleQueue
-10-colour*/
-
 function writeQueryString(){
   var qstring = "?";
-  qstring += "version=100&stage="+activeStage+"&";
+  qstring += "version=200&stage="+activeStage+"&";
   if ($("#trajTitle").hasClass("activeTitle")){
     var tt = makeTextCompatible(0);
     var to = $("#labelBox0").css("opacity");
@@ -1004,7 +1241,7 @@ function writeQueryString(){
   }
   for (i=1;i<10;i++){
     if (currentTrajs[i-1]){
-      for (j=0;j<25;j++){
+      for (j=0;j<26;j++){
         var temp = "";
         switch (j){
           case 0:
@@ -1018,6 +1255,7 @@ function writeQueryString(){
             temp += diSwitch["t"];
             temp += diSwitch["s"];
             temp += diSwitch["a"];
+            temp += diSwitch["z"];
             break;
           case 3:
             temp = t["t"+i].tdiMouseXReal;
@@ -1051,7 +1289,10 @@ function writeQueryString(){
             var temp8 = ~~t["t"+i].vcancel;
             var temp9 = ~~t["t"+i].useFractionals;
             var temp10 = ~~t["t"+i].grounded;
-            temp = temp1+temp2+temp3+temp4+temp5+temp6+temp7+temp8+temp9+temp10;
+            var temp11 = ~~t["t"+i].icg;
+            var temp12 = ~~t["t"+i].ice;
+            var temp13 = ~~t["t"+i].metal;
+            temp = temp1+temp2+temp3+temp4+temp5+temp6+temp7+temp8+temp9+temp10+temp11+temp12+temp13;
             break;
           case 9:
             temp = t["t"+i].chargeF;
@@ -1136,10 +1377,10 @@ function writeQueryString(){
             }
             break;
           case 20:
-            temp = t["t"+i].sdiMouseXReal;
+            temp = ""+t["t"+i].sdiMouseXReal+","+t["t"+i].zdiMouseXReal;
             break;
           case 21:
-            temp = t["t"+i].sdiMouseYReal;
+            temp = ""+t["t"+i].sdiMouseYReal+","+t["t"+i].zdiMouseYReal;
             break;
           case 22:
             temp = t["t"+i].adiMouseXReal;
@@ -1149,6 +1390,9 @@ function writeQueryString(){
             break;
           case 24:
             temp = t["t"+i].fractional;
+            break;
+          case 25:
+            temp = ""+t["t"+i].hasCombo+","+t["t"+i].comboSnap+","+t["t"+i].cSnapFrame;
             break;
           default:
             break;
@@ -1467,7 +1711,7 @@ function idClick(){
         charging = false;
         $("#disableCharge").show();
       }
-      drawTrajectory();
+      drawTrajectory(aT);
       drawAngle();
     }
   });
@@ -1513,7 +1757,7 @@ function idClick2(){
         charging = false;
         $("#disableCharge").show();
       }
-      drawTrajectory();
+      drawTrajectory(aT);
       drawAngle();
     }
   });
@@ -1529,6 +1773,7 @@ function trajBoxClick(){
     //prompt(aT);
     //prompt(t["t"+aT].cHName);
     swapOptions();
+    //trajectoryAnimation(aT);
     if (pT != aT){
       t["t"+pT].trajFrozen = true;
       $("#trajNum"+pT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
@@ -1595,7 +1840,7 @@ function swapOptions(){
     }
     diOffset = $("#"+activeDI+"diSelector").offset();
     var type;
-    for (b=0;b<3;b++){
+    for (b=0;b<4;b++){
       if (b == 0){
         type = "t";
       }
@@ -1604,6 +1849,9 @@ function swapOptions(){
       }
       else if (b == 2){
         type = "a";
+      }
+      else if (b == 3){
+        type = "z";
       }
 
       $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
@@ -1733,7 +1981,7 @@ function swapOptions(){
         charging = false;
         $("#disableCharge").show();
       }
-      drawTrajectory();
+      drawTrajectory(aT);
     }
     else {
       for (k=0;k<keys2.length;k++){
@@ -1787,7 +2035,7 @@ function swapOptions(){
         charging = false;
         $("#disableCharge").show();
       }
-      drawTrajectory();
+      drawTrajectory(aT);
 
     }
     drawAngle();
@@ -1860,7 +2108,7 @@ var colourChange = function(id){
     t["t"+aT].palette = newp;
     savedPalettes[id-1] = newp;
     $("#labelBox"+id).css("border-color",palettes[newp][0]);
-    drawTrajectory();
+    drawTrajectory(aT);
     $(".colourselectbox").remove();
   });
   $(".colourselectReal").hover(function(){
@@ -1880,6 +2128,20 @@ function trajDeleteClick(){
   $(".trajDelete").click(function(){
     var id = parseInt($(this).attr("id").substr(10,11));
     $("#trajBox"+id+", #trajGroup"+id+", #trajGroup-t"+id+", #labelBox"+id+", #labelOptions"+id+", #trajBoxInfo"+id).remove();
+    if (t["t"+id].comboSnap > 0){
+      var m = t["t"+id].comboSnap;
+      t["t"+m].hasCombo = 0;
+      t["t"+id].comboSnap = 0;
+      t["t"+id].cSnapFrame = 0;
+      drawTrajectory(m);
+
+    }
+    if (t["t"+id].hasCombo > 0){
+      var m = t["t"+id].hasCombo;
+      t["t"+m].comboSnap = 0;
+      t["t"+id].hasCombo = 0;
+      drawTrajectory(m);
+    }
     currentTrajs[id-1] = false;
     if (id == aT){
       for (i=0;i<9;i++){
@@ -1978,7 +2240,19 @@ function outputPopup(){
       if (t["t"+i].crouching){
         hitlag = Math.floor(hitlag * (2/3));
       }
-      $("#ppOutputText").append('-------------<br>TRAJECTORY '+i+'<br>-------------<br>ATTACKER<br>Attack: '+atk+'<br> -Damage: '+t["t"+i].curHitbox.dmg+'%<br> -Angle: '+t["t"+i].curHitbox.angle+'°<br> -Knockback Growth: '+t["t"+i].curHitbox.kg+'<br> -Set Knockback: '+t["t"+i].curHitbox.wbk+'<br> -Base Knockback: '+t["t"+i].curHitbox.bk+'<br> -Effect: '+t["t"+i].curHitbox.effect+'<br>Stale Queue: '+sq+'<br>Smash Charge: '+t["t"+i].chargeF+' frames<br>Damage: '+t["t"+i].newDamage.toFixed(5)+'%<br>VICTIM<br>Character: '+t["t"+i].character+'<br>Percent: '+t["t"+i].percent+'%<br>Hit Direction: '+hd+'<br>Trajectory DI:<br> -Inputs: X:'+t["t"+i].tdiMouseXMelee+' Y:'+t["t"+i].tdiMouseYMelee+'<br> -Strength: '+t["t"+i].tdiStrength+'%<br> -Angle: '+t["t"+i].tdiAngle+'°<br>SDI: <br> -Inputs: X:'+t["t"+i].sdiMouseXMelee+' Y:'+t["t"+i].sdiMouseYMelee+'<br> -Angle: '+t["t"+i].sdiAngle+'°<br>ASDI: <br> -Inputs: X:'+t["t"+i].adiMouseXMelee+' Y:'+t["t"+i].adiMouseYMelee+'<br> -Angle: '+t["t"+i].adiAngle+'°<br>Variables: '+variables+'<br>Hitlag: '+hitlag+' frames<br>Hitstun: '+t["t"+i].hitstun+' frames<br>Knockback: '+t["t"+i].knockback.toFixed(5)+kbtext+'<br>Y-Displacement: '+t["t"+i].yDisplacement.toFixed(5)+'<br>POSITIONS:<br>Position Hit: X: '+t["t"+i].mouseXMeleeF.toFixed(5)+' Y: '+t["t"+i].mouseYMeleeF.toFixed(5));
+      if (t["t"+i].tFrames[0] > 0){
+        var details = 'Throw Release: '+t["t"+i].tFrames[0]+'th frame of animation<br>Thrower Actionable: '+(t["t"+i].tFrames[1] + 1)+'th frame of hitstun';
+      }
+      else {
+        var details = 'Hitlag: '+hitlag+' frames<br>Shieldstun: '+t["t"+i].shieldstun+' frames';
+      }
+      if (t["t"+i].comboSnap > 0){
+        var combo = '<br>Combo Hit from Trajectory '+t["t"+i].comboSnap+', frame '+(t["t"+i].cSnapFrame+1);
+      }
+      else {
+        var combo = '';
+      }
+      $("#ppOutputText").append('-------------<br>TRAJECTORY '+i+'<br>-------------'+combo+'<br>ATTACKER<br>Attack: '+atk+'<br> -Damage: '+t["t"+i].curHitbox.dmg+'%<br> -Angle: '+t["t"+i].curHitbox.angle+'°<br> -Knockback Growth: '+t["t"+i].curHitbox.kg+'<br> -Set Knockback: '+t["t"+i].curHitbox.wbk+'<br> -Base Knockback: '+t["t"+i].curHitbox.bk+'<br> -Effect: '+t["t"+i].curHitbox.effect+'<br>Stale Queue: '+sq+'<br>Smash Charge: '+t["t"+i].chargeF+' frames<br>Damage: '+t["t"+i].newDamage.toFixed(5)+'%<br>VICTIM<br>Character: '+t["t"+i].character+'<br>Percent: '+t["t"+i].percent+'%<br>Hit Direction: '+hd+'<br>Trajectory DI:<br> -Inputs: X:'+t["t"+i].tdiMouseXMelee+' Y:'+t["t"+i].tdiMouseYMelee+'<br> -Strength: '+t["t"+i].tdiStrength+'%<br> -Angle: '+t["t"+i].tdiAngle+'°<br>SDI (1): <br> -Inputs: X:'+t["t"+i].sdiMouseXMelee+' Y:'+t["t"+i].sdiMouseYMelee+'<br> -Angle: '+t["t"+i].sdiAngle+'°<br>SDI (2): <br> -Inputs: X:'+t["t"+i].zdiMouseXMelee+' Y:'+t["t"+i].zdiMouseYMelee+'<br> -Angle: '+t["t"+i].zdiAngle+'°<br>ASDI: <br> -Inputs: X:'+t["t"+i].adiMouseXMelee+' Y:'+t["t"+i].adiMouseYMelee+'<br> -Angle: '+t["t"+i].adiAngle+'°<br>Variables: '+variables+'<br>'+details+'<br>Hitstun: '+t["t"+i].hitstun+' frames<br>Knockback: '+t["t"+i].knockback.toFixed(5)+kbtext+'<br>Y-Displacement: '+t["t"+i].yDisplacement.toFixed(5)+'<br>POSITIONS:<br>Position Hit: X: '+t["t"+i].mouseXMeleeF.toFixed(5)+' Y: '+t["t"+i].mouseYMeleeF.toFixed(5));
 
       if (t["t"+i].grounded){
         $("#ppOutputText").append(" Grounded");
@@ -1999,12 +2273,20 @@ function outputPopup(){
         while (!isKilled && p < t["t"+i].curPositions.length){
           var x = t["t"+i].curPositions[p][0];
           var y = t["t"+i].curPositions[p][1];
-          if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
-            //within the blastzone
-            $("#ppOutputText").append("<br>Frame "+(p+1)+":<br> -Positions: X: "+x.toFixed(5)+" Y: "+y.toFixed(5)+"<br> -KBVel: X: "+t["t"+i].curPositions[p][2].toFixed(5)+" Y: "+t["t"+i].curPositions[p][3].toFixed(5)+"<br> -CharVel: X: "+t["t"+i].curPositions[p][4].toFixed(5)+" Y:"+t["t"+i].curPositions[p][5].toFixed(5));
+          if (p+1 == t["t"+i].hitstun){
+            $("#ppOutputText").append("<br>Last Frame of Hitstun:");
           }
-          else {
-            $("#ppOutputText").append("<br>Frame "+(p+1)+":<br> -Positions: X: "+x.toFixed(5)+" Y: "+y.toFixed(5)+"<br> -KBVel: X: "+t["t"+i].curPositions[p][2].toFixed(5)+" Y: "+t["t"+i].curPositions[p][3].toFixed(5)+"<br> -CharVel: X: "+t["t"+i].curPositions[p][4].toFixed(5)+" Y:"+t["t"+i].curPositions[p][5].toFixed(5));
+          if (p == t["t"+i].tFrames[1]){
+            $("#ppOutputText").append("<br>Thrower is actionable:");
+          }
+          if (t["t"+i].hasCombo){
+            if (p == t["t"+(t["t"+i].hasCombo)].cSnapFrame){
+              $("#ppOutputText").append('<br>Combo Hit (Trajectory '+t["t"+i].hasCombo+'):');
+            }
+          }
+          $("#ppOutputText").append("<br>Frame "+(p+1)+":<br> -Positions: X: "+x.toFixed(5)+" Y: "+y.toFixed(5)+"<br> -KBVel: X: "+t["t"+i].curPositions[p][2].toFixed(5)+" Y: "+t["t"+i].curPositions[p][3].toFixed(5)+"<br> -CharVel: X: "+t["t"+i].curPositions[p][4].toFixed(5)+" Y:"+t["t"+i].curPositions[p][5].toFixed(5));
+          if (!(x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
+            //within the blastzone
             if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && t["t"+i].curPositions[i][3] >= 2.4)){
               isKilled = true;
               $("#ppOutputText").append("<br>KILLED!");
@@ -2073,6 +2355,309 @@ function sourcePopup(){
   }
 }
 
+function trajResetFrame(n,frame,type){
+  switch (type){
+    case 0:
+      setTimeout(function(){
+        $("#"+n+"f"+frame).attr("r",15);
+      }, 100);
+      break;
+    case 1:
+      setTimeout(function(){
+        $("#"+n+"f"+frame).css("stroke-width",0);
+      }, 100);
+      break;
+    case 2:
+      setTimeout(function(){
+        $("#"+n+"f"+frame).attr("r",40);
+      }, 100);
+      break;
+    case 3:
+      break;
+    default:
+      break;
+  }
+}
+
+function trajAnimFrame(n,frame,dupes){
+  setTimeout(function(){
+    if (frame == t["t"+n].killFrame){
+      if (!isDupe(n,dupes[5])){
+        var snd3 = new Audio("assets/sounds/kill.wav");
+        snd3.volume = curVolume/10;
+        snd3.play();
+      }
+      $("#"+n+"f"+frame).css("stroke-width",30);
+      trajResetFrame(n,frame,1);
+    }
+    else if (frame == t["t"+n].hitstun){
+      if (!isDupe(n,dupes[4])){
+        var snd4 = new Audio("assets/sounds/falcondodge.wav");
+        snd4.volume = curVolume/10;
+        snd4.play();
+      }
+      $("#"+n+"f"+frame).css("stroke-width",30);
+      trajResetFrame(n,frame,1);
+    }
+    else if (frame == t["t"+n].tFrames[1] + 1){
+      if (!isDupe(n,dupes[3])){
+        var snd5 = new Audio("assets/sounds/tactionable.wav");
+        snd5.volume = curVolume/10;
+        snd5.play();
+      }
+      $("#"+n+"f"+frame).attr("r",55);
+      trajResetFrame(n,frame,2);
+    }
+    else {
+      $("#"+n+"f"+frame).attr("r",30);
+      trajResetFrame(n,frame,0);
+    }
+    frame++;
+    if (t["t"+n].lastDisplay >= frame){
+      trajAnimFrame(n,frame,dupes);
+    }
+    else {
+      if (t["t"+n].hasCombo > 0){
+        trajectoryAnimation(t["t"+n].hasCombo,dupes);
+      }
+    }
+  }, 16.67);
+}
+
+function isDupe(n,dupes){
+  var isD = false;
+  for(var i=0;i<dupes.length;i++){
+    if (n == dupes[i]){
+      isD = true;
+      break;
+    }
+  }
+  return isD;
+}
+
+function trajectoryAnimation(n,dupes){
+  frame = 1;
+  if (!isDupe(n,dupes[0])){
+    var snd1 = new Audio("assets/sounds/hit.wav");
+    snd1.volume = curVolume/10;
+    snd1.play();
+  }
+  if (t["t"+n].comboSnap > 0){
+    $("#comboStartOuter"+n).attr("r",45).css("stroke-width",20);
+    $("#comboStartInner"+n).css("stroke-width",5);
+    setTimeout(function(){
+      $("#comboStartOuter"+n).css("stroke-width",10).attr("r",35);
+      $("#comboStartInner"+n).css("stroke-width",0);
+    }, 100);
+
+  }
+  else {
+    $("#start"+n).css("stroke-width",20);
+    setTimeout(function(){
+      $("#start"+n).css("stroke-width",0);
+    }, 100);
+  }
+  var delay;
+  if (t["t"+n].tFrames[0] > 0){
+    delay = t["t"+n].tFrames[0];
+  }
+  else {
+    delay = t["t"+n].hitlag;
+  }
+  if (t["t"+n].stayGrounded){
+    setTimeout(function(){
+      if (t["t"+n].knockback > 80){
+        if (!isDupe(n,dupes[2])){
+          var snd2 = new Audio("assets/sounds/tech.wav");
+          snd2.volume = curVolume/10;
+          snd2.play();
+        }
+      }
+      else {
+        if (!isDupe(n,dupes[1])){
+          var snd2 = new Audio("assets/sounds/land.wav");
+          snd2.volume = curVolume/10;
+          snd2.play();
+        }
+      }
+      $("#ccCircle"+n).css("stroke-width",20);
+      $("#atCircle"+n).css("stroke-width",20);
+      setTimeout(function(){
+        $("#ccCircle"+n).css("stroke-width",0);
+        $("#atCircle"+n).css("stroke-width",0);
+      }, 300);
+    }, 16.67*delay);
+  }
+  else {
+    setTimeout(function(){
+      trajAnimFrame(n,frame,dupes);
+    }, 16.67*delay);
+  }
+}
+
+function playAll(){
+
+  // finding duplicates
+  var d = {
+    hit : [],
+    land : [],
+    tech : [],
+    tactionable : [],
+    lasthitstun : [],
+    kill : []
+  };
+
+  for(j=1;j<10;j++){
+    if (currentTrajs[j-1]){
+      if (t["t"+j].comboSnap == 0){
+        d.hit.push(0);
+        if (t["t"+j].stayGrounded){
+          if (t["t"+j].knockback < 80){
+            d.land.push(t["t"+j].hitlag);
+            d.tech.push(-1);
+          }
+          else {
+            d.tech.push(t["t"+j].hitlag);
+            d.land.push(-1);
+          }
+        }
+        else {
+          d.land.push(-1);
+          d.tech.push(-1);
+        }
+        if (t["t"+j].tFrames[0] > 0){
+          d.tactionable.push(t["t"+j].tFrames[0] + t["t"+j].tFrames[1]);
+          if (t["t"+j].lastDisplay > t["t"+j].hitstun){
+            d.lasthitstun.push(t["t"+j].tFrames[0] + t["t"+j].hitstun);
+          }
+          else {
+            d.lasthitstun.push(-1);
+          }
+          if (t["t"+j].killFrame > 0){
+            d.kill.push(t["t"+j].tFrames[0] + t["t"+j].killFrame);
+          }
+          else {
+            d.kill.push(-1);
+          }
+        }
+        else {
+          d.tactionable.push(-1);
+          if (t["t"+j].lastDisplay > t["t"+j].hitstun){
+            d.lasthitstun.push(t["t"+j].hitlag + t["t"+j].hitstun);
+          }
+          else {
+            d.lasthitstun.push(-1);
+          }
+          if (t["t"+j].killFrame > 0){
+            d.kill.push(t["t"+j].hitlag + t["t"+j].killFrame);
+          }
+          else {
+            d.kill.push(-1);
+          }
+        }
+
+      }
+      else {
+        var firstHitReached = false;
+        var offset = 0;
+        var n = t["t"+j].comboSnap;
+        var m = j;
+        while (!firstHitReached){
+          if (t["t"+n].tFrames[0] > 0){
+            offset += t["t"+n].tFrames[0] + t["t"+m].cSnapFrame;
+          }
+          else {
+            offset += t["t"+n].hitlag + t["t"+m].cSnapFrame + 1;
+          }
+          if (t["t"+n].comboSnap > 0){
+            m = n;
+            n = t["t"+n].comboSnap;
+          }
+          else {
+            firstHitReached = true;
+          }
+        }
+
+        d.hit.push(offset);
+        if (t["t"+j].tFrames[0] > 0){
+          d.tactionable.push(offset+t["t"+j].tFrames[0]+t["t"+j].tFrames[1]);
+          if (t["t"+j].lastDisplay > t["t"+j].hitstun){
+            d.lasthitstun.push(offset+t["t"+j].tFrames[0] + t["t"+j].hitstun);
+          }
+          else {
+            d.lasthitstun.push(-1);
+          }
+          if (t["t"+j].killFrame > 0){
+            d.kill.push(offset+t["t"+j].tFrames[0] + t["t"+j].killFrame);
+          }
+          else {
+            d.kill.push(-1);
+          }
+        }
+        else {
+          d.tactionable.push(-1);
+          if (t["t"+j].lastDisplay > t["t"+j].hitstun){
+            d.lasthitstun.push(offset+t["t"+j].hitlag + t["t"+j].hitstun);
+          }
+          else {
+            d.lasthitstun.push(-1);
+          }
+          if (t["t"+j].killFrame > 0){
+            d.kill.push(offset+t["t"+j].hitlag + t["t"+j].killFrame);
+          }
+          else {
+            d.kill.push(-1);
+          }
+        }
+        d.land.push(-1);
+        d.tech.push(-1);
+      }
+    }
+    else {
+      d.hit.push(-1);
+      d.land.push(-1);
+      d.tech.push(-1);
+      d.tactionable.push(-1);
+      d.lasthitstun.push(-1);
+      d.kill.push(-1);
+    }
+  }
+
+  var keys = Object.keys(d);
+  var dupes = [];
+  for (k=0;k<keys.length;k++){
+    var dup = [];
+    for (l=0;l<9;l++){
+      if (d[keys[k]][l] > -1){
+        for(m=0;m<l;m++){
+          if(d[keys[k]][l] == d[keys[k]][m]){
+            dup.push(l+1);
+            break;
+          }
+        }
+      }
+    }
+    dupes.push(dup);
+  }
+
+  /*console.log(d.hit);
+  console.log(d.land);
+  console.log(d.tech);
+  console.log(d.tactionable);
+  console.log(d.lasthitstun);
+  console.log(d.kill);
+
+  console.log(dupes);*/
+
+  for(var i=0;i<9;i++){
+    if (currentTrajs[i]){
+      if (t["t"+(i+1)].comboSnap == 0){
+        trajectoryAnimation(i+1,dupes);
+      }
+    }
+  }
+}
+
 function drawTrajectoryFromSource(source,offset,colour){
 
   // (frame1x,frame1y),(frame2x,frame2y),(frame3x,frame3y)
@@ -2120,43 +2705,80 @@ function undoSource(){
   }
 }
 
-function drawTrajectory(onlyDrawWhenUnfrozen){
+function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
+  // n = trajectory number, using aT gets complicated with comboing
   //tried changing positions instead of redrawing, but didnt help firefox and created many other issues that'd have to be resolved in more code
   onlyDrawWhenUnfrozen = onlyDrawWhenUnfrozen || false;
 
+  waitTillFinish = waitTillFinish || false;
+
+  t["t"+n].killFrame = -1;
+
   var totalstale = 1.00;
-  var damage = t["t"+aT].curHitbox.dmg;
+  var damageunstaled = t["t"+n].curHitbox.dmg;
+  if (charging){
+    damageunstaled *= 1 + (t["t"+n].chargeF * (0.3671/60));
+  }
   for(i=0;i<9;i++){
-    if(t["t"+aT].staleQueue[i]){
+    if(t["t"+n].staleQueue[i]){
       totalstale -= (10-(i+1))/100;
     }
   }
-  damage *= totalstale;
-  if (charging){
-    damage *= 1 + (t["t"+aT].chargeF * (0.3671/60));
-  }
-  t["t"+aT].newDamage = damage;
-  $("#newDamageEdit").empty().append(damage.toPrecision(5));
+
+  var damagestaled = damageunstaled * totalstale;
+
+  t["t"+n].newDamage = damagestaled;
+  t["t"+n].shieldstun = Math.floor((damagestaled + 4.45) / 2.235);
+
   var xPos = 0;
   var yPos = 0;
-  if (t["t"+aT].trajFrozen){
+  if (t["t"+n].trajFrozen){
     if (!onlyDrawWhenUnfrozen){
-      xPos = t["t"+aT].mouseXMeleeF;
-      yPos = t["t"+aT].mouseYMeleeF;
+      xPos = t["t"+n].mouseXMeleeF;
+      yPos = t["t"+n].mouseYMeleeF;
     }
   }
   else {
-    xPos = t["t"+aT].mouseXMelee;
-    yPos = t["t"+aT].mouseYMelee;
+    xPos = t["t"+n].mouseXMelee;
+    yPos = t["t"+n].mouseYMelee;
   }
 
-	var hit = new Hit(t["t"+aT].percent,damage,t["t"+aT].curHitbox.kg,t["t"+aT].curHitbox.bk,t["t"+aT].curHitbox.wbk,t["t"+aT].curHitbox.angle,t["t"+aT].character,t["t"+aT].version,xPos,yPos,t["t"+aT].crouch,t["t"+aT].reverse,t["t"+aT].chargeInterrupt,t["t"+aT].tdiMouseXMelee,t["t"+aT].tdiMouseYMelee,t["t"+aT].fadeIn,t["t"+aT].doubleJump,t["t"+aT].sdiMouseXMelee,t["t"+aT].sdiMouseYMelee,t["t"+aT].adiMouseXMelee,t["t"+aT].adiMouseYMelee,t["t"+aT].meteorCancel,t["t"+aT].vcancel,t["t"+aT].grounded);
+  if (~t["t"+n].cHName[1].indexOf("throw")){
+    var isThrow = true;
+    var throwChar = t["t"+n].cHName[0];
+    if (t["t"+n].cHName[1][0] == "c"){
+      var throwType = "c"+t["t"+n].cHName[1][6];
+    }
+    else if (t["t"+n].cHName[1][0] == "k"){
+      var throwType = "k"+t["t"+n].cHName[1][5];
+    }
+    else {
+      var throwType = t["t"+n].cHName[1][0];
+    }
+  }
+  else {
+    var isThrow = false;
+    var throwChar = false;
+    var throwType = false;
+  }
 
-	t["t"+aT].curPositions = hit.positions;
-  t["t"+aT].hitstun = hit.hitstun;
-  t["t"+aT].knockback = hit.knockback;
+	var hit = new Hit(t["t"+n].percent,damagestaled,damageunstaled,t["t"+n].curHitbox.kg,t["t"+n].curHitbox.bk,t["t"+n].curHitbox.wbk,t["t"+n].curHitbox.angle,t["t"+n].character,t["t"+n].version,xPos,yPos,t["t"+n].crouch,t["t"+n].reverse,t["t"+n].chargeInterrupt,t["t"+n].tdiMouseXMelee,t["t"+n].tdiMouseYMelee,t["t"+n].fadeIn,t["t"+n].doubleJump,t["t"+n].sdiMouseXMelee,t["t"+n].sdiMouseYMelee,t["t"+n].zdiMouseXMelee,t["t"+n].zdiMouseYMelee,t["t"+n].adiMouseXMelee,t["t"+n].adiMouseYMelee,t["t"+n].meteorCancel,t["t"+n].vcancel,t["t"+n].grounded,t["t"+n].metal,t["t"+n].ice,t["t"+n].icg,isThrow,throwChar,throwType,t["t"+n].comboSnap,t["t"+n].cSnapFrame);
+
+	t["t"+n].curPositions = hit.positions;
+  t["t"+n].hitstun = hit.hitstun;
+  t["t"+n].knockback = hit.knockback;
+  t["t"+n].tFrames = hit.tFrames;
+  t["t"+n].hitlag = Math.floor(t["t"+n].newDamage * (1/3) + 3);
   if (hit.meteorCancelled){
-    t["t"+aT].hitstun = 8;
+    t["t"+n].hitstun = 8;
+  }
+
+  var comboCutOff = hit.positions.length;
+  for (j=0;j<9;j++){
+    if (t["t"+(j+1)].comboSnap == n){
+      comboCutOff = t["t"+(j+1)].cSnapFrame + 1;
+      break;
+    }
   }
 	var cla = "tLineS";
   var temX = ((xPos*10)+centreOffset[0]);
@@ -2167,85 +2789,159 @@ function drawTrajectory(onlyDrawWhenUnfrozen){
     $("#start-t"+aT).attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z");
   }
   else {*/
-    $("#trajGroup"+aT+", #trajGroup-t"+aT).remove();
-    $(SVG("g")).attr("id","trajGroup"+aT).appendTo("#trajectory");
-    $(SVG("g")).attr("id","trajGroup-t"+aT).appendTo("#trajectory-t");
-    $(SVG("path")).attr("id","start"+aT).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",palettes[t["t"+aT].palette][1]).attr("stroke",palettes[t["t"+aT].palette][1]).prependTo("#trajGroup"+aT);
-    $(SVG("path")).attr("id","start-t"+aT).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+aT);
+    $("#trajGroup"+n+", #trajGroup-t"+n).remove();
+    $(SVG("g")).attr("id","trajGroup"+n).appendTo("#trajectory");
+    $(SVG("g")).attr("id","trajGroup-t"+n).appendTo("#trajectory-t");
+    if (t["t"+n].comboSnap > 0){
+      $(SVG("g")).attr("id","comboStart"+n).attr("class","comboStart").prependTo("#trajGroup"+n);
+      $(SVG("g")).attr("id","comboStart-t"+n).attr("class","comboStart-t").prependTo("#trajGroup-t"+n);
+
+      $(SVG("circle")).attr("id","comboStartOuter"+n).attr("class","comboStartOuter").attr("cx",temX).attr("cy",temY).attr("r",35).attr("fill","transparent").attr("stroke",palettes[t["t"+n].palette][1]).prependTo("#comboStart"+n);
+      $(SVG("circle")).attr("id","comboStartInner"+n).attr("class","comboStartInner").attr("cx",temX).attr("cy",temY).attr("r",15).attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]).prependTo("#comboStart"+n);
+
+      $(SVG("circle")).attr("id","comboStartOuter-t"+n).attr("class","comboStartOuter-t").attr("cx",temX).attr("cy",temY).attr("r",35).attr("fill","transparent").prependTo("#comboStart-t"+n);
+      $(SVG("circle")).attr("id","comboStartInner-t"+n).attr("class","comboStartInner-t").attr("cx",temX).attr("cy",temY).attr("r",15).attr("fill","transparent").prependTo("#comboStart-t"+n);
+
+    }
+    else{
+      $(SVG("path")).attr("id","start"+n).attr("class","start").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]).prependTo("#trajGroup"+n);
+      $(SVG("path")).attr("id","start-t"+n).attr("class","start-t").attr("d","M"+temX+" "+(temY-25)+" L"+(temX+25)+" "+(temY+25)+" L"+(temX-25)+" "+(temY+25)+" Z").prependTo("#trajGroup-t"+n);
+    }
   //}
-  //$("#trajGroup"+aT+" .framePos").css("fill","#25d041");
+  //$("#trajGroup"+n+" .framePos").css("fill","#25d041");
   var isKilled = false;
   var i = 0;
 
-  t["t"+aT].stayGrounded = hit.stayGrounded;
+  t["t"+n].stayGrounded = hit.stayGrounded;
 
-  if (hit.stayGrounded && t["t"+aT].grounded){
-    t["t"+aT].yDisplacement = hit.yDisplacement;
+  if (hit.stayGrounded && t["t"+n].grounded){
+    t["t"+n].yDisplacement = hit.yDisplacement;
     if (hit.knockback >= 80){
       //amsah tech
 
-      $(SVG("text")).attr("id","at"+aT).attr("class","at").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","black").prependTo("#trajGroup"+aT);
-      $("#at"+aT).append("AT");
-      $(SVG("circle")).attr("id","atCircle"+aT).attr("class","atCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+aT].palette][0]).attr("stroke",palettes[t["t"+aT].palette][0]).prependTo("#trajGroup"+aT);
-      $(SVG("circle")).attr("id","atCircle-t"+aT).attr("class","atCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+aT);
+      $(SVG("text")).attr("id","at"+n).attr("class","at").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","white").prependTo("#trajGroup"+n);
+      if (t["t"+n].palette == 2 || t["t"+n].palette == 3){
+        $("#at"+n).attr("fill","black");
+      }
+      $("#at"+n).append("AT");
+      $(SVG("circle")).attr("id","atCircle"+n).attr("class","atCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
+      $(SVG("circle")).attr("id","atCircle-t"+n).attr("class","atCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+n);
     }
     else {
       //crouch cancel
-      $(SVG("text")).attr("id","cc"+aT).attr("class","cc").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","black").prependTo("#trajGroup"+aT);
-      $("#cc"+aT).append("CC");
-      $(SVG("circle")).attr("id","ccCircle"+aT).attr("class","ccCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+aT].palette][0]).attr("stroke",palettes[t["t"+aT].palette][0]).prependTo("#trajGroup"+aT);
-      $(SVG("circle")).attr("id","ccCircle-t"+aT).attr("class","ccCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+aT);
+      $(SVG("text")).attr("id","cc"+n).attr("class","cc").attr("x",temX+32).attr("y",temY-24).attr("font-size","80px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill","white").prependTo("#trajGroup"+n);
+      if (t["t"+n].palette == 2 || t["t"+n].palette == 3){
+        $("#cc"+n).attr("fill","black");
+      }
+      $("#cc"+n).append("CC");
+      $(SVG("circle")).attr("id","ccCircle"+n).attr("class","ccCircle").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
+      $(SVG("circle")).attr("id","ccCircle-t"+n).attr("class","ccCircle-t").attr("cx", temX+76).attr("cy",temY-50).attr("r", 60).attr("fill","transparent").prependTo("#trajGroup-t"+n);
     }
   }
 
-  while (!isKilled && i < hit.positions.length){
+  while (!isKilled && i < comboCutOff){
   	var x = hit.positions[i][0];
   	var y = hit.positions[i][1];
     var tempText = "L"+((x*10)+centreOffset[0])+" "+((-y*10)+centreOffset[1])+" ";
     lineText += tempText;
   	if ((x < bzRight && x > bzLeft) && (y < bzTop && y > bzBottom)){
-
-        $(SVG("circle")).attr("id",aT+"f"+(i+1)).attr("class","fP"+aT+" framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).attr("fill",palettes[t["t"+aT].palette][0]).attr("stroke",palettes[t["t"+aT].palette][0]).prependTo("#trajGroup"+aT);
-        $(SVG("circle")).attr("id",aT+"f"+(i+1)+"-t").attr("class","fP-t"+aT+" framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+aT);
-        if (i+1 > t["t"+aT].hitstun){
-          $("#"+aT+"f"+(i+1)).attr("class","fPnH"+aT+" framePos").attr("fill",palettes[t["t"+aT].palette][1]).attr("stroke",palettes[t["t"+aT].palette][1]);
+      if (i == t["t"+n].tFrames[1]){
+        var temX = ((x*10)+centreOffset[0]);
+        var temY = ((-y*10)+centreOffset[1]);
+        $(SVG("circle")).attr("id",n+"f"+(i+1)).attr("class","actCircle").attr("cx", temX).attr("cy",temY).attr("r", 40).attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]).appendTo("#trajGroup"+n);
+        $(SVG("circle")).attr("id",n+"f"+(i+1)+"-t").attr("class","actCircle-t").attr("cx", temX).attr("cy",temY).attr("r",30).attr("fill","transparent").appendTo("#trajGroup-t"+n);
+        $(SVG("text")).attr("id","act"+n).attr("class","act").attr("x",temX-20).attr("y",temY+22).attr("font-size","70px").attr("font-family","'Share Tech Mono', 'Ubuntu Mono', Consolas, 'Courier New'").attr("font-weight","bold").attr("fill",palettes[t["t"+n].palette][0]).appendTo("#trajGroup"+n);
+        if (t["t"+n].palette == 2 || t["t"+n].palette == 3){
+          $("#act"+n).attr("fill","black");
         }
+        $("#act"+n).append("A");
+      }
+      else if (i+1 == t["t"+n].hitstun){
+        var temX = ((x*10)+centreOffset[0]);
+        var temY = ((-y*10)+centreOffset[1]);
+        $(SVG("path")).attr("id",n+"f"+(i+1)).attr("class","lastHitstun").attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
+        $(SVG("path")).attr("id",n+"f"+(i+1)+"-t").attr("class","lastHitstun-t pos"+i).attr("d","M"+temX+" "+(temY-40)+" L"+(temX+40)+" "+temY+" L"+temX+" "+(temY+40)+" L"+(temX-40)+" "+temY+" Z").prependTo("#trajGroup-t"+n);
+      }
+      else {
+        $(SVG("circle")).attr("id",n+"f"+(i+1)).attr("class","fP"+n+" framePos").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).attr("fill",palettes[t["t"+n].palette][0]).attr("stroke",palettes[t["t"+n].palette][0]).prependTo("#trajGroup"+n);
+        $(SVG("circle")).attr("id",n+"f"+(i+1)+"-t").attr("class","fP-t"+n+" framePos-t").attr("cx", (x*10)+centreOffset[0]).attr("cy",(-y*10)+centreOffset[1]).attr("r", 15).prependTo("#trajGroup-t"+n);
+        if (i+1 > t["t"+n].hitstun){
+          $("#"+n+"f"+(i+1)).attr("class","fPnH"+n+" framePos").attr("fill",palettes[t["t"+n].palette][1]).attr("stroke",palettes[t["t"+n].palette][1]);
+        }
+      }
   	}
   	else {
       //checks if vertical knockback velocity is greater or equal to 2.4 when above the top blastzone
       if (x >= bzRight || x <= bzLeft || y <= bzBottom || (y >= bzTop && hit.positions[i][3] >= 2.4)){
         temX = ((x*10)+centreOffset[0]);
         temY = ((-y*10)+centreOffset[1]);
-        $(SVG("path")).attr("id","kill"+aT).attr("class","kill").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").attr("fill",palettes[t["t"+aT].palette][2]).attr("stroke",palettes[t["t"+aT].palette][2]).appendTo("#trajGroup"+aT);
-        $(SVG("path")).attr("id","kill-t"+aT).attr("class","kill-t pos"+i).attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup-t"+aT);
+        $(SVG("path")).attr("id",n+"f"+(i+1)).attr("class","kill").attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").attr("fill",palettes[t["t"+n].palette][2]).attr("stroke",palettes[t["t"+n].palette][2]).appendTo("#trajGroup"+n);
+        $(SVG("path")).attr("id",n+"f"+(i+1)+"-t").attr("class","kill-t pos"+i).attr("d","M"+temX+" "+(temY+15)+" L"+(temX+42)+" "+(temY+57)+" L"+(temX+57)+" "+(temY+42)+" L"+(temX+15)+" "+temY+" L"+(temX+57)+" "+(temY-42)+" L"+(temX+42)+" "+(temY-57)+" L"+temX+" "+(temY-15)+" L"+(temX-42)+" "+(temY-57)+" L"+(temX-57)+" "+(temY-42)+" L"+(temX-15)+" "+temY+" L"+(temX-57)+" "+(temY+42)+" L"+(temX-42)+" "+(temY+57)+" Z").appendTo("#trajGroup-t"+n);
         cla = "tLineK";
         isKilled = true;
+        t["t"+n].killFrame = i+1;
         if (i <= hit.hitstun){
-          $("#trajGroup"+aT+" .framePos").attr("class","fPK"+aT+" framePos").attr("fill",palettes[t["t"+aT].palette][2]).attr("stroke",palettes[t["t"+aT].palette][2]);;
+          $("#trajGroup"+n+" .framePos").attr("class","fPK"+n+" framePos").attr("fill",palettes[t["t"+n].palette][2]).attr("stroke",palettes[t["t"+n].palette][2]);;
         }
       }
     }
 
     i++;
   }
-  //$("#trajLine"+aT).remove();
-  $(SVG("path")).attr("id","trajLine"+aT).attr("class","trajLine "+cla+aT).attr("d",lineText).prependTo("#trajGroup"+aT);
+
+  t["t"+n].lastDisplay = i;
+  //$("#trajLine"+n).remove();
+  $(SVG("path")).attr("id","trajLine"+n).attr("class","trajLine "+cla+n).attr("d",lineText).prependTo("#trajGroup"+n);
   if (cla == "tLineS"){
-    $("#trajLine"+aT).attr("stroke",palettes[t["t"+aT].palette][1]);
+    $("#trajLine"+n).attr("stroke",palettes[t["t"+n].palette][1]);
   }
   else {
-    $("#trajLine"+aT).attr("stroke",palettes[t["t"+aT].palette][0]);
+    $("#trajLine"+n).attr("stroke",palettes[t["t"+n].palette][0]);
+  }
+
+  if (t["t"+n].hasCombo > 0){
+    var cT = t["t"+n].hasCombo;
+    t["t"+cT].mouseXMeleeF = hit.positions[t["t"+cT].cSnapFrame][0];
+    t["t"+cT].mouseYMeleeF = hit.positions[t["t"+cT].cSnapFrame][1];
+    drawTrajectory(cT,false);
   }
 
   if (!onlyDrawWhenUnfrozen){
     trajPosInfo();
   }
-  if (t["t"+aT].curHitbox.angle == 361){
+  if (t["t"+n].curHitbox.angle == 361){
     drawAngle();
+  }
+
+  $("#newDamageEdit").empty().append(damagestaled.toPrecision(5));
+
+  // when drawTrajectory didnt take a trajectory number argument and always used aT, I needed this when temporarily changing aT, but I shouldn't need it anymore
+  if (waitTillFinish){
+    return true;
   }
 }
 
+function setPosInfoOffset(id){
+  var frameposy = mouseZoomY;
+  var frameposx = mouseZoomX;
+  scroll = getScrollPos();
+  var borders = $("#display").css("border-width");
+  borders = borders.split(" ");
+  borders[1] = parseInt(borders[1].substr(0,borders[1].length-2));
+  borders[0] = parseInt(borders[0].substr(0,borders[0].length-2));
+  if (mouseY + 95 > displayheight - (2*borders[0])){
+    frameposy = scroll[0] + displayheight - 95 - (2*borders[0]);
+  }
+  if (mouseX + 165 > midwidth - (2*borders[1])){
+    frameposx = scroll[1] + midwidth - 165 - (2*borders[1]);
+  }
+
+  $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+}
+
 function trajPosInfo(){
+  $(".framePos-t, .start-t, .comboStartOuter-t, .lastHitstun-t, .kill-t, .ccCircle-t, .atCircle-t, .actCircle-t").unbind("mouseenter").unbind("mouseleave");
+  $(".framePosInfoBox").remove();
   $(".framePos-t").hover(function(){
     var id = $(this).attr("id");
     var fid = parseInt(id.substr(2,(id.length - 3)));
@@ -2257,15 +2953,8 @@ function trajPosInfo(){
     else {
       $("#trajCanvas").after('<div class="framePosInfoBox">Frame of hitstun: '+fid+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
     }
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
-    }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
-    }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+tid].palette][0]});
+    setPosInfoOffset(tid);
+
   }, function(){
     var id = $(this).attr("id");
     var fid = parseInt(id.substr(2,(id.length - 3)));
@@ -2291,37 +2980,90 @@ function trajPosInfo(){
       hitlag = Math.floor(hitlag * (2/3));
     }
     $("#start"+id).css("stroke-width",20);
-    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'</div>');
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
+    if (t["t"+id].tFrames[0] > 0){
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Release: '+t["t"+id].tFrames[0]+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>Shieldstun: '+t["t"+id].shieldstun+'</div>');
     }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
+    else {
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Position Hit</span><br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'<br>Shieldstun: '+t["t"+id].shieldstun+'</div>');
     }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+    setPosInfoOffset(id);
 
   }, function(){
     $(".start").css("stroke-width",0);
     $(".framePosInfoBox").remove();
   });
 
+  $(".comboStartOuter-t").hover(function(){
+    var id = parseInt($(this).attr("id").substr(17,18));
+    var kb = t["t"+id].knockback.toPrecision(4);
+    if (t["t"+id].knockback < 80){
+      kb += " (No Tumble)";
+    }
+    else {
+      kb += " (Tumble)";
+    }
+    var hitlag = Math.floor(t["t"+id].newDamage * (1/3) + 3);
+    if (t["t"+id].curHitbox.effect == "Electric"){
+      hitlag = Math.floor(hitlag * 1.5);
+    }
+    if (t["t"+id].crouching){
+      hitlag = Math.floor(hitlag * (2/3));
+    }
+    $("#comboStartOuter"+id).attr("r",45);
+    $("#comboStartOuter"+id).css("stroke-width",20);
+    $("#comboStartInner"+id).css("stroke-width",5);
+    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:95px"><span style="font-size:15px">Combo Hit</span><br>(trajectory '+t["t"+id].comboSnap+', frame '+(t["t"+id].cSnapFrame+1)+')<br>X: '+((Math.round(t["t"+id].mouseXMeleeF*100))/100)+' Y: '+((Math.round(t["t"+id].mouseYMeleeF*100))/100)+'<br>Hitlag: '+hitlag+'<br>Hitstun: '+t["t"+id].hitstun+'<br>KB: '+kb+'</div>');
+    setPosInfoOffset(id);
+
+  }, function(){
+    $(".comboStartOuter").css("stroke-width",10).attr("r",35);
+    $(".comboStartInner").css("stroke-width",0);
+    $(".framePosInfoBox").remove();
+  });
+
+  $(".lastHitstun-t").hover(function(){
+    var id = $(this).attr("id");
+    var fid = parseInt(id.substr(2,(id.length - 3)));
+    var tid = parseInt(id.substr(0,1));
+    $("#"+tid+"f"+fid).css("stroke-width",20);
+    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">Last Hitstun Frame ('+(fid)+')</span><br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
+    setPosInfoOffset(tid);
+
+  }, function(){
+    $(".lastHitstun").css("stroke-width",0);
+    $(".framePosInfoBox").remove();
+  });
+
+  $(".actCircle-t").hover(function(){
+    var id = $(this).attr("id");
+    var fid = parseInt(id.substr(2,(id.length - 3)));
+    var tid = parseInt(id.substr(0,1));
+    $("#"+tid+"f"+fid).attr("r",55);
+    if (fid > t["t"+tid].hitstun){
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">Thrower Actionable</span><br>Actionable frame: '+(fid-t["t"+tid].hitstun)+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
+    }
+    else {
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">Thrower Actionable</span><br>Frame of hitstun: '+fid+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
+    }
+    setPosInfoOffset(tid);
+
+  }, function(){
+    $(".actCircle").attr("r",40);
+    $(".framePosInfoBox").remove();
+  });
+
   $(".kill-t").hover(function(){
-    var id = parseInt($(this).attr("id").substr(6,7));
-    var num = $(this).attr("class");
-    num = parseInt(num.substr(10,num.length));
-    $("#kill"+id).css("stroke-width",20);
-    $("#trajCanvas").after('<div class="framePosInfoBox" style="height:45px"><span style="font-size:13px">KILLED!</span><br>Pos X:'+((Math.round(t["t"+id].curPositions[num][0]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+id].curPositions[num][2]*100))/100)+' Y:'+((Math.round(t["t"+id].curPositions[num][3]*100))/100)+'</div>');
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
+    var id = $(this).attr("id");
+    var fid = parseInt(id.substr(2,(id.length - 3)));
+    var tid = parseInt(id.substr(0,1));
+    $("#"+tid+"f"+fid).css("stroke-width",20);
+    if (fid > t["t"+tid].hitstun){
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">KILLED!</span><br>Actionable frame: '+(fid-t["t"+tid].hitstun)+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
     }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
+    else {
+      $("#trajCanvas").after('<div class="framePosInfoBox" style="height:70px"><span style="font-size:13px">KILLED!</span><br>Frame of hitstun: '+fid+'<br>Pos X:'+((Math.round(t["t"+tid].curPositions[fid-1][0]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][1]*100))/100)+'<br>KBVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][2]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][3]*100))/100)+'<br>CHVel X:'+((Math.round(t["t"+tid].curPositions[fid-1][4]*100))/100)+' Y:'+((Math.round(t["t"+tid].curPositions[fid-1][5]*100))/100)+'</div>');
     }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+    setPosInfoOffset(tid);
 
   }, function(){
     $(".kill").css("stroke-width",0);
@@ -2336,15 +3078,7 @@ function trajPosInfo(){
     }
     $("#ccCircle"+id).css("stroke-width",20);
     $("#trajCanvas").after('<div class="framePosInfoBox" style="height:45px"><span style="font-size:13px">Crouch Cancelled</span><br>Knockback: '+t["t"+id].knockback.toPrecision(7)+'<br>Y-Displacement:'+yD+'</div>');
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
-    }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
-    }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+    setPosInfoOffset(id);
 
   }, function(){
     $(".ccCircle").css("stroke-width",0);
@@ -2359,15 +3093,7 @@ function trajPosInfo(){
     }
     $("#atCircle"+id).css("stroke-width",20);
     $("#trajCanvas").after('<div class="framePosInfoBox" style="height:45px"><span style="font-size:13px">Amsah Techable</span><br>Knockback: '+t["t"+id].knockback.toPrecision(7)+'<br>Y-Displacement:'+yD+'</div>');
-    var frameposy = mouseY;
-    var frameposx = mouseX;
-    if (mouseY + trajOffset.top > windheight){
-      frameposy = windheight;
-    }
-    if (mouseX + trajOffset.left + 160 > windwidth){
-      frameposx = windwidth - trajOffset.left - 160;
-    }
-    $(".framePosInfoBox").css({"top":frameposy+5,"left":(frameposx+20),"border":"2px solid "+palettes[t["t"+id].palette][0]});
+    setPosInfoOffset(id);
 
   }, function(){
     $(".atCircle").css("stroke-width",0);
@@ -2375,14 +3101,90 @@ function trajPosInfo(){
   });
 }
 
+function getScrollPos() {
+  if ($("#display").length > 0){
+    sT = $("#display").scrollTop();
+    sL = $("#display").scrollLeft();
+
+    return[sT,sL];
+  }
+  else {
+    return[0,0];
+  }
+}
+
+function zoomToTrajectory(){
+  var disW = $("#display").width();
+  var disH = $("#display").height();
+  var zoomW = $("#trajBackground").width();
+  var zoomH = $("#trajBackground").height();
+  var widthRatio = zoomW/dimensions[activeStage][0];
+  var heightRatio = zoomH/dimensions[activeStage][1];
+  var tPosX = ((t["t"+aT].mouseXMeleeF*10)+(-bzLeft*10+50))*widthRatio;
+  var tPosY = ((t["t"+aT].mouseYMeleeF*-10)+(bzTop*10+50))*heightRatio;
+  var moveX = tPosX-(disW/2);
+  if (moveX < 0){
+    moveX = 0;
+  }
+  var moveY = tPosY-(disH/2);
+  if (moveY < 0){
+    moveY = 0;
+  }
+  $("#display").scrollTop(moveY);
+  $("#display").scrollLeft(moveX);
+}
+
 $(document).ready(function(){
+  for (var i=0;i<6;i++){
+    sounds[i].volume = 0;
+    sounds[i].play();
+  }
+  if (mobile){
+    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutApp"><div id="ppATitle"><p>Android App coming soon!</p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppAMain"><div id="ppAImage"><div id="ppAImageContainer"><img id="ppAImage1" class="ppAImage" src="assets/trajectory/app1.png"/><img id="ppAImage2" class="ppAImage" src="assets/trajectory/app2.png"/></div><div id="ppAImageSelector"><div id="ppAIS1" class="ppAIS ppAISelected"></div><div id="ppAIS2" class="ppAIS"></div></div></div"></div><div id="ppADetails"><div id="ppADetailTitle"><img id="ppAIcon" src="assets/trajectory/appicon.png"/><p>Melee Calculator <span id="ppASmallText"> for Android</span></p></div><ul><li>New User Interface built for ease of access</li><li>Find Kill Percents for any attack at any position</li><li>Find CC, ASDI Down and Amsah Teching maximum percents</li><li>Draw trajectories</li><li>Save, manage and share calculations</li></ul><p>and much more...<br><br>Release: TBA</div></div></div>');
+    if (screen.height > screen.width){
+      $("#popoutApp").css("width",screen.width+"px");
+      $("#ppAMain").css({"width":screen.width+"px"});
+      $("#popoutApp").css({"height":screen.height+"px","top":"0%"});
+      $("#ppAImage").css({"display":"block","width":screen.width+"px","height":"60%"});
+      $("#ppADetails").css({"display":"block","width":screen.width+"px","height":"40%"});
+    }
+    $("#ppAMain").height($("#popoutApp").height()-50);
+    $("#ppAImageContainer").height($("#ppAImage").height()-60);
+    $(".ppAImage").height($("#ppAImage").height()-80);
+    $("#ppAImageSelector").css("margin-left",(($("#ppAImage").width()-68)/2)+"px");
+    var ratio = 675/1200;
+    $(".ppAImage").css("margin","10px "+(($("#ppAImage").width() - ($("#ppAImage2").height()*ratio))/2)+"px");
+    $("#ppSClose").unbind("mouseover click");
+    $("#ppSClose").hover(function(){
+      $(this).toggleClass("ppSCloseHighlight");
+    });
+    $(".ppAIS").click(function(){
+      if (!$(this).hasClass("ppAISelected")){
+        $(".ppAIS").removeClass("ppAISelected");
+        $(this).addClass("ppAISelected");
+        var id = $(this).attr("id");
+        id = parseInt(id.substr(5,1));
+        $(".ppAImage").fadeOut();
+        $("#ppAImage"+id).fadeIn();
+      }
+    });
+    $("#ppSClose").click(function(){
+      $("#popoutOverlay, #popout").remove();
+    });
+  }
   $("#header").hide();
   attackTable();
 	$(document).on('mousemove', function(e){
+    scroll = getScrollPos();
 		mouseX = e.pageX - trajOffset.left;
 		mouseY = e.pageY - trajOffset.top;
+    mouseZoomX = e.pageX - trajOffset.left + scroll[1];
+    mouseZoomY = e.pageY - trajOffset.top + scroll[0];
     diMouseX = e.pageX - diOffset.left;
     diMouseY = e.pageY - diOffset.top;
+    //console.log("mouseX/Y: "+mouseX+"/"+mouseY);
+    //console.log("mouseZoomX/Y: "+mouseZoomX+"/"+mouseZoomY);
+
 	});
 
   $(document).on("ps-scroll-y",function(){
@@ -2391,8 +3193,10 @@ $(document).ready(function(){
 
   $("#tdiUser").hide();
   $("#sdiUser").hide();
+  $("#zdiUser").hide();
   $("#adiUser").hide();
   $("#sdiBox").hide();
+  $("#zdiBox").hide();
   $("#adiBox").hide();
 
   $("#tutorialbutton").hover(function(){
@@ -2421,7 +3225,7 @@ $(document).ready(function(){
       $("#"+type+"diXInput").empty().append(xy[2]);
       $("#"+type+"diYInput").empty().append(xy[3]);
       $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
-      drawTrajectory();
+      drawTrajectory(aT);
     }
   });
 
@@ -2529,7 +3333,7 @@ $(document).ready(function(){
 
     changeUserStick(t["t"+aT][type+"diMouseXMelee"],t["t"+aT][type+"diMouseYMelee"],type);
     $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".diTurn").hover(function(){
@@ -2575,7 +3379,7 @@ $(document).ready(function(){
     $("#"+type+"diXInput").empty().append(xy[2]);
     $("#"+type+"diYInput").empty().append(xy[3]);
     $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".diCentre").hover(function(){
@@ -2596,7 +3400,7 @@ $(document).ready(function(){
     $("#"+type+"diSvgPointer").attr("cx",t["t"+aT][type+"diMouseXReal"]/(130/161)).attr("cy",t["t"+aT][type+"diMouseYReal"]/(130/161));
     $("#"+type+"diUser").hide();
     $("#"+type+"diUserCentre").show();
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#diSwitchButton").hover(function(){
@@ -2632,6 +3436,11 @@ $(document).ready(function(){
     }
     else if (activeDI == "s"){
       $("#sdiBox").hide();
+      $("#zdiBox").show();
+      activeDI = "z";
+    }
+    else if (activeDI == "z"){
+      $("#zdiBox").hide();
       $("#adiBox").show();
       activeDI = "a";
     }
@@ -2647,7 +3456,7 @@ $(document).ready(function(){
 
   trajectoryClick();
 
-	drawTrajectory();
+	drawTrajectory(aT);
 
 	$("#victim-char").hover(function(){
     $(this).toggleClass("victimCharHighlight");
@@ -2684,7 +3493,7 @@ $(document).ready(function(){
 		var newchar = $(this).children("p").text();
 		$("#victimcharname").empty().append(newchar);
 		t["t"+aT].character = newchar;
-    drawTrajectory();
+    drawTrajectory(aT);
 	});
 
   $(".percentButton").hover(function(){
@@ -2718,7 +3527,7 @@ $(document).ready(function(){
 
 			$("#percentNumberEdit").val(newnum);
       $("#percentPreciseWhole").empty().append(newnum);
-      drawTrajectory();
+      drawTrajectory(aT);
 		}, 50);
 	}).bind("mouseup mouseleave", function() {
     clearInterval(percentHold);
@@ -2749,7 +3558,7 @@ $(document).ready(function(){
         t["t"+aT].chargeF = newnum;
       }
       $("#chargingNumberEdit").val(newnum);
-      drawTrajectory();
+      drawTrajectory(aT);
     }, 50);
   }).bind("mouseup mouseleave", function() {
     clearInterval(chargingHold);
@@ -2770,7 +3579,7 @@ $(document).ready(function(){
       t["t"+aT].staleQueue[id-1] = true;
       $(this).addClass("staleQon");
     }
-    drawTrajectory();
+    drawTrajectory(aT);
 
   });
 
@@ -2789,7 +3598,7 @@ $(document).ready(function(){
       t["t"+aT].reverse = false;
     }
     drawAngle();
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".realButton").hover(function(){
@@ -2807,6 +3616,17 @@ $(document).ready(function(){
     }
   });
 
+  $("#csRealButton").click(function(){
+    if (comboSnapping){
+      $("#csSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("Off");
+      comboSnapping = false;
+    }
+    else {
+      $("#csSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
+      comboSnapping = true;
+    }
+  });
+
   $("#hwcRealButton").click(function(){
     if (t["t"+aT].chargeInterrupt){
       $("#hwcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
@@ -2816,7 +3636,7 @@ $(document).ready(function(){
       $("#hwcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].chargeInterrupt = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#cRealButton").click(function(){
@@ -2828,7 +3648,7 @@ $(document).ready(function(){
       $("#cSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].crouch = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#vcRealButton").click(function(){
@@ -2840,7 +3660,7 @@ $(document).ready(function(){
       $("#vcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].vcancel = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#mcRealButton").click(function(){
@@ -2854,7 +3674,43 @@ $(document).ready(function(){
       $("#djSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].doubleJump = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
+  });
+
+  $("#icgRealButton").click(function(){
+    if (t["t"+aT].icg){
+      $("#icgSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      t["t"+aT].icg = false;
+    }
+    else {
+      $("#icgSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      t["t"+aT].icg = true;
+    }
+    drawTrajectory(aT);
+  });
+
+  $("#mtRealButton").click(function(){
+    if (t["t"+aT].metal){
+      $("#mtSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      t["t"+aT].metal = false;
+    }
+    else {
+      $("#mtSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      t["t"+aT].metal = true;
+    }
+    drawTrajectory(aT);
+  });
+
+  $("#dicRealButton").click(function(){
+    if (t["t"+aT].ice){
+      $("#dicSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      t["t"+aT].ice = false;
+    }
+    else {
+      $("#dicSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      t["t"+aT].ice = true;
+    }
+    drawTrajectory(aT);
   });
 
   $("#fiRealButton").click(function(){
@@ -2866,7 +3722,7 @@ $(document).ready(function(){
       $("#fiSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].fadeIn = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
   $("#djRealButton").click(function(){
     if (t["t"+aT].doubleJump){
@@ -2879,7 +3735,7 @@ $(document).ready(function(){
       $("#djSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].doubleJump = true;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".verButton").hover(function(){
@@ -2897,7 +3753,7 @@ $(document).ready(function(){
     }
     $(this).addClass("verButtonOn");
     swapOptions();
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".stageselect").hover(function(){
@@ -2981,6 +3837,9 @@ $(document).ready(function(){
       $.extend(true,t["t"+newTraj],t["t"+aT]);
 
       t["t"+newTraj].hasLabel = false;
+      t["t"+newTraj].hasCombo = 0;
+      t["t"+newTraj].comboSnap = 0;
+      t["t"+newTraj].cSnapFrame = 0;
       t["t"+newTraj].palette = savedPalettes[newTraj-1];
       aT = newTraj;
 
@@ -2991,7 +3850,7 @@ $(document).ready(function(){
         $("#trajBoxContainer").prepend('<div id="trajBox1" class="trajBox trajBoxSelected"><div id="trajNum1" class="trajNum"><div class="trajFreeze freezeOn"></div><p>1</p></div><div id="trajColour1" class="trajColour"><div id="t1minicolour1" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][0]+'"></div><div id="t1minicolour2" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][1]+'"></div><div id="t1minicolour3" class="tminicolour" style="background-color:'+palettes[t["t1"].palette][2]+'"></div></div><div id="trajLabel1" class="trajLabel"><p>Add label</p></div><div id="trajDelete1" class="trajDelete"><p>x</p></div></div>');
       }
 
-      drawTrajectory();
+      drawTrajectory(aT);
 
       trajBoxHover();
       trajBoxClick();
@@ -3015,7 +3874,7 @@ $(document).ready(function(){
   });
 
   $("#tutorialbutton").click(function(){
-    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="ppSVid"><iframe width="420" height="315" src="https://www.youtube.com/embed/3NFhZRdIDtc" frameborder="0" allowfullscreen></iframe></div><div id="ppSVidClose" class="ppSClose"><p>x</p></div></div></div>');
+    $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="ppSVid"><iframe width="420" height="315" src="https://www.youtube.com/embed/yOHATN4kFLc" frameborder="0" allowfullscreen></iframe></div><div id="ppSVidClose" class="ppSClose"><p>x</p></div></div></div>');
     $("#ppSVidClose").unbind("mouseover click");
     $("#ppSVidClose").hover(function(){
       $(this).toggleClass("ppSCloseHighlight");
@@ -3079,14 +3938,14 @@ $(document).ready(function(){
       if (container3.val() == ""){
         container3.val("0");
         t["t"+aT].percent = 0;
-        drawTrajectory();
+        drawTrajectory(aT);
       }
     }
     if (!container4.is(e.target)){
       if(container4.val() == ""){
         container4.val("0");
         t["t"+aT].chargeF = 0;
-        drawTrajectory();
+        drawTrajectory(aT);
       }
     }
     if (!container5.is(e.target) && !container6.is(e.target) && !container7.is(e.target) && !container8.is(e.target) && !container9.is(e.target)){
@@ -3106,7 +3965,7 @@ $(document).ready(function(){
     else {
       t["t"+aT].percent = temp;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#percentPreciseEdit").on("keyup blur", function() {
@@ -3115,7 +3974,7 @@ $(document).ready(function(){
     $(this).val(temp);
     t["t"+aT].fractional = temp;
     t["t"+aT].percent = parseFloat(Math.floor(t["t"+aT].percent)+"."+t["t"+aT].fractional);
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#chargingNumberEdit").on("keyup blur", function() {
@@ -3126,7 +3985,7 @@ $(document).ready(function(){
     temp = Math.abs(temp);
     $(this).val(temp);
     t["t"+aT].chargeF = temp;
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#mousePosition").hover(function(){
@@ -3146,7 +4005,7 @@ $(document).ready(function(){
       newFloat = 0;
     }
     t["t"+aT].mouseXMeleeF = newFloat;
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $("#mPosY").on("keyup blur", function() {
@@ -3161,7 +4020,7 @@ $(document).ready(function(){
       newFloat = 0;
     }
     t["t"+aT].mouseYMeleeF = newFloat;
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   $(".stageselect").click(function(){
@@ -3171,15 +4030,15 @@ $(document).ready(function(){
     id = id.substr(0,2);
     activeStage = id;
     changeStage(id);
-    var savedaT = aT;
+    //var savedaT = aT;
 
     for(x=0;x<9;x++){
       if(currentTrajs[x]){
-        aT = x+1;
-        drawTrajectory();
+        //aT = x+1;
+        drawTrajectory(x+1);
       }
     }
-    aT = savedaT;
+    //aT = savedaT;
 
   });
 
@@ -3202,7 +4061,7 @@ $(document).ready(function(){
       t["t"+aT].percent = parseInt($("#percentNumberEdit").val());
       t["t"+aT].useFractionals = false;
     }
-    drawTrajectory();
+    drawTrajectory(aT);
     diOffset = $("#"+activeDI+"diSelector").offset();
   });
 
@@ -3228,7 +4087,7 @@ $(document).ready(function(){
     diPointerFrozen.a = true;
     $("#adiSelector").children(".diFreeze").removeClass("freezeOff").addClass("freezeOn");
 
-    drawTrajectory();
+    drawTrajectory(aT);
   });
 
   /*$("#attemptAT").click(function(){
@@ -3261,25 +4120,218 @@ $(document).ready(function(){
   $("#attackscroll").perfectScrollbar();
   $("#trajBoxContainer").perfectScrollbar();
   $("#stageSelectContainer").perfectScrollbar();
+  $("#display").perfectScrollbar();
+  amount = 74;
+  $("#zoomSliderPointer").draggable({axis:"y",containment:"parent",drag:function(){
+    amount = parseInt($(this).css("top"));
+    zoom = 5 - ((amount/74) * 4);
+    resizing();
+    zoomToTrajectory();
+    //console.log("amount = "+amount+" , zoom = "+zoom);
+  }});
 
+  $(".zoomButton").click(function(){
+    //console.log("OLD: amount = "+amount+" , zoom = "+zoom);
+    var id = $(this).attr("id");
+    if (id[4] == "P"){
+      if (zoom < 5){
+        zoom = Math.round(zoom + 1);
+        if (zoom > 5){
+          zoom = 5;
+        }
+      }
+    }
+    else {
+      if (zoom > 1){
+        zoom = Math.round(zoom - 1);
+        if (zoom < 1){
+          zoom = 1;
+        }
+      }
+    }
+    amount = Math.round(((5 - zoom)*74)/4);
+    //console.log("NEW: amount = "+amount+" , zoom = "+zoom);
+    $("#zoomSliderPointer").css("top",amount+"px");
+    resizing();
+    zoomToTrajectory();
+  });
+
+  $(".volumeButton").click(function(){
+    if ($(this).hasClass("volumeUp")){
+      changeVolume(true);
+    }
+    else {
+      changeVolume(false);
+    }
+    $("#volumeLevel p").empty().append(curVolume);
+  });
+
+  $("#hotkeyContainer").hover(function(){
+    $("#hotkeys").toggle();
+  });
+
+  $(".activehk").hover(function(){
+    var id = $(this).attr("id");
+    id = id.substr(3,id.length-3);
+    var text;
+    switch (id){
+      case "1":
+      case "2":
+      case "3":
+      case "4":
+      case "5":
+      case "6":
+      case "7":
+      case "8":
+      case "9":
+        text = "Selects trajectory "+id;
+        break;
+      case "u":
+        text = "Removes last created trajectory from input";
+        break;
+      case "i":
+        text = "Opens trajectory input window";
+        break;
+      case "o":
+        text = "Opens output info dump for all trajectories";
+        break;
+      case "a":
+        text = "Plays animation for all trajectories";
+        break;
+      case "s":
+        text = "Toggles snap to surfaces";
+        break;
+      case "q":
+        text = "Plays animation for active trajectory";
+        break;
+      case "c":
+        text = "Toggles combo snapping";
+        break;
+      case "z":
+        text = "Zoom in";
+        break;
+      case "x":
+        text = "Zoom out";
+        break;
+      case "up":
+      case "left":
+      case "down":
+      case "right":
+        text = "Moves viewpoint "+id+" (when zoomed in)";
+        break;
+    }
+
+    $("#hotkeyDescriptionEdit").empty().append(text);
+  },function(){
+    $("#hotkeyDescriptionEdit").empty().append("Hover over a key");
+  });
 
   document.onkeydown = function(evt) {
     evt = evt || window.event;
-    switch (evt.keyCode) {
-      case 79:
-        outputPopup();
-        break;
-      case 83:
-        sourcePopup();
-        break;
-      case 85:
-        undoSource();
-        break;
-      default:
-        break;
+    if (!($("textarea").is(':focus'))){
+      switch (evt.keyCode) {
+        // 1-9
+        case 49:
+        case 50:
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
+        case 56:
+        case 57:
+          var num = evt.keyCode-48;
+          if (currentTrajs[num-1]){
+            $(".trajBox").removeClass("trajBoxSelected");
+            $("#trajBox"+num).addClass("trajBoxSelected");
+            var pT = aT;
+            aT = num;
+            //prompt(aT);
+            //prompt(t["t"+aT].cHName);
+            swapOptions();
+            //trajectoryAnimation(aT);
+            if (pT != aT){
+              t["t"+pT].trajFrozen = true;
+              $("#trajNum"+pT+" .trajFreeze").removeClass("freezeOff").addClass("freezeOn");
+            }
+          }
+          break;
+        // a
+        case 65:
+          playAll();
+          break;
+        // c
+        case 67:
+          if (comboSnapping){
+            $("#csSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("Off");
+            comboSnapping = false;
+          }
+          else {
+            $("#csSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
+            comboSnapping = true;
+          }
+          break;
+        // s
+        case 83:
+          if (snapping){
+            $("#stsSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("Off");
+            snapping = false;
+          }
+          else {
+            $("#stsSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("On");
+            snapping = true;
+          }
+          break;
+        // o
+        case 79:
+          outputPopup();
+          break;
+        // i
+        case 73:
+          sourcePopup();
+          break;
+        // u
+        case 85:
+          undoSource();
+          break;
+        // q
+        case 81:
+          var dupes = [[],[],[],[],[],[]];
+          trajectoryAnimation(aT,dupes);
+          break;
+        // z
+        case 90:
+          if (zoom < 5){
+            zoom = Math.round(zoom + 1);
+            if (zoom > 5){
+              zoom = 5;
+            }
+          }
+          amount = Math.round(((5 - zoom)*74)/4);
+          $("#zoomSliderPointer").css("top",amount+"px");
+          resizing();
+          zoomToTrajectory();
+          break;
+        // x
+        case 88:
+          if (zoom > 1){
+            zoom = Math.round(zoom - 1);
+            if (zoom < 1){
+              zoom = 1;
+            }
+          }
+          amount = Math.round(((5 - zoom)*74)/4);
+          $("#zoomSliderPointer").css("top",amount+"px");
+          resizing();
+          zoomToTrajectory();
+          break;
+        default:
+          break;
+      }
     }
   };
 
   readQueryString();
+
 
 });
