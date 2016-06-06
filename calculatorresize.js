@@ -48,7 +48,9 @@ displayheight = 0;
 var resizingtype = function(){
 	//width/length.   width = ratio*height.   height = width/ratio
 	mousePosBoxOffset = [220,145];
-	midwidth = windwidth-360;
+	midwidth = Math.floor(windwidth-360);
+	console.log(windwidth);
+	console.log(midwidth);
 	var hbuffer = 0;
 	var vbuffer = 0;
 
