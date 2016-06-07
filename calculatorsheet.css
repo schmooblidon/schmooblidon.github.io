@@ -25,6 +25,12 @@ body {
   font-family:Consolas,"lucida console","Courier New" ;
 }
 
+#widthTester {
+  width:100%;
+  position:absolute;
+  z-index:-1;
+}
+
 #display {
   position:relative;
   overflow:auto;
