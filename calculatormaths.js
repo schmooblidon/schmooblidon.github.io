@@ -546,7 +546,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
 
     //Frames of hitstun
     function getHitstun(knockback) {
-      if (groundDownHit){
+      if (groundDownHitType == "Fly"){
         knockback *= 1.25;
       }
       return Math.floor(knockback * .4);
@@ -790,6 +790,9 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       this.knockback = oldknockback;
     }
     else {
+      if (groundDownHitType == "Fly"){
+        knockback /= 0.8;
+      }
       this.knockback = knockback;
     }
 
