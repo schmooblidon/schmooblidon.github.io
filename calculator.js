@@ -2728,7 +2728,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
   var damagestaled = damageunstaled * totalstale;
 
   t["t"+n].newDamage = damagestaled;
-  t["t"+n].shieldstun = Math.floor((damagestaled + 4.45) / 2.235);
+  t["t"+n].shieldstun = Math.floor((Math.floor(damagestaled) + 4.45) / 2.235);
 
   var xPos = 0;
   var yPos = 0;
