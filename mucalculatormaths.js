@@ -1,5 +1,5 @@
-yRepick = false;
-oRepick = false;
+yRepick = true;
+oRepick = true;
 
 starter = 0.5;
 ocp1 = 0.5;
