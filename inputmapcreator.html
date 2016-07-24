@@ -11,12 +11,19 @@
 </head>
 
 <body>
+  <div id="inputMapContainer">
   <img id="inputMap" src="assets/inputmap.png">
-  <div id="output"><div id="outputColourBox"></div><div id="outputText"><p>R: <span id="outputRed" style="color:rgb(0,0,0)">0</span><br>G: <span id="outputGreen" style="color:rgb(0,0,0)">0</span><br>B: <span id="outputBlue" style="color:rgb(0,0,0)">0</span></div>
-    <input type="checkbox" id="findRed" value="1" checked>Same Red<br>
-    <input type="checkbox" id="findGreen" value="1" checked>Same Green<br>
-    <input type="checkbox" id="findBlue" value="1" checked>Same Blue<br>
-  <input type="checkbox" id="clear" value="1" checked>Clear On Click<br></div>
+  <div id="darkenInputMap"></div>
   <canvas id="selectedArea" height="255" width="255"></canvas>
+<div id="inputMapCover"></div>
+<img id="inputMap2" src="assets/inputmap.png"></div>
+  <div id="output">
+    <div id="variables">
+    <input type="radio" id="sameRedOrGreen" name="pixelType">Same Red or Green<br>
+    <input type="radio" id="sameBlue" name="pixelType">Same Blue<br>
+    <input type="radio" id="sameComposite" name="pixelType" checked>Same Composite<br>
+    <input type="radio" id="sameHue" name="pixelType">Same Hue<br>
+  <input type="checkbox" id="clear" value="1" checked>Clear On Click<br></div>
+  <div id="rgbContainer"><p id="rgbTitle">Draw Colour</p><div id="customColourViewer"></div><textarea id="red" class="colourChoice" maxlength="3">255</textarea><p class="comma">,</p><textarea id="green" class="colourChoice" maxlength="3">255</textarea><p class="comma">,</p><textarea id="blue" class="colourChoice" maxlength="3">255</textarea></div></div>
 </body>
 </html>
