@@ -52,7 +52,7 @@ function findComposite(pD,npD){
 }
 
 function findRedOrGreen(pD,npD){
-  if (pD[0] == npD[0] || pD[1] == npD[1]){
+  if ((pD[0] == npD[0] && pD[0] != 0) || (pD[1] == npD[1] && pD[1] != 0)){
     return true;
   }
   else {
@@ -87,11 +87,11 @@ function rgbToHsl(r, g, b){
         h /= 6;
     }
 
-    return [h, s, l];
+    return [Math.round(h*360), s, l];
 }
 
 function findHue(fH,pD,npD){
-  if (fH == rgbToHsl(npD[0],npD[1],npD[2])[0] * 360){
+  if (fH == rgbToHsl(npD[0],npD[1],npD[2])[0]){
     return true;
   }
   else {
@@ -151,7 +151,8 @@ $(document).ready(function() {
           this.canvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height);
       }
       var pixelData = this.canvas.getContext('2d').getImageData(event.offsetX, event.offsetY, 1, 1).data;
-      var firstHue = rgbToHsl(pixelData[0],pixelData[1],pixelData[2])[0] * 360;
+      var firstHue = rgbToHsl(pixelData[0],pixelData[1],pixelData[2])[0];
+      console.log(firstHue);
       c.restore();
       if (clearOnClick){
         c.clearRect(0,0,255,255);
@@ -208,7 +209,4 @@ $(document).ready(function() {
       }
       $("#customColourViewer").css("background-color","rgb("+customR+","+customG+","+customB+")");
     });
-
-
-
 });
