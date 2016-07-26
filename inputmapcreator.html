@@ -11,19 +11,25 @@
 </head>
 
 <body>
-  <div id="inputMapContainer">
-  <img id="inputMap" src="assets/inputmap.png">
-  <div id="darkenInputMap"></div>
-  <canvas id="selectedArea" height="255" width="255"></canvas>
-<div id="inputMapCover"></div>
-<img id="inputMap2" src="assets/inputmap.png"></div>
   <div id="output">
     <div id="variables">
     <input type="radio" id="sameRedOrGreen" name="pixelType">Same Red or Green<br>
     <input type="radio" id="sameBlue" name="pixelType">Same Blue<br>
     <input type="radio" id="sameComposite" name="pixelType" checked>Same Composite<br>
     <input type="radio" id="sameHue" name="pixelType">Same Hue<br>
-  <input type="checkbox" id="clear" value="1" checked>Clear On Click<br></div>
+  <input type="checkbox" id="clear" value="1">Clear On Draw<br></div>
   <div id="rgbContainer"><p id="rgbTitle">Draw Colour</p><div id="customColourViewer"></div><textarea id="red" class="colourChoice" maxlength="3">255</textarea><p class="comma">,</p><textarea id="green" class="colourChoice" maxlength="3">255</textarea><p class="comma">,</p><textarea id="blue" class="colourChoice" maxlength="3">255</textarea></div></div>
+  <div id="inputMapContainer">
+  <img id="inputMap" src="assets/inputmap2.png">
+  <div id="darkenInputMap"></div>
+  <canvas id="selectedArea" height="255" width="255"></canvas>
+<div id="inputMapCover"></div>
+<img id="inputMap2" src="assets/inputmap2.png"></div>
+<div id="fillCommands">
+  <div id="fCTitle"><p>Fill Commands</p></div>
+  <div id="rogRange" class="fCommand"><div class="fCommandTitle"><p>Red or Green Range</p></diV><div class="rangeContainer"><textarea id="rogRange1" class="range" maxlength="3">1</textarea><p class="comma">-</p><textarea id="rogRange2" class="range" maxlength="3">255</textarea></div><div id="fCommandOverlay0" class="fCommandOverlay" style="display:none"></div></div>
+  <div id="bRange" class="fCommand"><div class="fCommandTitle"><p>Blue Range</p></diV><div class="rangeContainer"><textarea id="bRange1" class="range" maxlength="3">1</textarea><p class="comma">-</p><textarea id="bRange2" class="range" maxlength="3">255</textarea></div><div id="fCommandOverlay1" class="fCommandOverlay"></div></div>
+  <div id="hRange" class="fCommand"><div class="fCommandTitle"><p>Hue Range</p></diV><div class="rangeContainer"><textarea id="hRange1" class="range" maxlength="3">1</textarea><p class="comma">-</p><textarea id="hRange2" class="range" maxlength="3">358</textarea></div><div id="fCommandOverlay2" class="fCommandOverlay"></div></div>
+  <div id="fillButton"><p>Fill</p></div>
 </body>
 </html>

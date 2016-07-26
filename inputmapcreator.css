@@ -151,3 +151,94 @@ textarea
   padding:8px 0px;
   vertical-align: top;
 }
+
+#fillCommands {
+  width:255px;
+  height:255px;
+  background-color:#383838;
+  display:inline-block;
+  color:white;
+  margin:0px 30px;
+}
+
+#fCTitle {
+  width:255px;
+  height:35px;
+  background-color: #383838;
+}
+
+#fCTitle p {
+  text-align: center;
+  margin:0;
+  padding:5px;
+  font-size:20px;
+}
+
+.fCommand {
+  width:255px;
+  height:62px;
+  position: relative;
+}
+
+.fCommandTitle {
+  width:255px;
+  height:24px;
+}
+
+.fCommandTitle p {
+  text-align: center;
+  margin:0;
+  padding:5px;
+  font-size:14px;
+}
+
+.rangeContainer {
+  width:160px;
+  height:34px;
+  margin-left:48px;
+}
+
+.range {
+  width:70px;
+  height:34px;
+  display:inline-block;
+  background-color:rgba(0, 0, 0, 0.5);
+  border:none;
+  color:white;
+  text-align:center;
+  resize:none;
+  font-size:27px;
+  vertical-align: top;
+}
+
+#fillButton {
+  width:255px;
+  height:30px;
+  background-color:#4a4a4a;
+  margin-top:5px;
+  cursor:pointer;
+}
+
+#fillButton:hover {
+  background-color:#676767;
+}
+
+#fillButton p {
+  text-align: center;
+  margin:0;
+  padding:3px;
+  font-size:24px;
+}
+
+.fCommandOverlay {
+  width:255px;
+  height:62px;
+  background-color:rgba(0, 0, 0, 0.51);
+  position:absolute;
+  top:0px;
+  cursor:pointer;
+}
+
+.fCommandOverlay:hover {
+  background-color:rgba(0,0,0,0.3);
+}
