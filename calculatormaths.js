@@ -143,10 +143,10 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
 
     //Calculates Sakurai angle for grounded opponents. Once support for different starting points exists, will need a check for in air / on ground
     //Function by Yeroc
-    function getAngle(trajectory, knockback, reverse, x, y) {
+    function getAngle(traj, knockback, reverse, x, y) {
       //p = cos(a-arctan(x/y))*sqrt(x^2+y^2)
         var deadzone = false;
-        if (knockback < 80 && grounded && (trajectory == 0 || trajectory == 180)){
+        if (knockback < 80 && grounded && (traj == 0 || traj == 180)){
           deadzone = true;
         }
         if (x < 0.2875 && x > -0.2875){
@@ -175,47 +175,50 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
           }
         }
 
-        if (trajectory == 361) {
+        if (traj == 361) {
             if (knockback < 32.1) {
               if (reverse){
-                trajectory = 180;
+                traj = 180;
+                //trajectory = 180;
               }
               else {
+                traj = 0;
                 trajectory = 0;
               }
               sakurai = 0;
             }
             else if (knockback >= 32.1) {
               if (reverse){
-                trajectory = 136;
+                traj = 136;
               }
               else {
+                traj = 44;
                 trajectory = 44;
               }
               sakurai = 44;
             }
             else {
               prompt("Why would this ever get called?");
-              trajectory = 440*(knockback-32);
+              traj = 440*(knockback-32);
               if (reverse){
-                trajectory = 180 - trajectory;
-                  if (trajectory < 0){
-                    trajectory = 360 + trajectory;
+                traj = 180 - traj;
+                  if (traj < 0){
+                    traj = 360 + traj;
                   }
               }
             }
         }
         else {
           if (reverse){
-            trajectory = 180 - trajectory;
-              if (trajectory < 0){
-                trajectory = 360 + trajectory;
+            traj = 180 - traj;
+              if (traj < 0){
+                traj = 360 + traj;
               }
           }
         }
 
         if (!deadzone){
-          var rAngle = trajectory - diAngle;
+          var rAngle = traj - diAngle;
           if (rAngle > 180){
             rAngle -= 360;
           }
@@ -237,7 +240,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
         else {
           var angleOffset = 0;
         }
-        var newtraj = trajectory - angleOffset;
+        var newtraj = traj - angleOffset;
         if (newtraj < 0.01){
           newtraj = 0;
         }
@@ -296,9 +299,10 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
           hitstun = 8;
           meteorCancelled = true;
         }
+        console.log(trajectory);
         if (grounded && (trajectory == 0 || trajectory == 180) && knockback < 80){
+          console.log("test");
           verVelKB = 0;
-          //prompt("test");
           reduceByTraction = true;
         }
 
