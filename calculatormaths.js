@@ -299,9 +299,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
           hitstun = 8;
           meteorCancelled = true;
         }
-        console.log(trajectory);
         if (grounded && (trajectory == 0 || trajectory == 180) && knockback < 80){
-          console.log("test");
           verVelKB = 0;
           reduceByTraction = true;
         }
