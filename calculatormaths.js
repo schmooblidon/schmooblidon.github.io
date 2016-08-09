@@ -278,10 +278,16 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     var yDisplacement = 0;
     var reduceByTraction = false;
     //Calculate position for every frame of hitstun
-    function knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump, sdiVector, zdiVector, asdiVector, trajectory, meteorCancel, grounded, angle, releasePoint, icg) {
+    function knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump, sdiVector, zdiVector, asdiVector, trajectory, meteorCancel, grounded, angle, releasePoint, icg, isThrow) {
         var positions = [];
-        var hPos = releasePoint[0];
-        var vPos = releasePoint[1];
+        if (isThrow){
+          var hPos = releasePoint[0];
+          var vPos = releasePoint[1];
+        }
+        else {
+          var hPos = xPos;
+          var vPos = yPos;
+        }
         var horVelChar = 0;
         var verVelChar = 0;
         var horVelKB = horizontalVelocity;
@@ -377,12 +383,18 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
 
 
             if (i == 0){
-              hPos += sdiVector[0] + zdiVector[0] + asdiVector[0];
-              vPos += sdiVector[1] + zdiVector[1] + asdiVector[1];
-              if (asdiVector[1] < 0 && grounded && (verVelChar + verVelKB + asdiVector[1] + sdiVector[1] + zdiVector[1] < 0) && (trajectory < 180 || trajectory == 361)){
-                stayGrounded = true;
-                yDisplacement = verVelChar + verVelKB + asdiVector[1] + sdiVector[1] + zdiVector[1];
-                break;
+              if (isThrow){
+                hPos += asdiVector[0];
+                vPos += asdiVector[1];
+              }
+              else {
+                hPos += sdiVector[0] + zdiVector[0] + asdiVector[0];
+                vPos += sdiVector[1] + zdiVector[1] + asdiVector[1];
+                if (asdiVector[1] < 0 && grounded && (verVelChar + verVelKB + asdiVector[1] + sdiVector[1] + zdiVector[1] < 0) && (trajectory < 180 || trajectory == 361)){
+                  stayGrounded = true;
+                  yDisplacement = verVelChar + verVelKB + asdiVector[1] + sdiVector[1] + zdiVector[1];
+                  break;
+                }
               }
             }
             positions.push([hPos, vPos, horVelKB, verVelKB, horVelChar, verVelChar]);
@@ -724,7 +736,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       var tFrames = getThrowFrames(throwChar,throwType,character);
     }
     else {
-      var releasePoint = [xPos,yPos];
+      var releasePoint = [0,0];
       var tFrames = [-1,-1];
     }
 
@@ -783,7 +795,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
 
     var asdiVector = calculateSDI(adix,adiy,"a",grounded,knockback,trajectory);
 
-    this.positions = knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump, sdiVector, zdiVector, asdiVector, trajectory, meteorCancel, grounded, angle, releasePoint, icg);
+    this.positions = knockbackTravel(horizontalVelocity, horizontalDecay, verticalVelocity, verticalDecay, character, hitstun, xPos, yPos, fadeIn, doubleJump, sdiVector, zdiVector, asdiVector, trajectory, meteorCancel, grounded, angle, releasePoint, icg, isThrow);
 
     //prompt("test");
 
