@@ -78,14 +78,14 @@ body {
 #hideButton {
   width:25px;
   background-color:rgb(50, 50, 50);
-  background-image:url(assets/header-icons/collapseicon.png);
+  background-image:url(ml/assets/header-icons/collapseicon.png);
 }
 
 #fullscreenButton {
   width:35px;
   background-color:rgb(50, 50, 50);
   float:right;
-  background-image:url(assets/header-icons/fullscreenicon.png);
+  background-image:url(ml/assets/header-icons/fullscreenicon.png);
 }
 
 #hideButton:hover,#fullscreenButton:hover {
@@ -94,27 +94,27 @@ body {
 
 #downloadButton {
   width: 24px;
-  background-image:url(assets/header-icons/downloadicon.png);
+  background-image:url(ml/assets/header-icons/downloadicon.png);
 }
 
 #discordButton {
   width:33px;
-  background-image:url(assets/header-icons/discordicon.png);
+  background-image:url(ml/assets/header-icons/discordicon.png);
 }
 
 #githubButton {
   width : 25px;
-  background-image:url(assets/header-icons/githubicon.png);
+  background-image:url(ml/assets/header-icons/githubicon.png);
 }
 
 #keyboardButton {
   width: 36px;
-  background-image:url(assets/header-icons/keyboardicon.png);
+  background-image:url(ml/assets/header-icons/keyboardicon.png);
 }
 
 #controllerButton {
   width: 33px;
-  background-image:url(assets/header-icons/controllericon.png);
+  background-image:url(ml/assets/header-icons/controllericon.png);
 }
 
 .topButton {
