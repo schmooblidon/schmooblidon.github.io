@@ -32,6 +32,7 @@ RT : 7
 Select : 8
 Start : 9*/
 console.log("biogenik adapter support");
+console.log("mac x360 support");
 // biogenik - index 4
 /*
 y : 3
@@ -374,7 +375,7 @@ function findPlayers(){
         console.log("You are using raphnet");
       }
       // Xbox 360 Controller (XInput STANDARD GAMEPAD)
-      else if (gamepad.id[0] == "X" || gamepad.id[0] == "x"){
+      else if (gamepad.id[0] == "X" || gamepad.id[0] == "x" || gamepad.id[0] == "W"){
         gType = 3;
         console.log("You are using xbox 360");
       }
