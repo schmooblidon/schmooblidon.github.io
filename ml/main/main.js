@@ -82,7 +82,7 @@ playerAmount = 0;
 
 playerType = [-1,-1,-1,-1];
 
-cpuDifficulty = [4,4,4,4];
+cpuDifficulty = [3,3,3,3];
 
 ports = 0;
 activePorts = [];
