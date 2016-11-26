@@ -35,6 +35,7 @@ console.log("biogenik adapter support");
 console.log("mac x360 support");
 console.log("TigerGame 3 in 1 adapter support");
 console.log("Retrolink support");
+console.log("Mayflash 2 port on Firefox Fix");
 // biogenik - index 4
 /*
 y : 3
@@ -363,16 +364,16 @@ function findPlayers(){
     var gamepad = navigator.getGamepads()[i];
     if (typeof gamepad != "undefined" &&  gamepad != null){
       var gType = 0;
-      if (gamepad.id[0] == "v" || gamepad.id[0] == "1"){
+      if (gamepad.id[0] == "M" || (gamepad.id[0] == "1" && gamepad.id[1] == "a")){
+        console.log("You are using Mayflash");
+      }
+      else if (gamepad.id[0] == "v" || gamepad.id[0] == "1"){
         gType = 1;
         console.log("You are using vJoy");
       }
       else if (gamepad.id[0] == "T"){
         gType = 4;
         console.log("You are using TigerGame 3 in 1");
-      }
-      else if (gamepad.id[0] == "M"){
-        console.log("You are using Mayflash");
       }
       // raphnet is :
       //GC/N64 to USB, v2.9 (Vendor: 289b Product: 000c)
