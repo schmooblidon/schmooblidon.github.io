@@ -356,7 +356,7 @@ function executeHits(){
 
         }
         else {
-          if (player[v].phys.hurtBoxState == 0){
+          if (player[v].phys.hurtBoxState == 0 || isThrow){
             if (!phantom){
               var crouching = aS[cS[v]][player[v].actionState].crouch;
               var vCancel = false;
