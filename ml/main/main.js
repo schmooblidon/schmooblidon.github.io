@@ -50,24 +50,24 @@ r : 5
 z : 7
 */
 map = {
-  a : [1,0,4,0,0],
-  b : [2,1,3,2,1],
-  x : [0,2,2,1,2],
-  y : [3,3,1,3,3],
-  z : [7,4,7,5,6],
-  r : [5,5,6,7,5],
-  l : [4,6,5,6,4],
-  s : [9,7,0,9,7],
-  du : [12,8,8,12,11],
-  dr : [13,11,10,15,9],
-  dd : [14,9,9,13,10],
-  dl : [15,10,11,14,8],
-  lsX : [0,0,0,0,0],
-  lsY : [1,1,1,1,1],
-  csX : [5,3,3,2,2],
-  csY : [2,4,4,3,3],
-  lA : [3,2,5,6,5],
-  rA : [4,5,6,7,4]
+  a : [1,0,4,0,0,0],
+  b : [2,1,3,2,1,1],
+  x : [0,2,2,1,2,7],
+  y : [3,3,1,3,3,8],
+  z : [7,4,7,5,6,2],
+  r : [5,5,6,7,5,5],
+  l : [4,6,5,6,4,4],
+  s : [9,7,0,9,7,3],
+  du : [12,8,8,12,11,10],
+  dr : [13,11,10,15,9,13],
+  dd : [14,9,9,13,10,11],
+  dl : [15,10,11,14,8,12],
+  lsX : [0,0,0,0,0,0],
+  lsY : [1,1,1,1,1,1],
+  csX : [5,3,3,2,2,3],
+  csY : [2,4,4,3,3,4],
+  lA : [3,2,5,6,5,5],
+  rA : [4,5,6,7,4,2]
 }
 
 
@@ -375,9 +375,14 @@ function findPlayers(){
       }
       // raphnet is :
       //GC/N64 to USB, v2.9 (Vendor: 289b Product: 000c)
-      else if ((gamepad.id[0] == "G" && gamepad.id[1] == "C") || gamepad.id[0] == "2"){
+      else if (gamepad.id == "GC/N64 to USB, v2.9 (Vendor: 289b Product: 000c)" || gamepad.id.substr(0,9) == "289b-000c"){
         gType = 2;
         console.log("You are using raphnet");
+      }
+      // GC/N64 to USB v3.2 (Vendor: 289b Product: 001d)
+      else if (gamepad.id == "GC/N64 to USB v3.2 (Vendor: 289b Product: 001d)" || gamepad.id.substr(0,9) == "289b-001d"){
+        gType = 5;
+        console.log("You are using raphnet 3.2+");
       }
       // Xbox 360 Controller (XInput STANDARD GAMEPAD)
       else if (gamepad.id[0] == "X" || gamepad.id[0] == "x" || gamepad.id[0] == "W"){
