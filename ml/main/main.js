@@ -375,14 +375,15 @@ function findPlayers(){
       }
       // raphnet is :
       //GC/N64 to USB, v2.9 (Vendor: 289b Product: 000c)
-      else if (gamepad.id == "GC/N64 to USB, v2.9 (Vendor: 289b Product: 000c)" || gamepad.id.substr(0,9) == "289b-000c"){
+      else if (gamepad.id.substr(0,17) == "GC/N64 to USB, v2." || gamepad.id.substr(0,9) == "289b-000c"){
         gType = 2;
         console.log("You are using raphnet");
       }
       // GC/N64 to USB v3.2 (Vendor: 289b Product: 001d)
-      else if (gamepad.id == "GC/N64 to USB v3.2 (Vendor: 289b Product: 001d)" || gamepad.id.substr(0,9) == "289b-001d"){
+      // GC/N64 to USB v3.3 (Vendor: 289b Product: 001d)
+      else if (gamepad.id.substr(0,17) == "GC/N64 to USB v3." || gamepad.id.substr(0,9) == "289b-001d"){
         gType = 5;
-        console.log("You are using raphnet 3.2+");
+        console.log("You are using Raphnet V3.2+");
       }
       // Xbox 360 Controller (XInput STANDARD GAMEPAD)
       else if (gamepad.id[0] == "X" || gamepad.id[0] == "x" || gamepad.id[0] == "W"){
