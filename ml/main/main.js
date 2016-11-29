@@ -375,7 +375,7 @@ function findPlayers(){
       }
       // raphnet is :
       //GC/N64 to USB, v2.9 (Vendor: 289b Product: 000c)
-      else if (gamepad.id.substr(0,17) == "GC/N64 to USB, v2." || gamepad.id.substr(0,9) == "289b-000c"){
+      else if (gamepad.id.substr(0,18) == "GC/N64 to USB, v2." || gamepad.id.substr(0,9) == "289b-000c"){
         gType = 2;
         console.log("You are using raphnet");
       }
