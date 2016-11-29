@@ -614,7 +614,20 @@ function interpretInputs(i,active){
   }
   else {
     var gamepad = navigator.getGamepads()[currentPlayers[i]];
-    //console.log(gamepad.axes);
+    // checking if all buttons/axes exist, if not set dummy value
+    var keys = Object.keys(map);
+    for (var j=0;j<12;j++){
+      if (gamepad.buttons[map[keys[j]][mType[i]]] === undefined || gamepad.buttons[map[keys[j]][mType[i]]] === null){
+        console.log("test");
+        gamepad.buttons[map[keys[j]][mType[i]]] = false;
+      }
+    }
+    for (var j=12;j<18;j++){
+      if (gamepad.axes[map[keys[j]][mType[i]]] === undefined || gamepad.axes[map[keys[j]][mType[i]]] === null){
+        console.log("test2");
+        gamepad.axes[map[keys[j]][mType[i]]] = 0;
+      }
+    }
 
     var lstickX = gamepad.axes[map.lsX[mType[i]]] - cd[i].ls.x;
     var lstickY = gamepad.axes[map.lsY[mType[i]]] * -1 - cd[i].ls.y;
