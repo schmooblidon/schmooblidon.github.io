@@ -174,7 +174,7 @@ function generalAI(i) {
 		if (["UPSPECIAL","UPSPECIALCHARGE","UPSPECIALLAUNCH","JUMPAERIAL","CLIFFWAIT","FALL","JUMPAERIAL1","FALLAERIAL","JUMPAERIALF","JUMPAERIALB","JUMPF"].indexOf(player[i].currentAction) == -1) {
 		  player[i].currentAction = "NONE";
 		  player[i].currentSubaction = "NONE";
-	    }  
+	    }
 	  }
   }
   if (["TOURNAMENTWINNER","LEDGEGETUP","LEDGEATTACK","LEDGEROLL"].indexOf(player[i].currentAction) != -1) {
@@ -411,7 +411,7 @@ function marthAI(i) {
 	      player[i].inputs.lStickAxis[0].x = 0.0;
 		  if (player[i].actionState.substr(0,4) == "CLIFF" && player[i].actionState == "CLIFFCATCH") { //end of action
               player[i].currentAction = "NONE";
-              player[i].currentSubaction = "NONE";			  
+              player[i].currentSubaction = "NONE";
 		  }
 		  return;
 	  }
@@ -477,7 +477,7 @@ function jiggsAI(i) {
 	  if (player[i].currentAction == "NONE") {
 	  var distx = player[i].phys.pos.x - player[NearestEnemy(player[i],i)].phys.pos.x;
 	  var disty = player[i].phys.pos.y - player[NearestEnemy(player[i],i)].phys.pos.y;
-   
+
   if (player[i].currentAction == "NONE" && (player[i].difficulty > 1 && (player[i].phys.grounded && ((player[i].actionState == "WAIT" || (player[i].phys.grounded && gameSettings.turbo && player[i].hasHit && (Math.floor((Math.random() * 10) + 1) >= 8 - (2 * player[i].difficulty)))) && Math.abs(distx) > 15) || ((player[i].difficulty > 0 && player[i].hasHit && gameSettings.turbo && player[i].phys.grounded) || player[i].actionState == "WAIT")  || (player[i].actionState == "LANDING" && player[i].timer > 3)))) {//smash turn to face enemy
 	  if (!(player[i].phys.face == -1.0 * (Math.sign(distx)))) {
 		  player[i].currentAction = "SMASHTURN";
@@ -534,7 +534,7 @@ function jiggsAI(i) {
 	  }
     }
   }
-	
+
 }
 
 function foxAI(i) {
@@ -554,7 +554,7 @@ function foxAI(i) {
 	      player[i].inputs.lStickAxis[0].x = 0.0;
 		  if (player[i].actionState.substr(0,4) == "CLIFF") { //end of action
               player[i].currentAction = "NONE";
-              player[i].currentSubaction = "NONE";			  
+              player[i].currentSubaction = "NONE";
 		  }
 		  return;
 	  }
@@ -575,7 +575,7 @@ function foxAI(i) {
 	if (isDead) {
 	  if (player[i].currentSubaction == "NONE" && player[i].currentAction == "NONE" && player[i].phys.grounded && player[i].difficulty >= 3) { //can do it
 	    player[i].currentAction = "RESPAWNMULTISHINE";
-		player[i].currentSubaction = "SHINE";  
+		player[i].currentSubaction = "SHINE";
 		return;
 	  }
     }
@@ -620,7 +620,7 @@ function foxAI(i) {
     if (player[i].currentAction == "NONE") {
 	  var distx = player[i].phys.pos.x - player[NearestEnemy(player[i],i)].phys.pos.x;
 	  var disty = player[i].phys.pos.y - player[NearestEnemy(player[i],i)].phys.pos.y;
-   
+
     if (player[i].currentAction == "NONE" && (player[i].difficulty > 1 && (player[i].phys.grounded && ((player[i].actionState == "WAIT" || (player[i].phys.grounded && gameSettings.turbo && player[i].hasHit && (Math.floor((Math.random() * 10) + 1) >= 8 - (2 * player[i].difficulty)))) && Math.abs(distx) > 15) || ((player[i].difficulty > 0 && player[i].hasHit && gameSettings.turbo && player[i].phys.grounded) || player[i].actionState == "WAIT")  || (player[i].actionState == "LANDING" && player[i].timer > 3)))) {//smash turn to face enemy
 	  if (!(player[i].phys.face == -1.0 * (Math.sign(distx)))) {
 		  player[i].currentAction = "SMASHTURN";
@@ -960,6 +960,7 @@ function CPUSDItoStage(cpu,p) {
 		lStickY: 0.0
 	}
 	if (cpu.timer % 2 == 0) {
+    var imperfection = 0;
 		var theta = Math.atan(((closest.y - 3.5) - cpu.phys.pos.y) / (closest.x - cpu.phys.pos.x)) + imperfection; //some trig to get angles //(cpu.phys.ledgeSnapBoxF.max.y-cpu.phys.ledgeSnapBoxF.min.y)/2
         var newX = Math.cos(theta);//* Math.sqrt(2);
         var newY = Math.sin(theta); //* Math.sqrt(2);
@@ -976,7 +977,8 @@ function CPUSDItoStage(cpu,p) {
 	} else {
 		var imperfection = 0;
 		var theta = Math.atan(((closest.y - 3.5) - cpu.phys.pos.y) / (closest.x - cpu.phys.pos.x)) + imperfection; //some trig to get angles //(cpu.phys.ledgeSnapBoxF.max.y-cpu.phys.ledgeSnapBoxF.min.y)/2
-        theta = theta + 0.25 * ((Math.floor((Math.random() * 2) + 1) - 1) * -1.0) * 3.14159265358979323846264338327950288419716939937510582097494459230781;	
+        theta = theta + 0.25 * ((Math.floor((Math.random() * 2) + 1) - 1) * -1.0) * Math.PI;
+
 		var newX = Math.cos(theta);//* Math.sqrt(2);
         var newY = Math.sin(theta); //* Math.sqrt(2);
         if (closest.x < cpu.phys.pos.x){
@@ -1028,7 +1030,7 @@ function CPUShield(cpu,p) {
 			}
 		}
 	}
-	
+
 	return returnInput;
 }
 function CPULedge(cpu,p) {
@@ -1102,9 +1104,9 @@ function CPULedge(cpu,p) {
 			//	console.log(1.0 * Math.sign(cpu.phys.face));
 			    //returnInput.lstickX = cpu.phys.face;
 				//returnInput.lstickY = -1.0;
-				//returnInput.l = true;	
+				//returnInput.l = true;
 			//}
-			
+
 			/*if (cpu.timer == 18) {//ledgedash?
 				returnInput.lstickX = cpu.phys.face;
 				returnInput.lstickY = -1.0;
@@ -1299,7 +1301,7 @@ function CPUrecover(cpu,p) {
       returnInput.lstickX = -1.0;
     }
     if (cS[p] == 0 && ((Math.abs(closest.x - cpu.phys.pos.x) > 25) && (!cpu.phys.doubleJumped || (cpu.phys.jumpsUsed < 5 && cpu.charAttributes.multiJump)) && ((closest.y - cpu.phys.pos.y < 5) || ((closest.y - cpu.phys.pos.y < 30 && Math.abs(closest.x - cpu.phys.pos.x) > 40))))) {
-		//side-b  
+		//side-b
 		  //console.log("HI");
 		  if (Math.abs(cpu.phys.cVel.x) > 0.8) {
 			  if (cpu.phys.pos.x < closest.x) {
