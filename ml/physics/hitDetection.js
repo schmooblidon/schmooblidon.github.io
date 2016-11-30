@@ -592,6 +592,12 @@ function getKnockback(hb,damagestaled,damageunstaled,percent,weight,crouching,vC
     kb *= 0.95;
   }
 
+  if (kb == "NaN"){
+    console.log("CRASH ON KNOCKBACK");
+    console.log(hb);
+    console.log(damagestaled+" "+damageunstaled+" "+percent+" "+weight+" "+crouching+" "+vCancel);
+  }
+
   return kb;
 }
 
@@ -699,6 +705,14 @@ function getHorizontalVelocity(knockback, angle) {
     var horizontalAngle = Math.cos(angle * angleConversion);
     var horizontalVelocity = initialVelocity * horizontalAngle;
     horizontalVelocity = Math.round(horizontalVelocity * 100000) / 100000;
+    if (horizontalVelocity == "NaN"){
+      console.log("CRASH ON getHorizontalVelocity");
+      console.log("kb: "+knockback);
+      console.log("angle: "+angle);
+      console.log("initV: "+initialVelocity);
+      console.log("horAngle: "+horizontalAngle);
+      console.log("horVel: "+horizontalVelocity);
+    }
     return horizontalVelocity;
 }
 
@@ -709,6 +723,16 @@ function getVerticalVelocity(knockback, angle,grounded,trajectory) {
     verticalVelocity = Math.round(verticalVelocity * 100000) / 100000;
     if (knockback < 80 && grounded && (trajectory == 0 || trajectory == 180)){
       verticalVelocity = 0;
+    }
+    if (verticalVelocity == "NaN"){
+      console.log("CRASH ON getVerticalVelocity");
+      console.log("kb: "+knockback);
+      console.log("angle: "+angle);
+      console.log("grounded: "+grounded);
+      console.log("trajectory: "+trajectory);
+      console.log("initV: "+initialVelocity);
+      console.log("verAngle: "+verticalAngle);
+      console.log("verVel: "+verticalVelocity);
     }
     return verticalVelocity;
 }
