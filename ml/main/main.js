@@ -35,6 +35,7 @@ console.log("biogenik adapter support");
 console.log("mac x360 support");
 console.log("TigerGame 3 in 1 adapter support");
 console.log("Kootek 4 Port");
+console.log("Rock Candy support");
 // biogenik - index 4
 /*
 y : 3
@@ -51,24 +52,24 @@ r : 5
 z : 7
 */
 map = {
-  a : [1,0,4,0,0,0],
-  b : [2,1,3,2,1,1],
-  x : [0,2,2,1,2,7],
-  y : [3,3,1,3,3,8],
-  z : [7,4,7,5,6,2],
-  r : [5,5,6,7,5,5],
-  l : [4,6,5,6,4,4],
-  s : [9,7,0,9,7,3],
-  du : [12,8,8,12,11,10],
-  dr : [13,11,10,15,9,13],
-  dd : [14,9,9,13,10,11],
-  dl : [15,10,11,14,8,12],
-  lsX : [0,0,0,0,0,0],
-  lsY : [1,1,1,1,1,1],
-  csX : [5,3,3,2,2,3],
-  csY : [2,4,4,3,3,4],
-  lA : [3,2,5,6,5,5],
-  rA : [4,5,6,7,4,2]
+  a : [1,0,4,0,0,0,0],
+  b : [2,1,3,2,1,1,2],
+  x : [0,2,2,1,2,7,1],
+  y : [3,3,1,3,3,8,3],
+  z : [7,4,7,5,6,2,5],
+  r : [5,5,6,7,5,5,10],
+  l : [4,6,5,6,4,4,9],
+  s : [9,7,0,9,7,3,7],
+  du : [12,8,8,12,11,10,4],
+  dr : [13,11,10,15,9,13,8],
+  dd : [14,9,9,13,10,11,8],
+  dl : [15,10,11,14,8,12,8],
+  lsX : [0,0,0,0,0,0,0],
+  lsY : [1,1,1,1,1,1,1],
+  csX : [5,3,3,2,2,3,3],
+  csY : [2,4,4,3,3,4,5],
+  lA : [3,2,5,6,5,5,2],
+  rA : [4,5,6,7,4,2,4]
 }
 
 
@@ -390,6 +391,10 @@ function findPlayers(){
       else if (gamepad.id[0] == "X" || gamepad.id[0] == "x" || gamepad.id[0] == "W"){
         gType = 3;
         console.log("You are using xbox 360");
+      }
+      else if (gamepad.id.substr(0,11) == "Performance" || gamepad.id.substr(0,9) == "0e6f-011f"){
+        gType = 6;
+        console.log("You are using Rock Candy Xbox 360");
       }
       if (gameMode < 2 || gameMode == 20){
         if (gamepad.buttons[map.s[gType]].pressed){
