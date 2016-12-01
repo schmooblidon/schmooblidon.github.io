@@ -189,10 +189,10 @@ function interpolatedHitHurtCollision(i,p,j,phantom){
   phantom = phantom || false;
   var hurt = player[i].phys.hurtbox;
   if (phantom){
-    var hb = player[p].phys.interPolatedHitbox[j];
+    var hb = player[p].phys.interPolatedHitboxPhantom[j];
   }
   else {
-    var hb = player[p].phys.interPolatedHitboxPhantom[j];
+    var hb = player[p].phys.interPolatedHitbox[j];
   }
 
   if (segmentSegmentCollision(new Vec2D(hurt.min.x,hurt.min.y),new Vec2D(hurt.max.x,hurt.min.y),hb[0],hb[1]) || segmentSegmentCollision(new Vec2D(hurt.min.x,hurt.min.y),new Vec2D(hurt.max.x,hurt.min.y),hb[2],hb[3])){
@@ -242,10 +242,10 @@ function hitHurtCollision(i,p,j,previous,phantom){
 
   var cornerDistance_sq = Math.pow(distance.x - hurtWidth/2,2) +
                        Math.pow(distance.y - hurtHeight/2,2);
-  if (phantom && !(cornerDistance_sq <= (Math.pow(player[p].hitboxes.id[j].size-(phantom?0.5:0),2)))){
+  if (phantom && !(cornerDistance_sq <= (Math.pow(player[p].hitboxes.id[j].size-(phantom?gameSettings.phantomThreshold:0),2)))){
     console.log("test-norm3");
   }
-  return (cornerDistance_sq <= (Math.pow(player[p].hitboxes.id[j].size-(phantom?0.5:0),2)));
+  return (cornerDistance_sq <= (Math.pow(player[p].hitboxes.id[j].size-(phantom?gameSettings.phantomThreshold:0),2)));
 }
 
 function executeHits(){
