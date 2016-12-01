@@ -34,6 +34,7 @@ Start : 9*/
 console.log("biogenik adapter support");
 console.log("mac x360 support");
 console.log("TigerGame 3 in 1 adapter support");
+console.log("Kootek 4 Port");
 // biogenik - index 4
 /*
 y : 3
@@ -370,7 +371,7 @@ function findPlayers(){
         gType = 4;
         console.log("You are using TigerGame 3 in 1");
       }
-      else if (gamepad.id[0] == "M" || gamepad.id.substr(0,3) == "USB" || gamepad.id.substr(0,9) == "1a34-f705"){
+      else if (gamepad.id[0] == "M" || gamepad.id.substr(0,3) == "USB" || gamepad.id.substr(0,9) == "1a34-f705" || gamepad.id.substr(0,8) == "GameCube" || gamepad.id.substr(0,9) == "0079-1846"){
         console.log("You are using Mayflash");
       }
       // raphnet is :
