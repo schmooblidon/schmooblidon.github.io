@@ -92,6 +92,12 @@ function hitDetection(p){
                     if ((player[p].hitboxes.id[j].hitGrounded && player[i].phys.grounded) || (player[p].hitboxes.id[j].hitAirborne && !player[i].phys.grounded))
                     if (hitHurtCollision(i,p,j,false) || (interpolate && (interpolatedHitHurtCollision(i,p,j) || hitHurtCollision(i,p,j,true)))){
                       var phantom = !hitHurtCollision(i,p,j,false,true) && (interpolate ? !interpolatedHitHurtCollision(i,p,j,true) : true);
+                      if (phantom){
+                        console.log("phantom");
+                        if (interpolate){
+                          console.log("with interpolation");
+                        }
+                      }
                       hitQueue.push([i,p,j,false,false,false,phantom]);
                       player[p].hitboxes.hitList.push(i);
                       setHasHit(p,j);
