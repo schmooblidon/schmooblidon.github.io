@@ -202,6 +202,9 @@ function interpolatedHitHurtCollision(i,p,j,phantom){
     return true;
   }
   else {
+    if (phantom){
+      console.log("test-inter");
+    }
     return false;
   }
 }
@@ -225,15 +228,17 @@ function hitHurtCollision(i,p,j,previous,phantom){
   var hurtWidth = 8;
   var hurtHeight = 18;
 
-  if (distance.x > (hurtWidth/2 + player[p].hitboxes.id[j].size-(phantom?gameSettings.phantomThreshold:0))) { return false; }
-  if (distance.y > (hurtHeight/2 + player[p].hitboxes.id[j].size-(phantom?gameSettings.phantomThreshold:0))) { return false; }
+  if (distance.x > (hurtWidth/2 + player[p].hitboxes.id[j].size-(phantom?gameSettings.phantomThreshold:0))) { if (phantom){console.log("test-norm1");} return false; }
+  if (distance.y > (hurtHeight/2 + player[p].hitboxes.id[j].size-(phantom?gameSettings.phantomThreshold:0))) { if (phantom){console.log("test-norm2");} return false; }
 
   if (distance.x <= (hurtWidth/2)) { return true; }
   if (distance.y <= (hurtHeight/2)) { return true; }
 
   var cornerDistance_sq = Math.pow(distance.x - hurtWidth/2,2) +
                        Math.pow(distance.y - hurtHeight/2,2);
-
+  if (phantom && !(cornerDistance_sq <= (Math.pow(player[p].hitboxes.id[j].size-(phantom?0.5:0),2)))){
+    console.log("test-norm3");
+  }
   return (cornerDistance_sq <= (Math.pow(player[p].hitboxes.id[j].size-(phantom?0.5:0),2)));
 }
 
