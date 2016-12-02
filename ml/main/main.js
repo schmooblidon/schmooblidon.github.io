@@ -34,8 +34,8 @@ Start : 9*/
 console.log("biogenik adapter support");
 console.log("mac x360 support");
 console.log("TigerGame 3 in 1 adapter support");
-console.log("Kootek 4 Port");
 console.log("Rock Candy support");
+console.log("More mayflash 2 port");
 // biogenik - index 4
 /*
 y : 3
@@ -364,6 +364,8 @@ function findPlayers(){
     var gamepad = navigator.getGamepads()[i];
     if (typeof gamepad != "undefined" &&  gamepad != null){
       var gType = 0;
+
+
       if (gamepad.id[0] == "v" || gamepad.id.substr(0,4) == "1234"){
         gType = 1;
         console.log("You are using vJoy");
@@ -372,9 +374,11 @@ function findPlayers(){
         gType = 4;
         console.log("You are using TigerGame 3 in 1");
       }
-      else if (gamepad.id[0] == "M" || gamepad.id.substr(0,3) == "USB" || gamepad.id.substr(0,9) == "1a34-f705" || gamepad.id.substr(0,8) == "GameCube" || gamepad.id.substr(0,9) == "0079-1846"){
+      else if (gamepad.id[0] == "M" || gamepad.id.substr(0,3) == "USB" || gamepad.id.substr(0,9) == "1a34-f705" || gamepad.id.substr(0,7) == "gamepad" || gamepad.id.substr(0,8) == "GameCube" || gamepad.id.substr(0,9) == "0079-1846"){
         console.log("You are using Mayflash");
       }
+      // mayflash 2 port: gamepad (Vendor:1a34 Product:f705)
+      //kootek: GameCube Controller Adapter (Vendor: 0079 Product: 1846)
       // raphnet is :
       //GC/N64 to USB, v2.9 (Vendor: 289b Product: 000c)
       else if (gamepad.id.substr(0,18) == "GC/N64 to USB, v2." || gamepad.id.substr(0,9) == "289b-000c"){
@@ -396,6 +400,7 @@ function findPlayers(){
         gType = 6;
         console.log("You are using Rock Candy Xbox 360");
       }
+      //Performance Designed Products Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)
       if (gameMode < 2 || gameMode == 20){
         if (gamepad.buttons[map.s[gType]].pressed){
           var alreadyIn = false;
