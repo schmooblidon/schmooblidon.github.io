@@ -363,8 +363,7 @@ function findPlayers(){
   for (var i=0;i<gps.length;i++){
     var gamepad = navigator.getGamepads()[i];
     if (typeof gamepad != "undefined" &&  gamepad != null){
-      var gType = 0;
-
+      var gType = -1;
 
       if (gamepad.id[0] == "v" || gamepad.id.substr(0,4) == "1234"){
         gType = 1;
@@ -375,6 +374,7 @@ function findPlayers(){
         console.log("You are using TigerGame 3 in 1");
       }
       else if (gamepad.id[0] == "M" || gamepad.id.substr(0,3) == "USB" || gamepad.id.substr(0,9) == "1a34-f705" || gamepad.id.substr(0,7) == "gamepad" || gamepad.id.substr(0,8) == "GameCube" || gamepad.id.substr(0,9) == "0079-1846"){
+        gType = 0;
         console.log("You are using Mayflash");
       }
       // mayflash 2 port: gamepad (Vendor:1a34 Product:f705)
@@ -400,38 +400,43 @@ function findPlayers(){
         gType = 6;
         console.log("You are using Rock Candy Xbox 360");
       }
+      else {
+        console.log("Your controller is not currently supported");
+      }
       //Performance Designed Products Rock Candy Gamepad for Xbox 360 (Vendor: 0e6f Product: 011f)
-      if (gameMode < 2 || gameMode == 20){
-        if (gamepad.buttons[map.s[gType]].pressed){
-          var alreadyIn = false;
-          for (var k=0;k<ports;k++){
-            if (currentPlayers[k] == i){
-              alreadyIn = true;
-            }
-          }
-          if (!alreadyIn){
-            if (ports < 4){
-              changeGamemode(1);
-              sounds.menuForward.play();
-              if (ports == 0){
-                music.menu.play("menuStart");
+      if (gType != -1){
+        if (gameMode < 2 || gameMode == 20){
+          if (gamepad.buttons[map.s[gType]].pressed){
+            var alreadyIn = false;
+            for (var k=0;k<ports;k++){
+              if (currentPlayers[k] == i){
+                alreadyIn = true;
               }
-              addPlayer(i,gType);
+            }
+            if (!alreadyIn){
+              if (ports < 4){
+                changeGamemode(1);
+                sounds.menuForward.play();
+                if (ports == 0){
+                  music.menu.play("menuStart");
+                }
+                addPlayer(i,gType);
+              }
             }
           }
         }
-      }
-      else {
-        if (gamepad.buttons[map.a[gType]].pressed){
-          var alreadyIn = false;
-          for (var k=0;k<ports;k++){
-            if (currentPlayers[k] == i){
-              alreadyIn = true;
+        else {
+          if (gamepad.buttons[map.a[gType]].pressed){
+            var alreadyIn = false;
+            for (var k=0;k<ports;k++){
+              if (currentPlayers[k] == i){
+                alreadyIn = true;
+              }
             }
-          }
-          if (!alreadyIn){
-            if (ports < 4){
-              addPlayer(i,gType);
+            if (!alreadyIn){
+              if (ports < 4){
+                addPlayer(i,gType);
+              }
             }
           }
         }
