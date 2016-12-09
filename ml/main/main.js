@@ -36,6 +36,7 @@ console.log("mac x360 support");
 console.log("TigerGame 3 in 1 adapter support");
 console.log("Rock Candy support");
 console.log("More mayflash 2 port");
+console.log("Mac mayflash 4 support");
 // biogenik - index 4
 /*
 y : 3
@@ -1540,6 +1541,8 @@ function finishGame(){
   var textGrad =fg2.createLinearGradient(0,200,0,520);
   if (gameMode == 5 || gameMode == 8){
     if (stage.target.length == targetsDestroyed){
+      drawTimer();
+      console.log("redraw timer");
       if (!targetTesting){
         if (targetStagePlaying < 10){
           for (var i=0;i<3;i++){

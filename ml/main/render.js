@@ -379,22 +379,27 @@ function renderPlayer(i){
   }
 }
 lostStockQueue = [];
+
+function drawTimer(){
+  ui.fillStyle = "white";
+  ui.lineWidth = 2;
+  ui.font = "900 40px Arial";
+  ui.textAlign = "center";
+  var min = (Math.floor(matchTimer/60)).toString();
+  var sec = (matchTimer % 60).toFixed(2);
+  ui.fillText(((min.length<2)?"0"+min:min)+":"+((sec.length<5)?"0"+sec[0]:sec[0]+sec[1]),590,70);
+  ui.strokeText(((min.length<2)?"0"+min:min)+":"+((sec.length<5)?"0"+sec[0]:sec[0]+sec[1]),590,70);
+  ui.font = "900 25px Arial";
+  ui.fillText(((sec.length<5)?sec[2]+sec[3]:sec[3]+sec[4]),670,70);
+  ui.strokeText(((sec.length<5)?sec[2]+sec[3]:sec[3]+sec[4]),670,70);
+}
+
 function renderOverlay(showStock){
 
   // stocks, percent, timer
   ui.strokeStyle = "black";
   if (!versusMode || gameMode == 5){
-    ui.fillStyle = "white";
-    ui.lineWidth = 2;
-    ui.font = "900 40px Arial";
-    ui.textAlign = "center";
-    var min = (Math.floor(matchTimer/60)).toString();
-    var sec = (matchTimer % 60).toFixed(2);
-    ui.fillText(((min.length<2)?"0"+min:min)+":"+((sec.length<5)?"0"+sec[0]:sec[0]+sec[1]),590,70);
-    ui.strokeText(((min.length<2)?"0"+min:min)+":"+((sec.length<5)?"0"+sec[0]:sec[0]+sec[1]),590,70);
-    ui.font = "900 25px Arial";
-    ui.fillText(((sec.length<5)?sec[2]+sec[3]:sec[3]+sec[4]),670,70);
-    ui.strokeText(((sec.length<5)?sec[2]+sec[3]:sec[3]+sec[4]),670,70);
+    drawTimer();
   }
   if (showStock){
     ui.font = "900 53px Arial";
