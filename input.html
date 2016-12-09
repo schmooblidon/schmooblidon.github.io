@@ -1,0 +1,45 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+<base href="">
+<script src="jquery-1.11.3.min.js" type="text/javascript"></script>
+<script src="input.js" type="text/javascript"></script>
+<link href="input.css" rel="stylesheet" type="text/css"></head>
+<body style="background-color:#1d4054">
+<div id="promptContainer">
+  <div id="promptText"><p id="promptTextEdit">Push Right Button</p></div>
+</div>
+<div id="bigMain">
+  <div id="setTypeContainer">
+    <div id="setButton" class="setType"><p>Set Buttons</p></div>
+    <div id="setAnalog" class="setType"><p>Set Analog</p></div>
+  </div>
+  <div id="main">
+    <div id="buttonContainer">
+      <div id="buttonup" class="button"></div>
+      <div id="buttonleft" class="button"></div>
+      <div id="buttondown" class="button"></div>
+      <div id="buttonright" class="button"></div>
+    </div>
+    <div id="analogContainer">
+      <div id="analog">
+        <div id="analogCircle"></div>
+        <div id="analogPointer"></div>
+      </div>
+      <div id="analogValues">
+        <div id="analogX" class="analogVal"><p>X: <span id="analogXEdit">0</span></p></div>
+        <div id="analogY" class="analogVal"><p>Y: <span id="analogYEdit">0</span></p></div>
+      </div>
+    </div>
+  </div>
+  <div id="resultsContainer">
+    <div id="buttonResults" class="results"></div>
+    <div id="resultButtons">
+      <div id="pauseButton" class="resultButton"><p>Play</p></div>
+      <div id="clearButton" class="resultButton"><p>Clear</p></div>
+    </div>
+    <div id="analogResults" class="results"></div>
+  </div>
+</div>
+</body>
+</html>
