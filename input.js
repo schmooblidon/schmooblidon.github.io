@@ -228,7 +228,6 @@ function displayInputs(){
         inputs[aKeys[i]] = 1*Math.sign(inputs[aKeys[i]]);
       }
     }
-    else {
       if (aKeys[i] == "x"){
         if (inputs.left){
           inputs.x += -1;
@@ -245,7 +244,7 @@ function displayInputs(){
           inputs.y += 1;
         }
       }
-    }
+    
     inputs[aKeys[i]] = (Math.round(80*inputs[aKeys[i]])/80).toFixed(5);
   }
 
@@ -298,10 +297,6 @@ $(document).ready(function(){
       "right" : false,
       "down" : false
     }
-    axes = {
-      "x" : false,
-      "y" : false
-    }
     $("#promptContainer").show();
     $("#promptTextEdit").text("Press Left Button");
   });
@@ -310,12 +305,6 @@ $(document).ready(function(){
     mode = 2;
     mapButtonNum = 0;
     mapAxisNum = 0;
-    buttons = {
-      "up" : false,
-      "left" : false,
-      "right" : false,
-      "down" : false
-    }
     axes = {
       "x" : false,
       "y" : false
