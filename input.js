@@ -1,7 +1,7 @@
 document.onkeydown = overrideKeyboardEvent;
 document.onkeyup = overrideKeyboardEvent;
 console.log(navigator.getGamepads());
-console.log("update");
+console.log("update2");
 var keys = {};
 keyBind = 0;
 keyBinding = false;
@@ -188,8 +188,18 @@ var inputs = {
 }
 
 frame = 0;
+sdi = {
+  x : 0,
+  y : 0
+}
+firstInputTimer = 0;
+lastInputTimer = 0;
+properTimer = 0;
 
 function displayInputs(){
+  var lastInput = {};
+  lastInput.x = inputs.x;
+  lastInput.y = inputs.y;
   $(".button").removeClass("pressed");
   var bKeys = Object.keys(buttons);
   var text = frame+"- ";
@@ -257,8 +267,73 @@ function displayInputs(){
       }
     }
 
-    inputs[aKeys[i]] = (Math.round(80*inputs[aKeys[i]])/80).toFixed(5);
   }
+
+  var norm = Math.sqrt(inputs.x*inputs.x + inputs.y*inputs.y);
+  if (norm < 1) {
+  }
+  else {
+    inputs.x = inputs.x/norm;
+    inputs.y = inputs.y/norm;
+  }
+
+  inputs.x = (Math.round(80*inputs.x)/80);
+  if (Math.abs(inputs.x) < 0.28){
+     inputs.x = 0;
+  }
+  inputs.y = (Math.round(80*inputs.y)/80);
+  if (Math.abs(inputs.y) < 0.28){
+     inputs.y = 0;
+  }
+
+
+
+
+  if (playing){
+
+    performDI = false;
+
+    if (Math.sign(lastInput.x) == Math.sign(inputs.x)*-1 && Math.sign(inputs.x) != 0){
+      performDI = true;
+    }
+    else if (Math.sign(lastInput.y) == Math.sign(inputs.y)*-1 && Math.sign(inputs.y) != 0){
+      performDI = true;
+    }
+    else if (Math.abs(inputs.x) > 0 && lastInput.x == 0){
+      performDI = true;
+    }
+    else if (Math.abs(inputs.y) > 0 && lastInput.y == 0){
+      performDI = true;
+    }
+    performedDI = false;
+    if (performDI){
+      if (!((inputs.x * inputs.x) + (inputs.y * inputs.y) < 0.49)){
+          sdi.x += inputs.x;
+          sdi.y += inputs.y;
+          performedDI = true;
+      }
+    }
+
+    if (firstInputTimer == 0){
+      if (inputs.x != 0 || inputs.y != 0){
+        firstInputTimer++;
+        lastInputTimer++;
+        properTimer++;
+      }
+    }
+    else {
+      firstInputTimer++;
+      if (inputs.x != 0 || inputs.y != 0){
+        lastInputTimer = firstInputTimer;
+      }
+      if (performedDI){
+        properTimer = firstInputTimer;
+      }
+    }
+  }
+
+  inputs.x = inputs.x.toFixed(5);
+  inputs.y = inputs.y.toFixed(5);
 
   $("#analogPointer").css({
     "top" : (140+inputs.y*-1*140)+"px",
@@ -266,6 +341,13 @@ function displayInputs(){
   });
   $("#analogXEdit").text(inputs.x);
   $("#analogYEdit").text(inputs.y);
+  $("#sdiXEdit").text(sdi.x.toFixed(3));
+  $("#sdiYEdit").text(sdi.y.toFixed(3));
+  $("#distXEdit").text((sdi.x*6).toFixed(2)+" Mm");
+  $("#distYEdit").text((sdi.y*6).toFixed(2)+" Mm");
+  $("#properTimer").text(properTimer);
+  $("#firstInputTimer").text(lastInputTimer);
+  $("#totalTimer").text(frame);
   text += "X: "+inputs.x+" | Y: "+inputs.y;
   if (playing){
     $("#analogResults").append(text+"<br>");
@@ -352,6 +434,15 @@ $(document).ready(function(){
 
   $("#clearButton").click(function(){
     frame = 0;
+    firstInputTimer = 0;
+    lastInputTimer = 0;
+    properTimer = 0;
+    sdi.x = 0;
+    sdi.y = 0;
+    $("#sdiXEdit").text(0);
+    $("#sdiYEdit").text(0);
+    $("#distXEdit").text(0+" Mm");
+    $("#distYEdit").text(0+" Mm");
     $("#buttonResults").empty();
     $("#analogResults").empty();
   });
