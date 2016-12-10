@@ -1,6 +1,7 @@
 document.onkeydown = overrideKeyboardEvent;
 document.onkeyup = overrideKeyboardEvent;
 console.log(navigator.getGamepads());
+console.log("update");
 var keys = {};
 keyBind = 0;
 keyBinding = false;
@@ -42,16 +43,18 @@ function disabledEventPropagation(e){
 function mapButton(usedButtons){
   var gps = navigator.getGamepads();
   for (var i=0;i<gps.length;i++){
-    for (var j=0;j<gps[i].buttons.length;j++){
-      var used = false;
-      for (var n=0;n<usedButtons.length;n++){
-        if (usedButtons[n][0] == i && usedButtons[n][1] == j){
-          used = true;
+    if (typeof gps[i] !== 'undefined' && gps[i] !== null && gps[i] !== undefined){
+      for (var j=0;j<gps[i].buttons.length;j++){
+        var used = false;
+        for (var n=0;n<usedButtons.length;n++){
+          if (usedButtons[n][0] == i && usedButtons[n][1] == j){
+            used = true;
+          }
         }
-      }
-      if (!used){
-        if (gps[i].buttons[j].pressed){
-          return [i,j];
+        if (!used){
+          if (gps[i].buttons[j].pressed){
+            return [i,j];
+          }
         }
       }
     }
@@ -76,16 +79,18 @@ function mapButton(usedButtons){
 function mapAxis(usedAxes){
   var gps = navigator.getGamepads();
   for (var i=0;i<gps.length;i++){
-    for (var j=0;j<2;j++){
-      var used = false;
-      for (var n=0;n<usedAxes.length;n++){
-        if (usedAxes[n][0] == i && usedAxes[n][1] == j){
-          used = true;
+    if (typeof gps[i] !== 'undefined' && gps[i] !== null && gps[i] !== undefined){
+      for (var j=0;j<2;j++){
+        var used = false;
+        for (var n=0;n<usedAxes.length;n++){
+          if (usedAxes[n][0] == i && usedAxes[n][1] == j){
+            used = true;
+          }
         }
-      }
-      if (!used){
-        if (Math.abs(gps[i].axes[j]) >= 0.7){
-          return [i,j,Math.sign(gps[i].axes[j])];
+        if (!used){
+          if (Math.abs(gps[i].axes[j]) >= 0.7){
+            return [i,j,Math.sign(gps[i].axes[j])];
+          }
         }
       }
     }
@@ -201,10 +206,15 @@ function displayInputs(){
     }
     else if (buttons[bKeys[i]]){
       var gamepad = navigator.getGamepads()[buttons[bKeys[i]][0]];
-      if (gamepad.buttons[buttons[bKeys[i]][1]].pressed){
-        $("#button"+bKeys[i]).addClass("pressed");
-        inputs[bKeys[i]] = true;
-        text += bKeys[i]+" ";
+      if (typeof gamepad !== 'undefined' && gamepad !== null && gamepad !== undefined){
+        if (gamepad.buttons[buttons[bKeys[i]][1]].pressed){
+          $("#button"+bKeys[i]).addClass("pressed");
+          inputs[bKeys[i]] = true;
+          text += bKeys[i]+" ";
+        }
+        else {
+          inputs[bKeys[i]] = false;
+        }
       }
       else {
         inputs[bKeys[i]] = false;
@@ -223,28 +233,30 @@ function displayInputs(){
   for (var i=0;i<aKeys.length;i++){
     if (axes[aKeys[i]]){
       var gamepad = navigator.getGamepads()[axes[aKeys[i]][0]];
-      inputs[aKeys[i]] = gamepad.axes[axes[aKeys[i]][1]] / 0.75 * axes[aKeys[i]][2];
-      if (Math.abs(inputs[aKeys[i]]) > 1){
-        inputs[aKeys[i]] = 1*Math.sign(inputs[aKeys[i]]);
+      if (typeof gamepad !== 'undefined' && gamepad !== null && gamepad !== undefined){
+        inputs[aKeys[i]] = gamepad.axes[axes[aKeys[i]][1]] / 0.75 * axes[aKeys[i]][2];
+        if (Math.abs(inputs[aKeys[i]]) > 1){
+          inputs[aKeys[i]] = 1*Math.sign(inputs[aKeys[i]]);
+        }
       }
     }
-      if (aKeys[i] == "x"){
-        if (inputs.left){
-          inputs.x += -1;
-        }
-        if (inputs.right){
-          inputs.x += 1;
-        }
+    if (aKeys[i] == "x"){
+      if (inputs.left){
+        inputs.x += -1;
       }
-      else {
-        if (inputs.down){
-          inputs.y += -1;
-        }
-        if (inputs.up){
-          inputs.y += 1;
-        }
+      if (inputs.right){
+        inputs.x += 1;
       }
-    
+    }
+    else {
+      if (inputs.down){
+        inputs.y += -1;
+      }
+      if (inputs.up){
+        inputs.y += 1;
+      }
+    }
+
     inputs[aKeys[i]] = (Math.round(80*inputs[aKeys[i]])/80).toFixed(5);
   }
 
@@ -271,11 +283,26 @@ function loop(){
   }
   // map buttons
   else if (mode == 1){
-    mappingButtons();
+    if (keys[27]){
+      mode = 3;
+      $("#promptContainer").hide();
+      mapButtonNum = 0;
+      mode = 3;
+    }
+    else {
+      mappingButtons();
+    }
   }
   // map axes
   else if (mode == 2){
-    mappingAxes();
+    if (keys[27]){
+      $("#promptContainer").hide();
+      mapAxisNum = 0;
+      mode = 3;
+    }
+    else {
+      mappingAxes();
+    }
   }
   // display
   else if (mode == 3){
