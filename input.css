@@ -74,13 +74,13 @@ body {
 
 .resultInfoTitle {
   width:300px;
-  height:50px;
+  height:40px;
 }
 
 .resultInfoTitle p {
   color:white;
   font-family: Consolas;
-  font-size:20px;
+  font-size:24px;
   text-align: center;
   margin:0;
   padding:10px;
@@ -94,18 +94,18 @@ body {
   height : 30px;
 }
 
-#sdiAmount, #distAmount {
+#sdiAmount, #distAmount, #sdiInputAmount {
   width:300px;
-  height:40px;
+  height:25px;
 }
 
-#sdiAmount p, #distAmount p {
+#sdiAmount p, #distAmount p, #sdiInputAmount p {
   color:white;
   font-family: Consolas;
-  font-size:14px;
+  font-size:16px;
   text-align: center;
   margin:0;
-  padding:10px;
+  padding:5px;
 }
 
 #buttonContainer {
@@ -194,6 +194,10 @@ body {
   font-family: Consolas;
   color:white;
   overflow-y:scroll;
+}
+
+.sdi {
+  color:#ff9e9e;
 }
 
 #buttonResults {

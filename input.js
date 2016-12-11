@@ -195,6 +195,7 @@ sdi = {
 firstInputTimer = 0;
 lastInputTimer = 0;
 properTimer = 0;
+sdiCount = 0;
 
 function displayInputs(){
   var lastInput = {};
@@ -202,13 +203,13 @@ function displayInputs(){
   lastInput.y = inputs.y;
   $(".button").removeClass("pressed");
   var bKeys = Object.keys(buttons);
-  var text = frame+"- ";
+  var bText = frame+"- ";
   for (var i=0;i<bKeys.length;i++){
     if (buttons[bKeys[i]][0] == "keyboard"){
       if (keys[buttons[bKeys[i]][1]]){
         $("#button"+bKeys[i]).addClass("pressed");
         inputs[bKeys[i]] = true;
-        text += bKeys[i]+" ";
+        bText += bKeys[i]+" ";
       }
       else {
         inputs[bKeys[i]] = false;
@@ -220,7 +221,7 @@ function displayInputs(){
         if (gamepad.buttons[buttons[bKeys[i]][1]].pressed){
           $("#button"+bKeys[i]).addClass("pressed");
           inputs[bKeys[i]] = true;
-          text += bKeys[i]+" ";
+          bText += bKeys[i]+" ";
         }
         else {
           inputs[bKeys[i]] = false;
@@ -232,12 +233,8 @@ function displayInputs(){
     }
   }
 
-  if (playing){
-    $("#buttonResults").append(text+"<br>");
-  }
-
   var aKeys = Object.keys(axes);
-  var text = frame+"- ";
+  var aText = frame+"- ";
   inputs.x = 0;
   inputs.y = 0;
   for (var i=0;i<aKeys.length;i++){
@@ -286,9 +283,7 @@ function displayInputs(){
      inputs.y = 0;
   }
 
-
-
-
+  performedDI = false;
   if (playing){
 
     performDI = false;
@@ -305,7 +300,7 @@ function displayInputs(){
     else if (Math.abs(inputs.y) > 0 && lastInput.y == 0){
       performDI = true;
     }
-    performedDI = false;
+    
     if (performDI){
       if (!((inputs.x * inputs.x) + (inputs.y * inputs.y) < 0.49)){
           sdi.x += inputs.x;
@@ -330,6 +325,9 @@ function displayInputs(){
         properTimer = firstInputTimer;
       }
     }
+    if (performedDI){
+      sdiCount++;
+    }
   }
 
   inputs.x = inputs.x.toFixed(5);
@@ -341,6 +339,7 @@ function displayInputs(){
   });
   $("#analogXEdit").text(inputs.x);
   $("#analogYEdit").text(inputs.y);
+  $("#sdiInputEdit").text(sdiCount);
   $("#sdiXEdit").text(sdi.x.toFixed(3));
   $("#sdiYEdit").text(sdi.y.toFixed(3));
   $("#distXEdit").text((sdi.x*6).toFixed(2)+" Mm");
@@ -348,9 +347,10 @@ function displayInputs(){
   $("#properTimer").text(properTimer);
   $("#firstInputTimer").text(lastInputTimer);
   $("#totalTimer").text(frame);
-  text += "X: "+inputs.x+" | Y: "+inputs.y;
+  aText += "X: "+inputs.x+" | Y: "+inputs.y;
   if (playing){
-    $("#analogResults").append(text+"<br>");
+    $("#analogResults").append(aText+(performedDI?" <span class='sdi'>SDI</span>":"")+"<br>");
+    $("#buttonResults").append(bText+(performedDI?" <span class='sdi'>SDI</span>":"")+"<br>");
     frame++;
   }
 }
@@ -439,6 +439,7 @@ $(document).ready(function(){
     properTimer = 0;
     sdi.x = 0;
     sdi.y = 0;
+    sdiCount = 0;
     $("#sdiXEdit").text(0);
     $("#sdiYEdit").text(0);
     $("#distXEdit").text(0+" Mm");
