@@ -193,7 +193,7 @@ body {
   padding:10px;
   font-family: Consolas;
   color:white;
-  overflow-y:scroll;
+  overflow:auto;
 }
 
 .sdi {

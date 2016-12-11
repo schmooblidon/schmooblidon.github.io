@@ -348,9 +348,21 @@ function displayInputs(){
   $("#firstInputTimer").text(lastInputTimer);
   $("#totalTimer").text(frame);
   aText += "X: "+inputs.x+" | Y: "+inputs.y;
+  var out = document.getElementById("analogResults");
+  var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
   if (playing){
     $("#analogResults").append(aText+(performedDI?" <span class='sdi'>SDI</span>":"")+"<br>");
     $("#buttonResults").append(bText+(performedDI?" <span class='sdi'>SDI</span>":"")+"<br>");
+    var out = document.getElementById("analogResults");
+    var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+    if(!isScrolledToBottom){
+      out.scrollTop = out.scrollHeight - out.clientHeight;
+    }
+    var out = document.getElementById("buttonResults");
+    var isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+    if(!isScrolledToBottom){
+      out.scrollTop = out.scrollHeight - out.clientHeight;
+    }
     frame++;
   }
 }
@@ -388,6 +400,17 @@ function loop(){
   }
   // display
   else if (mode == 3){
+    if (keys[13]){
+      frame = 0;
+      firstInputTimer = 0;
+      lastInputTimer = 0;
+      properTimer = 0;
+      sdi.x = 0;
+      sdi.y = 0;
+      sdiCount = 0;
+      $("#buttonResults").empty();
+      $("#analogResults").empty();
+    }
     displayInputs();
   }
 
