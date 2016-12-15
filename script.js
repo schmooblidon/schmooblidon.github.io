@@ -38,28 +38,28 @@ var resizing = function() {
 		}
 		if (windwidth < 1200){
 			$(".button").css({"font-size":"12px","width":70}).children("p").css("margin","23px 0px");
-			$(".longbutton").css("width",90);
+			$(".longbutton").css("width",95);
       $(".doublebutton").css("width",80).children("p").css("margin","16px 0px");
       $(".doublelongbutton").css("width",90).children("p").css("margin","16px 0px");
 			$("#titlelogo").css({"width":280,"height":60,"margin-top":0});
 		}
 		else {
 			$(".button").css({"font-size":"16px","width":80}).children("p").css("margin","21px 0px");
-			$(".longbutton").css("width",100);
+			$(".longbutton").css("width",110);
       $(".doublebutton").css("width",85).children("p").css("margin","12px 0px");
       $(".doublelongbutton").css("width",100).children("p").css("margin","12px 0px");
 			$("#titlelogo").css({"width":280,"height":60,"margin-top":0});
 		}
 		if (windwidth < 1050){
 			$(".button").css({"font-size":"12px","width":65}).children("p").css("margin","23px 0px");
-			$(".longbutton").css("width",75);
+			$(".longbutton").css("width",80);
       $(".doublebutton").css("width",70).children("p").css("margin","16px 0px");
       $(".doublelongbutton").css("width",75).children("p").css("margin","16px 0px");
 			$("#titlelogo").css({"width":200,"height":43,"margin-top":10});
 		}
 		if (windwidth < 905){
 			$(".button").css({"font-size":"10px","width":50}).children("p").css("margin","25px 0px");
-			$(".longbutton").css("width",60);
+			$(".longbutton").css("width",65);
       $(".doublebutton").css("width",55).children("p").css("margin","19px 0px");
       $(".doublelongbutton").css("width",60).children("p").css("margin","19px 0px");
 			$("#titlelogo").css({"width":150,"height":32,"margin-top":16});
