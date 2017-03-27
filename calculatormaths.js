@@ -176,10 +176,10 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
         }
 
         if (traj == 361) {
-            if (knockback < 32.1) {
+            if (knockback < 32.1 && grounded) {
               if (reverse){
                 traj = 180;
-                //trajectory = 180;
+                trajectory = 180;
               }
               else {
                 traj = 0;
@@ -187,7 +187,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
               }
               sakurai = 0;
             }
-            else if (knockback >= 32.1) {
+            else if (knockback >= 32.1 || !grounded) {
               if (reverse){
                 traj = 136;
               }
@@ -390,7 +390,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
               else {
                 hPos += sdiVector[0] + zdiVector[0] + asdiVector[0];
                 vPos += sdiVector[1] + zdiVector[1] + asdiVector[1];
-                if (asdiVector[1] < 0 && grounded && (verVelChar + verVelKB + asdiVector[1] + sdiVector[1] + zdiVector[1] < 0) && (trajectory < 180 || trajectory == 361)){
+                if (asdiVector[1] < 0 && grounded && (verVelChar + verVelKB + asdiVector[1] + sdiVector[1] + zdiVector[1] < 0)){
                   stayGrounded = true;
                   yDisplacement = verVelChar + verVelKB + asdiVector[1] + sdiVector[1] + zdiVector[1];
                   break;
@@ -598,15 +598,12 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
         }
 
         if (groundDownHit){
-          if (groundDownHitType == "Stay" && yDistance > 0){
-            yDistance = 0;
-          }
-          if (yDistance < 0){
+          if (groundDownHitType == "Stay"){
             yDistance = 0;
           }
         }
 
-        if (grounded && knockback < 80 && (trajectory == 0 || trajectory == 180)){
+        if (grounded && (knockback < 80 && (trajectory == 0 || trajectory == 180)) || (knockback < 32.1 && trajectory == 361)){
           yDistance = 0;
         }
       }
@@ -754,7 +751,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       trajectory = getAngle(trajectory,knockback,reverse, 0, 0);
       //console.log("trajectory = "+trajectory);
       horizontalVelocity = getHorizontalVelocity(knockback, trajectory, gravity);
-      verticalVelocity = getVerticalVelocity(knockback, trajectory, gravity, grounded);
+      verticalVelocity = getVerticalVelocity(knockback, trajectory, grounded);
       //console.log("horVel = "+horizontalVelocity);
       //console.log("verVel = "+verticalVelocity);
       var newVector = transformComboVelocity(horizontalVelocity,verticalVelocity,combo,comboFrame);
@@ -772,7 +769,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     var angle = getAngle(trajectory, knockback, reverse, tdiX, tdiY);
     //console.log("angle = "+angle);
     horizontalVelocity = getHorizontalVelocity(knockback, angle, gravity);
-    verticalVelocity = getVerticalVelocity(knockback, angle, gravity, grounded);
+    verticalVelocity = getVerticalVelocity(knockback, angle, grounded);
 
     //console.log("horVel = "+horizontalVelocity);
     //console.log("verVel = "+verticalVelocity);
