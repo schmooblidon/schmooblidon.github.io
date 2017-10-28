@@ -52,7 +52,7 @@ body {
 #outputColourBox {
   display:block;
   background-color:#ffffff;
-  width:70px;
+  width:80px;
   height:10px;
   border-radius:15px;
 }
@@ -80,8 +80,8 @@ body {
 
 .pixelInfoBox {
   position:absolute;
-  width:70px;
-  height:70px;
+  width:80px;
+  height:105px;
   background-color:#333333;
   border-radius:5px;
   color:white;
@@ -90,6 +90,10 @@ body {
 
 .pixelInfoBox p {
   margin:3px 4px;
+}
+
+#meleeX, #meleeY {
+  font-size:11px;
 }
 
 textarea:hover,

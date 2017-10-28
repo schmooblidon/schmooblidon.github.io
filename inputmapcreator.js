@@ -135,6 +135,11 @@ function findHueRange(npD){
   }
 }
 
+function rgbToMelee(rgb) {
+  var conversion = 80/255;
+  return [(Math.round(rgb[2]*conversion)/80).toFixed(4), (Math.round(rgb[1]*conversion)/80 - Math.round(rgb[0]*conversion)/80).toFixed(4)];
+}
+
 $(document).ready(function() {
 
   $(document).on('mousemove', function(e){
@@ -148,7 +153,7 @@ $(document).ready(function() {
 
     $("#inputMap2").hover(function(){
       $("#darkenInputMap").show();
-      $("#selectedArea").after('<div class="pixelInfoBox"><div id="outputColourBox"></div><p>R: <span id="outputRed" style="color:rgb(0,0,0)">0</span><br>G: <span id="outputGreen" style="color:rgb(0,0,0)">0</span><br>B: <span id="outputBlue" style="color:rgb(0,0,0)">0</span></div>');
+      $("#selectedArea").after('<div class="pixelInfoBox"><div id="outputColourBox"></div><p>X: <span id="meleeX" style="color:rgb(0,0,0)">0</span><br>Y: <span id="meleeY" style="color:rgb(0,0,0")>0</span><br>R: <span id="outputRed" style="color:rgb(0,0,0)">0</span><br>G: <span id="outputGreen" style="color:rgb(0,0,0)">0</span><br>B: <span id="outputBlue" style="color:rgb(0,0,0)">0</span></div>');
     },function(){
       $("#darkenInputMap").hide();
       $(".pixelInfoBox").remove();
@@ -166,6 +171,9 @@ $(document).ready(function() {
 
         var pixelData = this.canvas.getContext('2d').getImageData(event.offsetX, event.offsetY, 1, 1).data;
         $("#outputColourBox").css("background-color","rgb("+pixelData[0]+","+pixelData[1]+","+pixelData[2]+")");
+        var meleeUnit = rgbToMelee(pixelData);
+        $("#meleeX").text(meleeUnit[0]).css("color","white");
+        $("#meleeY").text(meleeUnit[1]).css("color","white");;
         $("#outputRed").text(pixelData[0]).css("color","rgb("+pixelData[0]+",0,0)");
         $("#outputGreen").text(pixelData[1]).css("color","rgb(0,"+pixelData[1]+",0)");
         $("#outputBlue").text(pixelData[2]).css("color","rgb(0,0,"+pixelData[2]+")");
