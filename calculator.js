@@ -2206,7 +2206,7 @@ function outputPopup(){
         hd = "Left";
       }
       var variables = "";
-      if (t["t"+i].crouching){
+      if (t["t"+i].crouch){
         variables += "Crouching, ";
       }
       if (t["t"+i].chargeInterrupt){
@@ -2237,7 +2237,7 @@ function outputPopup(){
       if (t["t"+i].curHitbox.effect == "Electric"){
         hitlag = Math.floor(hitlag * 1.5);
       }
-      if (t["t"+i].crouching){
+      if (t["t"+i].crouch){
         hitlag = Math.floor(hitlag * (2/3));
       }
       if (t["t"+i].tFrames[0] > 0){
@@ -2977,7 +2977,7 @@ function trajPosInfo(){
     if (t["t"+id].curHitbox.effect == "Electric"){
       hitlag = Math.floor(hitlag * 1.5);
     }
-    if (t["t"+id].crouching){
+    if (t["t"+id].crouch){
       hitlag = Math.floor(hitlag * (2/3));
     }
     $("#start"+id).css("stroke-width",20);
@@ -3007,7 +3007,7 @@ function trajPosInfo(){
     if (t["t"+id].curHitbox.effect == "Electric"){
       hitlag = Math.floor(hitlag * 1.5);
     }
-    if (t["t"+id].crouching){
+    if (t["t"+id].crouch){
       hitlag = Math.floor(hitlag * (2/3));
     }
     $("#comboStartOuter"+id).attr("r",45);
