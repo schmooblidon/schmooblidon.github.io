@@ -129,7 +129,6 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       }
       if ((trajectory > 180 && trajectory != 361) && grounded){
         if (kb >= 80){
-          kb *= 0.8;
           groundDownHitType = "Fly";
         }
         else {
@@ -269,6 +268,9 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
         verticalVelocity = Math.round(verticalVelocity * 100000) / 100000;
         if (knockback < 80 && grounded && (trajectory == 0 || trajectory == 180)){
           verticalVelocity = 0;
+        }
+        if (groundDownHit && groundDownHitType == "Fly") {
+          verticalVelocity *= 0.8;
         }
         return verticalVelocity;
     }
@@ -560,9 +562,6 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
 
     //Frames of hitstun
     function getHitstun(knockback) {
-      if (groundDownHitType == "Fly"){
-        knockback *= 1.25;
-      }
       return Math.floor(knockback * .4);
     }
 
@@ -697,6 +696,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       return [release,totalLag];
     }
 
+
 		/******* Internal functions end *******/
 
 		/******* Constants start *******/
@@ -771,8 +771,8 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     horizontalVelocity = getHorizontalVelocity(knockback, angle, gravity);
     verticalVelocity = getVerticalVelocity(knockback, angle, grounded);
 
-    //console.log("horVel = "+horizontalVelocity);
-    //console.log("verVel = "+verticalVelocity);
+    // angle could change if it is a ground bounce
+    angle = getNewAngle(horizontalVelocity, verticalVelocity);
 
 
     var horizontalDecay = getHorizontalDecay(angle);
@@ -801,9 +801,6 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       this.knockback = oldknockback;
     }
     else {
-      if (groundDownHitType == "Fly"){
-        knockback /= 0.8;
-      }
       this.knockback = knockback;
     }
 
