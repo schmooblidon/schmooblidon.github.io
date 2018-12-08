@@ -151,6 +151,15 @@ centreOffset = [-bzLeft*10+50,bzTop*10+50];
 
 curVolume = 5;
 
+function refreshKnockdownBox(traj) {
+  if (t["t"+traj].knockback >= 80){
+    $("#knockdownBox").show();
+  }
+  else {
+    $("#knockdownBox").hide();
+  }
+}
+
 function changeVolume(plus){
   if (plus){
     curVolume++;
@@ -526,6 +535,7 @@ function trajectoryHover(){
         $("#groundedBox").hide();
         $("#attemptCCDisable").show();
       }
+      refreshKnockdownBox(aT);
       drawTrajectory(aT,true);
     }
   });
@@ -1790,6 +1800,7 @@ function swapOptions(){
       $("#groundedBox").hide();
       $("#attemptCCDisable").show();
     }
+    refreshKnockdownBox(aT);
     $(".verButton").removeClass("verButtonOn");
     if (t["t"+aT].version == "PAL"){
       $("#PALButton").addClass("verButtonOn");
@@ -2227,10 +2238,10 @@ function outputPopup(){
       variables = variables.substr(0,variables.length-2);
 
       if (t["t"+i].knockback >= 80){
-        var kbtext = " (Tumble)";
+        var kbtext = " (Knockdown)";
       }
       else {
-        var kbtext = " (No Tumble)";
+        var kbtext = " (No Knockdown)";
       }
 
       var hitlag = Math.floor(t["t"+i].newDamage * (1/3) + 3);
@@ -2915,6 +2926,8 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
   }
 
   $("#newDamageEdit").empty().append(damagestaled.toPrecision(5));
+
+  refreshKnockdownBox(aT);
 
   // when drawTrajectory didnt take a trajectory number argument and always used aT, I needed this when temporarily changing aT, but I shouldn't need it anymore
   if (waitTillFinish){

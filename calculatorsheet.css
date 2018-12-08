@@ -858,6 +858,26 @@ textarea
   margin:3px 0 0 0;
 }
 
+#knockdownBox {
+  width:98px;
+  height:30px;
+  position:absolute;
+  bottom:35px;
+  left:15px;
+  z-index:1;
+  opacity:0.6;
+  background-color:black;
+  margin:5px;
+  padding:5px;
+  border-radius: 5px;
+}
+
+#knockdownBox p {
+  text-align:center;
+  font-size:20px;
+  margin:3px 0 0 0;
+}
+
 #mousePosition {
   width:175px;
   height:30px;
