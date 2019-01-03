@@ -94,6 +94,9 @@ function trajectoryObject(){
   this.killFrame = 0;
   this.hitlag = 0;
   this.shieldstun = 0;
+
+  this.grabInterrupt = false;
+  this.yoshiDJArmor = false;
 }
 
 t = {};
@@ -1918,6 +1921,21 @@ function swapOptions(){
     else {
       $("#hwcSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
     }
+
+    if (t["t"+aT].grabInterrupt){
+      $("#hwgSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+    }
+    else {
+      $("#hwgSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+    }
+
+    if (t["t"+aT].yoshiDJArmor){
+      $("#ydjaSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+    }
+    else {
+      $("#ydjaSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+    }
+
     if (t["t"+aT].vcancel){
       $("#vcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
     }
@@ -2740,6 +2758,11 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
 
   var damagestaled = damageunstaled * totalstale;
 
+  if (t["t"+n].grabInterrupt) {
+    damagestaled *= 0.5;
+    damageunstaled *= 0.5;
+  }
+
   t["t"+n].newDamage = damagestaled;
   t["t"+n].shieldstun = Math.floor((Math.floor(damagestaled) * 0.45 + 2) * 200/201);
   //old formula : Math.floor((Math.floor(damagestaled) + 4.45) / 2.235);
@@ -2776,7 +2799,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
     var throwType = false;
   }
 
-	var hit = new Hit(t["t"+n].percent,damagestaled,damageunstaled,t["t"+n].curHitbox.kg,t["t"+n].curHitbox.bk,t["t"+n].curHitbox.wbk,t["t"+n].curHitbox.angle,t["t"+n].character,t["t"+n].version,xPos,yPos,t["t"+n].crouch,t["t"+n].reverse,t["t"+n].chargeInterrupt,t["t"+n].tdiMouseXMelee,t["t"+n].tdiMouseYMelee,t["t"+n].fadeIn,t["t"+n].doubleJump,t["t"+n].sdiMouseXMelee,t["t"+n].sdiMouseYMelee,t["t"+n].zdiMouseXMelee,t["t"+n].zdiMouseYMelee,t["t"+n].adiMouseXMelee,t["t"+n].adiMouseYMelee,t["t"+n].meteorCancel,t["t"+n].vcancel,t["t"+n].grounded,t["t"+n].metal,t["t"+n].ice,t["t"+n].icg,isThrow,throwChar,throwType,t["t"+n].comboSnap,t["t"+n].cSnapFrame);
+	var hit = new Hit(t["t"+n].percent,damagestaled,damageunstaled,t["t"+n].curHitbox.kg,t["t"+n].curHitbox.bk,t["t"+n].curHitbox.wbk,t["t"+n].curHitbox.angle,t["t"+n].character,t["t"+n].version,xPos,yPos,t["t"+n].crouch,t["t"+n].reverse,t["t"+n].chargeInterrupt,t["t"+n].tdiMouseXMelee,t["t"+n].tdiMouseYMelee,t["t"+n].fadeIn,t["t"+n].doubleJump,t["t"+n].sdiMouseXMelee,t["t"+n].sdiMouseYMelee,t["t"+n].zdiMouseXMelee,t["t"+n].zdiMouseYMelee,t["t"+n].adiMouseXMelee,t["t"+n].adiMouseYMelee,t["t"+n].meteorCancel,t["t"+n].vcancel,t["t"+n].grounded,t["t"+n].metal,t["t"+n].ice,t["t"+n].icg,isThrow,throwChar,throwType,t["t"+n].comboSnap,t["t"+n].cSnapFrame,t["t"+n].yoshiDJArmor);
 
 	t["t"+n].curPositions = hit.positions;
   t["t"+n].hitstun = hit.hitstun;
@@ -3655,6 +3678,30 @@ $(document).ready(function(){
     else {
       $("#hwcSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
       t["t"+aT].chargeInterrupt = true;
+    }
+    drawTrajectory(aT);
+  });
+
+  $("#hwgRealButton").click(function(){
+    if (t["t"+aT].grabInterrupt){
+      $("#hwgSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      t["t"+aT].grabInterrupt = false;
+    }
+    else {
+      $("#hwgSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      t["t"+aT].grabInterrupt = true;
+    }
+    drawTrajectory(aT);
+  });
+
+  $("#ydjaRealButton").click(function(){
+    if (t["t"+aT].yoshiDJArmor){
+      $("#ydjaSwitch").removeClass("switchOn").addClass("switchOff").children("p").empty().append("False");
+      t["t"+aT].yoshiDJArmor = false;
+    }
+    else {
+      $("#ydjaSwitch").removeClass("switchOff").addClass("switchOn").children("p").empty().append("True");
+      t["t"+aT].yoshiDJArmor = true;
     }
     drawTrajectory(aT);
   });

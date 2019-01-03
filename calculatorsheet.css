@@ -2391,6 +2391,48 @@ textarea
   margin:14px 0px;
 }
 
+#hitWhenGrabbedContainer {
+  width:140px;
+  height:45px;
+  display:inline-block;
+  position:relative;
+  text-align:center;
+  vertical-align:top;
+}
+
+#hwgRealButton {
+  width:140px;
+  height:45px;
+  position:absolute;
+  cursor:pointer;
+}
+
+#hwgVisual {
+  width:140px;
+  height:45px;
+  position:absolute;
+}
+
+#hwgText {
+  width:80px;
+  height:45px;
+  background-color:#444444;
+  display:inline-block;
+  vertical-align:top;
+  font-size:11px;
+}
+
+#hwgSwitch {
+  width:60px;
+  height:45px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#hwgSwitch p {
+  margin:14px 0px;
+}
+
 #icgContainer {
   width:140px;
   height:45px;
@@ -2606,6 +2648,52 @@ textarea
 }
 
 #mcSwitch p {
+  margin:14px 0px;
+}
+
+#yoshiDJArmorContainer {
+  width:140px;
+  height:45px;
+  display:inline-block;
+  position:relative;
+  text-align:center;
+  vertical-align:top;
+}
+
+#ydjaRealButton {
+  width:140px;
+  height:45px;
+  position:absolute;
+  cursor:pointer;
+}
+
+#ydjaVisual {
+  width:140px;
+  height:45px;
+  position:absolute;
+}
+
+#ydjaText {
+  width:80px;
+  height:45px;
+  background-color:#444444;
+  display:inline-block;
+  vertical-align:top;
+  font-size:14px;
+}
+
+#ydjaText p {
+  margin:5px 0px;
+}
+
+#ydjaSwitch {
+  width:60px;
+  height:45px;
+  display:inline-block;
+  vertical-align:top;
+}
+
+#ydjaSwitch p {
   margin:14px 0px;
 }
 

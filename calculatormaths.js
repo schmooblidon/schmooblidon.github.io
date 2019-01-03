@@ -1,4 +1,4 @@
-function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt, tdiX, tdiY, fadeIn, doubleJump, sdix, sdiy, zdix, zdiy, adix, adiy, meteorCancel, vcancel, grounded, metal, ice, icg, isThrow, throwChar, throwType, combo, comboFrame) {
+function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, trajectory, character, version, xPos, yPos, crouch, reverse, chargeInterrupt, tdiX, tdiY, fadeIn, doubleJump, sdix, sdiy, zdix, zdiy, adix, adiy, meteorCancel, vcancel, grounded, metal, ice, icg, isThrow, throwChar, throwType, combo, comboFrame, yoshiDJArmor) {
 
     /******* Internal functions start *******/
     var groundDownHit = false;
@@ -83,7 +83,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       return [(xPos+rpX),(yPos+rpY)];
     }
 
-    function getKnockback(percent, damagestaled, damageunstaled, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel, grounded, trajectory, metal, ice, isThrow, character) {
+    function getKnockback(percent, damagestaled, damageunstaled, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel, grounded, trajectory, metal, ice, isThrow, character, yoshiDJArmor) {
 
       if (isThrow){
         weight = 100;
@@ -112,21 +112,16 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       if (ice){
         kb *= 0.25;
       }
+      if (yoshiDJArmor) {
+        kb = Math.max(0, kb - 120);
+      }
       if (metal){
-        kb -= 30;
-        if (kb < 0){
-          kb = 0;
-        }
+        kb = Math.max(0, kb - 30);
       }
       if (character == "Nana"){
-        kb -= 5;
-        if (kb < 0){
-          kb = 0;
-        }
+        kb = Math.max(0, kb - 5);
       }
-      if (kb > 2500){
-        kb = 2500;
-      }
+      kb = Math.min(2500, kb);
       if ((trajectory > 180 && trajectory != 361) && grounded){
         if (kb >= 80){
           groundDownHitType = "Fly";
@@ -737,7 +732,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       var tFrames = [-1,-1];
     }
 
-    var knockback = getKnockback(percent, damagestaled, damageunstaled, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel, grounded, trajectory, metal, ice, isThrow, character);
+    var knockback = getKnockback(percent, damagestaled, damageunstaled, weight, growth, base, setKnockback, crouch, chargeInterrupt, vcancel, grounded, trajectory, metal, ice, isThrow, character, yoshiDJArmor);
     var oldknockback = knockback;
 
     var hitstun = getHitstun(knockback);
