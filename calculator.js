@@ -84,6 +84,8 @@ function trajectoryObject(){
   this.metal = false;
   this.ice = false;
   this.icg = false;
+  this.stacked = false;
+  this.stackedTrajectory = 0;
   this.comboSnap = 0;
   this.cSnapFrame = 0;
   this.hasCombo = 0;
@@ -806,6 +808,28 @@ function getStickAngle(x,y){
   return diAngle;
 }
 
+function GetAttackAngle() {
+  if (t["t"+aT].stacked) {
+    return t["t"+aT].stackedTrajectory;
+  }
+  else {
+    var attackAngle = 0;
+    if (t["t"+aT].curHitbox.angle == 361){
+      attackAngle = sakurai;
+    }
+    else {
+      attackAngle = t["t"+aT].curHitbox.angle;
+    }
+    if (t["t"+aT].reverse){
+      attackAngle = 180 - attackAngle;
+        if (attackAngle < 0){
+          attackAngle = 360 + attackAngle;
+        }
+    }
+    return attackAngle;
+  }
+}
+
 function changeUserStick(x,y,type,di){
   diAngle = di || getStickAngle(x,y);
 
@@ -816,19 +840,7 @@ function changeUserStick(x,y,type,di){
   else {
     $("#"+type+"diUserCentre").hide();
     if (type == "t"){
-      var attackAngle = 0;
-      if (t["t"+aT].curHitbox.angle == 361){
-        attackAngle = sakurai;
-      }
-      else {
-        attackAngle = t["t"+aT].curHitbox.angle;
-      }
-      if (t["t"+aT].reverse){
-        attackAngle = 180 - attackAngle;
-          if (attackAngle < 0){
-            attackAngle = 360 + attackAngle;
-          }
-      }
+      var attackAngle = GetAttackAngle();
       var rAngle = attackAngle - diAngle;
       if (rAngle > 180){
         rAngle -= 360;
@@ -1419,17 +1431,7 @@ function writeQueryString(){
 }
 
 function drawAngle(){
-  var ang = t["t"+aT].curHitbox.angle;
-  if (ang == 361){
-    ang = sakurai;
-
-  }
-  if (t["t"+aT].reverse){
-    ang = 180 - ang;
-      if (ang < 0){
-        ang = 360 + ang;
-      }
-  }
+  var ang = GetAttackAngle();
   $("#tdiLAngle").css({
     "-webkit-transform":"rotate("+(ang * -1)+"deg)",
     "-moz-transform":"rotate("+(ang * -1)+"deg)",
@@ -2785,6 +2787,9 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
     t["t"+n].hitstun = 8;
   }
 
+  t["t"+n].stacked = hit.stacked;
+  t["t"+n].stackedTrajectory = hit.stackedTrajectory;
+
   var comboCutOff = hit.positions.length;
   for (j=0;j<9;j++){
     if (t["t"+(j+1)].comboSnap == n){
@@ -2928,6 +2933,7 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
   $("#newDamageEdit").empty().append(damagestaled.toPrecision(5));
 
   refreshKnockdownBox(aT);
+  drawAngle();
 
   // when drawTrajectory didnt take a trajectory number argument and always used aT, I needed this when temporarily changing aT, but I shouldn't need it anymore
   if (waitTillFinish){

@@ -747,6 +747,8 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
     var horizontalVelocity;
     var verticalVelocity;
 
+    this.stacked = false;
+    this.stackedTrajectory = 0;
     if (combo > 0 && comboFrame > 8){
       trajectory = getAngle(trajectory,knockback,reverse, 0, 0);
       //console.log("trajectory = "+trajectory);
@@ -765,6 +767,9 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
       knockback = getNewKnockback(trajectory,horizontalVelocity);
       //console.log("newKnockback = "+knockback);
       reverse = false;
+
+      this.stacked = true;
+      this.stackedTrajectory = trajectory;
     }
     var angle = getAngle(trajectory, knockback, reverse, tdiX, tdiY);
     //console.log("angle = "+angle);
