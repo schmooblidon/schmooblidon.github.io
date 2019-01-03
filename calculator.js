@@ -2760,7 +2760,6 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
 
   if (t["t"+n].grabInterrupt) {
     damagestaled *= 0.5;
-    damageunstaled *= 0.5;
   }
 
   t["t"+n].newDamage = damagestaled;
