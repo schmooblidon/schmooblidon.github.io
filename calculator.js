@@ -877,8 +877,8 @@ function changeUserStick(x,y,type,di){
       angleOffset = Math.abs(angleOffset);
       //$("#tdiDebug").empty().append(angleOffset);
       //$("#tdirAngle").empty().append(rAngle);
-      t["t"+aT].tdiStrength = Math.round(angleOffset/18*100);
-      $("#tdiOffsetPercent").empty().append(Math.round(angleOffset/18*100));
+      t["t"+aT].tdiStrength = (angleOffset/18)*100;
+      $("#tdiOffsetPercent").empty().append(formatTDIStrength((angleOffset/18)*100));
       calculateStickColor(angleOffset, type);
     }
     $("#"+type+"diDiAngle").empty().append(Math.round(diAngle));
@@ -2283,7 +2283,7 @@ function outputPopup(){
       else {
         var combo = '';
       }
-      $("#ppOutputText").append('-------------<br>TRAJECTORY '+i+'<br>-------------'+combo+'<br>ATTACKER<br>Attack: '+atk+'<br> -Damage: '+t["t"+i].curHitbox.dmg+'%<br> -Angle: '+t["t"+i].curHitbox.angle+'°<br> -Knockback Growth: '+t["t"+i].curHitbox.kg+'<br> -Set Knockback: '+t["t"+i].curHitbox.wbk+'<br> -Base Knockback: '+t["t"+i].curHitbox.bk+'<br> -Effect: '+t["t"+i].curHitbox.effect+'<br>Stale Queue: '+sq+'<br>Smash Charge: '+t["t"+i].chargeF+' frames<br>Damage: '+t["t"+i].newDamage.toFixed(5)+'%<br>VICTIM<br>Character: '+t["t"+i].character+'<br>Percent: '+t["t"+i].percent+'%<br>Hit Direction: '+hd+'<br>Trajectory DI:<br> -Inputs: X:'+t["t"+i].tdiMouseXMelee+' Y:'+t["t"+i].tdiMouseYMelee+'<br> -Strength: '+t["t"+i].tdiStrength+'%<br> -Angle: '+t["t"+i].tdiAngle+'°<br>SDI (1): <br> -Inputs: X:'+t["t"+i].sdiMouseXMelee+' Y:'+t["t"+i].sdiMouseYMelee+'<br> -Angle: '+t["t"+i].sdiAngle+'°<br>SDI (2): <br> -Inputs: X:'+t["t"+i].zdiMouseXMelee+' Y:'+t["t"+i].zdiMouseYMelee+'<br> -Angle: '+t["t"+i].zdiAngle+'°<br>ASDI: <br> -Inputs: X:'+t["t"+i].adiMouseXMelee+' Y:'+t["t"+i].adiMouseYMelee+'<br> -Angle: '+t["t"+i].adiAngle+'°<br>Variables: '+variables+'<br>'+details+'<br>Hitstun: '+t["t"+i].hitstun+' frames<br>Knockback: '+t["t"+i].knockback.toFixed(5)+kbtext+'<br>Y-Displacement: '+t["t"+i].yDisplacement.toFixed(5)+'<br>POSITIONS:<br>Position Hit: X: '+t["t"+i].mouseXMeleeF.toFixed(5)+' Y: '+t["t"+i].mouseYMeleeF.toFixed(5));
+      $("#ppOutputText").append('-------------<br>TRAJECTORY '+i+'<br>-------------'+combo+'<br>ATTACKER<br>Attack: '+atk+'<br> -Damage: '+t["t"+i].curHitbox.dmg+'%<br> -Angle: '+t["t"+i].curHitbox.angle+'°<br> -Knockback Growth: '+t["t"+i].curHitbox.kg+'<br> -Set Knockback: '+t["t"+i].curHitbox.wbk+'<br> -Base Knockback: '+t["t"+i].curHitbox.bk+'<br> -Effect: '+t["t"+i].curHitbox.effect+'<br>Stale Queue: '+sq+'<br>Smash Charge: '+t["t"+i].chargeF+' frames<br>Damage: '+t["t"+i].newDamage.toFixed(5)+'%<br>VICTIM<br>Character: '+t["t"+i].character+'<br>Percent: '+t["t"+i].percent+'%<br>Hit Direction: '+hd+'<br>Trajectory DI:<br> -Inputs: X:'+t["t"+i].tdiMouseXMelee+' Y:'+t["t"+i].tdiMouseYMelee+'<br> -Strength: '+formatTDIStrength(t["t"+i].tdiStrength)+'%<br> -Angle: '+t["t"+i].tdiAngle+'°<br>SDI (1): <br> -Inputs: X:'+t["t"+i].sdiMouseXMelee+' Y:'+t["t"+i].sdiMouseYMelee+'<br> -Angle: '+t["t"+i].sdiAngle+'°<br>SDI (2): <br> -Inputs: X:'+t["t"+i].zdiMouseXMelee+' Y:'+t["t"+i].zdiMouseYMelee+'<br> -Angle: '+t["t"+i].zdiAngle+'°<br>ASDI: <br> -Inputs: X:'+t["t"+i].adiMouseXMelee+' Y:'+t["t"+i].adiMouseYMelee+'<br> -Angle: '+t["t"+i].adiAngle+'°<br>Variables: '+variables+'<br>'+details+'<br>Hitstun: '+t["t"+i].hitstun+' frames<br>Knockback: '+t["t"+i].knockback.toFixed(5)+kbtext+'<br>Y-Displacement: '+t["t"+i].yDisplacement.toFixed(5)+'<br>POSITIONS:<br>Position Hit: X: '+t["t"+i].mouseXMeleeF.toFixed(5)+' Y: '+t["t"+i].mouseYMeleeF.toFixed(5));
 
       if (t["t"+i].grounded){
         $("#ppOutputText").append(" Grounded");
@@ -2961,6 +2961,11 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
   if (waitTillFinish){
     return true;
   }
+}
+
+function formatTDIStrength(val) {
+  if (val >= 100) return "100";
+  else return val.toFixed(1);
 }
 
 function setPosInfoOffset(id){
