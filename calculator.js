@@ -2762,6 +2762,8 @@ function drawTrajectory(n, onlyDrawWhenUnfrozen, waitTillFinish){
     damagestaled *= 0.5;
   }
 
+  if (t["t"+n].curHitbox.article) damageunstaled = damagestaled;
+
   t["t"+n].newDamage = damagestaled;
   t["t"+n].shieldstun = Math.floor((Math.floor(damagestaled) * 0.45 + 2) * 200/201);
   //old formula : Math.floor((Math.floor(damagestaled) + 4.45) / 2.235);
