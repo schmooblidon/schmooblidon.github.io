@@ -3188,7 +3188,7 @@ $(document).ready(function(){
     sounds[i].volume = 0;
     sounds[i].play();
   }
-  if (mobile){
+  /*if (mobile){
     $("body").prepend('<div id="popoutOverlay"></div><div id="popout"><div id="popoutApp"><div id="ppATitle"><p>Android App coming soon!</p></div><div id="ppSClose" class="ppSClose"><p>x</p></div><div id="ppAMain"><div id="ppAImage"><div id="ppAImageContainer"><img id="ppAImage1" class="ppAImage" src="assets/trajectory/app1.png"/><img id="ppAImage2" class="ppAImage" src="assets/trajectory/app2.png"/></div><div id="ppAImageSelector"><div id="ppAIS1" class="ppAIS ppAISelected"></div><div id="ppAIS2" class="ppAIS"></div></div></div"></div><div id="ppADetails"><div id="ppADetailTitle"><img id="ppAIcon" src="assets/trajectory/appicon.png"/><p>Melee Calculator <span id="ppASmallText"> for Android</span></p></div><ul><li>New User Interface built for ease of access</li><li>Find Kill Percents for any attack at any position</li><li>Find CC, ASDI Down and Amsah Teching maximum percents</li><li>Draw trajectories</li><li>Save, manage and share calculations</li></ul><p>and much more...<br><br>Release: TBA</div></div></div>');
     if (screen.height > screen.width){
       $("#popoutApp").css("width",screen.width+"px");
@@ -3220,7 +3220,7 @@ $(document).ready(function(){
     $("#ppSClose").click(function(){
       $("#popoutOverlay, #popout").remove();
     });
-  }
+  }*/
   $("#header").hide();
   attackTable();
 	$(document).on('mousemove', function(e){
