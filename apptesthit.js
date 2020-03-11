@@ -74,6 +74,8 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
         weight = 100;
       }
 
+      console.log("weight:"+weight);
+
       if (setKnockback == 0){
         //var percent = percent + damage;
         //var kb = ((((((percent / 10) + ((percent * damage) / 20)) * (200 / (weight + 100)) * 1.4) + 18) * (growth / 100)) + base);

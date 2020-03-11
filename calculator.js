@@ -97,6 +97,9 @@ function trajectoryObject(){
 
   this.grabInterrupt = false;
   this.yoshiDJArmor = false;
+
+  this.attacker_size = "Normal";
+  this.victim_size = "Normal";
 }
 
 t = {};
@@ -1822,6 +1825,12 @@ function swapOptions(){
             t["t"+aT].curHitbox = chars[t["t"+aT].cHName[0]][t["t"+aT].cHName[1]][t["t"+aT].cHName[3]];
     }
 
+    $(".attackerSizeSelect").removeClass("attackerSizeSelected");
+    $("#attackerSize"+t["t"+aT].attacker_size).addClass("attackerSizeSelected");
+
+    $(".victimSizeSelect").removeClass("victimSizeSelected");
+    $("#victimSize"+t["t"+aT].victim_size).addClass("victimSizeSelected");
+
     $(".staleQbutton").removeClass("staleQon");
     for(n=0;n<t["t"+aT].staleQueue.length;n++){
       if (t["t"+aT].staleQueue[n]){
@@ -3254,6 +3263,24 @@ $(document).ready(function(){
 
   $("#donatebutton").hover(function(){
     $(this).toggleClass("donatebuttonhighlight");
+  });
+
+  $(".attackerSizeSelect").click(function(){
+    var type = $(this).attr("id").slice(12,20);
+    //console.log(type);
+    $(".attackerSizeSelect").removeClass("attackerSizeSelected");
+    $(this).addClass("attackerSizeSelected");
+    t["t"+aT].attacker_size = type;
+    drawTrajectory(aT);
+  });
+
+  $(".victimSizeSelect").click(function(){
+    var type = $(this).attr("id").slice(10,20);
+    //console.log(type);
+    $(".victimSizeSelect").removeClass("victimSizeSelected");
+    $(this).addClass("victimSizeSelected");
+    t["t"+aT].victim_size = type;
+    drawTrajectory(aT);
   });
 
   $(".diSelector").mousemove(function(){

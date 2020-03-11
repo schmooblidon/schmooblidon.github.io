@@ -3670,3 +3670,73 @@ textarea
 .sectionTitle {
   font-size:10px;
 }
+
+#attackerSizeSelectContainer {
+  height:26px;
+  width:150px;
+  display:inline-block;
+  background-color:#111111;
+  position:relative;
+  text-align:center;
+  vertical-align:top;
+}
+
+.attackerSizeSelect {
+  height:26px;
+  width:50px;
+  position:relative;
+  cursor:pointer;
+  display:inline-block;
+  outline-style:solid;
+  outline-width:1px;
+  outline-color:#323232;
+}
+
+.attackerSizeSelect p {
+  font-size:14px;
+  margin:6px 0px;
+}
+
+.attackerSizeSelected {
+  outline-color: #aaaaaa;
+  background-color:#666666;
+}
+
+.attackerSizeSelect:hover {
+  background-color:#444444;
+}
+
+#victimSizeSelectContainer {
+  height:26px;
+  width:150px;
+  display:inline-block;
+  background-color:#111111;
+  position:relative;
+  text-align:center;
+  vertical-align:top;
+}
+
+.victimSizeSelect {
+  height:26px;
+  width:50px;
+  position:relative;
+  cursor:pointer;
+  display:inline-block;
+  outline-style:solid;
+  outline-width:1px;
+  outline-color:#323232;
+}
+
+.victimSizeSelect p {
+  font-size:14px;
+  margin:6px 0px;
+}
+
+.victimSizeSelected {
+  outline-color: #aaaaaa;
+  background-color:#666666;
+}
+
+.victimSizeSelect:hover {
+  background-color:#444444;
+}

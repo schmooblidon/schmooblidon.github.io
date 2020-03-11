@@ -134,7 +134,7 @@ var resizingtype = function(){
 	$("#middlecontrols, #lcontrols, #lcontrolscollapse, #rcontrols, #rcontrolscollapse").height(midheight);
 	$("#rcontrolsOptions").height(midheight - 40);
 
-	$("#attackscroll").height($("#lcontrols").height()-235);
+	$("#attackscroll").height($("#lcontrols").height()-235-25);
 	disWidth = $("#trajectory").width();
 	disHeight = $("#trajectory").height();
 	disMagnification = disWidth/dimensions[activeStage][0];
