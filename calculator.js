@@ -53,7 +53,7 @@ function trajectoryObject(){
   this.zdiMouseXReal = 65.4;
   this.zdiMouseYReal = 65.4;
   this.zdiAngle = 0;
-  this.curHitbox = chars.Fx.neutralSpecial.id0;
+  this.curHitbox = Object.create(chars.Fx.neutralSpecial.id0); //Essentially makes a shallow copy of the object so the original doesn't get messed with
   this.cHName = ["Fx","neutralSpecial",false,"id0"];
   this.character = "Fox";
   this.percent = 80;
@@ -2158,6 +2158,8 @@ function trajDeleteClick(){
   $(".trajDelete").unbind("click");
   $(".trajDelete").click(function(){
     var id = parseInt($(this).attr("id").substr(10,11));
+    //Set curHitbox null because otherwise it causes the original move to take on properties of a different one when added again
+    t["t"+id].curHitbox = null    
     $("#trajBox"+id+", #trajGroup"+id+", #trajGroup-t"+id+", #labelBox"+id+", #labelOptions"+id+", #trajBoxInfo"+id).remove();
     if (t["t"+id].comboSnap > 0){
       var m = t["t"+id].comboSnap;
@@ -2179,7 +2181,7 @@ function trajDeleteClick(){
         if (currentTrajs[i]){
           aT = i+1;
           $("#trajBox"+aT).addClass("trajBoxSelected");
-          swapOptions();
+          swapOptions();                    
           break;
         }
       }
@@ -3908,7 +3910,7 @@ $(document).ready(function(){
       storedTrajs++;
       //finally found a way to deep copy objects. fukin pointers man
       $.extend(true,t["t"+newTraj],t["t"+aT]);
-
+      
       t["t"+newTraj].hasLabel = false;
       t["t"+newTraj].hasCombo = 0;
       t["t"+newTraj].comboSnap = 0;
