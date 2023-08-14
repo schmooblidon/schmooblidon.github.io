@@ -181,7 +181,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
               }
               sakurai = 0;
             }
-            else if (knockback >= 32.1 || !grounded) {
+            else if (knockback >= 32.1 && grounded) {
               if (reverse){
                 traj = 136;
               }
@@ -191,7 +191,7 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
               }
               sakurai = 44;
             }
-            else {
+            else if (grounded) {
               prompt("Why would this ever get called?");
               traj = 440*(knockback-32);
               if (reverse){
@@ -201,6 +201,16 @@ function Hit(percent, damagestaled, damageunstaled, growth, base, setKnockback, 
                   }
               }
             }
+            else {
+              if (reverse) {
+                traj = 135;
+              }
+              else {
+                traj = 45;
+                trajectory = 45;
+              }
+              sakurai = 45;
+          }
         }
         else {
           if (reverse){
